@@ -351,3 +351,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,flutter,dart,intellij,visualstudiocode,go
+
+.vscode

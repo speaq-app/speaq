@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/route_util.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
 void main() {
@@ -27,7 +28,8 @@ class Speaq extends StatelessWidget {
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
           textTheme: spqTextTheme
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "login",
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
