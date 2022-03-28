@@ -13,22 +13,26 @@ class Speaq extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
+          primarySwatch: Colors.blue,
+          appBarTheme: const AppBarTheme(
+              foregroundColor: spqBlack, backgroundColor: spqWhite),
           scaffoldBackgroundColor: spqWhite,
           backgroundColor: spqWhite,
           bottomAppBarColor: spqWhite,
-          bottomNavigationBarTheme:  const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: spqWhite,
+              selectedItemColor: spqPrimaryBlue,
+              unselectedItemColor: spqDarkGrey),
           dialogBackgroundColor: spqWhite,
           primaryColor: spqPrimaryBlue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           errorColor: spqErrorRed,
           shadowColor: spqLightGreyTranslucent,
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
-          textTheme: spqTextTheme
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          textTheme: spqTextTheme),
+      home: SPQButtonNavigationBar(),
     );
   }
 }
@@ -41,7 +45,6 @@ class MainApp extends StatelessWidget {
     return Container();
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -121,8 +124,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class SPQButtonNavigationBar extends StatefulWidget {
   SPQButtonNavigationBar({Key? key}) : super(key: key);
-    @override
 
+  @override
   State<SPQButtonNavigationBar> createState() => _SPQButtonNavigationBarState();
 }
 
@@ -130,32 +133,47 @@ class _SPQButtonNavigationBarState extends State<SPQButtonNavigationBar> {
   int _seletedItem = 0;
   var _pages = [HomePage(), SearchPage(), NotificationsPage(), MessagesPage()];
   var _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
-    return  BottomNavigationBar(
-      unselectedItemColor: Colors.grey,
-      selectedItemColor: spqPrimaryBlue,
-      showUnselectedLabels: false,
-      showSelectedLabels: false,
-      iconSize: 30,
-      type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.search), label: 'Photos'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.notifications), label: "Profile"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.message), label: "Message")
-      ],
-      currentIndex: _seletedItem,
-      onTap: (index) {
-        setState(() {
-          _seletedItem = index;
-          _pageController.animateToPage(_seletedItem,
-              duration: Duration(milliseconds: 200), curve: Curves.linear);
-        });
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Placeholder'),
+      ),
+      body: PageView(
+        children: _pages,
+        onPageChanged: (index) {
+          setState(() {
+            _seletedItem = index;
+          });
+        },
+        controller: _pageController,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.blue,
+        showUnselectedLabels: false,
+        showSelectedLabels: false,
+        iconSize: 30,
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications), label: "Notification"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.message), label: "Message")
+        ],
+        currentIndex: _seletedItem,
+        onTap: (index) {
+          setState(() {
+            _seletedItem = index;
+            _pageController.animateToPage(_seletedItem,
+                duration: Duration(milliseconds: 200), curve: Curves.linear);
+          });
+        },
+      ),
     );
   }
 }
