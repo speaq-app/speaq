@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 
@@ -47,11 +49,28 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   filled: true,
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              ButtonTheme(
+                child: ElevatedButton(
+                  child: const Text("login"), 
+                onPressed: _loginUser,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
+  void _loginUser() {
+    log(_usernameTEC.text);
+    //_checkUser()
+    Navigator.pushNamed(context, "home");
+  }
 }
+
+//void _checkUser()
