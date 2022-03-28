@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
 void main() {
@@ -114,6 +115,47 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class SPQButtonNavigationBar extends StatefulWidget {
+  SPQButtonNavigationBar({Key? key}) : super(key: key);
+    @override
+
+  State<SPQButtonNavigationBar> createState() => _SPQButtonNavigationBarState();
+}
+
+class _SPQButtonNavigationBarState extends State<SPQButtonNavigationBar> {
+  int _seletedItem = 0;
+  var _pages = [HomePage(), SearchPage(), NotificationsPage(), MessagesPage()];
+  var _pageController = PageController();
+  @override
+  Widget build(BuildContext context) {
+    return  BottomNavigationBar(
+      unselectedItemColor: Colors.grey,
+      selectedItemColor: spqPrimaryBlue,
+      showUnselectedLabels: false,
+      showSelectedLabels: false,
+      iconSize: 30,
+      type: BottomNavigationBarType.fixed,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.search), label: 'Photos'),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.notifications), label: "Profile"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.message), label: "Message")
+      ],
+      currentIndex: _seletedItem,
+      onTap: (index) {
+        setState(() {
+          _seletedItem = index;
+          _pageController.animateToPage(_seletedItem,
+              duration: Duration(milliseconds: 200), curve: Curves.linear);
+        });
+      },
     );
   }
 }
