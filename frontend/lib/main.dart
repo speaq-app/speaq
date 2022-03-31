@@ -12,7 +12,7 @@ class Speaq extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Speaq',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
