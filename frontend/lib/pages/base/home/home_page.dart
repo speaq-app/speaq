@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/base/home/user_menu.dart';
+import 'package:frontend/pages/base/home/user_menu_page.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,6 +25,6 @@ class _HomePageState extends State<HomePage> {
                         'https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg'),
                   ));
             })),
-        drawer: const UserMenu(),
+        drawer: const UserMenuPage(),
       );
 }

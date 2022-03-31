@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class UserMenu extends StatelessWidget {
-  const UserMenu({Key? key}) : super(key: key);
+class UserMenuPage extends StatelessWidget {
+  const UserMenuPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -28,17 +28,23 @@ class UserMenu extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person_outline),
             title: const Text("Profile"),
-            onTap: () {},
+            onTap: () {
+              Navigator.popAndPushNamed(context, "profile");
+            },
           ),
           ListTile(
             leading: const Icon(Icons.qr_code_2),
             title: const Text("QR-Code"),
-            onTap: () {},
+            onTap: () {
+              Navigator.popAndPushNamed(context, "pq-code");
+            },
           ),
           ListTile(
             leading: const Icon(Icons.bookmark_border),
             title: const Text("Bookmarks"),
-            onTap: () {},
+            onTap: () {
+              Navigator.popAndPushNamed(context, "bookmarks");
+            },
           ),
           const Divider(
             color: Colors.black54,
@@ -46,11 +52,15 @@ class UserMenu extends StatelessWidget {
           ),
           ListTile(
             title: const Text("Settings and privacy"),
-            onTap: () {},
+            onTap: () {
+              Navigator.popAndPushNamed(context, "settingsPrivacy");
+            },
           ),
           ListTile(
             title: const Text("Impressum"),
-            onTap: () {},
+            onTap: () {
+              Navigator.popAndPushNamed(context, "impressum");
+            },
           ),
         ],
       );

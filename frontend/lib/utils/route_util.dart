@@ -25,6 +25,14 @@ class RouteGenerator {
         return PageTransition(child: NotificationsPage(), type: PageTransitionType.fade);
       case "search":
         return PageTransition(child: SearchPage(), type: PageTransitionType.fade);
+      case "settingsPrivacy":
+        return PageTransition(child: SettingsAndPrivacyPage(), type: PageTransitionType.fade);
+      case "bookmarks":
+        return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade);
+      case "impressum":
+        return PageTransition(child: ImpressumPage(), type: PageTransitionType.fade);
+      case "qr_code":
+        return PageTransition(child: QrCodePage(), type: PageTransitionType.fade);
       default:
         return _errorRoute();
     }
