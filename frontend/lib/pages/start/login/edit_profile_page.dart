@@ -84,20 +84,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(
                 height: 40,
               ),
+              const Divider(
+                indent: 110,
+                color: spqDarkGrey,
+              ),
               editProfileRow("Name", hcName, _nameController),
-              const SizedBox(
-                height: 15,
+              const Divider(
+                indent: 110,
+                color: spqDarkGrey,
               ),
               editProfileRow("Username", hcUsername, _usernameController),
-              const SizedBox(
-                height: 15,
+              const Divider(
+                indent: 110,
+                color: spqDarkGrey,
               ),
               editProfileRow(
                   "Description", hcDescription, _descriptionController),
-              const SizedBox(
-                height: 15,
+              const Divider(
+                indent: 110,
+                color: spqDarkGrey,
               ),
               editProfileRow("Website", hcWebsite, _websiteController),
+              const Divider(
+                indent: 110,
+                color: spqDarkGrey,
+              ),
             ],
           ),
         ),
@@ -106,18 +117,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget profileImage(String imageURL) {
-    return Container(
-      width: 150,
-      height: 150,
-      decoration: BoxDecoration(
-        border: Border.all(width: 5, color: spqWhite),
-        boxShadow: const [
-          BoxShadow(spreadRadius: 2, blurRadius: 10, color: spqLightGrey)
-        ],
-        shape: BoxShape.circle,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: NetworkImage(imageURL),
+    return Hero(
+      tag: 'dash',
+      child: Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          // boxShadow: const [
+          //   BoxShadow(spreadRadius: 1, blurRadius: 5, color: spqDarkGrey)
+          // ],
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(imageURL),
+          ),
         ),
       ),
     );
@@ -178,7 +191,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         color: const Color.fromARGB(255, 255, 255, 255),
         child: Center(
           child: Hero(
-            tag: 'myImage',
+            tag: 'dash',
             child: Image.network(
               imageURL,
             ),
