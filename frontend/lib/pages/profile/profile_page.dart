@@ -31,7 +31,8 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           Positioned(top: 0, child: _buildCover(size)),
           Positioned(top: 115, child: _buildProfilePictures(size)),
-          Positioned(bottom: 0, child: _buildProfileInformation(context, size))
+          Positioned(top: 190, child: _buildProfileInformation(context, size)),
+          _buildEditButton(context)
         ],
       ));
 
@@ -77,86 +78,98 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ElevatedButton(
-                      onPressed: reset,
-                      child: const Text(
-                        "Edit Profile",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            side: BorderSide(
-                              color: Colors.blue,
-                            )),
-                      ),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ),
       ]),
     );
+  }
+
+  Widget _buildEditButton(BuildContext context) {
+    return Positioned(
+        top: 155,
+        right: 20,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ElevatedButton(
+                onPressed: reset,
+                child: const Text(
+                  "Edit Profile",
+                  style: TextStyle(color: Colors.blue),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      side: BorderSide(
+                        color: Colors.blue,
+                      )),
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _buildProfileInformation(BuildContext context, Size size) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('Corinna',
-            style: TextStyle(
+      child: Container(
+        padding: const EdgeInsets.only(top: 10),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Corinna',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30)),
+          const Text('@corinna',
+              style: TextStyle(
                 color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 30)),
-        const Text('@corinna',
-            style: TextStyle(color: Colors.black, fontSize: 18)),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          child: Text('I like big Dicks and America',
-              style: TextStyle(color: Colors.black, fontSize: 18)),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
-          child: Row(
-            children: const [
-              Icon(Icons.link),
-              Text('@corinna.io', style: TextStyle(color: Colors.blue)),
-              SizedBox(width: 15),
-              Icon(Icons.calendar_month),
-              Text('Joined September 2018',
-                  style: TextStyle(color: Colors.black))
-            ],
+                fontSize: 18,
+              )),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 6.0),
+            child: Text('I like big America',
+                style: TextStyle(color: Colors.black, fontSize: 18)),
           ),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text('21 Following',
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Row(
+              children: const [
+                Icon(Icons.link),
+                Text('@corinna.io', style: TextStyle(color: Colors.blue)),
+                SizedBox(width: 15),
+                Icon(Icons.calendar_month),
+                Text('Joined September 2018',
+                    style: TextStyle(color: Colors.black))
+              ],
+            ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text('21 Following',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(width: 25),
+              Text('117k Followers',
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold)),
-            ),
-            SizedBox(width: 25),
-            Text('117k Followers',
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-          ],
-        ),
-      ]),
+            ],
+          ),
+        ]),
+      ),
     );
   }
 
   Widget _buildTabs(Size size) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 15),
       child: const DefaultTabController(
         length: 2,
         child: TabBar(
