@@ -10,12 +10,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 4.0,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.filter_alt_outlined),
+                color: Colors.blue,
+                iconSize: 25,
+                onPressed: () => {},
+              )
+            ],
             leading: Builder(builder: (context) {
               return IconButton(
                   onPressed: () => Scaffold.of(context).openDrawer(),
