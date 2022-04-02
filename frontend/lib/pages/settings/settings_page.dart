@@ -9,6 +9,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  static const String switchKey = "switchKey";
+  static const String dropDownKey = "dropDownKey";
+  static const String sliderKey = "sliderKey";
+  static const String checkboxKey = "checkboxKey";
+
   @override
   initState() {
     super.initState();
@@ -22,15 +27,17 @@ class _SettingsPageState extends State<SettingsPage> {
           SettingsGroup(title: "First Settings Group", children: [
             SimpleSettingsTile(
               title: "Settings Tile",
-              child: Text("H"),
+              leading: Icon(Icons.add),
+              //child: Icon(Icons.add),
+              subtitle: '',
               onTap: () => print("hh"),
             ),
-            SwitchSettingsTile(title: "Switch Tile", settingKey: "switch_key"),
+            SwitchSettingsTile(title: "Switch Tile", settingKey: switchKey),
           ]),
           SettingsGroup(title: "Second Settings Group", children: [
-            CheckboxSettingsTile(title: "Checkbox Tile", settingKey: "checkbox_key"),
-            DropDownSettingsTile(title: "Drop Down Tile", settingKey: "drop_down_key", selected: 0, values: {0: "Null", 1: "Eins", 2: "Zwei"}),
-            SliderSettingsTile(title: "Slider Tile", settingKey: "slider_key", min: 0, max: 4),
+            CheckboxSettingsTile(title: "Checkbox Tile", leading: Icon(Icons.add), settingKey: checkboxKey),
+            DropDownSettingsTile(title: "Drop Down Tile", settingKey: dropDownKey, selected: 0, values: {0: "Null", 1: "Eins", 2: "Zwei"}),
+            SliderSettingsTile(title: "Slider Tile", leading: Icon(Icons.add), settingKey: sliderKey, min: 0, max: 4),
           ])
         ],
       ),

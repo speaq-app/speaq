@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/utils/route_util.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
-void main() {
+Future<void> main() async {
+  await Settings.init(cacheProvider: SharePreferenceCache());
+
   runApp(const Speaq());
 }
 
