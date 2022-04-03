@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/utils/input_formatter/max_lines_text_input_formatter.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -9,7 +13,6 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  //Get Real Data, not hard coded
   String hcImageURL =
       "https://media-exp1.licdn.com/dms/image/C4E03AQHK_V2ZcbYo0Q/profile-displayphoto-shrink_200_200/0/1625487290463?e=2147483647&v=beta&t=8cRbhYZWCi9mi7XaRfq-TkGrX_G00ZBTUOCj0T882SY";
   String hcName = "Nosakhare Omoruyi";
@@ -42,24 +45,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Edit Profile",
-            textAlign: TextAlign.center,
-          ),
-          centerTitle: true,
-          leading: TextButton(
-            onPressed: _cancel,
-            child: const Text("Cancel"),
-          ),
-          leadingWidth: 80,
-          actions: [
-            TextButton(
-              onPressed: _saveProfile,
-              child: const Text("Done"),
-            ),
-          ],
-        ),
+        appBar: _buildAppBar(),
         body: Container(
           padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
           child: ListView(
@@ -71,7 +57,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       onTap: () => Navigator.of(context).push(PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  buildHero(context, hcImageURL, hcUsername),
+                                  _buildHero(context, hcImageURL, hcUsername),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
                             return child;
@@ -88,23 +74,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 indent: 110,
                 color: spqDarkGrey,
               ),
-              editProfileRow("Name", hcName, _nameController),
+              _buildEditProfileRow("Name", hcName, _nameController, 1, 30),
               const Divider(
                 indent: 110,
                 color: spqDarkGrey,
               ),
-              editProfileRow("Username", hcUsername, _usernameController),
+              _buildEditProfileRow("Username", hcUsername, _usernameController, 1, 20),
               const Divider(
                 indent: 110,
                 color: spqDarkGrey,
               ),
-              editProfileRow(
-                  "Description", hcDescription, _descriptionController),
+              _buildEditProfileRow(
+                  "Description", hcDescription, _descriptionController, 5, 120),
               const Divider(
                 indent: 110,
                 color: spqDarkGrey,
               ),
-              editProfileRow("Website", hcWebsite, _websiteController),
+              _buildEditProfileRow("Website", hcWebsite, _websiteController, 1, 20),
               const Divider(
                 indent: 110,
                 color: spqDarkGrey,
@@ -116,32 +102,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget profileImage(String imageURL) {
-    return Hero(
-      tag: 'dash',
-      child: Container(
-        width: 150,
-        height: 150,
-        decoration: BoxDecoration(
-          // boxShadow: const [
-          //   BoxShadow(spreadRadius: 1, blurRadius: 5, color: spqDarkGrey)
-          // ],
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget editProfileRow(
-      String title, String text, TextEditingController _controller) {
+  Widget _buildEditProfileRow(
+      String title, String text, TextEditingController _controller, int lineCount, int maxCharacterLength) {
     return Row(
       children: [
         editProfileTextItem(title),
-        editProfileTextfieldItem(text, _controller),
+        editProfileTextfieldItem(text, _controller, lineCount, maxCharacterLength),
+      ],
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      title: const Text(
+        "Edit Profile",
+        textAlign: TextAlign.center,
+      ),
+      centerTitle: true,
+      leading: TextButton(
+        onPressed: _cancel,
+        child: const Text("Cancel"),
+      ),
+      leadingWidth: 80,
+      actions: [
+        TextButton(
+          onPressed: _saveProfile,
+          child: const Text("Done"),
+        ),
       ],
     );
   }
@@ -156,16 +143,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  Widget profileImage(String imageURL) {
+    return Hero(
+      tag: 'dash',
+      child: Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget editProfileTextfieldItem(
-      String text, TextEditingController _controller) {
+      String text, TextEditingController _controller, int lineCount, int maxCharacterLength) {
     return SizedBox(
       width: 240,
       child: TextField(
-        //scrolling verhindern
+        inputFormatters: [
+          MaxLinesTextInputFormatter(lineCount),
+        ],
+        scrollPhysics: const NeverScrollableScrollPhysics(),
         controller: _controller,
         minLines: 1,
-        maxLines: 5,
-        maxLength: 100,
+        maxLines: lineCount,
+        maxLength: maxCharacterLength,
         decoration: null,
         style: const TextStyle(
           fontSize: 14,
@@ -174,7 +181,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget buildHero(BuildContext context, String imageURL, String username) {
+  Widget _buildHero(BuildContext context, String imageURL, String username) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -183,12 +190,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         centerTitle: true,
         leading: const BackButton(
-          color: Colors.black,
+          color: spqBlack,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: spqWhite,
       ),
       body: Container(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: spqWhite,
         child: Center(
           child: Hero(
             tag: 'dash',
@@ -204,13 +211,44 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void _cancel() {
     //pop anstatt push? Unendlicher Stack??? Wie funktioniert Routing genau?
     //Route ändern zu profile
-    Navigator.pushNamed(context, "login");
+    Navigator.pop(context, "login");
   }
 
   void _saveProfile() {
-    //Daten im Backend speichern
+    _saveData();
     //Pop anstatt push siehe _cancel
     //Route ändern zu profile
-    Navigator.pushNamed(context, "login");
+    Navigator.pop(context, "login");
+  }
+
+  void _saveData() {
+    //Daten tatsächlich im Backend speichern
+    log("Saving...");
+    if (hcName != _nameController.text) {
+      log("Name: " + _nameController.text + "\n");
+    }
+    if (hcUsername != _usernameController.text) {
+      log("Username: " + _usernameController.text + "\n");
+    }
+    if (hcDescription != _descriptionController.text) {
+      log("Description: " + _descriptionController.text + "\n");
+    }
+    if (hcWebsite != _websiteController.text) {
+      log("Website: " + _websiteController.text + "\n");
+    }
+    log("...Saved");
+  }
+
+  void _disposeController() {
+    _nameController.dispose();
+    _usernameController.dispose();
+    _descriptionController.dispose();
+    _websiteController.dispose();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _disposeController();
   }
 }
