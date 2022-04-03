@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/all_pages_export.dart';
+import 'package:frontend/utils/route_util.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
 void main() {
@@ -31,8 +32,10 @@ class Speaq extends StatelessWidget {
           errorColor: spqErrorRed,
           shadowColor: spqLightGreyTranslucent,
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
-          textTheme: spqTextTheme),
-      home: SPQButtonNavigationBar(),
+          textTheme: spqTextTheme
+      ),
+      initialRoute: "login",
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
@@ -45,6 +48,7 @@ class MainApp extends StatelessWidget {
     return Container();
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
