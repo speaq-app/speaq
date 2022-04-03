@@ -1,4 +1,4 @@
-module speaq
+module github.com/speak-app/speak
 
 go 1.18
 
@@ -15,4 +15,5 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/crypto v0.0.0-20220321153916-2c7772ba3064 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 )
