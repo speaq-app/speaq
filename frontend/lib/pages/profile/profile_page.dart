@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/speaq_styles.dart';
+
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -14,30 +17,29 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       body: ListView(
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        children: [
-          _buildHeader(deviceSize, context),
-          _buildTabs(deviceSize),
-        ],
-      ),
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          children: [
+            _buildHeader(deviceSize, context),
+            _buildTabs(deviceSize),
+          ]),
     );
   }
 
   SizedBox _buildHeader(Size deviceSize, BuildContext context) => SizedBox(
       width: deviceSize.width,
-      height: deviceSize.height * 0.55,
+      height: deviceSize.height * 0.50,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Positioned(top: 0, child: _buildCover(deviceSize)),
           Positioned(
-              top: deviceSize.height * 0.15, height: deviceSize.height * 0.17, width: deviceSize.width, child: _buildPictureEditProfile(deviceSize)),
-          /*
-          Positioned(top: 115, child: _buildProfilePicture(deviceSize)),
-          Positioned(top: 155, right: 20, child: _buildEditButton(context)),
-*/
-
-          Positioned(top: 190, child: _buildProfileInformation(context, deviceSize)),
+              top: deviceSize.height * 0.13,
+              height: deviceSize.height * 0.17,
+              width: deviceSize.width,
+              child: _buildPictureEditProfile(deviceSize)),
+          Positioned(
+              top: 210, child: _buildProfileInformation(context, deviceSize)),
         ],
       ));
 
@@ -46,9 +48,11 @@ class _ProfilePageState extends State<ProfilePage> {
         height: deviceSize.height * 0.225,
         width: deviceSize.width,
         decoration: const BoxDecoration(
-          color: Colors.blue,
+          color: spqPrimaryBlue,
           image: DecorationImage(
-              fit: BoxFit.cover, image: NetworkImage('https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg')),
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                  'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg')),
         ));
   }
 
@@ -72,7 +76,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildProfilePicture(Size deviceSize) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => buildHero(context),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            buildHero(context),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return child;
         },
@@ -95,14 +100,14 @@ class _ProfilePageState extends State<ProfilePage> {
         onPressed: reset,
         child: const Text(
           "Edit Profile",
-          style: TextStyle(color: Colors.blue),
+          style: TextStyle(color: spqPrimaryBlue),
         ),
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
+          primary: spqWhite,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               side: BorderSide(
-                color: Colors.blue,
+                color: spqPrimaryBlue,
               )),
         ),
       ),
@@ -117,25 +122,31 @@ class _ProfilePageState extends State<ProfilePage> {
         height: deviceSize.height * 0.3,
         padding: const EdgeInsets.only(top: 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Corinna', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30)),
+          const Text('Corinna',
+              style: TextStyle(
+                  color: spqBlack,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30)),
           const Text('@corinna',
               style: TextStyle(
-                color: Colors.black,
+                color: spqDarkGrey,
                 fontSize: 18,
               )),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 6.0),
-            child: Text('I like big America', style: TextStyle(color: Colors.black, fontSize: 18)),
+            child: Text('I like big America',
+                style: TextStyle(color: spqBlack, fontSize: 18)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: Row(
               children: const [
                 Icon(Icons.link),
-                Text('@corinna.io', style: TextStyle(color: Colors.blue)),
+                Text('@corinna.io', style: TextStyle(color: spqPrimaryBlue)),
                 SizedBox(width: 15),
                 Icon(Icons.calendar_month),
-                Text('Joined September 2018', style: TextStyle(color: Colors.black))
+                Text('Joined September 2018',
+                    style: TextStyle(color: spqDarkGrey))
               ],
             ),
           ),
@@ -144,10 +155,14 @@ class _ProfilePageState extends State<ProfilePage> {
             children: const [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
-                child: Text('21 Following', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                child: Text('21 Following',
+                    style: TextStyle(
+                        color: spqBlack, fontWeight: FontWeight.bold)),
               ),
               SizedBox(width: 25),
-              Text('117k Followers', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+              Text('117k Followers',
+                  style: TextStyle(
+                      color: spqBlack, fontWeight: FontWeight.bold)),
             ],
           ),
         ]),
@@ -156,17 +171,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildTabs(Size deviceSize) {
-    return Container(
+    return SizedBox(
       width: deviceSize.width,
       height: double.maxFinite,
-      padding: const EdgeInsets.symmetric(vertical: 15),
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: TabBar(
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.blue,
-            labelColor: Colors.blue,
+          appBar: const TabBar(
+            unselectedLabelColor: spqDarkGrey,
+            indicatorColor: spqPrimaryBlue,
+            labelColor: spqPrimaryBlue,
             tabs: [
               Text(
                 'Speaqs',
@@ -178,21 +192,25 @@ class _ProfilePageState extends State<ProfilePage> {
               )
             ],
           ),
-          body: TabBarView(
-            children: [
-              Text(
-                'Speaqs',
-                style: TextStyle(fontSize: 12),
-              ),
-              Text(
-                'Likes',
-                style: TextStyle(fontSize: 12),
-              )
-            ],
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.0),
+            child: TabBarView(
+              children: [listViewPostText(), listViewPostText()],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Widget listViewPostText() {
+    return Column(children: const [
+      PostContainer(),
+      Divider(thickness: 0.5, color: spqLightGreyTranslucent),
+      PostContainer(),
+      Divider(thickness: 0.5, color: spqLightGreyTranslucent),
+      PostContainer()
+    ]);
   }
 
   Widget buildHero(BuildContext context) {
@@ -200,16 +218,16 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text(
           "@corinna",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color:spqBlack),
         ),
         centerTitle: true,
         leading: const BackButton(
-          color: Colors.black,
+          color: spqBlack,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: spqWhite,
       ),
       body: Container(
-        color: Colors.white,
+        color: spqWhite,
         child: Center(
           child: Hero(
             tag: 'myImage',
@@ -222,4 +240,68 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void reset() {}
+}
+
+class PostContainer extends StatelessWidget {
+  const PostContainer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: const CircleAvatar(
+            backgroundImage: NetworkImage(
+                'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg'),
+          ),
+          title: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Text("Corinna Kopf",
+                      style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Text("@Corinna",
+                        style: TextStyle(fontSize: 15, color: spqDarkGrey)),
+                  ),
+                  Text("12/39/19",
+                      style: TextStyle(fontSize: 15, color: spqDarkGrey))
+                ],
+              )
+            ],
+          ),
+          subtitle: Column(
+            children: [
+              const Text(
+                "Hello and Welcome to  America lover Corinna, very nice to see you guys,"
+                    "Download: idont.know.this.link.io #beer#beer#beer#beer#beer#beer",
+                overflow: TextOverflow.clip,
+                style: TextStyle(color: spqBlack, fontSize: 18),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Icon(Icons.mic, color: spqDarkGrey),
+                  Text("69"),
+                  SizedBox(width: 30),
+                  Icon(Icons.favorite, color: spqErrorRed),
+                  Text("238"),
+                  SizedBox(width: 30),
+                  Icon(Icons.ios_share, color: spqDarkGrey),
+                  SizedBox(width: 30),
+                  Icon(Icons.bookmark, color: spqDarkGrey)
+                ],
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
 }
