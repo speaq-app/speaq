@@ -11,7 +11,8 @@ message ResourceRequest {
 }
 
 message ResourceResponse {
-    bytes Resource = 1;
-    string MIMEType = 2;
-    int64 Size = 3;
+    bytes Data = 1;
+    string Name = 2;
+    string MIMEType = 3;
+    int64 Size = 4;
 }
