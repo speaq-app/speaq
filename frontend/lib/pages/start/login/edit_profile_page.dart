@@ -6,7 +6,7 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/utils/input_formatter/max_lines_text_input_formatter.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+  EditProfilePage({Key? key}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -16,10 +16,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String hcImageURL =
       "https://media-exp1.licdn.com/dms/image/C4E03AQHK_V2ZcbYo0Q/profile-displayphoto-shrink_200_200/0/1625487290463?e=2147483647&v=beta&t=8cRbhYZWCi9mi7XaRfq-TkGrX_G00ZBTUOCj0T882SY";
   String hcName = "Nosakhare Omoruyi";
-  String hcUsername = "@nomoruyi";
+  String hcUsername = "nomoruyi";
   String hcDescription =
-      "This is a Text about me and myself. You think thats long? Then look at my dick.";
+      "This is a Text about me and myself. You think thats big? Then look at my forehead!";
   String hcWebsite = "open2work.blm";
+
+  //Limits
+  int maxlengthName = 20;
+  int maxlengthUsername = 20;
+  int maxlengthDescription = 120;
+  int maxlengthWebsite = 20;
 
   late TextEditingController _nameController;
   late TextEditingController _usernameController;
@@ -70,45 +76,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(
                 height: 40,
               ),
-              const Divider(
-                indent: 110,
-                color: spqDarkGrey,
-              ),
-              _buildEditProfileRow("Name", hcName, _nameController, 1, 30),
-              const Divider(
-                indent: 110,
-                color: spqDarkGrey,
-              ),
-              _buildEditProfileRow("Username", hcUsername, _usernameController, 1, 20),
-              const Divider(
-                indent: 110,
-                color: spqDarkGrey,
-              ),
-              _buildEditProfileRow(
-                  "Description", hcDescription, _descriptionController, 5, 120),
-              const Divider(
-                indent: 110,
-                color: spqDarkGrey,
-              ),
-              _buildEditProfileRow("Website", hcWebsite, _websiteController, 1, 20),
-              const Divider(
-                indent: 110,
-                color: spqDarkGrey,
-              ),
+              _buildNameTextfield(),
+              _buildUsernameTextfield(),
+              _buildDescriptionTextfield(),
+              _buildWebsiteTextfield(),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildEditProfileRow(
-      String title, String text, TextEditingController _controller, int lineCount, int maxCharacterLength) {
-    return Row(
-      children: [
-        editProfileTextItem(title),
-        editProfileTextfieldItem(text, _controller, lineCount, maxCharacterLength),
-      ],
     );
   }
 
@@ -121,27 +96,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
       centerTitle: true,
       leading: TextButton(
         onPressed: _cancel,
-        child: const Text("Cancel"),
+        child: const Text(
+          "Cancel",
+          style: TextStyle(
+            color: spqPrimaryBlue,
+          ),
+        ),
       ),
       leadingWidth: 80,
       actions: [
         TextButton(
           onPressed: _saveProfile,
-          child: const Text("Done"),
+          child: const Text(
+            "Done",
+            style: TextStyle(
+              color: spqPrimaryBlue,
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget editProfileTextItem(String title) {
-    return SizedBox(
-      width: 110,
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 14),
-      ),
-    );
-  }
 
   Widget profileImage(String imageURL) {
     return Hero(
@@ -159,28 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-
-  Widget editProfileTextfieldItem(
-      String text, TextEditingController _controller, int lineCount, int maxCharacterLength) {
-    return SizedBox(
-      width: 240,
-      child: TextField(
-        inputFormatters: [
-          MaxLinesTextInputFormatter(lineCount),
-        ],
-        scrollPhysics: const NeverScrollableScrollPhysics(),
-        controller: _controller,
-        minLines: 1,
-        maxLines: lineCount,
-        maxLength: maxCharacterLength,
-        decoration: null,
-        style: const TextStyle(
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
-
+  
   Widget _buildHero(BuildContext context, String imageURL, String username) {
     return Scaffold(
       appBar: AppBar(
@@ -208,6 +163,80 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+
+  Widget _buildNameTextfield() {
+    return TextField(
+        inputFormatters: [MaxLinesTextInputFormatter(1)],
+        minLines: 1,
+        maxLines: 1,
+        maxLength: 30,
+        maxLengthEnforcement: MaxLengthEnforcement.none,
+        controller: _nameController,
+        decoration: const InputDecoration(
+          errorStyle: TextStyle(
+            color: spqErrorRed,
+          ),
+          labelText: "Name",
+          prefixIcon: Icon(Icons.alternate_email),
+          border: OutlineInputBorder(),
+        ));
+  }
+
+  Widget _buildUsernameTextfield() {
+    return TextField(
+        inputFormatters: [MaxLinesTextInputFormatter(1)],
+        minLines: 1,
+        maxLines: 1,
+        maxLength: 20,
+        maxLengthEnforcement: MaxLengthEnforcement.none,
+        controller: _usernameController,
+        decoration: const InputDecoration(
+          errorStyle: TextStyle(
+            color: spqErrorRed,
+          ),
+          labelText: "Username",
+          prefixIcon: Icon(Icons.alternate_email),
+          border: OutlineInputBorder(),
+        ));
+  }
+
+  Widget _buildDescriptionTextfield() {
+    return TextField(
+        inputFormatters: [MaxLinesTextInputFormatter(5)],
+        minLines: 1,
+        maxLines: 12,
+        maxLength: 100,
+        maxLengthEnforcement: MaxLengthEnforcement.none,
+        controller: _descriptionController,
+        decoration: const InputDecoration(
+          errorStyle: TextStyle(
+            color: spqErrorRed,
+          ),
+          labelText: "Description",
+          prefixIcon: Icon(Icons.alternate_email),
+          border: OutlineInputBorder(),
+        ));
+  }
+
+  Widget _buildWebsiteTextfield() {
+    return TextField(
+        inputFormatters: [MaxLinesTextInputFormatter(1)],
+        minLines: 1,
+        maxLines: 1,
+        maxLength: 20,
+        maxLengthEnforcement: MaxLengthEnforcement.none,
+        controller: _websiteController,
+        decoration: const InputDecoration(
+          errorStyle: TextStyle(
+            color: spqErrorRed,
+          ),
+          labelText: "Website",
+          prefixIcon: Icon(Icons.alternate_email),
+          border: OutlineInputBorder(),
+        ));
+  }
+
+
   void _cancel() {
     //pop anstatt push? Unendlicher Stack??? Wie funktioniert Routing genau?
     //Route ändern zu profile
@@ -224,19 +253,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void _saveData() {
     //Daten tatsächlich im Backend speichern
     log("Saving...");
-    if (hcName != _nameController.text) {
+    if (_checkIfDataIsValid(_nameController, hcName, maxlengthName)) {
       log("Name: " + _nameController.text + "\n");
     }
-    if (hcUsername != _usernameController.text) {
+    if (_checkIfDataIsValid(
+        _usernameController, hcUsername, maxlengthUsername)) {
       log("Username: " + _usernameController.text + "\n");
     }
-    if (hcDescription != _descriptionController.text) {
+    if (_checkIfDataIsValid(
+        _descriptionController, hcDescription, maxlengthDescription)) {
       log("Description: " + _descriptionController.text + "\n");
     }
-    if (hcWebsite != _websiteController.text) {
+    if (_checkIfDataIsValid(_websiteController, hcWebsite, maxlengthWebsite)) {
       log("Website: " + _websiteController.text + "\n");
     }
+
     log("...Saved");
+  }
+
+
+  bool _checkIfDataIsValid(
+      TextEditingController controller, String originalText, int maxLength) {
+    return controller.text != originalText &&
+        controller.text.isNotEmpty &&
+        controller.text.length < maxLength;
   }
 
   void _disposeController() {

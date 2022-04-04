@@ -14,7 +14,9 @@ class MaxLinesTextInputFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     if (maxLines > 0) {
+      // final regEx = RegExp("^.*((\n?.*){0,${maxLines - 1}})");
       final regEx = RegExp("^.*((\n?.*){0,${maxLines - 1}})");
+      
       String newString = regEx.stringMatch(newValue.text) ?? "";
 
       final maxLength = newString.length;
