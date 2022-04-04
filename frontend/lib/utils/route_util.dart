@@ -3,9 +3,8 @@ import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:page_transition/page_transition.dart';
 
-
 class RouteGenerator {
-  static Route<dynamic> generateRoute(RouteSettings settings){
+  static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "main":
         return PageTransition(child: MainApp(), type: PageTransitionType.fade);
@@ -25,19 +24,18 @@ class RouteGenerator {
         return PageTransition(child: NotificationsPage(), type: PageTransitionType.fade);
       case "search":
         return PageTransition(child: SearchPage(), type: PageTransitionType.fade);
+      case "follow":
+        return PageTransition(child: FollowPage(), type: PageTransitionType.fade);
       default:
         return _errorRoute();
     }
   }
 
   static _errorRoute() {
-    return MaterialPageRoute(builder: (context) {
-      return Scaffold(
-        appBar: AppBar(title: Text("ERROR")),
-          body: Center(
-              child: Text("ERROR")
-          )
-      );
-    },);
+    return MaterialPageRoute(
+      builder: (context) {
+        return Scaffold(appBar: AppBar(title: Text("ERROR")), body: Center(child: Text("ERROR")));
+      },
+    );
   }
 }

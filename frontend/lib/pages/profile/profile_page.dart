@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -139,16 +140,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Text('21 Following', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-              ),
-              SizedBox(width: 25),
-              Text('117k Followers', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-            ],
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(context, 'follow'),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: Text('21 Following', style: TextStyle(color: spqBlack, fontWeight: FontWeight.bold)),
+                ),
+                SizedBox(width: 25),
+                Text('117k Followers', style: TextStyle(color: spqBlack, fontWeight: FontWeight.bold)),
+              ],
+            ),
           ),
         ]),
       ),
@@ -164,9 +168,9 @@ class _ProfilePageState extends State<ProfilePage> {
         length: 2,
         child: Scaffold(
           appBar: TabBar(
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.blue,
-            labelColor: Colors.blue,
+            unselectedLabelColor: spqLightGrey,
+            indicatorColor: spqPrimaryBlue,
+            labelColor: spqPrimaryBlue,
             tabs: [
               Text(
                 'Speaqs',
