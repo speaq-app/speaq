@@ -1,12 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/input_formatter/max_lines_text_input_formatter.dart';
+import '../../../widgets/speaq_textfield.dart';
 
 class EditProfilePage extends StatefulWidget {
-  EditProfilePage({Key? key}) : super(key: key);
+  const EditProfilePage({Key? key}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -76,10 +74,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(
                 height: 40,
               ),
-              _buildNameTextfield(),
-              _buildUsernameTextfield(),
-              _buildDescriptionTextfield(),
-              _buildWebsiteTextfield(),
+              SpeaqTextField(
+                  maxLength: 30, controller: _nameController, label: "Name"),
+              SpeaqTextField(
+                  maxLength: 20,
+                  controller: _usernameController,
+                  label: "Username"),
+              SpeaqTextField(
+                  maxLength: 100,
+                  controller: _descriptionController,
+                  label: "Description",
+                  maxLines: 12,
+                  newLines: 5),
+              SpeaqTextField(
+                  maxLength: 20,
+                  controller: _websiteController,
+                  label: "Website"),
             ],
           ),
         ),
@@ -118,7 +128,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-
   Widget profileImage(String imageURL) {
     return Hero(
       tag: 'dash',
@@ -135,7 +144,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-  
+
   Widget _buildHero(BuildContext context, String imageURL, String username) {
     return Scaffold(
       appBar: AppBar(
@@ -162,80 +171,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-
-
-  Widget _buildNameTextfield() {
-    return TextField(
-        inputFormatters: [MaxLinesTextInputFormatter(1)],
-        minLines: 1,
-        maxLines: 1,
-        maxLength: 30,
-        maxLengthEnforcement: MaxLengthEnforcement.none,
-        controller: _nameController,
-        decoration: const InputDecoration(
-          errorStyle: TextStyle(
-            color: spqErrorRed,
-          ),
-          labelText: "Name",
-          prefixIcon: Icon(Icons.alternate_email),
-          border: OutlineInputBorder(),
-        ));
-  }
-
-  Widget _buildUsernameTextfield() {
-    return TextField(
-        inputFormatters: [MaxLinesTextInputFormatter(1)],
-        minLines: 1,
-        maxLines: 1,
-        maxLength: 20,
-        maxLengthEnforcement: MaxLengthEnforcement.none,
-        controller: _usernameController,
-        decoration: const InputDecoration(
-          errorStyle: TextStyle(
-            color: spqErrorRed,
-          ),
-          labelText: "Username",
-          prefixIcon: Icon(Icons.alternate_email),
-          border: OutlineInputBorder(),
-        ));
-  }
-
-  Widget _buildDescriptionTextfield() {
-    return TextField(
-        inputFormatters: [MaxLinesTextInputFormatter(5)],
-        minLines: 1,
-        maxLines: 12,
-        maxLength: 100,
-        maxLengthEnforcement: MaxLengthEnforcement.none,
-        controller: _descriptionController,
-        decoration: const InputDecoration(
-          errorStyle: TextStyle(
-            color: spqErrorRed,
-          ),
-          labelText: "Description",
-          prefixIcon: Icon(Icons.alternate_email),
-          border: OutlineInputBorder(),
-        ));
-  }
-
-  Widget _buildWebsiteTextfield() {
-    return TextField(
-        inputFormatters: [MaxLinesTextInputFormatter(1)],
-        minLines: 1,
-        maxLines: 1,
-        maxLength: 20,
-        maxLengthEnforcement: MaxLengthEnforcement.none,
-        controller: _websiteController,
-        decoration: const InputDecoration(
-          errorStyle: TextStyle(
-            color: spqErrorRed,
-          ),
-          labelText: "Website",
-          prefixIcon: Icon(Icons.alternate_email),
-          border: OutlineInputBorder(),
-        ));
-  }
-
 
   void _cancel() {
     //pop anstatt push? Unendlicher Stack??? Wie funktioniert Routing genau?
@@ -271,7 +206,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     log("...Saved");
   }
 
-
   bool _checkIfDataIsValid(
       TextEditingController controller, String originalText, int maxLength) {
     return controller.text != originalText &&
@@ -279,16 +213,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
         controller.text.length < maxLength;
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _disposeController();
+  }
+
   void _disposeController() {
     _nameController.dispose();
     _usernameController.dispose();
     _descriptionController.dispose();
     _websiteController.dispose();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _disposeController();
   }
 }
