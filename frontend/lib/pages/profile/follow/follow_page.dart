@@ -47,7 +47,7 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  _buildFollowingList() {
+  Widget _buildFollowingList() {
     return Container(
       child: Text("Following"),
     );
