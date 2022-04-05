@@ -75,19 +75,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 height: 40,
               ),
               SpeaqTextField(
-                  maxLength: 30, controller: _nameController, label: "Name"),
+                  maxLength: maxlengthName, controller: _nameController, label: "Name"),
               SpeaqTextField(
-                  maxLength: 20,
+                  maxLength: maxlengthUsername,
                   controller: _usernameController,
                   label: "Username"),
               SpeaqTextField(
-                  maxLength: 100,
+                  maxLength: maxlengthDescription,
                   controller: _descriptionController,
                   label: "Description",
                   maxLines: 12,
                   newLines: 5),
               SpeaqTextField(
-                  maxLength: 20,
+                  maxLength: maxlengthWebsite,
                   controller: _websiteController,
                   label: "Website"),
             ],
