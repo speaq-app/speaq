@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:frontend/utils/all_utils.dart';
 
@@ -20,52 +21,69 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: buildAppBar(),
-      body: SettingsList(
-        sections: [
-          SpqSettingsSection(
-            title: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "@eric",
-                style: TextStyle(
-                    color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
+      body: Stack(children: [
+        SettingsList(
+          sections: [
+            SpqSettingsSection(
+              title: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "@eric",
+                  style: TextStyle(
+                      color: spqBlack,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
+              tiles: [
+                buildSettingsTile("Account", "login"),
+                buildSettingsTile("Privacy and safety", "login"),
+                buildSettingsTile("Notifications", "login"),
+                buildSettingsTile("Content preferences", "login"),
+              ],
             ),
-            tiles: [
-              buildSettingsTile("Account"),
-              buildSettingsTile("Privacy and safety"),
-              buildSettingsTile("Notifications"),
-              buildSettingsTile("Content preferences"),
-            ],
-          ),
-          SpqSettingsSection(
-            title: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "General",
-                style: TextStyle(
-                    color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
+            SpqSettingsSection(
+              title: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "General",
+                  style: TextStyle(
+                      color: spqBlack,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
+              tiles: [
+                buildSettingsTile("Display and Sound", "login"),
+                buildSettingsTile("Data usage", "login"),
+                buildSettingsTile("Accessibility", "login"),
+                buildSettingsTile("About speaq", "login"),
+              ],
             ),
-            tiles: [
-              buildSettingsTile("Display and Sound"),
-              buildSettingsTile("Data usage"),
-              buildSettingsTile("Accessibility"),
-              buildSettingsTile("About speaq"),
-            ],
-          )
-        ],
-      ),
+          ],
+        ),
+        Positioned(
+          child: Align(alignment: Alignment.bottomCenter,child: _buildLogoPicturres(deviceSize)), bottom: 20, height: deviceSize.height*0.1,
+        )
+      ]),
     );
   }
 
-  SettingsTile buildSettingsTile(String text) {
+  Widget _buildLogoPicturres(Size deviceSize) {
+    return SizedBox(width: deviceSize.width,
+      child: Image(height: deviceSize.height*0.05, width: deviceSize.width*0.3,image: const AssetImage('assets/logo.png')),
+    );
+  }
+
+  SettingsTile buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_back),
-      title: Text(text),
-      onPressed: (context) => print("Pressed:" + text),
+      title: Text(text, style: const TextStyle(fontSize: 15)),
+      onPressed: (context) => Navigator.pushNamed(context, route),
     );
   }
 
@@ -107,7 +125,8 @@ class SpqSettingsSection extends AbstractSettingsSection {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 24.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 2.0, horizontal: 24.0),
             child: title),
         Container(
           child: Column(
