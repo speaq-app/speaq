@@ -19,7 +19,7 @@ class Speaq extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.blue,
           appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
-          scaffoldBackgroundColor: spqWhite,
+          scaffoldBackgroundColor: spqBackgroundGrey,
           backgroundColor: spqWhite,
           bottomAppBarColor: spqWhite,
           bottomNavigationBarTheme:

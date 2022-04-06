@@ -45,6 +45,7 @@ dependencies:
   connectivity_plus: ^2.2.1
   #settings_ui: ^2.0.2
   flutter_settings_screens: ^0.3.2-null-safety
+  settings_ui: ^2.0.2
   #app_settings: ^4.1.1
 
 dev_dependencies:
