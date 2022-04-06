@@ -25,6 +25,6 @@ class _HomePageState extends State<HomePage> {
                         'https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg'),
                   ));
             })),
-        drawer: const UserMenu(),
+        drawer: UserMenu(),
       );
 }

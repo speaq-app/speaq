@@ -1,25 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserMenu extends StatelessWidget {
-  const UserMenu({Key? key}) : super(key: key);
+  UserMenu({Key? key}) : super(key: key);
+
+  String userName = "@dave";
+  String name = "David";
+  String follower = "234";
+  String following = "690";
+  String image =
+      "https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg";
 
   @override
   Widget build(BuildContext context) => Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              buildHeader(context),
-              buildMenu(context),
-            ],
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                buildHeader(context),
+                buildMenu(context),
+              ],
+            ),
           ),
         ),
       );
 
   Widget buildHeader(BuildContext context) => Container(
-        padding: EdgeInsets.only(
-          top: 24 + MediaQuery.of(context).padding.top,
+        padding: const EdgeInsets.only(
+          top: 24,
           bottom: 24,
         ),
         child: Padding(
@@ -27,31 +35,31 @@ class UserMenu extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 24,
-                backgroundImage: NetworkImage(
-                    'https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg'),
+                backgroundImage: NetworkImage(image),
               ),
               const SizedBox(height: 5),
-              const Text(
-                'David',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              Text(
+                name,
+                style:
+                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
-              const Text(
-                '@david',
-                style: TextStyle(fontSize: 15),
+              Text(
+                userName,
+                style: const TextStyle(fontSize: 15),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Text(
-                        '234',
-                        style: TextStyle(
+                        following,
+                        style: const TextStyle(
                             fontSize: 10, fontWeight: FontWeight.bold),
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(left: 2),
                         child: Text(
                           'Following',
@@ -61,18 +69,18 @@ class UserMenu extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.only(left: 5.0),
                     child: Row(
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.all(2),
+                          padding: const EdgeInsets.only(right: 2.0),
                           child: Text(
-                            '690',
-                            style: TextStyle(
+                            follower,
+                            style: const TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Followers',
                           style: TextStyle(fontSize: 10),
                         )
