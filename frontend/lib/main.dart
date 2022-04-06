@@ -28,7 +28,7 @@ class Speaq extends StatelessWidget {
           shadowColor: spqLightGreyTranslucent,
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
           textTheme: spqTextTheme),
-      initialRoute: "profile",
+      initialRoute: "follow",
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
