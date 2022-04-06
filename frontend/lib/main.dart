@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/speaq_widgets.dart';
+import 'widgets/all_widgets.dart';
 
 void main() {
   runApp(const Speaq());
