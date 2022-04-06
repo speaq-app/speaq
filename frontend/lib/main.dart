@@ -28,7 +28,7 @@ class Speaq extends StatelessWidget {
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
           textTheme: spqTextTheme
       ),
-      initialRoute: "login",
+      initialRoute: "home",
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
