@@ -57,48 +57,51 @@ class _FollowPageState extends State<FollowPage> {
           ),
         ),
         body: TabBarView(
-          children: [_buildFollowerList(), _buildFollowingList()],
+          children: [_buildFollowerList(deviceSize), _buildFollowingList()],
         ),
       ),
     );
   }
 
-  Widget _buildFollowerList() {
-    return _buildFollowingTiles();
+  Widget _buildFollowerList(Size deviceSize) {
+    return Column(
+      children: [
+        SizedBox(
+          height: deviceSize.height * 0.75,
+          child: ListView.builder(
+              shrinkWrap: false,
+              itemBuilder: (context, index) {
+                Follower currentFollower = follower[index];
+                //Hier image von Server laden
+                Image availableImage;
+                print(currentFollower.username);
+                /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
+/*
+                          if (contact.image != null && contact.image != '') {
+                            try{
+                              availableImage = Image.network(contact.image!);
+                            }on ArgumentError catch(err){
+                              availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+                              print("URI for ${contact.firstname} ${contact.lastname}is invalid");
+                            }
+                          } else {
+                            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+                          }*/
+
+                availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+
+                return FollowerTile(follower: currentFollower, followerImage: "lol");
+              },
+              itemCount: follower.length),
+        ),
+      ],
+    );
   }
 
   Widget _buildFollowingList() {
     return Container(
       child: const Text("Following"),
     );
-  }
-
-  Widget _buildFollowingTiles() {
-    return ListView.builder(
-        shrinkWrap: false,
-        itemBuilder: (context, index) {
-          Follower currentFollower = follower[index];
-          //Hier image von Server laden
-          Image availableImage;
-          print(currentFollower.username);
-          /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
-/*
-                    if (contact.image != null && contact.image != '') {
-                      try{
-                        availableImage = Image.network(contact.image!);
-                      }on ArgumentError catch(err){
-                        availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                        print("URI for ${contact.firstname} ${contact.lastname}is invalid");
-                      }
-                    } else {
-                      availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                    }*/
-
-          availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-
-          return FollowerTile(follower: currentFollower, followerImage: "lol");
-        },
-        itemCount: follower.length);
   }
 }
 
