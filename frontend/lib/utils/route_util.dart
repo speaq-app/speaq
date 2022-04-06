@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
+import 'package:frontend/pages/start/login/edit_profile_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 
@@ -25,6 +26,8 @@ class RouteGenerator {
         return PageTransition(child: NotificationsPage(), type: PageTransitionType.fade);
       case "search":
         return PageTransition(child: SearchPage(), type: PageTransitionType.fade);
+      case "edit_profile":
+        return PageTransition(child: EditProfilePage(), type: PageTransitionType.fade);
       default:
         return _errorRoute();
     }
