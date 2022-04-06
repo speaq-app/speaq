@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
 class FollowPage extends StatefulWidget {
-  const FollowPage({Key? key}) : super(key: key);
+  const FollowPage({Key? key, required this.username}) : super(key: key);
+
+  final String username;
 
   @override
   State<FollowPage> createState() => _FollowPageState();
@@ -18,6 +20,7 @@ class _FollowPageState extends State<FollowPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          title: Text(widget.username),
           bottom: TabBar(
             unselectedLabelColor: spqLightGrey,
             indicatorColor: spqPrimaryBlue,

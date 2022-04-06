@@ -5,6 +5,8 @@ import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
+
     switch (settings.name) {
       case "main":
         return PageTransition(child: MainApp(), type: PageTransitionType.fade);
@@ -25,7 +27,8 @@ class RouteGenerator {
       case "search":
         return PageTransition(child: SearchPage(), type: PageTransitionType.fade);
       case "follow":
-        return PageTransition(child: FollowPage(), type: PageTransitionType.fade);
+        String username = args["username"];
+        return PageTransition(child: FollowPage(username: username), type: PageTransitionType.fade);
       default:
         return _errorRoute();
     }
