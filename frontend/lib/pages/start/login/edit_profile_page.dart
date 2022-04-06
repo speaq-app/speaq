@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
-import '../../../widgets/speaq_textfield.dart';
+import 'package:frontend/widgets/speaq_textfield.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -20,10 +20,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String hcWebsite = "open2work.blm";
 
   //Limits
-  int maxlengthName = 20;
-  int maxlengthUsername = 20;
-  int maxlengthDescription = 120;
-  int maxlengthWebsite = 20;
+  final int maxlengthName = 20;
+  final int maxlengthUsername = 20;
+  final int maxlengthDescription = 120;
+  final int maxlengthWebsite = 20;
 
   late TextEditingController _nameController;
   late TextEditingController _usernameController;
@@ -61,12 +61,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       onTap: () => Navigator.of(context).push(PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  _buildHero(context, hcImageURL, hcUsername),
+                                  _buildFullScreenProfileImage(context, hcImageURL, hcUsername),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
                             return child;
                           })),
-                      child: profileImage(hcImageURL),
+                      child: _buildProfileImage(hcImageURL),
                     ),
                   ],
                 ),
@@ -128,7 +128,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget profileImage(String imageURL) {
+  Widget _buildProfileImage(String imageURL) {
     return Hero(
       tag: 'dash',
       child: Container(
@@ -145,7 +145,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildHero(BuildContext context, String imageURL, String username) {
+  Widget _buildFullScreenProfileImage(BuildContext context, String imageURL, String username) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -173,16 +173,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _cancel() {
-    //pop anstatt push? Unendlicher Stack??? Wie funktioniert Routing genau?
-    //Route ändern zu profile
-    Navigator.pop(context, "login");
+    Navigator.pop(context);
   }
 
   void _saveProfile() {
     _saveData();
-    //Pop anstatt push siehe _cancel
-    //Route ändern zu profile
-    Navigator.pop(context, "login");
+    Navigator.pop(context);
   }
 
   void _saveData() {
@@ -202,7 +198,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (_checkIfDataIsValid(_websiteController, hcWebsite, maxlengthWebsite)) {
       log("Website: " + _websiteController.text + "\n");
     }
-
     log("...Saved");
   }
 
