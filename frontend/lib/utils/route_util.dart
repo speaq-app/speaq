@@ -12,31 +12,31 @@ class RouteGenerator {
 
     switch (settings.name) {
       case "main":
-        return PageTransition(child: MainApp(), type: PageTransitionType.fade);
+        return PageTransition(child: const MainApp(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "login":
-        return PageTransition(child: LoginPage(), type: PageTransitionType.fade);
+        return PageTransition(child: const LoginPage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
       case "register":
-        return PageTransition(child: RegisterPage(), type: PageTransitionType.fade);
+        return PageTransition(child: const RegisterPage(), type: PageTransitionType.rightToLeftWithFade, alignment: Alignment.center);
       case "settings":
-        return PageTransition(child: SettingsPage(), type: PageTransitionType.fade);
+        return PageTransition(child: const SettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "profile":
-        return PageTransition(child: ProfilePage(), type: PageTransitionType.fade);
+        return PageTransition(child: const ProfilePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "home":
-        return PageTransition(child: HomePage(), type: PageTransitionType.fade);
+        return PageTransition(child: const HomePage(), type: PageTransitionType.bottomToTop, duration: const Duration(milliseconds: 400), alignment: Alignment.center);
       case "messages":
-        return PageTransition(child: MessagesPage(), type: PageTransitionType.fade);
+        return PageTransition(child: const MessagesPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "notifications":
-        return PageTransition(child: NotificationsPage(), type: PageTransitionType.fade);
+        return PageTransition(child: const NotificationsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "search":
-        return PageTransition(child: SearchPage(), type: PageTransitionType.fade);
+        return PageTransition(child: const SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "edit_profile":
-        return PageTransition(child: EditProfilePage(), type: PageTransitionType.fade);
+        return PageTransition(child: const EditProfilePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "follow":
 /*
         args = settings.arguments as Map<String, dynamic>;
         String username = args["username"];
 */
-        return PageTransition(child: FollowPage(username: "username"), type: PageTransitionType.fade);
+        return PageTransition(child: const FollowPage(username: "username"), type: PageTransitionType.fade);
       default:
         return _errorRoute();
     }
@@ -45,7 +45,7 @@ class RouteGenerator {
   static _errorRoute() {
     return MaterialPageRoute(
       builder: (context) {
-        return Scaffold(appBar: AppBar(title: Text("ERROR")), body: Center(child: Text("ERROR")));
+        return Scaffold(appBar: AppBar(title: const Text("ERROR")), body: const Center(child: Text("ERROR")));
       },
     );
   }

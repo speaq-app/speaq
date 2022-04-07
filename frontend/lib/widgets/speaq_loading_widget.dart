@@ -4,7 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../utils/all_utils.dart';
 
 class SpqLoadingWidget extends StatelessWidget {
-  const SpqLoadingWidget(this.radius, {
+  const SpqLoadingWidget(
+    this.radius, {
     Key? key,
   }) : super(key: key);
 
@@ -20,7 +21,7 @@ class SpqLoadingWidget extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Center(
-              child: SpinKitFoldingCube(
+              child: SpinKitChasingDots(
                 color: spqPrimaryBlue,
                 size: radius,
               ),

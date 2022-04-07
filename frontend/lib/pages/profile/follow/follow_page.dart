@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/widgets/speaq_follower_tile.dart';
 
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.username}) : super(key: key);
@@ -10,18 +11,12 @@ class FollowPage extends StatefulWidget {
   State<FollowPage> createState() => _FollowPageState();
 }
 
-class Follower {
-  Follower({required this.username});
-
-  final String username;
-}
-
 class _FollowPageState extends State<FollowPage> {
   int followerCount = 522;
   int followingCount = 14;
 
-  List<Follower> follower = [Follower(username: "Nosa"), Follower(username: "David"), Follower(username: "Sven"), Follower(username: "Hendrik")];
-  List<Follower> following = [Follower(username: "Eric"), Follower(username: "Daniel")];
+  List<Follower> follower = [Follower(username: "nomoruyi", firstname: "Nosakhare", lastname: "Omoruyi"), Follower(username: "dloewe", firstname: "David", lastname: "Loewe"), Follower(username: "sgatnar", firstname: "Sven", lastname: "Gatnar")];
+  List<Follower> following = [];
 
   @override
   Widget build(BuildContext context) {
@@ -57,44 +52,9 @@ class _FollowPageState extends State<FollowPage> {
           ),
         ),
         body: TabBarView(
-          children: [_buildFollowerList(deviceSize), _buildFollowingList()],
+          children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList()],
         ),
       ),
-    );
-  }
-
-  Widget _buildFollowerList(Size deviceSize) {
-    return Column(
-      children: [
-        SizedBox(
-          height: deviceSize.height * 0.75,
-          child: ListView.builder(
-              shrinkWrap: false,
-              itemBuilder: (context, index) {
-                Follower currentFollower = follower[index];
-                //Hier image von Server laden
-                Image availableImage;
-                print(currentFollower.username);
-                /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
-/*
-                          if (contact.image != null && contact.image != '') {
-                            try{
-                              availableImage = Image.network(contact.image!);
-                            }on ArgumentError catch(err){
-                              availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                              print("URI for ${contact.firstname} ${contact.lastname}is invalid");
-                            }
-                          } else {
-                            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                          }*/
-
-                availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-
-                return FollowerTile(follower: currentFollower, followerImage: "lol");
-              },
-              itemCount: follower.length),
-        ),
-      ],
     );
   }
 
@@ -105,50 +65,85 @@ class _FollowPageState extends State<FollowPage> {
   }
 }
 
-class FollowerTile extends StatelessWidget {
-  const FollowerTile({Key? key, required this.follower, required this.followerImage}) : super(key: key);
+Widget _buildFollowerTab(Size deviceSize, List<Follower> followerList) {
+  return Column(
+    children: [
+      SizedBox(
+        height: deviceSize.height * 0.75,
+        child: _buildFollowList(followerList),
+      ),
+    ],
+  );
+}
 
-  final String followerImage;
+ListView _buildFollowList(List<Follower> followerList) {
+  return ListView.builder(
+      shrinkWrap: false,
+      itemBuilder: (context, index) {
+        Follower currentFollower = followerList[index];
+        //Hier image von Server laden
+        Image availableImage;
+        print(currentFollower.username);
+        /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
+/*
+                        if (contact.image != null && contact.image != '') {
+                          try{
+                            availableImage = Image.network(contact.image!);
+                          }on ArgumentError catch(err){
+                            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+                            print("URI for ${contact.firstname} ${contact.lastname}is invalid");
+                          }
+                        } else {
+                          availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+                        }*/
 
-  final Follower follower;
+        availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+
+        return FollowerTile(follower: currentFollower, followerImage: "lol");
+      },
+      itemCount: followerList.length);
+}
+
+class FollowerSearchDelegate extends SearchDelegate {
+  FollowerSearchDelegate({required this.followerList});
+
+  List<Follower> followerList = [];
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () => Navigator.pushNamed(context, "contact_details", arguments: {"user": follower}),
-/*
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ContactDetailsPage(contact: contact, contactImage: contactImage))),
-*/
-      leading: Hero(tag: followerImage, child: CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07)),
-      title: Text(
-        "${follower.username} ${follower.username}",
-        style: const TextStyle(fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
-      ),
-      subtitle: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(follower.username, style: const TextStyle(fontSize: 16.0, color: spqLightGrey)),
-        ],
-      ),
-      isThreeLine: false,
-      trailing: ElevatedButton(
-        onPressed: () {
-          print("delete ${follower.username}");
-        },
-        child: const Text(
-          "Delete",
-          style: TextStyle(color: Colors.blue),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              side: BorderSide(
-                color: Colors.blue,
-              )),
-        ),
-      ),
-    );
+  List<Widget>? buildActions(BuildContext context) {
+    return [IconButton(onPressed: () => query = "", icon: const Icon(Icons.clear_outlined))];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(onPressed: () => close(context, null), icon: Icon(Icons.adaptive.arrow_back_rounded));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<Follower> matchQuery = [];
+
+    for (Follower currentFollower in followerList) {
+      if ((currentFollower.firstname.isNotEmpty ? currentFollower.firstname!.toLowerCase().contains(query.toLowerCase()) : false) ||
+          (currentFollower.lastname.isNotEmpty ? currentFollower.lastname.toLowerCase().contains(query.toLowerCase()) : false)) {
+        matchQuery.add(currentFollower);
+      }
+    }
+
+    return _buildFollowList(matchQuery);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<Follower> matchQuery = [];
+
+    for (Follower currentFollower in followerList) {
+      if ((currentFollower.firstname != null ? (currentFollower.firstname!.isNotEmpty ? currentFollower.firstname!.toLowerCase().contains(query.toLowerCase()) : false) : false) ||
+          (currentFollower.lastname != null ? (currentFollower.lastname.isNotEmpty ? currentFollower.lastname.toLowerCase().contains(query.toLowerCase()) : false) : false)) {
+        matchQuery.add(currentFollower);
+      }
+    }
+
+    return _buildFollowList(matchQuery);
   }
 }

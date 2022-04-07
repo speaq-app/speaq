@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
+
 import 'widgets/all_widgets.dart';
 
 void main() {
@@ -20,8 +21,7 @@ class Speaq extends StatelessWidget {
           scaffoldBackgroundColor: spqWhite,
           backgroundColor: spqBackgroundGrey,
           bottomAppBarColor: spqWhite,
-          bottomNavigationBarTheme:
-              const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
           dialogBackgroundColor: spqWhite,
           primaryColor: spqPrimaryBlue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -29,7 +29,7 @@ class Speaq extends StatelessWidget {
           shadowColor: spqLightGreyTranslucent,
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
           textTheme: spqTextTheme),
-      initialRoute: "main",
+      initialRoute: 'main',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
@@ -59,7 +59,6 @@ class MainApp extends StatelessWidget {
   }
 }
 
-Future<bool> verifyIDToken()
- {
-  return Future.delayed(Duration(seconds: 2), () => true);
+Future<bool> verifyIDToken() {
+  return Future.delayed(Duration(seconds: 5), () => false);
 }
