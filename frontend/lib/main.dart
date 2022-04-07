@@ -134,7 +134,7 @@ class SPQButtonNavigationBar extends StatefulWidget {
 }
 
 class _SPQButtonNavigationBarState extends State<SPQButtonNavigationBar> {
-  int _seletedItem = 0;
+  int _selectedItem = 0;
   var _pages = [HomePage(), SearchPage(), NotificationsPage(), MessagesPage()];
   var _pageController = PageController();
 
@@ -148,7 +148,7 @@ class _SPQButtonNavigationBarState extends State<SPQButtonNavigationBar> {
         children: _pages,
         onPageChanged: (index) {
           setState(() {
-            _seletedItem = index;
+            _selectedItem = index;
           });
         },
         controller: _pageController,
@@ -169,11 +169,11 @@ class _SPQButtonNavigationBarState extends State<SPQButtonNavigationBar> {
           BottomNavigationBarItem(
               icon: Icon(Icons.message), label: "Message")
         ],
-        currentIndex: _seletedItem,
+        currentIndex: _selectedItem,
         onTap: (index) {
           setState(() {
-            _seletedItem = index;
-            _pageController.animateToPage(_seletedItem,
+            _selectedItem = index;
+            _pageController.animateToPage(_selectedItem,
                 duration: Duration(milliseconds: 200), curve: Curves.linear);
           });
         },
