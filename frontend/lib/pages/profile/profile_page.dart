@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -14,7 +13,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-
     return Scaffold(
       body: ListView(
           physics: const BouncingScrollPhysics(
@@ -26,22 +24,23 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  SizedBox _buildHeader(Size deviceSize, BuildContext context) => SizedBox(
-      width: deviceSize.width,
-      height: deviceSize.height * 0.50,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(top: 0, child: _buildCover(deviceSize)),
-          Positioned(
-              top: deviceSize.height * 0.13,
-              height: deviceSize.height * 0.17,
-              width: deviceSize.width,
-              child: _buildPictureEditProfile(deviceSize)),
-          Positioned(
-              top: 210, child: _buildProfileInformation(context, deviceSize)),
-        ],
-      ));
+  SizedBox _buildHeader(Size deviceSize, BuildContext context) =>
+      SizedBox(
+          width: deviceSize.width,
+          height: deviceSize.height * 0.50,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(top: 0, child: _buildCover(deviceSize)),
+              Positioned(
+                  top: deviceSize.height * 0.13,
+                  height: deviceSize.height * 0.17,
+                  width: deviceSize.width,
+                  child: _buildPictureEditProfile(deviceSize)),
+              Positioned(
+                  top: 210, child: _buildProfileInformation(context, deviceSize)),
+            ],
+          ));
 
   Widget _buildCover(Size deviceSize) {
     return Container(
@@ -66,8 +65,8 @@ class _ProfilePageState extends State<ProfilePage> {
           child: _buildProfilePicture(deviceSize),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 24.0),
-          child: _buildEditButton(context, deviceSize),
+          padding:  EdgeInsets.only(right: 24.0,top: deviceSize.height * 0.09),
+          child: SpqTextButton(onPressed: reset,),
         )
       ],
     );
@@ -75,40 +74,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildProfilePicture(Size deviceSize) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            buildHero(context),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return child;
-        },
-      )),
+      onTap: () =>
+          Navigator.of(context).push(PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                _buildProfileImageFullScreen(context),
+            transitionsBuilder: (context, animation, secondaryAnimation,
+                child) {
+              return child;
+            },
+          )),
       child: const Hero(
         tag: 'myImage',
         child: CircleAvatar(
           radius: 43,
           backgroundImage: NetworkImage(
               'https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEditButton(BuildContext context, Size deviceSize) {
-    return Padding(
-      padding: EdgeInsets.only(top: deviceSize.height * 0.09),
-      child: ElevatedButton(
-        onPressed: reset,
-        child: const Text(
-          "Edit Profile",
-          style: TextStyle(color: spqPrimaryBlue),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: spqWhite,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              side: BorderSide(
-                color: spqPrimaryBlue,
-              )),
         ),
       ),
     );
@@ -195,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 7.0),
             child: TabBarView(
-              children: [listViewPostText(), listViewPostText()],
+              children: [listViewPostText(deviceSize), listViewPostText(deviceSize)],
             ),
           ),
         ),
@@ -203,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget listViewPostText() {
+  Widget listViewPostText(Size deviceSize) {
     return Column(children: const [
       PostContainer(),
       Divider(thickness: 0.5, color: spqLightGreyTranslucent),
@@ -213,12 +193,12 @@ class _ProfilePageState extends State<ProfilePage> {
     ]);
   }
 
-  Widget buildHero(BuildContext context) {
+  Widget _buildProfileImageFullScreen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "@corinna",
-          style: TextStyle(color:spqBlack),
+          style: TextStyle(color: spqBlack),
         ),
         centerTitle: true,
         leading: const BackButton(
@@ -279,7 +259,7 @@ class PostContainer extends StatelessWidget {
             children: [
               const Text(
                 "Hello and Welcome to  America lover Corinna, very nice to see you guys,"
-                    "Download: idont.know.this.link.io #beer#beer#beer#beer#beer#beer",
+                    "Download: i.dont.know.this.link.io #beer#beer#beer#beer#beer#beer",
                 overflow: TextOverflow.clip,
                 style: TextStyle(color: spqBlack, fontSize: 18),
               ),
@@ -302,6 +282,31 @@ class PostContainer extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class SpqTextButton extends StatelessWidget {
+  const SpqTextButton({Key? key,void function, required this.onPressed}) : super(key: key);
+
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => onPressed,
+      child: const Text(
+        "Edit Profile",
+        style: TextStyle(color: spqPrimaryBlue),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: spqWhite,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            side: BorderSide(
+              color: spqPrimaryBlue,
+            )),
+      ),
     );
   }
 }
