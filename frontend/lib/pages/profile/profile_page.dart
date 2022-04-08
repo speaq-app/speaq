@@ -11,7 +11,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer ";
+  final String _postMessage =
+      "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _link = "hs-heilbronn.de";
   final String _name = "Informatics";
   final String _username = "@hhn";
@@ -25,43 +26,53 @@ class _ProfilePageState extends State<ProfilePage> {
     Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: ListView(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            _buildHeader(deviceSize, context),
-            _buildTabs(deviceSize),
-          ]),
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        children: [
+          _buildHeader(deviceSize, context),
+          _buildTabs(deviceSize),
+        ],
+      ),
     );
   }
 
   SizedBox _buildHeader(Size deviceSize, BuildContext context) => SizedBox(
-      width: deviceSize.width,
-      height: deviceSize.height * 0.50,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(top: 0, child: _buildCover(deviceSize)),
-          Positioned(
+        width: deviceSize.width,
+        height: deviceSize.height * 0.50,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: 0,
+              child: _buildCover(deviceSize),
+            ),
+            Positioned(
               top: deviceSize.height * 0.13,
               height: deviceSize.height * 0.17,
               width: deviceSize.width,
-              child: _buildPictureEditProfile(deviceSize)),
-          Positioned(
-              top: 210, child: _buildProfileInformation(context, deviceSize)),
-        ],
-      ));
+              child: _buildPictureEditProfile(deviceSize),
+            ),
+            Positioned(
+              top: 210,
+              child: _buildProfileInformation(context, deviceSize),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildCover(Size deviceSize) {
     return Container(
-        height: deviceSize.height * 0.225,
-        width: deviceSize.width,
-        decoration: const BoxDecoration(
-          color: spqPrimaryBlue,
-          image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                  'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg')),
-        ));
+      height: deviceSize.height * 0.225,
+      width: deviceSize.width,
+      decoration: const BoxDecoration(
+        color: spqPrimaryBlue,
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+              'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg'),
+        ),
+      ),
+    );
   }
 
   Widget _buildPictureEditProfile(Size deviceSize) {
@@ -78,20 +89,22 @@ class _ProfilePageState extends State<ProfilePage> {
           child: SpqTextButton(
             onPressed: reset,
           ),
-        )
+        ),
       ],
     );
   }
 
   Widget _buildProfilePicture(Size deviceSize) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            _buildProfileImageFullScreen(context),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return child;
-        },
-      )),
+      onTap: () => Navigator.of(context).push(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              _buildProfileImageFullScreen(context),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return child;
+          },
+        ),
+      ),
       child: const Hero(
         tag: 'myImage',
         child: CircleAvatar(
@@ -110,55 +123,71 @@ class _ProfilePageState extends State<ProfilePage> {
         width: deviceSize.width,
         height: deviceSize.height * 0.3,
         padding: const EdgeInsets.only(top: 10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(_name,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _name,
               style: const TextStyle(
-                  color: spqBlack, fontWeight: FontWeight.bold, fontSize: 23)),
-          Text(_username,
+                  color: spqBlack, fontWeight: FontWeight.bold, fontSize: 23),
+            ),
+            Text(
+              _username,
               style: const TextStyle(
                 color: spqDarkGrey,
                 fontSize: 18,
-              )),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6.0),
-            child: Text(_bio,
-                style: const TextStyle(color: spqBlack, fontSize: 19)),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Row(
-              children: [
-                const Icon(Icons.link),
-                Text(_link,
-                    style:
-                        const TextStyle(color: spqPrimaryBlue, fontSize: 16)),
-                const SizedBox(width: 15),
-                const Icon(Icons.calendar_month),
-                Text(_joined,
-                    style: const TextStyle(color: spqDarkGrey, fontSize: 16))
-              ],
+              ),
             ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(_following,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
+              child: Text(
+                _bio,
+                style: const TextStyle(color: spqBlack, fontSize: 19),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.link),
+                  Text(
+                    _link,
+                    style: const TextStyle(color: spqPrimaryBlue, fontSize: 16),
+                  ),
+                  const SizedBox(width: 15),
+                  const Icon(Icons.calendar_month),
+                  Text(
+                    _joined,
+                    style: const TextStyle(color: spqDarkGrey, fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    _following,
                     style: const TextStyle(
                         color: spqBlack,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16)),
-              ),
-              const SizedBox(width: 25),
-              Text(_follower,
+                        fontSize: 16),
+                  ),
+                ),
+                const SizedBox(width: 25),
+                Text(
+                  _follower,
                   style: const TextStyle(
                       color: spqBlack,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16)),
-            ],
-          ),
-        ]),
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -200,13 +229,18 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget listViewPostText(Size deviceSize) {
-    return Column(children: [
-      PostContainer(name: _name, username: _username, postMessage: _postMessage),
-      const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
-      PostContainer(name: _name, username: _username, postMessage: _postMessage),
-      const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
-      PostContainer(name: _name, username: _username, postMessage: _postMessage)
-    ]);
+    return Column(
+      children: [
+        PostContainer(
+            name: _name, username: _username, postMessage: _postMessage),
+        const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
+        PostContainer(
+            name: _name, username: _username, postMessage: _postMessage),
+        const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
+        PostContainer(
+            name: _name, username: _username, postMessage: _postMessage),
+      ],
+    );
   }
 
   Widget _buildProfileImageFullScreen(BuildContext context) {
