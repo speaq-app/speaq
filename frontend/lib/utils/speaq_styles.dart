@@ -15,8 +15,8 @@ const Color spqErrorRedTranslucent = Color(0x77FF1111);
 //endregion
 
 //region Black/White
-const Color spqWhite = Color(0xFFF7F7F7);
-const Color spqWhiteTranslucent = Color(0x77F7F7F7);
+const Color spqWhite = Color(0xFFF9F9F9);
+const Color spqWhiteTranslucent = Color(0x77F9F9F9);
 const Color spqLightGrey = Color(0xFFCCCCCC);
 const Color spqLightGreyTranslucent = Color(0x77CCCCCC);
 const Color spqBackgroundGrey = Color(0xFFE7ECF0);
