@@ -18,13 +18,16 @@ class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      toolbarHeight: preferredSize.height,
-      title: title,
-      backgroundColor: Colors.white,
-      elevation: 4.0,
-      actions: actionList,
-      leading: leading,
+    Size deviceSize = MediaQuery.of(context).size;
+    return SizedBox( height: deviceSize.height * 0.15,
+      child: AppBar(
+        toolbarHeight: deviceSize.height * 0.15,
+        title: title,
+        backgroundColor: Colors.white,
+        elevation: 4.0,
+        actions: actionList,
+        leading: leading,
+      ),
     );
   }
 }

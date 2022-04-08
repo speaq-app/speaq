@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
-import 'package:frontend/utils/all_utils.dart';
-
-import '../../../widgets/speaq_appbar.dart';
+import 'package:frontend/widgets/speaq_appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,7 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String profilePicture =
       "https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg";
-  String spqImage = "lib/assets/images/logo/logo_speaq.png";
+  String spqImage = "lib/assets/images/logo/logo_speaq.svg";
 
   bool _showBackToTopButton = false;
   late ScrollController _scrollController;
@@ -67,10 +66,9 @@ class _HomePageState extends State<HomePage> {
               _scrollController.animateTo(0,
                   duration: const Duration(seconds: 1), curve: Curves.linear);
             },
-            child: Image.asset(
+            child: SvgPicture.asset(
               spqImage,
-              height: 60,
-              width: 60,
+              height: deviceSize.height * 0.055,
               alignment: Alignment.center,
             ),
           ),
