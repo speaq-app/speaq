@@ -46,6 +46,7 @@ dependencies:
   #settings_ui: ^2.0.2
   flutter_settings_screens: ^0.3.2-null-safety
   settings_ui: ^2.0.2
+  flutter_svg: ^1.0.3
   #app_settings: ^4.1.1
 
 dev_dependencies:
@@ -66,14 +67,18 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
 
+  assets:
+    - lib/assets/images/logo/logo_speaq.svg
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
