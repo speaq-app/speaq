@@ -14,12 +14,13 @@ class Speaq extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
+          primarySwatch: Colors.blue,
+          appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
           scaffoldBackgroundColor: spqWhite,
           backgroundColor: spqWhite,
           bottomAppBarColor: spqWhite,
-          bottomNavigationBarTheme:  const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey ),
+          bottomNavigationBarTheme:
+              const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
           dialogBackgroundColor: spqWhite,
           primaryColor: spqPrimaryBlue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -42,7 +43,6 @@ class MainApp extends StatelessWidget {
     return Container();
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
