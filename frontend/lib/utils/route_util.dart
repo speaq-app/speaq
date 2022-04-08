@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
-import 'package:frontend/pages/start/login/edit_profile_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
@@ -28,6 +27,15 @@ class RouteGenerator {
       case "notifications":
         return PageTransition(child: const NotificationsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "search":
+        return PageTransition(child: SearchPage(), type: PageTransitionType.fade);
+      case "settingsPrivacy":
+        return PageTransition(child: SettingsAndPrivacyPage(), type: PageTransitionType.fade);
+      case "bookmarks":
+        return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade);
+      case "impressum":
+        return PageTransition(child: ImpressumPage(), type: PageTransitionType.fade);
+      case "qr_code":
+        return PageTransition(child: QrCodePage(), type: PageTransitionType.fade);
         return PageTransition(child: const SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "edit_profile":
         return PageTransition(child: const EditProfilePage(), type: PageTransitionType.fade, alignment: Alignment.center);
@@ -43,10 +51,13 @@ class RouteGenerator {
   }
 
   static _errorRoute() {
-    return MaterialPageRoute(
-      builder: (context) {
-        return Scaffold(appBar: AppBar(title: const Text("ERROR")), body: const Center(child: Text("ERROR")));
-      },
-    );
+    return MaterialPageRoute(builder: (context) {
+      return Scaffold(
+        appBar: AppBar(title: Text("ERROR")),
+          body: Center(
+              child: Text("ERROR")
+          )
+      );
+    },);
   }
 }
