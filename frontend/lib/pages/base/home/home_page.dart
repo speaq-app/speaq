@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
 
+import '../../../widgets/speaq_appbar.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -10,6 +12,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String profilePicture =
+      "https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg";
+  String spqImage = "lib/assets/images/logo/logo_speaq.png";
+
   bool _showBackToTopButton = false;
   late ScrollController _scrollController;
 
@@ -35,74 +41,76 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-            title: Center(
-              child: InkWell(
-                onTap: () {
-                  _scrollController.animateTo(0,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.linear);
-                },
-                child: Image.asset(
-                  'lib/assets/images/logo/logo_speaq.png',
-                  height: 60,
-                  width: 60,
-                  alignment: Alignment.center,
-                ),
-              ),
+  Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: SpqAppBar(
+        actionList: [
+          IconButton(
+            icon: const Icon(Icons.filter_alt_outlined),
+            color: Colors.blue,
+            iconSize: 25,
+            onPressed: () => {},
+          )
+        ],
+        leading: Builder(builder: (context) {
+          return IconButton(
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              icon: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(profilePicture),
+              ));
+        }),
+        title: Center(
+          child: InkWell(
+            onTap: () {
+              _scrollController.animateTo(0,
+                  duration: const Duration(seconds: 1), curve: Curves.linear);
+            },
+            child: Image.asset(
+              spqImage,
+              height: 60,
+              width: 60,
+              alignment: Alignment.center,
             ),
-            backgroundColor: Colors.white,
-            elevation: 4.0,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.filter_alt_outlined),
-                color: Colors.blue,
-                iconSize: 25,
-                onPressed: () => {},
-              )
-            ],
-            leading: Builder(builder: (context) {
-              return IconButton(
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  icon: const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(
-                        'https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg'),
-                  ));
-            })),
-        drawer: UserMenu(),
-        body: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            children: [
-              // add a bunch of containers to make the screen longer
-              Container(
-                height: 600,
-                color: Colors.amber,
-              ),
-              Container(
-                height: 600,
-                color: Colors.blue[100],
-              ),
-              Container(
-                height: 600,
-                color: Colors.red[200],
-              ),
-              Container(
-                height: 600,
-                color: Colors.orange,
-              ),
-              Container(
-                height: 600,
-                color: Colors.yellow,
-              ),
-              Container(
-                height: 1200,
-                color: Colors.lightGreen,
-              ),
-            ],
           ),
         ),
-      );
+        scrollController: _scrollController,
+        preferredSize: Size.fromHeight(deviceSize.height * 0.075),
+      ),
+      drawer: UserMenu(),
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: [
+            // add a bunch of containers to make the screen longer
+            Container(
+              height: 600,
+              color: Colors.amber,
+            ),
+            Container(
+              height: 600,
+              color: Colors.blue[100],
+            ),
+            Container(
+              height: 600,
+              color: Colors.red[200],
+            ),
+            Container(
+              height: 600,
+              color: Colors.orange,
+            ),
+            Container(
+              height: 600,
+              color: Colors.yellow,
+            ),
+            Container(
+              height: 1200,
+              color: Colors.lightGreen,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
