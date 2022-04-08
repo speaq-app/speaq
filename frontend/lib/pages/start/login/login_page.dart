@@ -55,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ButtonTheme(
                 child: ElevatedButton(
-                  child: const Text("login"), 
-                onPressed: _loginUser,
+                  child: const Text("login"),
+                  onPressed: _loginUser,
                 ),
               ),
             ],
