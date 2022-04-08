@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:frontend/utils/all_utils.dart';
 
@@ -68,15 +69,15 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         Positioned(
-          child: Align(alignment: Alignment.bottomCenter,child: _buildLogoPicturres(deviceSize)), bottom: 20, height: deviceSize.height*0.1,
+          child: Align(alignment: Alignment.bottomCenter,child: _buildLogoPictures(deviceSize)), bottom: 20, height: deviceSize.height*0.1,
         )
       ]),
     );
   }
 
-  Widget _buildLogoPicturres(Size deviceSize) {
+  Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(width: deviceSize.width,
-      child: Image(height: deviceSize.height*0.05, width: deviceSize.width*0.3,image: const AssetImage('assets/logo.png')),
+      child: SvgPicture.asset("assets/images/logo/logo_speaq.svg", height: deviceSize.height*0.05, width: deviceSize.width*0.3),
     );
   }
 
