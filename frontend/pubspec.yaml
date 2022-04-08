@@ -46,6 +46,8 @@ dependencies:
   #settings_ui: ^2.0.2
   flutter_settings_screens: ^0.3.2-null-safety
   settings_ui: ^2.0.2
+  flutter_spinkit: ^5.1.0
+  flutter_i18n: ^0.32.2
   flutter_svg: ^1.0.3
   #app_settings: ^4.1.1
 
