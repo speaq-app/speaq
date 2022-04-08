@@ -27,8 +27,9 @@ class Speaq extends StatelessWidget {
           errorColor: spqErrorRed,
           shadowColor: spqLightGreyTranslucent,
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
-          textTheme: spqTextTheme),
-      initialRoute: "profile",
+          textTheme: spqTextTheme
+      ),
+      initialRoute: "home",
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
