@@ -55,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ButtonTheme(
                 child: ElevatedButton(
-                  child: const Text("login"), 
-                onPressed: _loginUser,
+                  child: const Text("login"),
+                  onPressed: _loginUser,
                 ),
               ),
             ],
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
   void _loginUser() {
     log(_usernameTEC.text);
     //_checkUser()
-    Navigator.pushNamed(context, "edit_profile");
+    Navigator.pushNamed(context, "home");
   }
 }
 
