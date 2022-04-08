@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/widgets/speaq_post_container.dart';
+import 'package:frontend/widgets/speaq_text_button.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -9,13 +12,23 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final String _postMessage =
+      "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
+  final String _link = "hs-heilbronn.de";
+  final String _name = "Informatics";
+  final String _username = "@hhn";
+  final String _bio = "I like Hochschule Heilbronn";
+  final String _joined = "Joined August 2022";
+  final String _follower = "117k Follower";
+  final String _following = "69 Follower";
+
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-
     return Scaffold(
       body: ListView(
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         children: [
           _buildHeader(deviceSize, context),
           _buildTabs(deviceSize),
@@ -25,32 +38,42 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   SizedBox _buildHeader(Size deviceSize, BuildContext context) => SizedBox(
-      width: deviceSize.width,
-      height: deviceSize.height * 0.55,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(top: 0, child: _buildCover(deviceSize)),
-          Positioned(
-              top: deviceSize.height * 0.15, height: deviceSize.height * 0.17, width: deviceSize.width, child: _buildPictureEditProfile(deviceSize)),
-          /*
-          Positioned(top: 115, child: _buildProfilePicture(deviceSize)),
-          Positioned(top: 155, right: 20, child: _buildEditButton(context)),
-*/
-
-          Positioned(top: 190, child: _buildProfileInformation(context, deviceSize)),
-        ],
-      ));
+        width: deviceSize.width,
+        height: deviceSize.height * 0.50,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: 0,
+              child: _buildCover(deviceSize),
+            ),
+            Positioned(
+              top: deviceSize.height * 0.13,
+              height: deviceSize.height * 0.17,
+              width: deviceSize.width,
+              child: _buildPictureEditProfile(deviceSize),
+            ),
+            Positioned(
+              top: 210,
+              child: _buildProfileInformation(context, deviceSize),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildCover(Size deviceSize) {
     return Container(
-        height: deviceSize.height * 0.225,
-        width: deviceSize.width,
-        decoration: const BoxDecoration(
-          color: Colors.blue,
-          image: DecorationImage(
-              fit: BoxFit.cover, image: NetworkImage('https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg')),
-        ));
+      height: deviceSize.height * 0.225,
+      width: deviceSize.width,
+      decoration: const BoxDecoration(
+        color: spqPrimaryBlue,
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+              'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg'),
+        ),
+      ),
+    );
   }
 
   Widget _buildPictureEditProfile(Size deviceSize) {
@@ -63,48 +86,32 @@ class _ProfilePageState extends State<ProfilePage> {
           child: _buildProfilePicture(deviceSize),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 24.0),
-          child: _buildEditButton(context, deviceSize),
-        )
+          padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
+          child: SpqTextButton(
+            onPressed: reset,
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildProfilePicture(Size deviceSize) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => buildHero(context),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return child;
-        },
-      )),
+      onTap: () => Navigator.of(context).push(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              _buildProfileImageFullScreen(context),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return child;
+          },
+        ),
+      ),
       child: const Hero(
         tag: 'myImage',
         child: CircleAvatar(
           radius: 43,
           backgroundImage: NetworkImage(
               'https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEditButton(BuildContext context, Size deviceSize) {
-    return Padding(
-      padding: EdgeInsets.only(top: deviceSize.height * 0.09),
-      child: ElevatedButton(
-        onPressed: reset,
-        child: const Text(
-          "Edit Profile",
-          style: TextStyle(color: Colors.blue),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              side: BorderSide(
-                color: Colors.blue,
-              )),
         ),
       ),
     );
@@ -117,58 +124,84 @@ class _ProfilePageState extends State<ProfilePage> {
         width: deviceSize.width,
         height: deviceSize.height * 0.3,
         padding: const EdgeInsets.only(top: 10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Corinna', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30)),
-          const Text('@corinna',
-              style: TextStyle(
-                color: Colors.black,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _name,
+              style: const TextStyle(
+                  color: spqBlack, fontWeight: FontWeight.bold, fontSize: 23),
+            ),
+            Text(
+              _username,
+              style: const TextStyle(
+                color: spqDarkGrey,
                 fontSize: 18,
-              )),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 6.0),
-            child: Text('I like big America', style: TextStyle(color: Colors.black, fontSize: 18)),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Row(
-              children: const [
-                Icon(Icons.link),
-                Text('@corinna.io', style: TextStyle(color: Colors.blue)),
-                SizedBox(width: 15),
-                Icon(Icons.calendar_month),
-                Text('Joined September 2018', style: TextStyle(color: Colors.black))
-              ],
+              ),
             ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.pushNamed(context, 'follow'),
-            child: Row(
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
+              child: Text(
+                _bio,
+                style: const TextStyle(color: spqBlack, fontSize: 19),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.link),
+                  Text(
+                    _link,
+                    style: const TextStyle(color: spqPrimaryBlue, fontSize: 16),
+                  ),
+                  const SizedBox(width: 15),
+                  const Icon(Icons.calendar_month),
+                  Text(
+                    _joined,
+                    style: const TextStyle(color: spqDarkGrey, fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            Row(
               mainAxisSize: MainAxisSize.min,
-              children: const [
+              children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Text('21 Following', style: TextStyle(color: spqBlack, fontWeight: FontWeight.bold)),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    _following,
+                    style: const TextStyle(
+                        color: spqBlack,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
                 ),
-                SizedBox(width: 25),
-                Text('117k Followers', style: TextStyle(color: spqBlack, fontWeight: FontWeight.bold)),
+                const SizedBox(width: 25),
+                Text(
+                  _follower,
+                  style: const TextStyle(
+                      color: spqBlack,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
               ],
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildTabs(Size deviceSize) {
-    return Container(
+    return SizedBox(
       width: deviceSize.width,
       height: double.maxFinite,
-      padding: const EdgeInsets.symmetric(vertical: 15),
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: TabBar(
-            unselectedLabelColor: spqLightGrey,
+          appBar: const TabBar(
+            unselectedLabelColor: spqDarkGrey,
             indicatorColor: spqPrimaryBlue,
             labelColor: spqPrimaryBlue,
             tabs: [
@@ -182,38 +215,50 @@ class _ProfilePageState extends State<ProfilePage> {
               )
             ],
           ),
-          body: TabBarView(
-            children: [
-              Text(
-                'Speaqs',
-                style: TextStyle(fontSize: 12),
-              ),
-              Text(
-                'Likes',
-                style: TextStyle(fontSize: 12),
-              )
-            ],
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.0),
+            child: TabBarView(
+              children: [
+                listViewPostText(deviceSize),
+                listViewPostText(deviceSize)
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget buildHero(BuildContext context) {
+  Widget listViewPostText(Size deviceSize) {
+    return Column(
+      children: [
+        PostContainer(
+            name: _name, username: _username, postMessage: _postMessage),
+        const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
+        PostContainer(
+            name: _name, username: _username, postMessage: _postMessage),
+        const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
+        PostContainer(
+            name: _name, username: _username, postMessage: _postMessage),
+      ],
+    );
+  }
+
+  Widget _buildProfileImageFullScreen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "@corinna",
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          _username,
+          style: const TextStyle(color: spqBlack),
         ),
         centerTitle: true,
         leading: const BackButton(
-          color: Colors.black,
+          color: spqBlack,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: spqWhite,
       ),
       body: Container(
-        color: Colors.white,
+        color: spqWhite,
         child: Center(
           child: Hero(
             tag: 'myImage',
