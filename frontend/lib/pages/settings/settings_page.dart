@@ -24,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Size deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: _buildAppBar(),
       body: Stack(children: [
         SettingsList(
           sections: [
@@ -40,10 +40,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               tiles: [
-                buildSettingsTile("Account", "login"),
-                buildSettingsTile("Privacy and safety", "login"),
-                buildSettingsTile("Notifications", "login"),
-                buildSettingsTile("Content preferences", "login"),
+                _buildSettingsTile("Account", "login"),
+                _buildSettingsTile("Privacy and safety", "login"),
+                _buildSettingsTile("Notifications", "login"),
+                _buildSettingsTile("Content preferences", "login"),
               ],
             ),
             SpqSettingsSection(
@@ -58,10 +58,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               tiles: [
-                buildSettingsTile("Display and Sound", "login"),
-                buildSettingsTile("Data usage", "login"),
-                buildSettingsTile("Accessibility", "login"),
-                buildSettingsTile("About speaq", "login"),
+                _buildSettingsTile("Display and Sound", "login"),
+                _buildSettingsTile("Data usage", "login"),
+                _buildSettingsTile("Accessibility", "login"),
+                _buildSettingsTile("About speaq", "login"),
               ],
             ),
           ],
@@ -79,7 +79,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  SettingsTile buildSettingsTile(String text, String route) {
+  SettingsTile _buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_back),
       title: Text(text, style: const TextStyle(fontSize: 15)),
@@ -87,7 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  AppBar buildAppBar() {
+  AppBar _buildAppBar() {
     return AppBar(
       title: const Text(
         "settings and privacy",

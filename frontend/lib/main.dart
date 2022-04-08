@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/utils/route_util.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
-Future<void> main() async {
-  await Settings.init(cacheProvider: SharePreferenceCache());
-
+void main() {
   runApp(const Speaq());
 }
 
@@ -19,7 +16,7 @@ class Speaq extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.blue,
           appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
-          scaffoldBackgroundColor: spqBackgroundGrey,
+          scaffoldBackgroundColor: spqWhite,
           backgroundColor: spqWhite,
           bottomAppBarColor: spqWhite,
           bottomNavigationBarTheme:
@@ -31,7 +28,7 @@ class Speaq extends StatelessWidget {
           shadowColor: spqLightGreyTranslucent,
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
           textTheme: spqTextTheme),
-      initialRoute: "settings",
+      initialRoute: "profile",
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
