@@ -12,6 +12,8 @@ class RouteGenerator {
     switch (settings.name) {
       case "main":
         return PageTransition(child: const MainApp(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "base":
+        return PageTransition(child: const BasePage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
       case "login":
         return PageTransition(child: const LoginPage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
       case "register":
@@ -27,16 +29,15 @@ class RouteGenerator {
       case "notifications":
         return PageTransition(child: const NotificationsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "search":
-        return PageTransition(child: SearchPage(), type: PageTransitionType.fade);
+        return PageTransition(child: SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settingsPrivacy":
-        return PageTransition(child: SettingsAndPrivacyPage(), type: PageTransitionType.fade);
+        return PageTransition(child: SettingsAndPrivacyPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "bookmarks":
-        return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade);
+        return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":
-        return PageTransition(child: ImpressumPage(), type: PageTransitionType.fade);
+        return PageTransition(child: ImpressumPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "qr_code":
-        return PageTransition(child: QrCodePage(), type: PageTransitionType.fade);
-        return PageTransition(child: const SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: QrCodePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "edit_profile":
         return PageTransition(child: const EditProfilePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "follow":

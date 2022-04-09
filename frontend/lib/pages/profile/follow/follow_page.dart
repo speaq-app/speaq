@@ -138,7 +138,7 @@ class FollowerSearchDelegate extends SearchDelegate {
     List<Follower> matchQuery = [];
 
     for (Follower currentFollower in followerList) {
-      if ((currentFollower.firstname.isNotEmpty ? currentFollower.firstname!.toLowerCase().contains(query.toLowerCase()) : false) ||
+      if ((currentFollower.firstname.isNotEmpty ? currentFollower.firstname.toLowerCase().contains(query.toLowerCase()) : false) ||
           (currentFollower.lastname.isNotEmpty ? currentFollower.lastname.toLowerCase().contains(query.toLowerCase()) : false)) {
         matchQuery.add(currentFollower);
       }
