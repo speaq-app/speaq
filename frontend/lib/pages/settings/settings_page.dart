@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:frontend/utils/all_utils.dart';
 
@@ -26,7 +27,11 @@ class _SettingsPageState extends State<SettingsPage> {
     Size deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: SpqAppBar(preferredSize: deviceSize, scrollController: ScrollController(), title: const Text(
+        "Settings and Privacy",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16),
+      ),),
       body: Stack(children: [
         SettingsList(
           sections: [
@@ -77,33 +82,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_speaq.svg", height: deviceSize.height*0.05, width: deviceSize.width*0.3),
+      child: SvgPicture.asset("assets/images/logo/logo_text.svg", height: deviceSize.height*0.05, width: deviceSize.width*0.3),
     );
   }
 
   SettingsTile _buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
-      trailing: Icon(Icons.adaptive.arrow_back),
+      trailing: Icon(Icons.adaptive.arrow_forward),
       title: Text(text, style: const TextStyle(fontSize: 15)),
       onPressed: (context) => Navigator.pushNamed(context, route),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: const Text(
-        "settings and privacy",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16),
-      ),
-      centerTitle: true,
-      leadingWidth: 80,
-      actions: [
-        TextButton(
-          onPressed: () => log("done"),
-          child: const Text("Done"),
-        ),
-      ],
     );
   }
 }

@@ -130,7 +130,7 @@ class UserMenu extends StatelessWidget {
       ListTile(
         title: const Text("Settings and privacy"),
         onTap: () {
-          Navigator.popAndPushNamed(context, "settingsPrivacy");
+          Navigator.popAndPushNamed(context, "settings");
         },
       ),
       ListTile(
