@@ -49,50 +49,96 @@ class UserMenu extends StatelessWidget {
                 userName,
                 style: const TextStyle(fontSize: 15),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        following,
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 2),
-                        child: Text(
-                          'Following',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 2.0),
-                          child: Text(
-                            follower,
+              InkWell(
+                onTap: () => Navigator.pushNamed(context, 'follow'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            following,
                             style: const TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        const Text(
-                          'Followers',
-                          style: TextStyle(fontSize: 10),
-                        )
-                      ],
+                          const Padding(
+                            padding: EdgeInsets.only(left: 2),
+                            child: Text(
+                              'Following',
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 2.0),
+                            child: Text(
+                              follower,
+                              style: const TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const Text(
+                            'Followers',
+                            style: TextStyle(fontSize: 10),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       );
 
-  Widget buildMenu(BuildContext context) => Container();
+  Widget buildMenu(BuildContext context) => Column(
+    children: [
+      ListTile(
+        leading: const Icon(Icons.person_outline),
+        title: const Text("Profile"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "profile");
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.qr_code_2),
+        title: const Text("QR-Code"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "pq-code");
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.bookmark_border),
+        title: const Text("Bookmarks"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "bookmarks");
+        },
+      ),
+      const Divider(
+        color: Colors.black54,
+        thickness: 0.75,
+      ),
+      ListTile(
+        title: const Text("Settings and privacy"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "settingsPrivacy");
+        },
+      ),
+      ListTile(
+        title: const Text("Impressum"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "impressum");
+        },
+      ),
+    ],
+  );
 }

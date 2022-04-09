@@ -10,7 +10,7 @@ class SpqTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => onPressed,
+      onPressed: onPressed,
       child: const Text(
         "Edit Profile",
         style: TextStyle(color: spqPrimaryBlue),
