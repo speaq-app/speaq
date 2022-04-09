@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Padding(
           padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
           child: SpqTextButton(
-            onPressed: reset,
+            onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
           ),
         ),
       ],
@@ -164,28 +164,31 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    _following,
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, 'follow'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      _following,
+                      style: const TextStyle(
+                          color: spqBlack,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(width: 25),
+                  Text(
+                    _follower,
                     style: const TextStyle(
                         color: spqBlack,
                         fontWeight: FontWeight.bold,
                         fontSize: 16),
                   ),
-                ),
-                const SizedBox(width: 25),
-                Text(
-                  _follower,
-                  style: const TextStyle(
-                      color: spqBlack,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -270,5 +273,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void reset() {}
 }
