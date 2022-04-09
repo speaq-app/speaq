@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/route_util.dart';
-import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/pages/all_pages_export.dart';
+
+import 'package:frontend/utils/all_utils.dart';
+
+import 'widgets/all_widgets.dart';
 
 void main() {
   runApp(const Speaq());
@@ -12,23 +15,23 @@ class Speaq extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Speaq',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
+          primarySwatch: Colors.blue,
+          appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
           scaffoldBackgroundColor: spqWhite,
-          backgroundColor: spqWhite,
+          backgroundColor: spqBackgroundGrey,
           bottomAppBarColor: spqWhite,
-          bottomNavigationBarTheme:  const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey ),
+
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
           dialogBackgroundColor: spqWhite,
           primaryColor: spqPrimaryBlue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           errorColor: spqErrorRed,
           shadowColor: spqLightGreyTranslucent,
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
-          textTheme: spqTextTheme
-      ),
-      initialRoute: "login",
+          textTheme: spqTextTheme),
+      initialRoute: 'main',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
@@ -39,83 +42,81 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return FutureBuilder<bool>(
+      future: verifyIDToken(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const LoginPage();
+        } else if (snapshot.hasData) {
+          if (snapshot.data!) {
+            return const HomePage();
+          } else {
+            return const LoginPage();
+          }
+        } else {
+          return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.25);
+        }
+      },
+    );
   }
 }
 
+Future<bool> verifyIDToken() {
+  return Future.delayed(Duration(seconds: 5), () => false);
+}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class SPQButtonNavigationBar extends StatefulWidget {
+  SPQButtonNavigationBar({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SPQButtonNavigationBar> createState() => _SPQButtonNavigationBarState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class _SPQButtonNavigationBarState extends State<SPQButtonNavigationBar> {
+  int _selectedItem = 0;
+  var _pages = [HomePage(), SearchPage(), NotificationsPage(), MessagesPage()];
+  var _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('Placeholder'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: PageView(
+        children: _pages,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedItem = index;
+          });
+        },
+        controller: _pageController,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.blue,
+        showUnselectedLabels: false,
+        showSelectedLabels: false,
+        iconSize: 30,
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications), label: "Notification"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.message), label: "Message")
+        ],
+        currentIndex: _selectedItem,
+        onTap: (index) {
+          setState(() {
+            _selectedItem = index;
+            _pageController.animateToPage(_selectedItem,
+                duration: Duration(milliseconds: 200), curve: Curves.linear);
+          });
+        },
+      ),
     );
   }
 }
