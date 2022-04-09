@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
-
 import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
