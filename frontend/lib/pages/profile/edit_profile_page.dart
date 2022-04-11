@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_textfield.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -41,6 +42,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -48,57 +51,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
           currentFocus.unfocus();
         }
       },
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        body: Container(
-          padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-          child: ListView(
-            children: [
-              Center(
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  _buildFullScreenProfileImage(context, hcImageURL, hcUsername),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return child;
-                          })),
-                      child: _buildProfileImage(hcImageURL),
-                    ),
-                  ],
+      child: SafeArea(
+        child: Scaffold(
+          appBar: _buildAppBar(deviceSize),
+          body: Container(
+            padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
+            child: ListView(
+              children: [
+                Center(
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).push(PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    _buildFullScreenProfileImage(context, hcImageURL, hcUsername),
+                            transitionsBuilder:
+                                (context, animation, secondaryAnimation, child) {
+                              return child;
+                            })),
+                        child: _buildProfileImage(hcImageURL),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              SpeaqTextField(
-                  maxLength: maxlengthName, controller: _nameController, label: "Name"),
-              SpeaqTextField(
-                  maxLength: maxlengthUsername,
-                  controller: _usernameController,
-                  label: "Username"),
-              SpeaqTextField(
-                  maxLength: maxlengthDescription,
-                  controller: _descriptionController,
-                  label: "Description",
-                  maxLines: 12,
-                  newLines: 5),
-              SpeaqTextField(
-                  maxLength: maxlengthWebsite,
-                  controller: _websiteController,
-                  label: "Website"),
-            ],
+                const SizedBox(
+                  height: 40,
+                ),
+                SpeaqTextField(
+                    maxLength: maxlengthName, controller: _nameController, label: "Name"),
+                SpeaqTextField(
+                    maxLength: maxlengthUsername,
+                    controller: _usernameController,
+                    label: "Username"),
+                SpeaqTextField(
+                    maxLength: maxlengthDescription,
+                    controller: _descriptionController,
+                    label: "Description",
+                    maxLines: 12,
+                    newLines: 5),
+                SpeaqTextField(
+                    maxLength: maxlengthWebsite,
+                    controller: _websiteController,
+                    label: "Website"),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
+  PreferredSizeWidget _buildAppBar(Size deviceSize) {
+    return SpqAppBar(
       title: const Text(
         "Edit Profile",
         textAlign: TextAlign.center,
@@ -114,7 +119,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
       leadingWidth: 80,
-      actions: [
+      actionList: [
         TextButton(
           onPressed: _saveProfile,
           child: const Text(
@@ -124,7 +129,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ),
         ),
-      ],
+      ], preferredSize: deviceSize,
     );
   }
 
