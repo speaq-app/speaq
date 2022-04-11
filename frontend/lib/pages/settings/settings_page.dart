@@ -47,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               tiles: [
-                _buildSettingsTile("Account", "login"),
+                _buildSettingsTile("Account", "settAccount"),
                 _buildSettingsTile("Privacy and safety", "login"),
                 _buildSettingsTile("Notifications", "login"),
                 _buildSettingsTile("Content preferences", "login"),
