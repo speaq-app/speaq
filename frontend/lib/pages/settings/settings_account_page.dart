@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../utils/speaq_styles.dart';
 import '../../widgets/speaq_appbar.dart';
 import '../../widgets/speaq_settings_section.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -35,7 +34,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                _buildSettingsTile("Account-Informationen", "settAccount"),
+                _buildSettingsTile("Account-Informationen", "login"),
                 _buildSettingsTile("Passwort ändern", "login"),
                 _buildPopUpWindow(
                     "Account löschen",
