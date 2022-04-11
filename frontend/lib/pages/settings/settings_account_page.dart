@@ -36,10 +36,12 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 ),
                 _buildSettingsTile("Account-Informationen", "login"),
                 _buildSettingsTile("Passwort ändern", "login"),
+                //Account löschen
                 _buildPopUpWindow(
                     "Account löschen",
                     "Bist du dir sicher, dass du den Account löschen möchtest?",
                     "Löschen"),
+                //Account abmelden
                 _buildPopUpWindow(
                     "Account abmelden",
                     "Bist du dir sicher, dass du dich abmelden möchtest?",
@@ -48,6 +50,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
             ),
           ],
         ),
+        //Logo
         Positioned(
           child: Align(
               alignment: Alignment.bottomCenter,
@@ -59,7 +62,9 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     );
   }
 
-  SettingsTile _buildPopUpWindow(String text, String popupMessage, exitText) {
+  //Pop-up-Fenster
+  SettingsTile _buildPopUpWindow(
+      String text, String popupMessage, String exitText) {
     return SettingsTile.navigation(
         trailing: Icon(Icons.adaptive.arrow_forward),
         title: Text(text, style: const TextStyle(fontSize: 15)),
