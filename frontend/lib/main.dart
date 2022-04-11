@@ -60,7 +60,7 @@ class MainApp extends StatelessWidget {
             return const LoginPage();
           }
         } else {
-          return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.25);
+          return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
         }
       },
     );
@@ -68,6 +68,6 @@ class MainApp extends StatelessWidget {
 }
 
 Future<bool> verifyIDToken() {
-  return Future.delayed(Duration(seconds: 2), () => false);
+  return Future.delayed(const Duration(seconds: 3), () => false);
 }
 

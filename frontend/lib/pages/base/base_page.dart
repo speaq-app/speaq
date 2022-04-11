@@ -38,12 +38,37 @@ class _BasePageState extends State<BasePage> {
     });
   }
 
+  final List<Widget> _pages = const [HomePage(), SearchPage(), NotificationsPage(), MessagesPage()];
+  late List<String> pageTitles;
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
+
+  void _switchPage(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.animateToPage(_selectedIndex, duration: const Duration(milliseconds: 200), curve: Curves.linear);
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: SPQButtonNavigationBar(),
+    return Container(
+      color: spqBackgroundGrey,
+      child: SafeArea(
+        child: Scaffold(
+          body: PageView(
+            children: _pages,
+            onPageChanged: (index){
+              setState(() {
+                _selectedIndex=index;
+              });
+            },
+            controller: _pageController,
+          ),
+          bottomNavigationBar: SpqButtonNavigationBar(switchPage: _switchPage, selectedIndex: _selectedIndex,),
+        ),
       ),
     );
   }
