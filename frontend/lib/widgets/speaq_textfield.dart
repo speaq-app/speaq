@@ -11,17 +11,19 @@ class SpeaqTextField extends StatelessWidget {
   final MaxLengthEnforcement enforcement;
   final TextEditingController controller;
   final String label;
+  final Widget? icon;
 
-  const SpeaqTextField(
-      {Key? key,
-      this.newLines = 1,
-      this.minLines = 1,
-      this.maxLines = 1,
-      required this.maxLength,
-      this.enforcement = MaxLengthEnforcement.none,
-      required this.controller,
-      required this.label})
-      : super(key: key);
+  const SpeaqTextField({
+    Key? key,
+    this.newLines = 1,
+    this.minLines = 1,
+    this.maxLines = 1,
+    required this.maxLength,
+    this.enforcement = MaxLengthEnforcement.none,
+    required this.controller,
+    required this.label,
+    this.icon,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class SpeaqTextField extends StatelessWidget {
             color: spqErrorRed,
           ),
           labelText: label,
-          prefixIcon: const Icon(Icons.alternate_email),
+          prefixIcon: icon,
           border: const OutlineInputBorder(),
         ));
   }
