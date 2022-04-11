@@ -3,6 +3,7 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
+import 'package:frontend/widgets/spq_FAB.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -111,6 +112,9 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        floatingActionButton: SpqFloatingActionButton(onPressed: () { print("New Speaq"); }, heroTag: 'post',
+        child: SvgPicture.asset("assets/images/logo/logo_text.svg"),),
+
       ),
     );
   }
