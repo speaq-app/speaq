@@ -43,7 +43,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return SafeArea(
+    return Container(
+      color: spqBackgroundGrey,
       child: Scaffold(
         appBar: SpqAppBar(
           actionList: [

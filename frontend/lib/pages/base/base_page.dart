@@ -54,18 +54,21 @@ class _BasePageState extends State<BasePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: PageView(
-          children: _pages,
-          onPageChanged: (index){
-            setState(() {
-              _selectedIndex=index;
-            });
-          },
-          controller: _pageController,
+    return Container(
+      color: spqBackgroundGrey,
+      child: SafeArea(
+        child: Scaffold(
+          body: PageView(
+            children: _pages,
+            onPageChanged: (index){
+              setState(() {
+                _selectedIndex=index;
+              });
+            },
+            controller: _pageController,
+          ),
+          bottomNavigationBar: SpqButtonNavigationBar(switchPage: _switchPage, selectedIndex: _selectedIndex,),
         ),
-        bottomNavigationBar: SpqButtonNavigationBar(switchPage: _switchPage, selectedIndex: _selectedIndex,),
       ),
     );
   }

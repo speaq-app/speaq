@@ -21,7 +21,7 @@ class SpqLoadingWidget extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Center(
-              child: SpinKitChasingDots(
+              child: SpinKitWave(
                 color: spqPrimaryBlue,
                 size: radius,
               ),
