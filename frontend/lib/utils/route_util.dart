@@ -13,7 +13,7 @@ class RouteGenerator {
       case "main":
         return PageTransition(child: const MainApp(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "base":
-        return PageTransition(child: const BasePage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
+        return PageTransition(child: const BasePage(), type: PageTransitionType.bottomToTop, alignment: Alignment.center);
       case "login":
         return PageTransition(child: const LoginPage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
       case "register":
@@ -52,10 +52,13 @@ class RouteGenerator {
   }
 
   static _errorRoute() {
-    return MaterialPageRoute(
-      builder: (context) {
-        return Scaffold(appBar: AppBar(title: Text("ERROR")), body: Center(child: Text("ERROR")));
-      },
-    );
+    return MaterialPageRoute(builder: (context) {
+      return Scaffold(
+        appBar: AppBar(title: Text("ERROR")),
+          body: Center(
+              child: Text("ERROR")
+          )
+      );
+    },);
   }
 }

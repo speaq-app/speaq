@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/widgets/speaq_appbar.dart';
+import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/speaq_text_button.dart';
 
@@ -12,8 +14,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final String _postMessage =
-      "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
+  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _link = "hs-heilbronn.de";
   final String _name = "Informatics";
   final String _username = "@hhn";
@@ -25,14 +26,26 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      body: ListView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        children: [
-          _buildHeader(deviceSize, context),
-          _buildTabs(deviceSize),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: SpqAppBar(preferredSize: deviceSize, title: Text(
+          _username,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16),
+        ),),
+        body: ListView(
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          children: [
+            _buildHeader(deviceSize, context),
+            _buildTabs(deviceSize),
+          ],
+        ),
+        bottomNavigationBar: SpqButtonNavigationBar(
+          switchPage: (index) {
+            Navigator.pushNamed(context, "base");
+          },
+          selectedIndex: 0,
+        ),
       ),
     );
   }
@@ -69,8 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
         color: spqPrimaryBlue,
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: NetworkImage(
-              'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg'),
+          image: NetworkImage('https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg'),
         ),
       ),
     );
@@ -99,8 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              _buildProfileImageFullScreen(context),
+          pageBuilder: (context, animation, secondaryAnimation) => _buildProfileImageFullScreen(context),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return child;
           },
@@ -110,8 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
         tag: 'myImage',
         child: CircleAvatar(
           radius: 43,
-          backgroundImage: NetworkImage(
-              'https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
+          backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
         ),
       ),
     );
@@ -129,8 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Text(
               _name,
-              style: const TextStyle(
-                  color: spqBlack, fontWeight: FontWeight.bold, fontSize: 23),
+              style: const TextStyle(color: spqBlack, fontWeight: FontWeight.bold, fontSize: 23),
             ),
             Text(
               _username,
@@ -173,19 +182,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
                       _following,
-                      style: const TextStyle(
-                          color: spqBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
+                      style: const TextStyle(color: spqBlack, fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ),
                   const SizedBox(width: 25),
                   Text(
                     _follower,
-                    style: const TextStyle(
-                        color: spqBlack,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
+                    style: const TextStyle(color: spqBlack, fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ],
               ),
@@ -221,10 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 7.0),
             child: TabBarView(
-              children: [
-                listViewPostText(deviceSize),
-                listViewPostText(deviceSize)
-              ],
+              children: [listViewPostText(deviceSize), listViewPostText(deviceSize)],
             ),
           ),
         ),
@@ -235,14 +235,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget listViewPostText(Size deviceSize) {
     return Column(
       children: [
-        PostContainer(
-            name: _name, username: _username, postMessage: _postMessage),
+        PostContainer(name: _name, username: _username, postMessage: _postMessage),
         const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
-        PostContainer(
-            name: _name, username: _username, postMessage: _postMessage),
+        PostContainer(name: _name, username: _username, postMessage: _postMessage),
         const Divider(thickness: 0.55, color: spqLightGreyTranslucent),
-        PostContainer(
-            name: _name, username: _username, postMessage: _postMessage),
+        PostContainer(name: _name, username: _username, postMessage: _postMessage),
       ],
     );
   }
@@ -265,12 +262,10 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Center(
           child: Hero(
             tag: 'myImage',
-            child: Image.network(
-                "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg"),
+            child: Image.network("https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg"),
           ),
         ),
       ),
     );
   }
-
 }

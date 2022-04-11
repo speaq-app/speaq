@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class UserMenu extends StatelessWidget {
   UserMenu({Key? key}) : super(key: key);
 
-  String userName = "@dave";
-  String name = "David";
+  String userName = "@hhn";
+  String name = "Informatics";
   String follower = "234";
   String following = "690";
   String image =
-      "https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg";
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -130,7 +130,7 @@ class UserMenu extends StatelessWidget {
       ListTile(
         title: const Text("Settings and privacy"),
         onTap: () {
-          Navigator.popAndPushNamed(context, "settingsPrivacy");
+          Navigator.popAndPushNamed(context, "settings");
         },
       ),
       ListTile(
