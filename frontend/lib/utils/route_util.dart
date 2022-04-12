@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
-import 'package:page_transition/page_transition.dart';
 
-import '../pages/settings/settings_accessibility.dart';
-import '../pages/settings/settings_account_page.dart';
-import '../pages/settings/settings_content_preferences.dart';
-import '../pages/settings/settings_data_usage.dart';
-import '../pages/settings/settings_display_sound.dart';
-import '../pages/settings/settings_notifications.dart';
-import '../pages/settings/settings_privacy_safety.dart';
+import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
