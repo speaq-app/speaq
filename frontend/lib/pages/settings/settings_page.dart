@@ -54,6 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   _buildSettingsTile("Content preferences", "login"),
                 ],
               ),
+
               SpqSettingsSection(
                 title: const Padding(
                   padding: EdgeInsets.all(8.0),

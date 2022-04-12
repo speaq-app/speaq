@@ -3,6 +3,8 @@ import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../pages/settings/settings_account_page.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
 /*
@@ -32,6 +34,8 @@ class RouteGenerator {
         return PageTransition(child: SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settingsPrivacy":
         return PageTransition(child: SettingsAndPrivacyPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "settAccount":
+        return PageTransition(child: AccountSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "bookmarks":
         return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":
@@ -41,6 +45,9 @@ class RouteGenerator {
       case "edit_profile":
         return PageTransition(child: const EditProfilePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "follow":
+
+
+
 /*
         args = settings.arguments as Map<String, dynamic>;
         String username = args["username"];
