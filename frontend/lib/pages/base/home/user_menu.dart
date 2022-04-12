@@ -113,7 +113,7 @@ class UserMenu extends StatelessWidget {
         leading: const Icon(Icons.qr_code_2),
         title: const Text("QR-Code"),
         onTap: () {
-          Navigator.popAndPushNamed(context, "pq-code");
+          Navigator.popAndPushNamed(context, "qr_ode");
         },
       ),
       ListTile(

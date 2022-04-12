@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         floatingActionButton: SpqFloatingActionButton(onPressed: () { print("New Speaq"); }, heroTag: 'post',
-        child: SvgPicture.asset("assets/images/logo/logo_text.svg"),),
+        child: SvgPicture.asset("assets/images/logo/logo_speaq.svg", color: spqWhite,height: 28, width: 28,),),
 
       ),
     );
