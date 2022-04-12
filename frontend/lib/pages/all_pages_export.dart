@@ -17,3 +17,4 @@ export 'profile/edit_profile_page.dart';
 
 export 'settings/settings_page.dart';
 
+export 'post/new_post_page.dart';
