@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../widgets/speaq_appbar.dart';
-import '../../widgets/speaq_settings_section.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-class AccountSettingsPage extends StatefulWidget {
-  const AccountSettingsPage({Key? key}) : super(key: key);
+import '../../utils/speaq_styles.dart';
+import '../../widgets/speaq_appbar.dart';
+import '../../widgets/speaq_settings_section.dart';
+
+class PrivacySafetySettingsPage extends StatefulWidget {
+  const PrivacySafetySettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<AccountSettingsPage> createState() => _AccountSettingsPageState();
+  State<PrivacySafetySettingsPage> createState() =>
+      _PrivacySafetySettingsPageState();
 }
 
-class _AccountSettingsPageState extends State<AccountSettingsPage> {
+class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-
+    bool valuePrivateSwitch = false;
     return Scaffold(
       appBar: SpqAppBar(
         preferredSize: deviceSize,
         scrollController: ScrollController(),
         title: const Text(
-          "Account",
+          "Settings and Privacy",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16),
         ),
@@ -34,23 +37,27 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 padding: EdgeInsets.all(20.0),
               ),
               tiles: [
-                _buildSettingsTile("Account-Informationen", "login"),
-                _buildSettingsTile("Passwort ändern", "login"),
-                //Account löschen
+                //Privates Konto SwitchTile
+                SettingsTile.switchTile(
+                  title: Text("Privates Konto", style: TextStyle(fontSize: 15)),
+                  initialValue: valuePrivateSwitch,
+                  onToggle: (value) {
+                    setState(() {
+                      print(valuePrivateSwitch);
+                      valuePrivateSwitch = value;
+                      print(valuePrivateSwitch);
+                    });
+                  },
+                ),
+                //Suchverlauf löschen
                 _buildPopUpWindow(
-                    "Account löschen",
-                    "Bist du dir sicher, dass du den Account löschen möchtest?",
+                    "Suchverlauf löschen",
+                    "Bist du dir sicher, dass du den Suchverlauf löschen möchtest?",
                     "Löschen"),
-                //Account abmelden
-                _buildPopUpWindow(
-                    "Account abmelden",
-                    "Bist du dir sicher, dass du dich abmelden möchtest?",
-                    "Abmelden"),
               ],
             ),
           ],
         ),
-        //Logo
         Positioned(
           child: Align(
               alignment: Alignment.bottomCenter,
@@ -88,14 +95,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
       width: deviceSize.width,
       child: SvgPicture.asset("assets/images/logo/logo_text.svg",
           height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
-    );
-  }
-
-  SettingsTile _buildSettingsTile(String text, String route) {
-    return SettingsTile.navigation(
-      trailing: Icon(Icons.adaptive.arrow_forward),
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      onPressed: (context) => Navigator.pushNamed(context, route),
     );
   }
 }

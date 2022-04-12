@@ -48,9 +48,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               tiles: [
                 _buildSettingsTile("Account", "settAccount"),
-                _buildSettingsTile("Privacy and safety", "login"),
-                _buildSettingsTile("Notifications", "login"),
-                _buildSettingsTile("Content preferences", "login"),
+                _buildSettingsTile("Privacy and safety", "settPrivSafety"),
+                _buildSettingsTile("Notifications", "settNotific"),
+                _buildSettingsTile("Content preferences", "settContentPref"),
               ],
             ),
             SpqSettingsSection(
@@ -65,9 +65,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               tiles: [
-                _buildSettingsTile("Display and Sound", "login"),
-                _buildSettingsTile("Data usage", "login"),
-                _buildSettingsTile("Accessibility", "login"),
+                _buildSettingsTile("Display and Sound", "settDispSound"),
+                _buildSettingsTile("Data usage", "settDataUsage"),
+                _buildSettingsTile("Accessibility", "settAccess"),
                 _buildSettingsTile("About speaq", "login"),
               ],
             ),
