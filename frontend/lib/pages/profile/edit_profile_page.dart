@@ -1,6 +1,8 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_textfield.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -11,12 +13,10 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  String hcImageURL =
-      "https://media-exp1.licdn.com/dms/image/C4E03AQHK_V2ZcbYo0Q/profile-displayphoto-shrink_200_200/0/1625487290463?e=2147483647&v=beta&t=8cRbhYZWCi9mi7XaRfq-TkGrX_G00ZBTUOCj0T882SY";
-  String hcName = "Nosakhare Omoruyi";
-  String hcUsername = "nomoruyi";
-  String hcDescription =
-      "This is a Text about me and myself. You think thats big? Then look at my forehead!";
+  String hcImageURL = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  String hcName = "Informatics";
+  String hcUsername = "hhn";
+  String hcDescription = "I like Hochschule Heilbronn";
   String hcWebsite = "open2work.blm";
 
   //Limits
@@ -41,6 +41,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -48,57 +50,66 @@ class _EditProfilePageState extends State<EditProfilePage> {
           currentFocus.unfocus();
         }
       },
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        body: Container(
-          padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-          child: ListView(
-            children: [
-              Center(
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  _buildFullScreenProfileImage(context, hcImageURL, hcUsername),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return child;
-                          })),
-                      child: _buildProfileImage(hcImageURL),
-                    ),
-                  ],
+      child: SafeArea(
+        child: Scaffold(
+          appBar: _buildAppBar(deviceSize),
+          body: Container(
+            padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
+            child: ListView(
+              children: [
+                Center(
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).push(PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, hcImageURL, hcUsername),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return child;
+                            })),
+                        child: _buildProfileImage(hcImageURL),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              SpeaqTextField(
-                  maxLength: maxlengthName, controller: _nameController, label: "Name"),
-              SpeaqTextField(
+                const SizedBox(
+                  height: 40,
+                ),
+                SpeaqTextField(
+                  maxLength: maxlengthName,
+                  controller: _nameController,
+                  label: "Name",
+                  icon: const Icon(Icons.drive_file_rename_outline),
+                ),
+                SpeaqTextField(
                   maxLength: maxlengthUsername,
                   controller: _usernameController,
-                  label: "Username"),
-              SpeaqTextField(
+                  label: "Username",
+                  icon: const Icon(Icons.alternate_email_rounded),
+                ),
+                SpeaqTextField(
                   maxLength: maxlengthDescription,
                   controller: _descriptionController,
                   label: "Description",
                   maxLines: 12,
-                  newLines: 5),
-              SpeaqTextField(
+                  newLines: 5,
+                  icon: Icon(Icons.format_align_left),
+                ),
+                SpeaqTextField(
                   maxLength: maxlengthWebsite,
                   controller: _websiteController,
-                  label: "Website"),
-            ],
+                  label: "Website",
+                  icon: const Icon(Icons.web),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
+  PreferredSizeWidget _buildAppBar(Size deviceSize) {
+    return SpqAppBar(
       title: const Text(
         "Edit Profile",
         textAlign: TextAlign.center,
@@ -114,7 +125,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
       leadingWidth: 80,
-      actions: [
+      actionList: [
         TextButton(
           onPressed: _saveProfile,
           child: const Text(
@@ -125,6 +136,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ),
       ],
+      preferredSize: deviceSize,
     );
   }
 
@@ -187,12 +199,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (_checkIfDataIsValid(_nameController, hcName, maxlengthName)) {
       log("Name: " + _nameController.text + "\n");
     }
-    if (_checkIfDataIsValid(
-        _usernameController, hcUsername, maxlengthUsername)) {
+    if (_checkIfDataIsValid(_usernameController, hcUsername, maxlengthUsername)) {
       log("Username: " + _usernameController.text + "\n");
     }
-    if (_checkIfDataIsValid(
-        _descriptionController, hcDescription, maxlengthDescription)) {
+    if (_checkIfDataIsValid(_descriptionController, hcDescription, maxlengthDescription)) {
       log("Description: " + _descriptionController.text + "\n");
     }
     if (_checkIfDataIsValid(_websiteController, hcWebsite, maxlengthWebsite)) {
@@ -201,11 +211,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     log("...Saved");
   }
 
-  bool _checkIfDataIsValid(
-      TextEditingController controller, String originalText, int maxLength) {
-    return controller.text != originalText &&
-        controller.text.isNotEmpty &&
-        controller.text.length < maxLength;
+  bool _checkIfDataIsValid(TextEditingController controller, String originalText, int maxLength) {
+    return controller.text != originalText && controller.text.isNotEmpty && controller.text.length < maxLength;
   }
 
   @override

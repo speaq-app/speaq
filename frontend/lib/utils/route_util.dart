@@ -15,7 +15,7 @@ class RouteGenerator {
       case "main":
         return PageTransition(child: const MainApp(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "base":
-        return PageTransition(child: const BasePage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
+        return PageTransition(child: const BasePage(), type: PageTransitionType.bottomToTop, alignment: Alignment.center);
       case "login":
         return PageTransition(child: const LoginPage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
       case "register":
