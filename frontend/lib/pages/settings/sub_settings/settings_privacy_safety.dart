@@ -33,7 +33,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
           sections: [
             SpqSettingsSection(
               title: const Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(25.0),
               ),
               tiles: [
                 //Privates Konto SwitchTile
