@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/api/protos/resource.pb.dart';
+import 'package:frontend/api/resource_service.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -71,6 +73,8 @@ class _LoginPageState extends State<LoginPage> {
   void _loginUser() async {
     log(_usernameTEC.text);
     //_checkUser()
+    ResourceResponse resource = await ResourceService.getResource(1337);
+    log(resource.name);
     Navigator.pushNamed(context, "base");
   }
 }

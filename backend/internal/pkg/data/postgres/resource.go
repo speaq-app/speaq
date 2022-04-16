@@ -1,7 +1,23 @@
 package postgres
 
-import "github.com/speak-app/speak/internal/pkg/data"
+import (
+	"context"
+
+	"github.com/speak-app/speak/internal/pkg/data"
+)
 
 func (s Service) ResourceByID(id int64) (data.Resource, error) {
-	return data.Resource{}, nil
+	ctx, cancel := context.WithTimeout(context.Background(), s.timeout)
+	defer cancel()
+
+	var r data.Resource
+	if err := s.QueryRow(ctx, `
+SELECT resource_data, resource_name, mime_type, size
+FROM resources
+WHERE id = $1;
+`, id).Scan(&r.Data, &r.Name, &r.MIMEType, &r.Size); err != nil {
+		return r, err
+	}
+
+	return r, nil
 }

@@ -93,7 +93,7 @@ var (
 
 func init() {
 	v = viper.New()
-	v.SetEnvPrefix("INFRARED")
+	v.SetEnvPrefix("SPEAQ")
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 
