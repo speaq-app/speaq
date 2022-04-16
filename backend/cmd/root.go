@@ -8,10 +8,9 @@ import (
 	"net"
 	"path"
 	"strings"
-	"time"
 
 	"github.com/speak-app/speak/internal/app/resource"
-	"github.com/speak-app/speak/internal/pkg/data/postgres"
+	"github.com/speak-app/speak/internal/pkg/data/mockdb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -61,19 +60,21 @@ var (
 				zap.String("config", configPath),
 			)
 
-			cfg, err := loadConfig()
+			_, err = loadConfig()
 			if err != nil {
 				log.Fatalf("Failed to read config from %q, %s", configPath, err)
 			}
 
-			db, err := postgres.Open(cfg.Database.DSN(), time.Second*5)
-			if err != nil {
-				return err
-			}
+			// db, err := postgres.Open(cfg.Database.DSN(), time.Second*5)
+			// if err != nil {
+			// 	return err
+			// }
 
-			if err := db.MigrateSchema(); err != nil {
-				return err
-			}
+			// if err := db.MigrateSchema(); err != nil {
+			// 	return err
+			// }
+
+			db := mockdb.New()
 
 			srv := grpc.NewServer()
 			resourceSrv := resource.Server{

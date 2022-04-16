@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/speak-app/speak/internal/pkg/data"
 )
 
 //go:embed schema/*.sql
@@ -19,13 +20,13 @@ type Service struct {
 	timeout time.Duration
 }
 
-func Open(dsn string, timeout time.Duration) (Service, error) {
+func Open(dsn string, timeout time.Duration) (data.Service, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	pool, err := pgxpool.Connect(ctx, dsn)
 	if err != nil {
-		return Service{}, err
+		return nil, err
 	}
 
 	return Service{
