@@ -15,51 +15,53 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: spqWhite,
-        child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            children: <Widget>[
-              Column(
-                children: const <Widget>[
-                  SizedBox(
-                    height: 120,
-                  ),
-                  Text(
-                    "Login",
-                    style: TextStyle(fontSize: 40),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              TextField(
-                controller: _usernameTEC,
-                style: const TextStyle(
-                  fontSize: 25,
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          color: spqWhite,
+          child: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              children: <Widget>[
+                Column(
+                  children: const <Widget>[
+                    SizedBox(
+                      height: 120,
+                    ),
+                    Text(
+                      "Login",
+                      style: TextStyle(fontSize: 40),
+                    ),
+                  ],
                 ),
-                decoration: const InputDecoration(
-                  labelText: "Username",
-                  labelStyle: TextStyle(
-                    color: spqPrimaryBlue,
+                const SizedBox(
+                  height: 60,
+                ),
+                TextField(
+                  controller: _usernameTEC,
+                  style: const TextStyle(
                     fontSize: 25,
                   ),
-                  filled: true,
+                  decoration: const InputDecoration(
+                    labelText: "Username",
+                    labelStyle: TextStyle(
+                      color: spqPrimaryBlue,
+                      fontSize: 25,
+                    ),
+                    filled: true,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              ButtonTheme(
-                child: ElevatedButton(
-                  child: const Text("login"),
-                  onPressed: _loginUser,
+                const SizedBox(
+                  height: 50,
                 ),
-              ),
-            ],
+                ButtonTheme(
+                  child: ElevatedButton(
+                    child: const Text("login"),
+                    onPressed: _loginUser,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -69,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
   void _loginUser() async {
     log(_usernameTEC.text);
     //_checkUser()
-    Navigator.pushNamed(context, "home");
+    Navigator.pushNamed(context, "base");
   }
 }
 

@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:app_settings/app_settings.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class ConnectionUtilSingleton {
@@ -52,5 +56,58 @@ class ConnectionUtilSingleton {
       connectionChangeController.add(hasConnection);
     }
     return hasConnection;
+  }
+
+  static noConnectionDialog(BuildContext context) {
+    if (Platform.isAndroid) {
+      return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("NO INTERNET CONNECTION"),
+          content: const Text("Please check your device settings"),
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+          buttonPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text(
+                "Settings",
+                style: TextStyle(fontSize: 20.0),
+              ),
+              onPressed: () => AppSettings.openDeviceSettings(
+                asAnotherTask: true,
+              ),
+            ),
+            ElevatedButton(
+              child: const Text("OK", style: TextStyle(fontSize: 20.0)),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // todo : showDialog for ios
+    return showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text("NO INTERNET CONNECTION"),
+        content: const Text("Please check your device settings"),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text(
+              "Settings",
+              style: TextStyle(fontSize: 20.0),
+            ),
+            onPressed: () => AppSettings.openDeviceSettings(
+              asAnotherTask: true,
+            ),
+          ),
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+        ],
+      ),
+    );
   }
 }
