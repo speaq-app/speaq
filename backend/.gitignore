@@ -22,3 +22,6 @@ go.work
 
 # Protobuf
 *.pb.go
+
+# Generated mock files
+*_mock_test.go

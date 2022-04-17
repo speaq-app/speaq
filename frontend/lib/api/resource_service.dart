@@ -1,19 +1,9 @@
-import 'package:fixnum/fixnum.dart';
-import 'package:frontend/api/protos/resource.pbgrpc.dart';
-import 'package:grpc/grpc.dart';
+import 'package:frontend/api/model/resource.dart';
 
 abstract class ResourceService {
-  static final ResourceClient _client = ResourceClient(
-    ClientChannel(
-      "10.0.2.2",
-      port: 8080,
-      options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
-    ),
-  );
-
-  static Future<ResourceResponse> getResource(int id) async {
-    return _client.getResource(
-      ResourceRequest()..iD = Int64(id),
+  Future<Resource> getResource(int id) async {
+    return Future.delayed(
+      const Duration(seconds: 1),
     );
   }
 }
