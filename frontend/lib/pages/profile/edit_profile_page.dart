@@ -57,62 +57,66 @@ class _EditProfilePageState extends State<EditProfilePage> {
           appBar: _buildAppBar(deviceSize),
           body: Container(
             padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-            child: ListView(
-              children: [
-                Center(
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                            PageRouteBuilder(
-                                pageBuilder: (context, animation,
-                                        secondaryAnimation) =>
-                                    _buildFullScreenProfileImage(
-                                        context, hcImageURL, profileUsername),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return child;
-                                })),
-                        child: _buildProfileImage(hcImageURL),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                SpeaqTextField(
-                  maxLength: maxLengthName,
-                  controller: _nameController,
-                  label: "Name",
-                  icon: const Icon(Icons.drive_file_rename_outline),
-                ),
-                SpeaqTextField(
-                  maxLength: maxLengthUsername,
-                  controller: _usernameController,
-                  label: "Username",
-                  icon: const Icon(Icons.alternate_email_rounded),
-                ),
-                SpeaqTextField(
-                  maxLength: maxLengthDescription,
-                  controller: _descriptionController,
-                  label: "Description",
-                  maxLines: 12,
-                  newLines: 5,
-                  icon: Icon(Icons.format_align_left),
-                ),
-                SpeaqTextField(
-                  maxLength: maxLengthWebsite,
-                  controller: _websiteController,
-                  label: "Website",
-                  icon: const Icon(Icons.web),
-                ),
-              ],
-            ),
+            child: _buildListViewWithData(context),
           ),
         ),
       ),
     );
+  }
+
+  ListView _buildListViewWithData(BuildContext context, ) {
+    return ListView(
+            children: [
+              Center(
+                child: Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                          PageRouteBuilder(
+                              pageBuilder: (context, animation,
+                                      secondaryAnimation) =>
+                                  _buildFullScreenProfileImage(
+                                      context, hcImageURL, profileUsername),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return child;
+                              })),
+                      child: _buildProfileImage(hcImageURL),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              SpeaqTextField(
+                maxLength: maxLengthName,
+                controller: _nameController,
+                label: "Name",
+                icon: const Icon(Icons.drive_file_rename_outline),
+              ),
+              SpeaqTextField(
+                maxLength: maxLengthUsername,
+                controller: _usernameController,
+                label: "Username",
+                icon: const Icon(Icons.alternate_email_rounded),
+              ),
+              SpeaqTextField(
+                maxLength: maxLengthDescription,
+                controller: _descriptionController,
+                label: "Description",
+                maxLines: 12,
+                newLines: 5,
+                icon: Icon(Icons.format_align_left),
+              ),
+              SpeaqTextField(
+                maxLength: maxLengthWebsite,
+                controller: _websiteController,
+                label: "Website",
+                icon: const Icon(Icons.web),
+              ),
+            ],
+          );
   }
 
   PreferredSizeWidget _buildAppBar(Size deviceSize) {
