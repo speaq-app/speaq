@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,13 +25,16 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 40),
               children: <Widget>[
                 Column(
-                  children: const <Widget>[
+                  children: <Widget>[
                     SizedBox(
                       height: 120,
                     ),
-                    Text(
-                      "Login",
-                      style: TextStyle(fontSize: 40),
+                    I18nText(
+                      "pages.start.login.login",
+                      child: Text(
+                        "",
+                        style: TextStyle(fontSize: 40),
+                      ),
                     ),
                   ],
                 ),

@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:frontend/pages/all_pages_export.dart';
-
 import 'package:frontend/utils/all_utils.dart';
 
 import 'widgets/all_widgets.dart';
@@ -28,7 +29,6 @@ class Speaq extends StatelessWidget {
           scaffoldBackgroundColor: spqWhite,
           backgroundColor: spqBackgroundGrey,
           bottomAppBarColor: spqWhite,
-
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
           dialogBackgroundColor: spqWhite,
           primaryColor: spqPrimaryBlue,
@@ -38,6 +38,17 @@ class Speaq extends StatelessWidget {
           //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
           textTheme: spqTextTheme),
       initialRoute: 'main',
+      localizationsDelegates: [
+        FlutterI18nDelegate(
+          translationLoader: FileTranslationLoader(fallbackFile: 'de', forcedLocale: Locale('de', ''), basePath: 'assets/i18n/'),
+          missingTranslationHandler: (key, locale) {
+            print("--- Missing Key: $key, languageCode: ${locale?.languageCode}");
+          },
+        ),
+        DefaultMaterialLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+      ],
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
@@ -70,4 +81,3 @@ class MainApp extends StatelessWidget {
 Future<bool> verifyIDToken() {
   return Future.delayed(const Duration(seconds: 3), () => false);
 }
-
