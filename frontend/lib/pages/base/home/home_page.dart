@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/all_utils.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/spq_FAB.dart';
 
@@ -13,8 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String profilePicture =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
   String spqImage = "assets/images/logo/logo_speaq.svg";
 
   bool _showBackToTopButton = false;
@@ -44,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
+
     return Container(
       color: spqBackgroundGrey,
       child: Scaffold(
@@ -67,8 +67,7 @@ class _HomePageState extends State<HomePage> {
           title: Center(
             child: InkWell(
               onTap: () {
-                _scrollController.animateTo(0,
-                    duration: const Duration(seconds: 1), curve: Curves.linear);
+                _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
               },
               child: SvgPicture.asset(
                 spqImage,
@@ -112,9 +111,13 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        floatingActionButton: SpqFloatingActionButton(onPressed: () { print("New Speaq"); }, heroTag: 'post',
-        child: SvgPicture.asset("assets/images/logo/logo_text.svg"),),
-
+        floatingActionButton: SpqFloatingActionButton(
+          onPressed: () {
+            print("New Speaq");
+          },
+          heroTag: 'post',
+          child: SvgPicture.asset("assets/images/logo/logo_text.svg"),
+        ),
       ),
     );
   }
