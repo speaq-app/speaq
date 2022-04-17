@@ -69,5 +69,13 @@ func (s service) UserByID(id int64) (data.User, error) {
 }
 
 func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
+	u, err := s.UserByID(id)
+	if err != nil {
+		return err
+	}
+
+	u.UserProfile = profile
+	s.users[id] = u
+
 	return nil
 }

@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/speak-app/speak/internal/app/resource"
+	"github.com/speak-app/speak/internal/app/user"
 	"github.com/speak-app/speak/internal/pkg/data/mockdb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -81,6 +82,10 @@ var (
 				DataService: db,
 			}
 			resource.RegisterResourceServer(srv, resourceSrv)
+			userSrv := user.Server{
+				DataService: db,
+			}
+			user.RegisterUserServer(srv, userSrv)
 
 			l, err := net.Listen("tcp", ":8080")
 			if err != nil {

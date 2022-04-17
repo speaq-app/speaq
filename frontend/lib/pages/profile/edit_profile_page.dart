@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/api/protos/user.pbgrpc.dart';
+import 'package:frontend/api/user_service.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_textfield.dart';
@@ -13,7 +15,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  String hcImageURL = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  String hcImageURL =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
   String hcName = "Informatics";
   String hcUsername = "hhn";
   String hcDescription = "I like Hochschule Heilbronn";
@@ -61,11 +64,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: Stack(
                     children: [
                       GestureDetector(
-                        onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, hcImageURL, hcUsername),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return child;
-                            })),
+                        onTap: () => Navigator.of(context).push(
+                            PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        _buildFullScreenProfileImage(
+                                            context, hcImageURL, hcUsername),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return child;
+                                })),
                         child: _buildProfileImage(hcImageURL),
                       ),
                     ],
@@ -157,7 +165,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildFullScreenProfileImage(BuildContext context, String imageURL, String username) {
+  Widget _buildFullScreenProfileImage(
+      BuildContext context, String imageURL, String username) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -196,24 +205,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void _saveData() {
     //Daten tatsächlich im Backend speichern
     log("Saving...");
-    if (_checkIfDataIsValid(_nameController, hcName, maxlengthName)) {
-      log("Name: " + _nameController.text + "\n");
-    }
-    if (_checkIfDataIsValid(_usernameController, hcUsername, maxlengthUsername)) {
-      log("Username: " + _usernameController.text + "\n");
-    }
-    if (_checkIfDataIsValid(_descriptionController, hcDescription, maxlengthDescription)) {
-      log("Description: " + _descriptionController.text + "\n");
-    }
-    if (_checkIfDataIsValid(_websiteController, hcWebsite, maxlengthWebsite)) {
-      log("Website: " + _websiteController.text + "\n");
-    }
+    UserService.updateProfile(
+        1,
+        UpdateUserProfileRequest()
+          ..name = _nameController.text
+          ..username = _usernameController.text
+          ..description = _descriptionController.text
+          ..website = _websiteController.text);
     log("...Saved");
   }
 
-  bool _checkIfDataIsValid(TextEditingController controller, String originalText, int maxLength) {
-    return controller.text != originalText && controller.text.isNotEmpty && controller.text.length < maxLength;
-  }
+  // bool _checkIfDataIsValid(TextEditingController controller, String originalText, int maxLength) {
+  //   return controller.text != originalText && controller.text.isNotEmpty && controller.text.length < maxLength;
+  // }
 
   @override
   void dispose() {
