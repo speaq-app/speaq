@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_settings_section.dart';
 
 import 'package:settings_ui/settings_ui.dart';
+
+import '../../../widgets/speaq_bottom_logo.dart';
 
 class AccountSettingsPage extends StatefulWidget {
   const AccountSettingsPage({Key? key}) : super(key: key);
@@ -55,7 +56,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         Positioned(
           child: Align(
               alignment: Alignment.bottomCenter,
-              child: _buildLogoPictures(deviceSize)),
+              child: SpeaqBottomLogo(deviceSize: deviceSize)),
           bottom: 20,
           height: deviceSize.height * 0.1,
         )
@@ -82,14 +83,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         onPressed: () => Navigator.pop(context)),
                   ],
                 )));
-  }
-
-  Widget _buildLogoPictures(Size deviceSize) {
-    return SizedBox(
-      width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_text.svg",
-          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
-    );
   }
 
   SettingsTile _buildSettingsTile(String text, String route) {

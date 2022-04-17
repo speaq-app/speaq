@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../../widgets/speaq_appbar.dart';
+import '../../../widgets/speaq_bottom_logo.dart';
 import '../../../widgets/speaq_settings_section.dart';
 
 class ContentPrefSettingsPage extends StatefulWidget {
   const ContentPrefSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<ContentPrefSettingsPage> createState() => _ContentPrefSettingsPageState();
+  State<ContentPrefSettingsPage> createState() =>
+      _ContentPrefSettingsPageState();
 }
 
 class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
@@ -45,7 +46,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
         Positioned(
           child: Align(
               alignment: Alignment.bottomCenter,
-              child: _buildLogoPictures(deviceSize)),
+              child: SpeaqBottomLogo(deviceSize: deviceSize)),
           bottom: 20,
           height: deviceSize.height * 0.1,
         )
@@ -60,12 +61,6 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
       onPressed: (context) => Navigator.pushNamed(context, route),
     );
   }
-
-  Widget _buildLogoPictures(Size deviceSize) {
-    return SizedBox(
-      width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_text.svg",
-          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
-    );
-  }
 }
+
+

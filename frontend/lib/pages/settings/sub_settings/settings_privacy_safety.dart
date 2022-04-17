@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_settings_section.dart';
 import 'package:settings_ui/settings_ui.dart';
+
+import '../../../widgets/speaq_bottom_logo.dart';
 
 class PrivacySafetySettingsPage extends StatefulWidget {
   const PrivacySafetySettingsPage({Key? key}) : super(key: key);
@@ -58,7 +59,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
         Positioned(
           child: Align(
               alignment: Alignment.bottomCenter,
-              child: _buildLogoPictures(deviceSize)),
+              child: SpeaqBottomLogo(deviceSize: deviceSize)),
           bottom: 20,
           height: deviceSize.height * 0.1,
         )
@@ -85,13 +86,5 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                         onPressed: () => Navigator.pop(context)),
                   ],
                 )));
-  }
-
-  Widget _buildLogoPictures(Size deviceSize) {
-    return SizedBox(
-      width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_text.svg",
-          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
-    );
   }
 }

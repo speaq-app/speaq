@@ -6,3 +6,4 @@ export 'speaq_bottom_navi_bar.dart';
 export 'speaq_follower_tile.dart';
 export 'speaq_post_container.dart';
 export 'speaq_text_button.dart';
+export 'speaq_bottom_logo.dart';

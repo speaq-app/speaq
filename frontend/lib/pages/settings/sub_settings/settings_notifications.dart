@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../../widgets/speaq_appbar.dart';
+import '../../../widgets/speaq_bottom_logo.dart';
 import '../../../widgets/speaq_settings_section.dart';
 
 class NotificationsSettingsPage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
         Positioned(
           child: Align(
               alignment: Alignment.bottomCenter,
-              child: _buildLogoPictures(deviceSize)),
+              child: SpeaqBottomLogo(deviceSize: deviceSize)),
           bottom: 20,
           height: deviceSize.height * 0.1,
         )
@@ -75,14 +75,6 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
       trailing: Icon(Icons.adaptive.arrow_forward),
       title: Text(text, style: const TextStyle(fontSize: 15)),
       onPressed: (context) => Navigator.pushNamed(context, route),
-    );
-  }
-
-  Widget _buildLogoPictures(Size deviceSize) {
-    return SizedBox(
-      width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_text.svg",
-          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
     );
   }
 }
