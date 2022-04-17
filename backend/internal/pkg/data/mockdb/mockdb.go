@@ -33,8 +33,8 @@ func New() data.Service {
 				UserProfile: data.UserProfile{
 					Name:        "Daniel Holzwarth",
 					Username:    "dholzwarth",
-					Description: "Test Description 1",
-					Website:     "Test Website 1",
+					Description: "Test Description 2",
+					Website:     "Test Website 2",
 				},
 			},
 			3: {
@@ -42,8 +42,8 @@ func New() data.Service {
 				UserProfile: data.UserProfile{
 					Name:        "Nosakhare",
 					Username:    "nomoruyi",
-					Description: "Test Description 1",
-					Website:     "Test Website 1",
+					Description: "Test Description 3",
+					Website:     "Test Website 3",
 				},
 			},
 		},

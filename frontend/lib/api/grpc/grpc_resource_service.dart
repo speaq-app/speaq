@@ -1,8 +1,8 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:frontend/api/protos/resource.pbgrpc.dart';
+import 'package:frontend/api/grpc/protos/resource.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
 
-abstract class ResourceService {
+abstract class GRPCResourceService {
   static final ResourceClient _client = ResourceClient(
     ClientChannel(
       "10.0.2.2",

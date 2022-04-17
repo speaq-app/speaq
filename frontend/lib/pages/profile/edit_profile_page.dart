@@ -1,7 +1,6 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:frontend/api/protos/user.pbgrpc.dart';
+import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
@@ -15,18 +14,17 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  String hcImageURL =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
-  String hcName = "Informatics";
-  String hcUsername = "hhn";
-  String hcDescription = "I like Hochschule Heilbronn";
-  String hcWebsite = "open2work.blm";
+  int maxLengthName = 30;
+  int maxLengthUsername = 20;
+  int maxLengthDescription = 120;
+  int maxLengthWebsite = 20;
 
-  //Limits
-  final int maxlengthName = 20;
-  final int maxlengthUsername = 20;
-  final int maxlengthDescription = 120;
-  final int maxlengthWebsite = 20;
+  late String hcImageURL =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  late String profileName;
+  late String profileUsername;
+  late String profileDescription;
+  late String profileWebsite;
 
   late TextEditingController _nameController;
   late TextEditingController _usernameController;
@@ -36,10 +34,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: hcName);
-    _usernameController = TextEditingController(text: hcUsername);
-    _descriptionController = TextEditingController(text: hcDescription);
-    _websiteController = TextEditingController(text: hcWebsite);
+    _loadData();
+    _nameController = TextEditingController(text: profileName);
+    _usernameController = TextEditingController(text: profileUsername);
+    _descriptionController = TextEditingController(text: profileDescription);
+    _websiteController = TextEditingController(text: profileWebsite);
   }
 
   @override
@@ -66,10 +65,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       GestureDetector(
                         onTap: () => Navigator.of(context).push(
                             PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        _buildFullScreenProfileImage(
-                                            context, hcImageURL, hcUsername),
+                                pageBuilder: (context, animation,
+                                        secondaryAnimation) =>
+                                    _buildFullScreenProfileImage(
+                                        context, hcImageURL, profileUsername),
                                 transitionsBuilder: (context, animation,
                                     secondaryAnimation, child) {
                                   return child;
@@ -83,19 +82,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   height: 40,
                 ),
                 SpeaqTextField(
-                  maxLength: maxlengthName,
+                  maxLength: maxLengthName,
                   controller: _nameController,
                   label: "Name",
                   icon: const Icon(Icons.drive_file_rename_outline),
                 ),
                 SpeaqTextField(
-                  maxLength: maxlengthUsername,
+                  maxLength: maxLengthUsername,
                   controller: _usernameController,
                   label: "Username",
                   icon: const Icon(Icons.alternate_email_rounded),
                 ),
                 SpeaqTextField(
-                  maxLength: maxlengthDescription,
+                  maxLength: maxLengthDescription,
                   controller: _descriptionController,
                   label: "Description",
                   maxLines: 12,
@@ -103,7 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   icon: Icon(Icons.format_align_left),
                 ),
                 SpeaqTextField(
-                  maxLength: maxlengthWebsite,
+                  maxLength: maxLengthWebsite,
                   controller: _websiteController,
                   label: "Website",
                   icon: const Icon(Icons.web),
@@ -193,6 +192,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  void _loadData() {
+    log("loading");
+
+    // profileName = UserService.getProfile(1)
+
+    log("loaded");
+  }
+
   void _cancel() {
     Navigator.pop(context);
   }
@@ -203,15 +210,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveData() {
-    //Daten tatsächlich im Backend speichern
     log("Saving...");
-    UserService.updateProfile(
-        1,
-        UpdateUserProfileRequest()
-          ..name = _nameController.text
-          ..username = _usernameController.text
-          ..description = _descriptionController.text
-          ..website = _websiteController.text);
+    UserService userService = GRPCUserService();
+    userService.updateProfile(
+      id: 1,
+      name: _nameController.text,
+      username: _usernameController.text,
+      description: _descriptionController.text,
+      website: _websiteController.text,
+    );
     log("...Saved");
   }
 
