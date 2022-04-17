@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
   void _loginUser() async {
     log(_usernameTEC.text);
     //_checkUser()
-    ResourceResponse resource = await ResourceService.getResource(1337);
+    ResourceResponse resource = await ResourceService.getResource(1);
     log(resource.name);
     Navigator.pushNamed(context, "base");
   }

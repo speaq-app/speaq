@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "app/user";
+
+
+service User {
+    rpc GetUser(GetUserRequest) returns (GetUserResponse);
+    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);    
+}
+
+message GetUserRequest {
+    int64 id = 1;
+}
+
+message GetUserResponse {
+    string name = 1;
+    string username = 2;
+    string description = 3;
+    string website = 4;
+    int64  profile_image_id = 5;
+}
+
+message UpdateUserProfileRequest {
+    int64  id = 1;
+    string name = 2;
+    string username = 3;
+    string description = 4;
+    string website = 5;
+}
