@@ -23,7 +23,6 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
     return Scaffold(
       appBar: SpqAppBar(
         preferredSize: deviceSize,
-        scrollController: ScrollController(),
         title: const Text(
           "Notifications",
           textAlign: TextAlign.center,

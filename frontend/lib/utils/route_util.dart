@@ -4,8 +4,6 @@ import 'package:frontend/pages/all_pages_export.dart';
 
 import 'package:page_transition/page_transition.dart';
 
-import '../pages/settings/settings_account_page.dart';
-
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
 /*

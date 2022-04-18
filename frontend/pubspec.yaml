@@ -51,6 +51,9 @@ dependencies:
   flutter_svg: ^1.0.3
   app_settings: ^4.1.5
   #app_settings: ^4.1.1
+  protobuf: ^2.0.1
+  grpc: ^3.0.2
+  fixnum: ^1.0.0
 
 dev_dependencies:
   flutter_test:

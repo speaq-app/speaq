@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _loginUser() {
+  void _loginUser() async {
     log(_usernameTEC.text);
     //_checkUser()
     Navigator.pushNamed(context, "base");

@@ -22,7 +22,6 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     return Scaffold(
       appBar: SpqAppBar(
         preferredSize: deviceSize,
-        scrollController: ScrollController(),
         title: const Text(
           "Notifications",
           textAlign: TextAlign.center,

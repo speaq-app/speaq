@@ -27,6 +27,9 @@ doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 
+### Protos ###
+*.pb*.dart
+
 ### Dart Patch ###
 # dotenv environment variables file
 .env
