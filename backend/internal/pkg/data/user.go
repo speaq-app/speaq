@@ -2,14 +2,15 @@ package data
 
 type UserService interface {
 	UserByID(id int64) (User, error)
-	UpdateUserProfile(id int64, profile UserProfile) error
+	UpdateUserProfile(userID int64, profile UserProfile) error
+	UserProfileByID(userID int64) (UserProfile, error)
 }
 
 type User struct {
 	ID int64
 	ProfilePictureID int64
 
-	UserProfile
+	Profile UserProfile
 }
 
 type UserProfile struct {

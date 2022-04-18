@@ -64,7 +64,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               listener: (context, state) {
                 if (state is ProfileLoaded) {
                   var profile = state.profile;
-                  _nameController.text = profile.username;
+                  _nameController.text = profile.name;
                   _usernameController.text = profile.username;
                   _descriptionController.text = profile.description;
                   _websiteController.text = profile.website;
@@ -231,7 +231,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveData() {
-    log("Saving...");
     UserService userService = GRPCUserService();
     userService.updateProfile(
       id: 1,
@@ -240,7 +239,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       description: _descriptionController.text,
       website: _websiteController.text,
     );
-    log("...Saved");
   }
 
   @override

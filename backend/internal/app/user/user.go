@@ -18,11 +18,12 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 	log.Printf("User with ID %d should be updated", req.UserId)
 
 	p := data.UserProfile{
-		Name: req.Name, 
-		Username: req.Username, 
-		Description: req.Description, 
-		Website: req.Website,
+		Name:        req.Name,
+		Username:    req.Username,
+		Description: req.Description,
+		Website:     req.Website,
 	}
+
 	log.Println(p)
 	err := s.DataService.UpdateUserProfile(req.UserId, p)
 	if err != nil {
@@ -32,3 +33,19 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 	return &emptypb.Empty{}, nil
 }
 
+func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) (*GetUserProfileResponse, error) {
+	log.Printf("User Profile with ID %d should be loaded", req.UserId)
+
+	p, err := s.DataService.UserProfileByID(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+	log.Println(p)
+
+	return &GetUserProfileResponse{
+		Name:        p.Name,
+		Username:    p.Username,
+		Description: p.Description,
+		Website:     p.Website,
+	}, nil
+}

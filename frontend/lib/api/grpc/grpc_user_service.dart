@@ -1,6 +1,7 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:frontend/api/grpc/protos/User.pbgrpc.dart';
+import 'package:frontend/api/protos/user.pbgrpc.dart';
 import 'package:frontend/api/user_service.dart';
+import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCUserService implements UserService {
@@ -13,8 +14,15 @@ class GRPCUserService implements UserService {
   );
 
   @override
-  Future<dynamic> getProfile(int id) async {
-    return _client.getUser(GetUserRequest()..id = Int64(id));
+  Future<Profile> getProfile(int id) async {
+    GetUserProfileResponse resp = await _client
+        .getUserProfile(GetUserProfileRequest()..userId = Int64(id));
+    return Profile(
+      name: resp.name,
+      username: resp.username,
+      description: resp.description,
+      website: resp.website,
+    );
   }
 
   @override
@@ -26,7 +34,7 @@ class GRPCUserService implements UserService {
     required String website,
   }) async {
     return _client.updateUserProfile(UpdateUserProfileRequest()
-      ..id = Int64(id)
+      ..userId = Int64(id)
       ..name = name
       ..username = username
       ..description = description

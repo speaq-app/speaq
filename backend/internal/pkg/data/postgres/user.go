@@ -6,7 +6,6 @@ import (
 	"github.com/speak-app/speak/internal/pkg/data"
 )
 
-
 func (s Service) UserByID(id int64) (data.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), s.timeout)
 	defer cancel()
@@ -16,7 +15,7 @@ func (s Service) UserByID(id int64) (data.User, error) {
 SELECT name, username, description, website, profile_picture_id
 FROM users
 WHERE id = $1;
-`, id).Scan(&u.Name, &u.Username, &u.Description, &u.Website, &u.ProfilePictureID); err != nil {
+`, id).Scan(&u.Profile.Name, &u.Profile.Username, &u.Profile.Description, &u.Profile.Website, &u.ProfilePictureID); err != nil {
 		return u, err
 	}
 
@@ -25,13 +24,16 @@ WHERE id = $1;
 
 func (s Service) UpdateUserProfile(id int64, u data.UserProfile) error {
 
-
-// UPDATE user
-// SET 	name = u.name,
-// 		username = u.Username
-// 		description = u.Description
-// 		website = u.Website
-// WHERE id = id;
+	// UPDATE user
+	// SET 	name = u.name,
+	// 		username = u.Username
+	// 		description = u.Description
+	// 		website = u.Website
+	// WHERE id = id;
 
 	return nil
+}
+
+func (s Service) UserProfileByID(id int64) (data.UserProfile, error) {
+	return data.UserProfile{}, nil
 }

@@ -1,5 +1,7 @@
+import 'package:frontend/pages/profile/model/profile.dart';
+
 abstract class UserService {
-  Future<dynamic> getProfile(int id) async {}
+  Future<Profile> getProfile(int id);
 
   Future<dynamic> updateProfile({
     required int id,
