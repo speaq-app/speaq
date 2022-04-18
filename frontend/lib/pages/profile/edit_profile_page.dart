@@ -4,7 +4,9 @@ import 'package:frontend/pages/profile/bloc/profile_bloc.dart';
 import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
+import 'package:frontend/widgets/speaq_loading_widget.dart';
 import 'package:frontend/widgets/speaq_textfield.dart';
+import 'package:shimmer/shimmer.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -65,15 +67,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   _usernameController.text = profile.username;
                   _descriptionController.text = profile.description;
                   _websiteController.text = profile.website;
+                } else if (state is ProfileSaved) {
+                  Navigator.pop(context);
                 }
               },
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 bloc: _profileBloc,
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return const CircularProgressIndicator();
+                    return _buildListViewShimmer(context);
                   } else if (state is ProfileLoaded) {
                     return _buildListViewWithData(context, state.profile);
+                  } else if (state is ProfileSaving) {
+                    return SpqLoadingWidget(
+                        MediaQuery.of(context).size.shortestSide * 0.15);
                   }
                   return const Text("not workin - edit_profile_page line 81");
                 },
@@ -136,6 +143,79 @@ class _EditProfilePageState extends State<EditProfilePage> {
           controller: _websiteController,
           label: "Website",
           icon: const Icon(Icons.web),
+        ),
+      ],
+    );
+  }
+
+  ListView _buildListViewShimmer(BuildContext context) {
+    return ListView(
+      children: [
+        Center(
+          child: Stack(
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        _buildFullScreenProfileImage(
+                            context, hcImageURL, profileUsername),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return child;
+                    })),
+                child: _buildProfileImage(hcImageURL),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+        Shimmer.fromColors(
+          baseColor: spqBlack,
+          highlightColor: spqLightGrey,
+          child: SpeaqTextField(
+            isEnabled: false,
+            maxLength: maxLengthName,
+            controller: _nameController,
+            label: "Name",
+            icon: const Icon(Icons.drive_file_rename_outline),
+          ),
+        ),
+        Shimmer.fromColors(
+          baseColor: spqBlack,
+          highlightColor: spqLightGrey,
+          child: SpeaqTextField(
+            isEnabled: false,
+            maxLength: maxLengthUsername,
+            controller: _usernameController,
+            label: "Username",
+            icon: const Icon(Icons.alternate_email_rounded),
+          ),
+        ),
+        Shimmer.fromColors(
+          baseColor: spqBlack,
+          highlightColor: spqLightGrey,
+          child: SpeaqTextField(
+            isEnabled: false,
+            maxLength: maxLengthDescription,
+            controller: _descriptionController,
+            label: "Description",
+            maxLines: 12,
+            newLines: 5,
+            icon: const Icon(Icons.format_align_left),
+          ),
+        ),
+        Shimmer.fromColors(
+          baseColor: spqBlack,
+          highlightColor: spqLightGrey,
+          child: SpeaqTextField(
+            isEnabled: false,
+            maxLength: maxLengthWebsite,
+            controller: _websiteController,
+            label: "Website",
+            icon: const Icon(Icons.web),
+          ),
         ),
       ],
     );
@@ -223,11 +303,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveProfile() {
-    _saveData();
-    Navigator.pop(context);
-  }
-
-  void _saveData() {
     Profile _profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,

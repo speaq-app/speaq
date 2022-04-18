@@ -3,7 +3,6 @@ part of 'profile_bloc.dart';
 @immutable
 abstract class ProfileEvent {}
 
-//cur
 class LoadProfile extends ProfileEvent {
   final int userId;
 

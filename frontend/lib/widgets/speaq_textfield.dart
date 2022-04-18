@@ -12,6 +12,7 @@ class SpeaqTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final Widget? icon;
+  final bool isEnabled;
 
   const SpeaqTextField({
     Key? key,
@@ -23,11 +24,13 @@ class SpeaqTextField extends StatelessWidget {
     required this.controller,
     required this.label,
     this.icon,
+    this.isEnabled = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+        enabled: isEnabled,
         inputFormatters: [MaxLinesTextInputFormatter(newLines)],
         minLines: minLines,
         maxLines: maxLines,
