@@ -49,36 +49,39 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 tiles: [
-                  _buildSettingsTile("Account", "login"),
-                  _buildSettingsTile("Privacy and safety", "login"),
-                  _buildSettingsTile("Notifications", "login"),
-                  _buildSettingsTile("Content preferences", "login"),
-                ],
+                _buildSettingsTile("Account", "settAccount"),
+                _buildSettingsTile("Privacy and safety", "settPrivSafety"),
+                _buildSettingsTile("Notifications", "settNotific"),
+                _buildSettingsTile("Content preferences", "settContentPref"),
+              ],
               ),
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "General",
-                    style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
+              
+            ),
+            SpqSettingsSection(
+              title: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "General",
+                  style: TextStyle(
+                      color: spqBlack,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
                 ),
                 tiles: [
-                  _buildSettingsTile("Display and Sound", "login"),
-                  _buildSettingsTile("Data usage", "login"),
-                  _buildSettingsTile("Accessibility", "login"),
-                  _buildSettingsTile("About speaq", "login"),
-                ],
+                _buildSettingsTile("Display and Sound", "settDispSound"),
+                _buildSettingsTile("Data usage", "settDataUsage"),
+                _buildSettingsTile("Accessibility", "settAccess"),
+                _buildSettingsTile("About speaq", "login"),
+              ],
               ),
-            ],
-          ),
-          Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
-            bottom: 20,
-            height: deviceSize.height * 0.1,
-          )
-        ]),
-      ),
+             
+            ),
+          ],
+        ),
+        Positioned(
+          child: Align(alignment: Alignment.bottomCenter,child: _buildLogoPictures(deviceSize)), bottom: 20, height: deviceSize.height*0.1,
+        )
+      ]),
     );
   }
 
