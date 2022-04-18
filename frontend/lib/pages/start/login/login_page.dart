@@ -12,6 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final String langKey = "pages.start.login.";
+
   final TextEditingController _usernameTEC = TextEditingController();
 
   @override
@@ -30,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 120,
                     ),
                     I18nText(
-                      "pages.start.login.login",
+                      langKey + "login",
                       child: Text(
                         "",
                         style: TextStyle(fontSize: 40),
@@ -46,13 +48,23 @@ class _LoginPageState extends State<LoginPage> {
                   style: const TextStyle(
                     fontSize: 25,
                   ),
-                  decoration: const InputDecoration(
-                    labelText: "Username",
+                  decoration: InputDecoration(
+                    labelText: FlutterI18n.translate(context, globalLangKey + "username"),
                     labelStyle: TextStyle(
                       color: spqPrimaryBlue,
                       fontSize: 25,
                     ),
-                    filled: true,
+                    decoration: const InputDecoration(
+                      labelText: "Username",
+                      labelStyle: TextStyle(
+                        color: spqPrimaryBlue,
+                        fontSize: 25,
+                      ),
+                      filled: true,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
                   ),
                 ),
                 const SizedBox(
@@ -60,11 +72,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 ButtonTheme(
                   child: ElevatedButton(
-                    child: const Text("login"),
+                    child: I18nText(langKey + "login"),
                     onPressed: _loginUser,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
