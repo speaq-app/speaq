@@ -1,4 +1,7 @@
 {
+  "global": {
+    "username": "Username"
+  },
   "pages": {
     "base": {
       "home": {

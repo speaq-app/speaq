@@ -1,9 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:frontend/utils/all_utils.dart';
 
 import '../../widgets/speaq_settings_section.dart';
 
@@ -15,6 +14,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final String langKey = "pages.settings.";
+
   @override
   initState() {
     super.initState();
@@ -28,11 +29,14 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: SpqAppBar(preferredSize: deviceSize, title: const Text(
-          "Settings and Privacy",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
-        ),),
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+          title: const Text(
+            "Settings and Privacy",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
         body: Stack(children: [
           SettingsList(
             sections: [
@@ -41,10 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     "@eric",
-                    style: TextStyle(
-                        color: spqBlack,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ),
                 tiles: [
@@ -54,16 +55,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   _buildSettingsTile("Content preferences", "login"),
                 ],
               ),
-
               SpqSettingsSection(
                 title: const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     "General",
-                    style: TextStyle(
-                        color: spqBlack,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ),
                 tiles: [
@@ -76,7 +73,9 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter,child: _buildLogoPictures(deviceSize)), bottom: 20, height: deviceSize.height*0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
+            bottom: 20,
+            height: deviceSize.height * 0.1,
           )
         ]),
       ),
@@ -84,8 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildLogoPictures(Size deviceSize) {
-    return SizedBox(width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_text.svg", height: deviceSize.height*0.05, width: deviceSize.width*0.3),
+    return SizedBox(
+      width: deviceSize.width,
+      child: SvgPicture.asset("assets/images/logo/logo_text.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
     );
   }
 

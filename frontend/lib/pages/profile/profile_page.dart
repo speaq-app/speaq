@@ -14,6 +14,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final String langKey = "pages.profile.";
+
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _link = "hs-heilbronn.de";
   final String _name = "Informatics";
@@ -28,11 +30,14 @@ class _ProfilePageState extends State<ProfilePage> {
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: SpqAppBar(preferredSize: deviceSize, title: Text(
-          _username,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
-        ),),
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+          title: Text(
+            _username,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
         body: ListView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [

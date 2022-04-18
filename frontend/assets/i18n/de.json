@@ -1,4 +1,8 @@
 {
+  "sesh": "Sesh",
+  "global": {
+    "username": "Benutzername"
+  },
   "pages": {
     "base": {
       "home": {
