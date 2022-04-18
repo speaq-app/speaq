@@ -5,12 +5,17 @@ abstract class ProfileState {}
 
 class ProfileInitial extends ProfileState {}
 
+//cur
 class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  final User user;
+  final Profile profile;
 
   ProfileLoaded({
-    required this.user,
+    required this.profile,
   });
 }
+
+class ProfileSaving extends ProfileState {}
+
+class ProfileSaved extends ProfileState {}

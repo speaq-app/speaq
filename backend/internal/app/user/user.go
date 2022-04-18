@@ -15,7 +15,7 @@ type Server struct {
 }
 
 func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileRequest) (*empty.Empty, error) {
-	log.Printf("User with ID %d should be updated", req.Id)
+	log.Printf("User with ID %d should be updated", req.UserId)
 
 	p := data.UserProfile{
 		Name: req.Name, 
@@ -24,10 +24,11 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 		Website: req.Website,
 	}
 	log.Println(p)
-	err := s.DataService.UpdateUserProfile(req.Id, p)
+	err := s.DataService.UpdateUserProfile(req.UserId, p)
 	if err != nil {
 		return nil, err
 	}
 
 	return &emptypb.Empty{}, nil
 }
+

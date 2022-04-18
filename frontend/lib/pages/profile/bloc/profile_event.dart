@@ -3,10 +3,21 @@ part of 'profile_bloc.dart';
 @immutable
 abstract class ProfileEvent {}
 
+//cur
+class LoadProfile extends ProfileEvent {
+  final int userId;
+
+  LoadProfile({
+    required this.userId,
+  });
+}
+
 class SaveProfile extends ProfileEvent {
-  final User user;
+  final int userId;
+  final Profile profile;
 
   SaveProfile({
-    required this.user
+    required this.userId,
+    required this.profile,
   });
 }

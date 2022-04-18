@@ -1,5 +1,5 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:frontend/api/protos/User.pbgrpc.dart';
+import 'package:frontend/api/grpc/protos/User.pbgrpc.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:grpc/grpc.dart';
 

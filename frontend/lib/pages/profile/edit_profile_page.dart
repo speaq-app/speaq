@@ -1,7 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/user_service.dart';
+import 'package:frontend/pages/profile/bloc/profile_bloc.dart';
+import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_textfield.dart';
@@ -14,6 +17,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final ProfileBloc _profileBloc = ProfileBloc();
+
   int maxLengthName = 30;
   int maxLengthUsername = 20;
   int maxLengthDescription = 120;
@@ -26,19 +31,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late String profileDescription;
   late String profileWebsite;
 
-  late TextEditingController _nameController;
-  late TextEditingController _usernameController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _websiteController;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _websiteController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _loadData();
-    _nameController = TextEditingController(text: profileName);
-    _usernameController = TextEditingController(text: profileUsername);
-    _descriptionController = TextEditingController(text: profileDescription);
-    _websiteController = TextEditingController(text: profileWebsite);
+    //Get ID
+    _profileBloc.add(LoadProfile(userId: 1));
   }
 
   @override
@@ -57,66 +59,89 @@ class _EditProfilePageState extends State<EditProfilePage> {
           appBar: _buildAppBar(deviceSize),
           body: Container(
             padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-            child: _buildListViewWithData(context),
+            child: BlocListener<ProfileBloc, ProfileState>(
+              bloc: _profileBloc,
+              listener: (context, state) {
+                if (state is ProfileLoaded) {
+                  var profile = state.profile;
+                  _nameController.text = profile.username;
+                  _usernameController.text = profile.username;
+                  _descriptionController.text = profile.description;
+                  _websiteController.text = profile.website;
+                }
+              },
+              child: BlocBuilder<ProfileBloc, ProfileState>(
+                bloc: _profileBloc,
+                builder: (context, state) {
+                  if (state is ProfileLoading) {
+                    return const CircularProgressIndicator();
+                  } else if (state is ProfileLoaded) {
+                    return _buildListViewWithData(context, state.profile);
+                  }
+                  return const Text("ups");
+                },
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  ListView _buildListViewWithData(BuildContext context, ) {
+  ListView _buildListViewWithData(
+    BuildContext context,
+    Profile profile,
+  ) {
     return ListView(
+      children: [
+        Center(
+          child: Stack(
             children: [
-              Center(
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                          PageRouteBuilder(
-                              pageBuilder: (context, animation,
-                                      secondaryAnimation) =>
-                                  _buildFullScreenProfileImage(
-                                      context, hcImageURL, profileUsername),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return child;
-                              })),
-                      child: _buildProfileImage(hcImageURL),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              SpeaqTextField(
-                maxLength: maxLengthName,
-                controller: _nameController,
-                label: "Name",
-                icon: const Icon(Icons.drive_file_rename_outline),
-              ),
-              SpeaqTextField(
-                maxLength: maxLengthUsername,
-                controller: _usernameController,
-                label: "Username",
-                icon: const Icon(Icons.alternate_email_rounded),
-              ),
-              SpeaqTextField(
-                maxLength: maxLengthDescription,
-                controller: _descriptionController,
-                label: "Description",
-                maxLines: 12,
-                newLines: 5,
-                icon: Icon(Icons.format_align_left),
-              ),
-              SpeaqTextField(
-                maxLength: maxLengthWebsite,
-                controller: _websiteController,
-                label: "Website",
-                icon: const Icon(Icons.web),
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        _buildFullScreenProfileImage(
+                            context, hcImageURL, profileUsername),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return child;
+                    })),
+                child: _buildProfileImage(hcImageURL),
               ),
             ],
-          );
+          ),
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+        SpeaqTextField(
+          maxLength: maxLengthName,
+          controller: _nameController,
+          label: "Name",
+          icon: const Icon(Icons.drive_file_rename_outline),
+        ),
+        SpeaqTextField(
+          maxLength: maxLengthUsername,
+          controller: _usernameController,
+          label: "Username",
+          icon: const Icon(Icons.alternate_email_rounded),
+        ),
+        SpeaqTextField(
+          maxLength: maxLengthDescription,
+          controller: _descriptionController,
+          label: "Description",
+          maxLines: 12,
+          newLines: 5,
+          icon: Icon(Icons.format_align_left),
+        ),
+        SpeaqTextField(
+          maxLength: maxLengthWebsite,
+          controller: _websiteController,
+          label: "Website",
+          icon: const Icon(Icons.web),
+        ),
+      ],
+    );
   }
 
   PreferredSizeWidget _buildAppBar(Size deviceSize) {
@@ -196,14 +221,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  void _loadData() {
-    log("loading");
-
-    // profileName = UserService.getProfile(1)
-
-    log("loaded");
-  }
-
   void _cancel() {
     Navigator.pop(context);
   }
@@ -226,14 +243,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     log("...Saved");
   }
 
-  // bool _checkIfDataIsValid(TextEditingController controller, String originalText, int maxLength) {
-  //   return controller.text != originalText && controller.text.isNotEmpty && controller.text.length < maxLength;
-  // }
-
   @override
   void dispose() {
     super.dispose();
     _disposeController();
+    _profileBloc.close();
   }
 
   void _disposeController() {
