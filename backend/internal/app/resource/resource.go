@@ -3,7 +3,7 @@ package resource
 import (
 	"context"
 
-	"github.com/speak-app/speak/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 type Server struct {

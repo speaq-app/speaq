@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/speak-app/speak/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 //go:embed schema/*.sql

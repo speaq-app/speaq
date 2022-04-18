@@ -1,4 +1,4 @@
-//go:generate mockgen -destination=resource_mock_test.go -package=resource_test github.com/speak-app/speak/internal/pkg/data Service
+//go:generate mockgen -destination=resource_mock_test.go -package=resource_test github.com/speaq-app/speaq/internal/pkg/data Service
 package resource_test
 
 import (
@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/speak-app/speak/internal/app/resource"
-	"github.com/speak-app/speak/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/app/resource"
+	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 func TestGetResource(t *testing.T) {

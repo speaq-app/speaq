@@ -9,8 +9,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/speak-app/speak/internal/app/resource"
-	"github.com/speak-app/speak/internal/pkg/data/mockdb"
+	"github.com/speaq-app/speaq/internal/app/resource"
+	"github.com/speaq-app/speaq/internal/pkg/data/mockdb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"

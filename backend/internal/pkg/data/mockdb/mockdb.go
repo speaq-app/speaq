@@ -3,7 +3,7 @@ package mockdb
 import (
 	"errors"
 
-	"github.com/speak-app/speak/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 type service struct {
