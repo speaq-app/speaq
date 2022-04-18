@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,37 +12,46 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final String langKey = "pages.start.login.";
+
   final TextEditingController _usernameTEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: spqWhite,
-      child: SafeArea(
-        child: Scaffold(
-          body: Container(
-            color: spqWhite,
-            child: SafeArea(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                children: <Widget>[
-                  Column(
-                    children: const <Widget>[
-                      SizedBox(
-                        height: 120,
-                      ),
-                      Text(
-                        "Login",
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          color: spqWhite,
+          child: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 120,
+                    ),
+                    I18nText(
+                      langKey + "login",
+                      child: Text(
+                        "",
                         style: TextStyle(fontSize: 40),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
+                TextField(
+                  controller: _usernameTEC,
+                  style: const TextStyle(
+                    fontSize: 25,
                   ),
-                  const SizedBox(
-                    height: 60,
-                  ),
-                  TextField(
-                    controller: _usernameTEC,
-                    style: const TextStyle(
+                  decoration: InputDecoration(
+                    labelText: FlutterI18n.translate(context, globalLangKey + "username"),
+                    labelStyle: TextStyle(
+                      color: spqPrimaryBlue,
                       fontSize: 25,
                     ),
                     decoration: const InputDecoration(
@@ -56,11 +66,14 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 50,
                   ),
-                  ButtonTheme(
-                    child: ElevatedButton(
-                      child: const Text("login"),
-                      onPressed: _loginUser,
-                    ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                ButtonTheme(
+                  child: ElevatedButton(
+                    child: I18nText(langKey + "login"),
+                    onPressed: _loginUser,
                   ),
                 ],
               ),

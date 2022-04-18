@@ -13,6 +13,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final String langKey = "pages.profile.";
+
   String hcImageURL = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
   String hcName = "Informatics";
   String hcUsername = "hhn";
