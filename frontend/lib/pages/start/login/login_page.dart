@@ -54,7 +54,17 @@ class _LoginPageState extends State<LoginPage> {
                       color: spqPrimaryBlue,
                       fontSize: 25,
                     ),
-                    filled: true,
+                    decoration: const InputDecoration(
+                      labelText: "Username",
+                      labelStyle: TextStyle(
+                        color: spqPrimaryBlue,
+                        fontSize: 25,
+                      ),
+                      filled: true,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
                   ),
                 ),
                 const SizedBox(
@@ -65,8 +75,8 @@ class _LoginPageState extends State<LoginPage> {
                     child: I18nText(langKey + "login"),
                     onPressed: _loginUser,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

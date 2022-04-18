@@ -108,44 +108,44 @@ class _UserMenuState extends State<UserMenu> {
       );
 
   Widget buildMenu(BuildContext context) => Column(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.person_outline),
-            title: const Text("Profile"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "profile");
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.qr_code_2),
-            title: const Text("QR-Code"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "pq-code");
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.bookmark_border),
-            title: const Text("Bookmarks"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "bookmarks");
-            },
-          ),
-          const Divider(
-            color: Colors.black54,
-            thickness: 0.75,
-          ),
-          ListTile(
-            title: const Text("Settings and privacy"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "settings");
-            },
-          ),
-          ListTile(
-            title: const Text("Impressum"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "impressum");
-            },
-          ),
-        ],
-      );
+    children: [
+      ListTile(
+        leading: const Icon(Icons.person_outline),
+        title: const Text("Profile"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "profile");
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.qr_code_2),
+        title: const Text("QR-Code"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "qr_ode");
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.bookmark_border),
+        title: const Text("Bookmarks"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "bookmarks");
+        },
+      ),
+      const Divider(
+        color: Colors.black54,
+        thickness: 0.75,
+      ),
+      ListTile(
+        title: const Text("Settings and privacy"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "settings");
+        },
+      ),
+      ListTile(
+        title: const Text("Impressum"),
+        onTap: () {
+          Navigator.popAndPushNamed(context, "impressum");
+        },
+      ),
+    ],
+  );
 }

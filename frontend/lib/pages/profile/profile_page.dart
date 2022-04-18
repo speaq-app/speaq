@@ -4,7 +4,7 @@ import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
-import 'package:frontend/widgets/speaq_text_button.dart';
+import 'package:frontend/widgets/speaq_textbutton.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -104,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Padding(
           padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
-          child: SpqTextButton(
+          child: SpqTextbutton(
             onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
           ),
         ),
