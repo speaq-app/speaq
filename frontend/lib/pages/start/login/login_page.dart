@@ -21,63 +21,47 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
       child: Scaffold(
         body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           color: spqWhite,
-          child: SafeArea(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 120,
-                    ),
-                    I18nText(
-                      langKey + "login",
-                      child: Text(
-                        "",
-                        style: TextStyle(fontSize: 40),
-                      ),
-                    ),
-                  ],
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 120,
+              ),
+              I18nText(
+                langKey + "login",
+                child: Text(
+                  "",
+                  style: TextStyle(fontSize: 40),
                 ),
-                const SizedBox(
-                  height: 60,
+              ),
+              const SizedBox(
+                height: 60,
+              ),
+              TextField(
+                controller: _usernameTEC,
+                style: const TextStyle(
+                  fontSize: 25,
                 ),
-                TextField(
-                  controller: _usernameTEC,
-                  style: const TextStyle(
+                decoration: InputDecoration(
+                  labelText: FlutterI18n.translate(context, globalLangKey + "username"),
+                  labelStyle: TextStyle(
+                    color: spqPrimaryBlue,
                     fontSize: 25,
                   ),
-                  decoration: InputDecoration(
-                    labelText: FlutterI18n.translate(context, globalLangKey + "username"),
-                    labelStyle: TextStyle(
-                      color: spqPrimaryBlue,
-                      fontSize: 25,
-                    ),
-                    decoration: const InputDecoration(
-                      labelText: "Username",
-                      labelStyle: TextStyle(
-                        color: spqPrimaryBlue,
-                        fontSize: 25,
-                      ),
-                      filled: true,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
+                  filled: true,
                 ),
-                const SizedBox(
-                  height: 50,
-                ),
-                ButtonTheme(
-                  child: ElevatedButton(
-                    child: I18nText(langKey + "login"),
-                    onPressed: _loginUser,
-                  ),
-                ],
               ),
-            ),
+              const SizedBox(
+                height: 100,
+              ),
+              ButtonTheme(
+                child: ElevatedButton(
+                  child: I18nText(langKey + "login"),
+                  onPressed: _loginUser,
+                ),
+              )
+            ],
           ),
         ),
       ),

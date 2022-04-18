@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/all_utils.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -115,9 +114,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         floatingActionButton: SpqFloatingActionButton(
-          onPressed: () {
-            print("New Speaq");
-          },
+          onPressed: () => Navigator.pushNamed(context, 'new_post'),
           heroTag: 'post',
           child: SvgPicture.asset("assets/images/logo/logo_text.svg"),
         ),
