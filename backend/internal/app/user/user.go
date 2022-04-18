@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/speak-app/speak/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/data"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

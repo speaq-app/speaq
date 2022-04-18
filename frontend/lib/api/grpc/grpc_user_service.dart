@@ -1,5 +1,5 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:frontend/api/protos/user.pbgrpc.dart';
+import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:grpc/grpc.dart';
@@ -26,11 +26,11 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<dynamic> updateProfile({
+  Future<void> updateProfile({
     required int id,
     required Profile userProfile,
   }) async {
-    return _client.updateUserProfile(
+    await _client.updateUserProfile(
       UpdateUserProfileRequest()
         ..userId = Int64(id)
         ..name = userProfile.name
