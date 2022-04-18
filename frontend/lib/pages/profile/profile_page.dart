@@ -4,7 +4,7 @@ import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
-import 'package:frontend/widgets/speaq_text_button.dart';
+import 'package:frontend/widgets/speaq_textbutton.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -14,6 +14,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final String langKey = "pages.profile.";
+
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _link = "hs-heilbronn.de";
   final String _name = "Informatics";
@@ -28,11 +30,14 @@ class _ProfilePageState extends State<ProfilePage> {
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: SpqAppBar(preferredSize: deviceSize, title: Text(
-          _username,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
-        ),),
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+          title: Text(
+            _username,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
         body: ListView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
@@ -99,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Padding(
           padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
-          child: SpqTextButton(
+          child: SpqTextbutton(
             onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
           ),
         ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
-class SpqTextButton extends StatelessWidget {
+class SpqTextbutton extends StatelessWidget {
   final void Function() onPressed;
 
-  const SpqTextButton({Key? key, void function, required this.onPressed})
+  const SpqTextbutton({Key? key, void function, required this.onPressed})
       : super(key: key);
 
   @override

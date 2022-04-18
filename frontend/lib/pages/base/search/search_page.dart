@@ -8,6 +8,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final String langKey = "pages.base.search.";
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -15,8 +17,5 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.green,
       ),
     );
-
-
-
   }
 }
