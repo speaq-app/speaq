@@ -37,47 +37,58 @@ class _SettingsPageState extends State<SettingsPage> {
             style: TextStyle(fontSize: 16),
           ),
         ),
-        body: Stack(children: [
-          SettingsList(
-            sections: [
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "@eric",
-                    style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
+        body: Stack(
+          children: [
+            SettingsList(
+              sections: [
+                SpqSettingsSection(
+                  title: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "@eric",
+                      style: TextStyle(
+                          color: spqBlack,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
+                  tiles: [
+                    _buildSettingsTile("Account", "settAccount"),
+                    _buildSettingsTile("Privacy and safety", "settPrivSafety"),
+                    _buildSettingsTile("Notifications", "settNotific"),
+                    _buildSettingsTile(
+                        "Content preferences", "settContentPref"),
+                  ],
                 ),
-                tiles: [
-                  _buildSettingsTile("Account", "login"),
-                  _buildSettingsTile("Privacy and safety", "login"),
-                  _buildSettingsTile("Notifications", "login"),
-                  _buildSettingsTile("Content preferences", "login"),
-                ],
-              ),
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "General",
-                    style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
+                SpqSettingsSection(
+                  title: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "General",
+                      style: TextStyle(
+                          color: spqBlack,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
+                  tiles: [
+                    _buildSettingsTile("Display and Sound", "settDispSound"),
+                    _buildSettingsTile("Data usage", "settDataUsage"),
+                    _buildSettingsTile("Accessibility", "settAccess"),
+                    _buildSettingsTile("About speaq", "login"),
+                  ],
                 ),
-                tiles: [
-                  _buildSettingsTile("Display and Sound", "login"),
-                  _buildSettingsTile("Data usage", "login"),
-                  _buildSettingsTile("Accessibility", "login"),
-                  _buildSettingsTile("About speaq", "login"),
-                ],
-              ),
-            ],
-          ),
-          Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
-            bottom: 20,
-            height: deviceSize.height * 0.1,
-          )
-        ]),
+              ],
+            ),
+            Positioned(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _buildLogoPictures(deviceSize)),
+              bottom: 20,
+              height: deviceSize.height * 0.1,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -85,7 +96,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_text.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
+      child: SvgPicture.asset("assets/images/logo/logo_text.svg",
+          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
     );
   }
 

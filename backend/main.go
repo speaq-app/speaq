@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/speak-app/speak/cmd"
+	"github.com/speaq-app/speaq/cmd"
 )
 
 func main() {

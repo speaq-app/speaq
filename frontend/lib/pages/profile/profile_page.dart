@@ -4,7 +4,7 @@ import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
-import 'package:frontend/widgets/speaq_textbutton.dart';
+import 'package:frontend/widgets/speaq_text_button.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);

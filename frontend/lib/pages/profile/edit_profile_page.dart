@@ -5,7 +5,7 @@ import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_loading_widget.dart';
-import 'package:frontend/widgets/speaq_textfield.dart';
+import 'package:frontend/widgets/speaq_text_field.dart';
 import 'package:shimmer/shimmer.dart';
 
 class EditProfilePage extends StatefulWidget {

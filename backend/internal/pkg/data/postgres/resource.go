@@ -3,7 +3,7 @@ package postgres
 import (
 	"context"
 
-	"github.com/speak-app/speak/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 func (s Service) ResourceByID(id int64) (data.Resource, error) {

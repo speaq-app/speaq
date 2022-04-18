@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
-import 'package:page_transition/page_transition.dart';
 
-import '../pages/settings/settings_account_page.dart';
+import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -32,10 +31,24 @@ class RouteGenerator {
         return PageTransition(child: const NotificationsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "search":
         return PageTransition(child: SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        //Settings
       case "settingsPrivacy":
         return PageTransition(child: SettingsAndPrivacyPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settAccount":
         return PageTransition(child: AccountSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "settPrivSafety":
+        return PageTransition(child: PrivacySafetySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "settNotific":
+        return PageTransition(child: NotificationsSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "settContentPref":
+        return PageTransition(child: ContentPrefSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "settDispSound":
+        return PageTransition(child: DisplaySoundSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "settDataUsage":
+        return PageTransition(child: DataUsageSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "settAccess":
+        return PageTransition(child: AccessibilitySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      
       case "bookmarks":
         return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":
