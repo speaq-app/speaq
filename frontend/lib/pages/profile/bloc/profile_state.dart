@@ -11,9 +11,7 @@ class ProfileLoading extends ProfileState {}
 class ProfileLoaded extends ProfileState {
   final Profile profile;
 
-  ProfileLoaded({
-    required this.profile,
-  });
+  ProfileLoaded({required this.profile});
 }
 
 class ProfileSaving extends ProfileState {}

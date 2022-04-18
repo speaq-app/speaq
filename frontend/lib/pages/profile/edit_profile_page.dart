@@ -25,10 +25,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   late String hcImageURL =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
-  late String profileName;
-  late String profileUsername;
-  late String profileDescription;
-  late String profileWebsite;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -38,7 +34,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    //Use ID of Account
     _profileBloc.add(LoadProfile(userId: 1));
   }
 
@@ -54,39 +49,50 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       },
       child: SafeArea(
-        child: Scaffold(
-          appBar: _buildAppBar(deviceSize),
-          body: Container(
-            padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-            child: BlocListener<ProfileBloc, ProfileState>(
-              bloc: _profileBloc,
-              listener: (context, state) {
-                if (state is ProfileLoaded) {
-                  var profile = state.profile;
-                  _nameController.text = profile.name;
-                  _usernameController.text = profile.username;
-                  _descriptionController.text = profile.description;
-                  _websiteController.text = profile.website;
-                } else if (state is ProfileSaved) {
-                  Navigator.pop(context);
-                }
-              },
-              child: BlocBuilder<ProfileBloc, ProfileState>(
-                bloc: _profileBloc,
-                builder: (context, state) {
-                  if (state is ProfileLoading) {
-                    return _buildListViewShimmer(context);
-                  } else if (state is ProfileLoaded) {
-                    return _buildListViewWithData(context, state.profile);
-                  } else if (state is ProfileSaving) {
-                    return SpqLoadingWidget(
-                        MediaQuery.of(context).size.shortestSide * 0.15);
-                  }
-                  return const Text("not workin - edit_profile_page line 81");
-                },
-              ),
-            ),
-          ),
+        child: BlocConsumer<ProfileBloc, ProfileState>(
+          bloc: _profileBloc,
+          listener: (context, state) async {
+            if (state is ProfileLoaded) {
+              var profile = state.profile;
+              _nameController.text = profile.name;
+              _usernameController.text = profile.username;
+              _descriptionController.text = profile.description;
+              _websiteController.text = profile.website;
+            } else if (state is ProfileSaved) {
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+            if (state is ProfileSaving) {
+              return SpqLoadingWidget(
+                  MediaQuery.of(context).size.shortestSide * 0.15);
+            } else if (state is ProfileSaved) {
+              return const Center(
+                child: Icon(
+                  Icons.check,
+                  size: 35,
+                  color: spqPrimaryBlue,
+                ),
+              );
+            } else if (state is ProfileLoading) {
+              return Scaffold(
+                appBar: _buildLoadingAppBar(deviceSize),
+                body: Container(
+                    padding:
+                        const EdgeInsets.only(left: 30, top: 20, right: 30),
+                    child: _buildListViewShimmer(context)),
+              );
+            } else if (state is ProfileLoaded) {
+              return Scaffold(
+                appBar: _buildAppBar(deviceSize),
+                body: Container(
+                    padding:
+                        const EdgeInsets.only(left: 30, top: 20, right: 30),
+                    child: _buildListViewWithData(context, state.profile)),
+              );
+            }
+            return const Text("not workin - edit_profile_page line 81");
+          },
         ),
       ),
     );
@@ -99,56 +105,66 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return ListView(
       children: [
         Center(
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        _buildFullScreenProfileImage(
-                            context, hcImageURL, profileUsername),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return child;
-                    })),
-                child: _buildProfileImage(hcImageURL),
-              ),
-            ],
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).push(PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    _buildFullScreenProfileImage(
+                        context, hcImageURL, _usernameController.text),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return child;
+                })),
+            child: _buildProfileImage(hcImageURL),
           ),
         ),
-        const SizedBox(
-          height: 40,
-        ),
-        SpeaqTextField(
-          maxLength: maxLengthName,
-          controller: _nameController,
-          label: "Name",
-          icon: const Icon(Icons.drive_file_rename_outline),
-        ),
-        SpeaqTextField(
-          maxLength: maxLengthUsername,
-          controller: _usernameController,
-          label: "Username",
-          icon: const Icon(Icons.alternate_email_rounded),
-        ),
-        SpeaqTextField(
-          maxLength: maxLengthDescription,
-          controller: _descriptionController,
-          label: "Description",
-          maxLines: 12,
-          newLines: 5,
-          icon: const Icon(Icons.format_align_left),
-        ),
-        SpeaqTextField(
-          maxLength: maxLengthWebsite,
-          controller: _websiteController,
-          label: "Website",
-          icon: const Icon(Icons.web),
-        ),
+        const SizedBox(height: 40),
+        _buildNameTextField(),
+        _buildUsernameTextField(),
+        _buildDescriptionTextField(),
+        _buildWebsiteTextField(),
       ],
     );
   }
 
-  ListView _buildListViewShimmer(BuildContext context) {
+  Widget _buildNameTextField() {
+    return SpeaqTextField(
+      maxLength: maxLengthName,
+      controller: _nameController,
+      label: "Name",
+      icon: const Icon(Icons.person_outline),
+    );
+  }
+
+  Widget _buildUsernameTextField() {
+    return SpeaqTextField(
+      maxLength: maxLengthUsername,
+      controller: _usernameController,
+      label: "Username",
+      icon: const Icon(Icons.alternate_email_rounded),
+    );
+  }
+
+  Widget _buildDescriptionTextField() {
+    return SpeaqTextField(
+      maxLength: maxLengthDescription,
+      controller: _descriptionController,
+      label: "Description",
+      maxLines: 12,
+      newLines: 5,
+      icon: const Icon(Icons.format_align_left),
+    );
+  }
+
+  Widget _buildWebsiteTextField() {
+    return SpeaqTextField(
+      maxLength: maxLengthWebsite,
+      controller: _websiteController,
+      label: "Website",
+      icon: const Icon(Icons.link),
+    );
+  }
+
+  Widget _buildListViewShimmer(BuildContext context) {
     return ListView(
       children: [
         Center(
@@ -158,7 +174,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onTap: () => Navigator.of(context).push(PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         _buildFullScreenProfileImage(
-                            context, hcImageURL, profileUsername),
+                            context, hcImageURL, _usernameController.text),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       return child;
@@ -168,9 +184,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ],
           ),
         ),
-        const SizedBox(
-          height: 40,
-        ),
+        const SizedBox(height: 40),
         Shimmer.fromColors(
           baseColor: spqBlack,
           highlightColor: spqLightGrey,
@@ -179,7 +193,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             maxLength: maxLengthName,
             controller: _nameController,
             label: "Name",
-            icon: const Icon(Icons.drive_file_rename_outline),
+            icon: const Icon(Icons.person_outline),
           ),
         ),
         Shimmer.fromColors(
@@ -214,7 +228,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             maxLength: maxLengthWebsite,
             controller: _websiteController,
             label: "Website",
-            icon: const Icon(Icons.web),
+            icon: const Icon(Icons.link),
           ),
         ),
       ],
@@ -250,6 +264,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ],
       preferredSize: deviceSize,
+    );
+  }
+
+  PreferredSizeWidget _buildLoadingAppBar(Size deviceSize) {
+    return SpqAppBar(
+      title: const Text(
+        "Edit Profile",
+        textAlign: TextAlign.center,
+      ),
+      centerTitle: true,
+      preferredSize: deviceSize,
+      leading: null,
+      isAutomaticallyImplyLeading: false,
     );
   }
 
