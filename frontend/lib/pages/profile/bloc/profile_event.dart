@@ -7,9 +7,7 @@ abstract class ProfileEvent {}
 class LoadProfile extends ProfileEvent {
   final int userId;
 
-  LoadProfile({
-    required this.userId,
-  });
+  LoadProfile({required this.userId});
 }
 
 class SaveProfile extends ProfileEvent {

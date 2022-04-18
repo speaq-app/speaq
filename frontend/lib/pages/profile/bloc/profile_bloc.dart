@@ -12,19 +12,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final UserService _userService = GRPCUserService();
 
   ProfileBloc() : super(ProfileInitial()) {
-        //Events
+    //Events
     on<LoadProfile>(_onLoadProfile);
     on<SaveProfile>(_onSaveProfile);
   }
 
-  Future<void> _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) async {
+  Future<void> _onLoadProfile(
+      LoadProfile event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading()); //State (Shimmer)
+    await Future.delayed(Duration(seconds:5));
 
     var _profile = await _userService.getProfile(event.userId);
     emit(ProfileLoaded(profile: _profile)); //State
   }
 
   void _onSaveProfile(SaveProfile event, Emitter<ProfileState> emit) {
+    _userService.updateProfile(id: event.userId, userProfile: event.profile);
     emit(ProfileSaving());
+
+    emit(ProfileSaved());
   }
 }

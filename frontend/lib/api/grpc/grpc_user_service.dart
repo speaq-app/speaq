@@ -28,16 +28,15 @@ class GRPCUserService implements UserService {
   @override
   Future<dynamic> updateProfile({
     required int id,
-    required String name,
-    required String username,
-    required String description,
-    required String website,
+    required Profile userProfile,
   }) async {
-    return _client.updateUserProfile(UpdateUserProfileRequest()
-      ..userId = Int64(id)
-      ..name = name
-      ..username = username
-      ..description = description
-      ..website = website);
+    return _client.updateUserProfile(
+      UpdateUserProfileRequest()
+        ..userId = Int64(id)
+        ..name = userProfile.name
+        ..username = userProfile.username
+        ..description = userProfile.description
+        ..website = userProfile.website,
+    );
   }
 }

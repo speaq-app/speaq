@@ -5,9 +5,6 @@ abstract class UserService {
 
   Future<dynamic> updateProfile({
     required int id,
-    required String name,
-    required String username,
-    required String description,
-    required String website,
+    required Profile userProfile,
   }) async {}
 }

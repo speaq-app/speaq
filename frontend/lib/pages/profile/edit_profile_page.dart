@@ -1,8 +1,5 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/user_service.dart';
 import 'package:frontend/pages/profile/bloc/profile_bloc.dart';
 import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -39,7 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    //Get ID
+    //Use ID of Account
     _profileBloc.add(LoadProfile(userId: 1));
   }
 
@@ -78,7 +75,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   } else if (state is ProfileLoaded) {
                     return _buildListViewWithData(context, state.profile);
                   }
-                  return const Text("ups");
+                  return const Text("not workin - edit_profile_page line 81");
                 },
               ),
             ),
@@ -132,7 +129,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           label: "Description",
           maxLines: 12,
           newLines: 5,
-          icon: Icon(Icons.format_align_left),
+          icon: const Icon(Icons.format_align_left),
         ),
         SpeaqTextField(
           maxLength: maxLengthWebsite,
@@ -231,14 +228,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveData() {
-    UserService userService = GRPCUserService();
-    userService.updateProfile(
-      id: 1,
+    Profile _profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,
       description: _descriptionController.text,
       website: _websiteController.text,
     );
+    _profileBloc.add(SaveProfile(userId: 1, profile: _profile));
   }
 
   @override
