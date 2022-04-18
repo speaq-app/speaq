@@ -114,9 +114,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         floatingActionButton: SpqFloatingActionButton(
-          onPressed: () {
-            print("New Speaq");
-          },
+          onPressed: () => Navigator.pushNamed(context, 'new_post'),
           heroTag: 'post',
           child: SvgPicture.asset("assets/images/logo/logo_text.svg"),
         ),
