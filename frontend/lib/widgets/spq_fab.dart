@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class SpqFloatingActionButton extends StatelessWidget {
-  final void Function() onPressed;
   final Widget child;
   final String heroTag;
+  final void Function() onPressed;
 
   const SpqFloatingActionButton({
     Key? key,

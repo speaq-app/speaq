@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 
-class SpqTextButton extends StatelessWidget {
+class SpqTextbutton extends StatelessWidget {
   final void Function() onPressed;
 
-  const SpqTextButton({
+  const SpqTextbutton({
     Key? key,
     required this.onPressed,
   }) : super(key: key);

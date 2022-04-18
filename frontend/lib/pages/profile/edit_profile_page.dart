@@ -18,6 +18,8 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
 
+  final String langKey = "pages.profile.";
+
   int maxLengthName = 30;
   int maxLengthUsername = 20;
   int maxLengthDescription = 120;

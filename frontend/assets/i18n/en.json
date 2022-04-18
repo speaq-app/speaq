@@ -1,0 +1,41 @@
+{
+  "global": {
+    "username": "Username"
+  },
+  "pages": {
+    "base": {
+      "home": {
+        "userMenu": {
+
+        }
+      },
+      "messages": {
+
+      },
+      "notifications": {
+
+      },
+      "search": {
+
+      }
+    },
+    "profile": {
+      "follow": {
+
+      }
+    },
+    "settings": {
+
+    },
+    "start": {
+      "login": {
+        "login":"Anmelden"
+
+      },
+      "register": {
+        "register": "Registrieren"
+      }
+    }
+
+  }
+}
