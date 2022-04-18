@@ -40,6 +40,8 @@ class RouteGenerator {
         return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":
         return PageTransition(child: ImpressumPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "new_post":
+        return PageTransition(child: NewPostPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "qr_code":
         return PageTransition(child: QrCodePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "edit_profile":
