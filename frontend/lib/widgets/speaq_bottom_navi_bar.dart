@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class SpqButtonNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final void Function(int) switchPage;
 
-  SpqButtonNavigationBar({
+  const SpqButtonNavigationBar({
     Key? key,
     this.selectedIndex = 0,
     required this.switchPage,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/utils/input_formatter/max_lines_text_input_formatter.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 
 class SpeaqTextField extends StatelessWidget {
   final int newLines;

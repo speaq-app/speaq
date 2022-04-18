@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class PostContainer extends StatelessWidget {
   final String name;

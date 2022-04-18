@@ -6,10 +6,21 @@ class SpqFloatingActionButton extends StatelessWidget {
   final Widget child;
   final String heroTag;
 
-  const SpqFloatingActionButton({Key? key, required this.onPressed, required this.child, required this.heroTag}) : super(key: key);
+  const SpqFloatingActionButton({
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    required this.heroTag,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(backgroundColor: spqPrimaryBlue, foregroundColor: spqWhite,onPressed: onPressed, child: child, heroTag: heroTag,);
+    return FloatingActionButton(
+      backgroundColor: spqPrimaryBlue,
+      foregroundColor: spqWhite,
+      onPressed: onPressed,
+      child: child,
+      heroTag: heroTag,
+    );
   }
 }
