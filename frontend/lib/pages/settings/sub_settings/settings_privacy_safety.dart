@@ -22,7 +22,6 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
     return Scaffold(
       appBar: SpqAppBar(
         preferredSize: deviceSize,
-        scrollController: ScrollController(),
         title: const Text(
           "Settings and Privacy",
           textAlign: TextAlign.center,

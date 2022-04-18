@@ -21,7 +21,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     return Scaffold(
       appBar: SpqAppBar(
         preferredSize: deviceSize,
-        scrollController: ScrollController(),
         title: const Text(
           "Account",
           textAlign: TextAlign.center,

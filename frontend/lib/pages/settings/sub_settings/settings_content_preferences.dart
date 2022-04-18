@@ -22,7 +22,6 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
     return Scaffold(
       appBar: SpqAppBar(
         preferredSize: deviceSize,
-        scrollController: ScrollController(),
         title: const Text(
           "Notifications",
           textAlign: TextAlign.center,
