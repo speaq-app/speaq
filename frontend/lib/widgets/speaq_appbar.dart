@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
   const SpqAppBar({
     Key? key,
-    required ScrollController scrollController,
     required this.preferredSize,
     this.actionList,
     this.leading,
-    required this.title,
+    required this.title, this.bottom, this.centerTitle, this.leadingWidth,
   }) : super(key: key);
 
   @override
@@ -15,18 +14,23 @@ class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actionList;
   final Widget? leading;
   final Widget title;
+  final TabBar? bottom;
+  final bool? centerTitle;
+  final double? leadingWidth;
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
-    return SizedBox( height: deviceSize.height * 0.15,
+    return SizedBox( height: preferredSize.height * 0.075,
       child: AppBar(
-        toolbarHeight: deviceSize.height * 0.15,
+        leadingWidth: leadingWidth,
+        centerTitle: centerTitle,
+        toolbarHeight: preferredSize.height * 0.075,
         title: title,
         backgroundColor: Colors.white,
         elevation: 4.0,
         actions: actionList,
         leading: leading,
+        bottom: bottom,
       ),
     );
   }

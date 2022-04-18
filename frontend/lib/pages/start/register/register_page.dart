@@ -8,8 +8,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final String langKey = "pages.start.register.";
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SafeArea(child: Scaffold(body: Container()));
   }
 }

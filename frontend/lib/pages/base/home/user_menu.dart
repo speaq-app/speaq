@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 
-class UserMenu extends StatelessWidget {
-  UserMenu({Key? key}) : super(key: key);
+class UserMenu extends StatefulWidget {
+  const UserMenu({Key? key}) : super(key: key);
 
-  String userName = "@dave";
-  String name = "David";
+  @override
+  State<UserMenu> createState() => _UserMenuState();
+}
+
+class _UserMenuState extends State<UserMenu> {
+  final String langKey = "pages.base.home.";
+
+  String userName = "@hhn";
+
+  String name = "Informatics";
+
   String follower = "234";
+
   String following = "690";
-  String image =
-      "https://dieschneidersgmbh.de/wp-content/uploads/2020/11/Mercedes-AMG-GTR-fahren-dieschneiders-1-1.jpg";
+
+  String image = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -42,8 +52,7 @@ class UserMenu extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                 name,
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               Text(
                 userName,
@@ -60,8 +69,7 @@ class UserMenu extends StatelessWidget {
                         children: [
                           Text(
                             following,
-                            style: const TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                           ),
                           const Padding(
                             padding: EdgeInsets.only(left: 2),
@@ -81,8 +89,7 @@ class UserMenu extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 2.0),
                             child: Text(
                               follower,
-                              style: const TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                             ),
                           ),
                           const Text(
@@ -113,7 +120,7 @@ class UserMenu extends StatelessWidget {
         leading: const Icon(Icons.qr_code_2),
         title: const Text("QR-Code"),
         onTap: () {
-          Navigator.popAndPushNamed(context, "pq-code");
+          Navigator.popAndPushNamed(context, "qr_ode");
         },
       ),
       ListTile(

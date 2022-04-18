@@ -8,13 +8,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final String langKey = "pages.base.search.";
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.green,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.green,
+      ),
     );
-
-
-
   }
 }

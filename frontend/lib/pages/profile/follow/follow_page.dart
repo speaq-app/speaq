@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_follower_tile.dart';
 
 class FollowPage extends StatefulWidget {
@@ -12,6 +13,8 @@ class FollowPage extends StatefulWidget {
 }
 
 class _FollowPageState extends State<FollowPage> {
+  final String langKey = "pages.profile.follow.";
+
   int followerCount = 522;
   int followingCount = 14;
 
@@ -24,35 +27,38 @@ class _FollowPageState extends State<FollowPage> {
 
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.username),
-          bottom: TabBar(
-            indicatorWeight: 1.5,
-            indicatorSize: TabBarIndicatorSize.tab,
-            unselectedLabelColor: spqLightGrey,
-            indicatorColor: spqPrimaryBlue,
-            labelColor: spqPrimaryBlue,
-            tabs: [
-              SizedBox(
-                height: deviceSize.height * 0.05,
-                child: Text(
-                  "$followerCount Follower",
-                  style: const TextStyle(fontSize: 20),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: SpqAppBar(
+            title: Text(widget.username),
+            bottom: TabBar(
+              indicatorWeight: 1.5,
+              indicatorSize: TabBarIndicatorSize.tab,
+              unselectedLabelColor: spqLightGrey,
+              indicatorColor: spqPrimaryBlue,
+              labelColor: spqPrimaryBlue,
+              tabs: [
+                SizedBox(
+                  height: deviceSize.height * 0.05,
+                  child: Text(
+                    "$followerCount Follower",
+                    style: const TextStyle(fontSize: 20),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: deviceSize.height * 0.05,
-                child: Text(
-                  "$followingCount Following",
-                  style: const TextStyle(fontSize: 20),
-                ),
-              )
-            ],
+                SizedBox(
+                  height: deviceSize.height * 0.05,
+                  child: Text(
+                    "$followingCount Following",
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                )
+              ],
+            ),
+            preferredSize: deviceSize,
           ),
-        ),
-        body: TabBarView(
-          children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList()],
+          body: TabBarView(
+            children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList()],
+          ),
         ),
       ),
     );
@@ -99,7 +105,7 @@ ListView _buildFollowList(List<Follower> followerList) {
 
         availableImage = Image.asset('resources/images/no_profile_picture.jpg');
 
-        return FollowerTile(follower: currentFollower, followerImage: "lol");
+        return FollowerTile(follower: currentFollower, followerImage: currentFollower.username);
       },
       itemCount: followerList.length);
 }

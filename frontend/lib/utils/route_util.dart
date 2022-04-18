@@ -4,6 +4,8 @@ import 'package:frontend/pages/all_pages_export.dart';
 
 import 'package:page_transition/page_transition.dart';
 
+import '../pages/settings/settings_account_page.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
 /*
@@ -14,7 +16,7 @@ class RouteGenerator {
       case "main":
         return PageTransition(child: const MainApp(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "base":
-        return PageTransition(child: const BasePage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
+        return PageTransition(child: const BasePage(), type: PageTransitionType.bottomToTop, alignment: Alignment.center);
       case "login":
         return PageTransition(child: const LoginPage(), type: PageTransitionType.topToBottom, alignment: Alignment.center);
       case "register":
@@ -48,11 +50,13 @@ class RouteGenerator {
         return PageTransition(child: DataUsageSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settAccess":
         return PageTransition(child: AccessibilitySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
-        //
+      
       case "bookmarks":
         return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":
         return PageTransition(child: ImpressumPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+      case "new_post":
+        return PageTransition(child: NewPostPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "qr_code":
         return PageTransition(child: QrCodePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "edit_profile":

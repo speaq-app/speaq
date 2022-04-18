@@ -24,3 +24,4 @@ export 'package:frontend/pages/settings/sub_settings/settings_display_sound.dart
 export 'package:frontend/pages/settings/sub_settings/settings_notifications.dart';
 export 'package:frontend/pages/settings/sub_settings/settings_privacy_safety.dart';
 
+export 'post/new_post_page.dart';

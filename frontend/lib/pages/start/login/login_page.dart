@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,27 +12,28 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final String langKey = "pages.start.login.";
+
   final TextEditingController _usernameTEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: spqWhite,
-        child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          color: spqWhite,
+          child: Column(
             children: <Widget>[
-              Column(
-                children: const <Widget>[
-                  SizedBox(
-                    height: 120,
-                  ),
-                  Text(
-                    "Login",
-                    style: TextStyle(fontSize: 40),
-                  ),
-                ],
+              SizedBox(
+                height: 120,
+              ),
+              I18nText(
+                langKey + "login",
+                child: Text(
+                  "",
+                  style: TextStyle(fontSize: 40),
+                ),
               ),
               const SizedBox(
                 height: 60,
@@ -41,8 +43,8 @@ class _LoginPageState extends State<LoginPage> {
                 style: const TextStyle(
                   fontSize: 25,
                 ),
-                decoration: const InputDecoration(
-                  labelText: "Username",
+                decoration: InputDecoration(
+                  labelText: FlutterI18n.translate(context, globalLangKey + "username"),
                   labelStyle: TextStyle(
                     color: spqPrimaryBlue,
                     fontSize: 25,
@@ -51,14 +53,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(
-                height: 50,
+                height: 100,
               ),
               ButtonTheme(
                 child: ElevatedButton(
-                  child: const Text("login"),
+                  child: I18nText(langKey + "login"),
                   onPressed: _loginUser,
                 ),
-              ),
+              )
             ],
           ),
         ),
