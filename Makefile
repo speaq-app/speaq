@@ -5,7 +5,7 @@ protos:
 	docker run --rm --name protoc \
 		-v "${CURDIR}/protos:/protos" \
 		-v "${CURDIR}/backend/internal:/out/go" \
-		-v "${CURDIR}/frontend/lib/api/protos:/out/dart" \
+		-v "${CURDIR}/frontend/lib/api/grpc/protos:/out/dart" \
 		protoc:dev
 
 build: protos
