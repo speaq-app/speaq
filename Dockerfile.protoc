@@ -24,6 +24,6 @@ ENV PATH="$PATH:/usr/local/flutter/bin"
 RUN dart pub global activate protoc_plugin
 ENV PATH="$PATH:/root/.pub-cache/bin"
 
-ENTRYPOINT [ "protoc", "--proto_path=/protos/", "--go_out=/out/go", "--go-grpc_out=/out/go", "--dart_out=grpc:/out/dart",\
-     "/protos/resource.proto" \
-]
+COPY protoc.sh /protoc.sh
+RUN chmod +x /protoc.sh
+ENTRYPOINT ["/protoc.sh"]

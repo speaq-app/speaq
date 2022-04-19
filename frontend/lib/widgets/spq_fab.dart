@@ -6,7 +6,12 @@ class SpqFloatingActionButton extends StatelessWidget {
   final String heroTag;
   final void Function() onPressed;
 
-  const SpqFloatingActionButton({Key? key, required this.child, required this.heroTag, required this.onPressed}) : super(key: key);
+  const SpqFloatingActionButton({
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    required this.heroTag,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

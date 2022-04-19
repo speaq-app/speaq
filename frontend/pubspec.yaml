@@ -53,6 +53,7 @@ dependencies:
   #app_settings: ^4.1.1
   protobuf: ^2.0.1
   grpc: ^3.0.2
+  shimmer: ^2.0.0
   fixnum: ^1.0.0
 
 dev_dependencies:

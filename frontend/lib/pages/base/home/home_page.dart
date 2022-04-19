@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final String langKey = "pages.base.home.";
 
-  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  String profilePicture =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
   String spqImage = "assets/images/logo/logo_speaq.svg";
 
   bool _showBackToTopButton = false;
@@ -69,7 +70,8 @@ class _HomePageState extends State<HomePage> {
           title: Center(
             child: InkWell(
               onTap: () {
-                _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+                _scrollController.animateTo(0,
+                    duration: const Duration(seconds: 1), curve: Curves.linear);
               },
               child: SvgPicture.asset(
                 spqImage,
@@ -80,7 +82,7 @@ class _HomePageState extends State<HomePage> {
           ),
           preferredSize: deviceSize,
         ),
-        drawer: UserMenu(),
+        drawer: const UserMenu(),
         body: SingleChildScrollView(
           controller: _scrollController,
           child: Column(

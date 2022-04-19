@@ -20,16 +20,31 @@ func New() data.Service {
 		},
 		users: map[int64]data.User{
 			1: {
-				Username:         "Hendrik",
 				ProfilePictureID: 1,
+				Profile: data.UserProfile{
+					Name:        "Hendrik Schlehlein",
+					Username:    "schlehlein",
+					Description: "Test Description 1",
+					Website:     "Test Website 1",
+				},
 			},
 			2: {
-				Username:         "Daniel",
 				ProfilePictureID: 2,
+				Profile: data.UserProfile{
+					Name:        "Daniel Holzwarth",
+					Username:    "dholzwarth",
+					Description: "Test Description 2",
+					Website:     "Test Website 2",
+				},
 			},
 			3: {
-				Username:         "Nosa",
 				ProfilePictureID: 3,
+				Profile: data.UserProfile{
+					Name:        "Nosakhare",
+					Username:    "nomoruyi",
+					Description: "Test Description 3",
+					Website:     "Test Website 3",
+				},
 			},
 		},
 	}
@@ -51,4 +66,25 @@ func (s service) UserByID(id int64) (data.User, error) {
 	}
 	u.ID = id
 	return u, nil
+}
+
+func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
+	u, err := s.UserByID(id)
+	if err != nil {
+		return err
+	}
+
+	u.Profile = profile
+	s.users[id] = u
+
+	return nil
+}
+
+func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
+	u, err := s.UserByID(id)
+	if err != nil {
+		return data.UserProfile{}, err
+	}
+
+	return u.Profile, nil
 }
