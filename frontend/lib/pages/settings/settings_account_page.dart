@@ -41,6 +41,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 //Account abmelden
                 _buildPopUpWindow("Account abmelden", "Bist du dir sicher, dass du dich abmelden möchtest?", "Abmelden"),
               ],
+      
             ),
           ],
         ),
@@ -73,7 +74,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/logo_text.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
+      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
     );
   }
 

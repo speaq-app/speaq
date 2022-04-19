@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
 
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
-  String spqImage = "assets/images/logo/logo_speaq.svg";
+  String spqImage = "assets/images/logo/speaq_logo.svg";
 
   bool _showBackToTopButton = false;
   late ScrollController _scrollController;
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: SpqFloatingActionButton(
           onPressed: () => Navigator.pushNamed(context, 'new_post'),
           heroTag: 'post',
-          child: SvgPicture.asset("assets/images/logo/logo_text.svg"),
+          child: const Icon(Icons.add, size: 35,),
         ),
       ),
     );

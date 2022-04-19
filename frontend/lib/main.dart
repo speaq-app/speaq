@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -12,7 +11,8 @@ import 'widgets/all_widgets.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  ConnectionUtilSingleton connectionStatus = ConnectionUtilSingleton.getInstance();
+  ConnectionUtilSingleton connectionStatus =
+      ConnectionUtilSingleton.getInstance();
   connectionStatus.initialize();
 
   runApp(const Speaq());
@@ -26,17 +26,22 @@ class Speaq extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => LocaleProvider(),
       builder: (context, child) {
-        final localeProvider = Provider.of<LocaleProvider>(context, listen: true);
+        final localeProvider =
+            Provider.of<LocaleProvider>(context, listen: true);
 
         return MaterialApp(
           title: 'Speaq',
           theme: ThemeData(
               primarySwatch: Colors.blue,
-              appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
+              appBarTheme: const AppBarTheme(
+                  foregroundColor: spqBlack, backgroundColor: spqWhite),
               scaffoldBackgroundColor: spqWhite,
               backgroundColor: spqBackgroundGrey,
               bottomAppBarColor: spqWhite,
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                  backgroundColor: spqWhite,
+                  selectedItemColor: spqPrimaryBlue,
+                  unselectedItemColor: spqDarkGrey),
               dialogBackgroundColor: spqWhite,
               primaryColor: spqPrimaryBlue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -47,9 +52,14 @@ class Speaq extends StatelessWidget {
           initialRoute: 'main',
           localizationsDelegates: [
             FlutterI18nDelegate(
-              translationLoader: FileTranslationLoader(useCountryCode: false, fallbackFile: 'de', forcedLocale: LocaleProvider.allSupportedLocales[0], basePath: 'assets/i18n/'),
+              translationLoader: FileTranslationLoader(
+                  useCountryCode: false,
+                  fallbackFile: 'de',
+                  forcedLocale: LocaleProvider.allSupportedLocales[0],
+                  basePath: 'assets/i18n/'),
               missingTranslationHandler: (key, locale) {
-                print("--- Missing Key: $key, languageCode: ${locale?.languageCode}");
+                print(
+                    "--- Missing Key: $key, languageCode: ${locale?.languageCode}");
               },
             ),
             GlobalMaterialLocalizations.delegate,
@@ -82,7 +92,8 @@ class MainApp extends StatelessWidget {
             return const LoginPage();
           }
         } else {
-          return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
+          return SpqLoadingWidget(
+              MediaQuery.of(context).size.shortestSide * 0.15);
         }
       },
     );
