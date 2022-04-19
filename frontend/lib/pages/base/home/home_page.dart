@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/all_utils.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
-import 'package:frontend/widgets/spq_FAB.dart';
+import 'package:frontend/widgets/spq_fab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,9 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final String langKey = "pages.base.home.";
+
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
-  String spqImage = "assets/images/logo/logo_speaq.svg";
+  String spqImage = "assets/images/logo/speaq_logo.svg";
 
   bool _showBackToTopButton = false;
   late ScrollController _scrollController;
@@ -44,6 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
+
     return Container(
       color: spqBackgroundGrey,
       child: Scaffold(
@@ -79,7 +82,7 @@ class _HomePageState extends State<HomePage> {
           ),
           preferredSize: deviceSize,
         ),
-        drawer: UserMenu(),
+        drawer: const UserMenu(),
         body: SingleChildScrollView(
           controller: _scrollController,
           child: Column(
@@ -112,9 +115,11 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        floatingActionButton: SpqFloatingActionButton(onPressed: () { print("New Speaq"); }, heroTag: 'post',
-        child: SvgPicture.asset("assets/images/logo/logo_speaq.svg", color: spqWhite,height: 28, width: 28,),),
-
+        floatingActionButton: SpqFloatingActionButton(
+          onPressed: () => Navigator.pushNamed(context, 'new_post'),
+          heroTag: 'post',
+          child: const Icon(Icons.add, size: 35,),
+        ),
       ),
     );
   }

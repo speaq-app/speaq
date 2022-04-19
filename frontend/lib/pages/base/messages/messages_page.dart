@@ -8,6 +8,8 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
+  final String langKey = "pages.base.messages.";
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

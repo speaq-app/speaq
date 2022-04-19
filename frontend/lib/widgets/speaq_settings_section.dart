@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../utils/speaq_styles.dart';
-
 class SpqSettingsSection extends AbstractSettingsSection {
+  final List<Widget> tiles;
+  final EdgeInsetsDirectional? margin;
+  final Widget? title;
+
   const SpqSettingsSection({
     required this.tiles,
     this.margin,
     this.title,
     Key? key,
   }) : super(key: key);
-
-  final List<Widget> tiles;
-  final EdgeInsetsDirectional? margin;
-  final Widget? title;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class SpqSettingsSection extends AbstractSettingsSection {
       children: [
         Container(
             padding:
-            const EdgeInsets.symmetric(vertical: 2.0, horizontal: 24.0),
+                const EdgeInsets.symmetric(vertical: 2.0, horizontal: 24.0),
             child: title),
         Container(
           child: Column(

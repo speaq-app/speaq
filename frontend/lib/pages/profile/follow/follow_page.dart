@@ -13,6 +13,8 @@ class FollowPage extends StatefulWidget {
 }
 
 class _FollowPageState extends State<FollowPage> {
+  final String langKey = "pages.profile.follow.";
+
   int followerCount = 522;
   int followingCount = 14;
 
@@ -51,7 +53,8 @@ class _FollowPageState extends State<FollowPage> {
                   ),
                 )
               ],
-            ), preferredSize: deviceSize,
+            ),
+            preferredSize: deviceSize,
           ),
           body: TabBarView(
             children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList()],

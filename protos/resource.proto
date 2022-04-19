@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "app/resource";
+
+service Resource {
+    rpc GetResource(GetResourceRequest) returns (GetResourceResponse);
+}
+
+message GetResourceRequest {
+    int64 id = 1;
+}
+
+message GetResourceResponse {
+    bytes data = 1;
+    string name = 2;
+    string mime_type = 3;
+    int64 size = 4;
+}
