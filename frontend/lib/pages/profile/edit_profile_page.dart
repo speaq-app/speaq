@@ -1,5 +1,7 @@
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/pages/profile/bloc/profile_bloc.dart';
 import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -69,13 +71,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               return SpqLoadingWidget(
                   MediaQuery.of(context).size.shortestSide * 0.15);
             } else if (state is ProfileSaved) {
-              return const Center(
-                child: Icon(
-                  Icons.check,
-                  size: 35,
-                  color: spqPrimaryBlue,
-                ),
-              );
+              return _buildCheckScreen();
             } else if (state is ProfileLoading) {
               return Scaffold(
                 appBar: _buildLoadingAppBar(deviceSize),
@@ -93,9 +89,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     child: _buildListViewWithData(context, state.profile)),
               );
             }
-            return const Text("not workin - edit_profile_page line 81");
+            return const Text("not workin - edit_profile_page line");
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildCheckScreen() {
+    return const Center(
+      child: Icon(
+        Icons.check,
+        size: 35,
+        color: spqPrimaryBlue,
       ),
     );
   }
@@ -170,70 +176,72 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return ListView(
       children: [
         Center(
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        _buildFullScreenProfileImage(
-                            context, hcImageURL, _usernameController.text),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return child;
-                    })),
-                child: _buildProfileImage(hcImageURL),
-              ),
-            ],
-          ),
+          child: _buildProfileImageShimmer(hcImageURL),
         ),
         const SizedBox(height: 40),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthName,
-            controller: _nameController,
-            label: "Name",
-            icon: const Icon(Icons.person_outline),
-          ),
-        ),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthUsername,
-            controller: _usernameController,
-            label: "Username",
-            icon: const Icon(Icons.alternate_email_rounded),
-          ),
-        ),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthDescription,
-            controller: _descriptionController,
-            label: "Description",
-            maxLines: 12,
-            newLines: 5,
-            icon: const Icon(Icons.format_align_left),
-          ),
-        ),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthWebsite,
-            controller: _websiteController,
-            label: "Website",
-            icon: const Icon(Icons.link),
-          ),
-        ),
+        _buildNameTextFieldShimmer(),
+        _buildUsernameTextFieldShimmer(),
+        _buildDescriptionTextFieldShimmer(),
+        _buildWebsiteTextFieldShimmer(),
       ],
+    );
+  }
+
+  Widget _buildNameTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthName,
+        controller: _nameController,
+        label: "Name",
+        icon: const Icon(Icons.person_outline),
+      ),
+    );
+  }
+
+  Widget _buildUsernameTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthUsername,
+        controller: _usernameController,
+        label: "Username",
+        icon: const Icon(Icons.alternate_email_rounded),
+      ),
+    );
+  }
+
+  Widget _buildDescriptionTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthDescription,
+        controller: _descriptionController,
+        label: "Description",
+        maxLines: 12,
+        newLines: 5,
+        icon: const Icon(Icons.format_align_left),
+      ),
+    );
+  }
+
+  Widget _buildWebsiteTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthWebsite,
+        controller: _websiteController,
+        label: "Website",
+        icon: const Icon(Icons.link),
+      ),
     );
   }
 
@@ -299,8 +307,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  Widget _buildProfileImageShimmer(String imageURL) {
+    return Hero(
+      tag: 'dash',
+      child: Shimmer.fromColors(
+        baseColor: spqLightGrey,
+        highlightColor: spqWhite,
+        child: Container(
+          width: 150,
+          height: 150,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(imageURL),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildFullScreenProfileImage(
-      BuildContext context, String imageURL, String username) {
+    BuildContext context,
+    String imageURL,
+    String username,
+  ) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
