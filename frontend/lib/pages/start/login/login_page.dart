@@ -18,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     AppLocalizations appLocale = AppLocalizations.of(context)!;
 
     return SafeArea(
@@ -57,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ButtonTheme(
                 child: ElevatedButton(
-                  child: Text("login"),
+                  child: Text(appLocale.login),
                   onPressed: _loginUser,
                 ),
               )

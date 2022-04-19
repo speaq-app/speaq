@@ -10,5 +10,9 @@
     }
   },
   "username": "Benutzername",
-  "login": "Anmelden"
+  "login": "Anmelden",
+  "register": "Registrieren",
+  "follower": "Follower",
+  "following": "Gefolgt"
+
 }

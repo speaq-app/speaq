@@ -10,6 +10,9 @@
     }
   },
   "username": "Username",
-  "login": "Login"
+  "login": "Login",
+  "register": "Registrieren",
+  "follower": "Follower",
+  "following": "Gefolgt"
 }
 
