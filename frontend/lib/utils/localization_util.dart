@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-const String globalLangKey = "global.";
 
 class LocaleProvider extends ChangeNotifier {
   Locale _locale = Settings.isInitialized ? Locale(Settings.getValue("language_key", LocaleProvider.allSupportedLocales[0].languageCode), "") : LocaleProvider.allSupportedLocales[0];
+
+
+  Future<SharedPreferences> setupLocale () async {
+    final prefs = await SharedPreferences.getInstance();
+
+    return prefs;
+  }
 
   static final List<Locale> allSupportedLocales = [
     const Locale('de'), // German, no country code

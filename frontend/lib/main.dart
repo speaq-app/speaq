@@ -5,6 +5,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/all_widgets.dart';
 
 
@@ -29,6 +30,8 @@ class Speaq extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
 
     return ChangeNotifierProvider(
       create: (context) => LocaleProvider(),
