@@ -29,7 +29,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
   # Dependency for font we're currently using in our mockups
   google_fonts: ^2.3.1
 
@@ -73,6 +75,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  generate: true
 
   assets:
     - assets/images/logo/

@@ -50,18 +50,7 @@ class Speaq extends StatelessWidget {
               //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
               textTheme: spqTextTheme),
           initialRoute: 'main',
-          localizationsDelegates: [
-            FlutterI18nDelegate(
-              translationLoader: FileTranslationLoader(
-                  useCountryCode: false,
-                  fallbackFile: 'de',
-                  forcedLocale: LocaleProvider.allSupportedLocales[0],
-                  basePath: 'assets/i18n/'),
-              missingTranslationHandler: (key, locale) {
-                print(
-                    "--- Missing Key: $key, languageCode: ${locale?.languageCode}");
-              },
-            ),
+          localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

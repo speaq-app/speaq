@@ -1,0 +1,12 @@
+{
+  "langCode": "de",
+  "helloWorld": "Hallo Welt",
+  "greeting": "Hallo {name}",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "default": "Nutzer"
+      }
+    }
+  }
+}
