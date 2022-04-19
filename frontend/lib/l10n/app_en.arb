@@ -1,7 +1,6 @@
 {
   "langCode": "en",
-  "helloWorld": "Hello World!",
-
+  "helloWorld": "Hello World",
   "greeting": "Hello {name}",
   "@greeting": {
     "placeholders": {
@@ -9,6 +8,8 @@
         "default": "User"
       }
     }
-  }
-
+  },
+  "username": "Username",
+  "login": "Login"
 }
+

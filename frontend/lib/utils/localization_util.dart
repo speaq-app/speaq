@@ -7,8 +7,8 @@ class LocaleProvider extends ChangeNotifier {
   Locale _locale = Settings.isInitialized ? Locale(Settings.getValue("language_key", LocaleProvider.allSupportedLocales[0].languageCode), "") : LocaleProvider.allSupportedLocales[0];
 
   static final List<Locale> allSupportedLocales = [
-    const Locale('de', ''), // German, no country code
-    const Locale('en', ''), // English, no country code
+    const Locale('de'), // German, no country code
+    const Locale('en'), // English, no country code
   ];
 
   static String? getLocaleFlag(String localeCode) {
