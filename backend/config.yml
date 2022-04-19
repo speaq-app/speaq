@@ -1,0 +1,9 @@
+api:
+  bind: 0.0.0.0:8080
+config: config.yml
+database:
+  database: postgres
+  host: localhost
+  password: postgres
+  port: 5432
+  username: postgres
