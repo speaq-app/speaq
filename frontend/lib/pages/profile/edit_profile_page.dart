@@ -20,13 +20,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   final String langKey = "pages.profile.";
 
+  final String nameText = "Name";
+  final String usernameText = "Username";
+  final String descriptionText = "Description";
+  final String websiteText = "Website";
+  final String editProfileText = "Edit Profile";
+  final String cancelText = "Cancel";
+  final String doneText = "Done";
+
+  late String hcImageURL =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+
   int maxLengthName = 30;
   int maxLengthUsername = 20;
   int maxLengthDescription = 120;
   int maxLengthWebsite = 20;
-
-  late String hcImageURL =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -69,13 +77,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               return SpqLoadingWidget(
                   MediaQuery.of(context).size.shortestSide * 0.15);
             } else if (state is ProfileSaved) {
-              return const Center(
-                child: Icon(
-                  Icons.check,
-                  size: 35,
-                  color: spqPrimaryBlue,
-                ),
-              );
+              return _buildCheckScreen();
             } else if (state is ProfileLoading) {
               return Scaffold(
                 appBar: _buildLoadingAppBar(deviceSize),
@@ -93,9 +95,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     child: _buildListViewWithData(context, state.profile)),
               );
             }
-            return const Text("not workin - edit_profile_page line 81");
+            return const Text("not workin - edit_profile_page line");
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildCheckScreen() {
+    return const Center(
+      child: Icon(
+        Icons.check,
+        size: 35,
+        color: spqPrimaryBlue,
       ),
     );
   }
@@ -132,7 +144,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthName,
       controller: _nameController,
-      label: "Name",
+      label: nameText,
       icon: const Icon(Icons.person_outline),
     );
   }
@@ -141,7 +153,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthUsername,
       controller: _usernameController,
-      label: "Username",
+      label: usernameText,
       icon: const Icon(Icons.alternate_email_rounded),
     );
   }
@@ -150,7 +162,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthDescription,
       controller: _descriptionController,
-      label: "Description",
+      label: descriptionText,
       maxLines: 12,
       newLines: 5,
       icon: const Icon(Icons.format_align_left),
@@ -161,7 +173,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthWebsite,
       controller: _websiteController,
-      label: "Website",
+      label: websiteText,
       icon: const Icon(Icons.link),
     );
   }
@@ -170,85 +182,87 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return ListView(
       children: [
         Center(
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        _buildFullScreenProfileImage(
-                            context, hcImageURL, _usernameController.text),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return child;
-                    })),
-                child: _buildProfileImage(hcImageURL),
-              ),
-            ],
-          ),
+          child: _buildProfileImageShimmer(hcImageURL),
         ),
         const SizedBox(height: 40),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthName,
-            controller: _nameController,
-            label: "Name",
-            icon: const Icon(Icons.person_outline),
-          ),
-        ),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthUsername,
-            controller: _usernameController,
-            label: "Username",
-            icon: const Icon(Icons.alternate_email_rounded),
-          ),
-        ),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthDescription,
-            controller: _descriptionController,
-            label: "Description",
-            maxLines: 12,
-            newLines: 5,
-            icon: const Icon(Icons.format_align_left),
-          ),
-        ),
-        Shimmer.fromColors(
-          baseColor: spqBlack,
-          highlightColor: spqLightGrey,
-          child: SpeaqTextField(
-            isEnabled: false,
-            maxLength: maxLengthWebsite,
-            controller: _websiteController,
-            label: "Website",
-            icon: const Icon(Icons.link),
-          ),
-        ),
+        _buildNameTextFieldShimmer(),
+        _buildUsernameTextFieldShimmer(),
+        _buildDescriptionTextFieldShimmer(),
+        _buildWebsiteTextFieldShimmer(),
       ],
+    );
+  }
+
+  Widget _buildNameTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthName,
+        controller: _nameController,
+        label: nameText,
+        icon: const Icon(Icons.person_outline),
+      ),
+    );
+  }
+
+  Widget _buildUsernameTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthUsername,
+        controller: _usernameController,
+        label: usernameText,
+        icon: const Icon(Icons.alternate_email_rounded),
+      ),
+    );
+  }
+
+  Widget _buildDescriptionTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthDescription,
+        controller: _descriptionController,
+        label: descriptionText,
+        maxLines: 12,
+        newLines: 5,
+        icon: const Icon(Icons.format_align_left),
+      ),
+    );
+  }
+
+  Widget _buildWebsiteTextFieldShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqBlack,
+      highlightColor: spqLightGrey,
+      child: SpeaqTextField(
+        isEnabled: false,
+        maxLength: maxLengthWebsite,
+        controller: _websiteController,
+        label: websiteText,
+        icon: const Icon(Icons.link),
+      ),
     );
   }
 
   PreferredSizeWidget _buildAppBar(Size deviceSize) {
     return SpqAppBar(
-      title: const Text(
-        "Edit Profile",
+      title: Text(
+        editProfileText,
         textAlign: TextAlign.center,
       ),
       centerTitle: true,
       leading: TextButton(
         onPressed: _cancel,
-        child: const Text(
-          "Cancel",
-          style: TextStyle(
+        child: Text(
+          cancelText,
+          style: const TextStyle(
             color: spqPrimaryBlue,
           ),
         ),
@@ -257,9 +271,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       actionList: [
         TextButton(
           onPressed: _saveProfile,
-          child: const Text(
-            "Done",
-            style: TextStyle(
+          child: Text(
+            doneText,
+            style: const TextStyle(
               color: spqPrimaryBlue,
             ),
           ),
@@ -271,8 +285,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   PreferredSizeWidget _buildLoadingAppBar(Size deviceSize) {
     return SpqAppBar(
-      title: const Text(
-        "Edit Profile",
+      title: Text(
+        editProfileText,
         textAlign: TextAlign.center,
       ),
       centerTitle: true,
@@ -299,8 +313,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  Widget _buildProfileImageShimmer(String imageURL) {
+    return Hero(
+      tag: 'dash',
+      child: Shimmer.fromColors(
+        baseColor: spqLightGrey,
+        highlightColor: spqWhite,
+        child: Container(
+          width: 150,
+          height: 150,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(imageURL),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildFullScreenProfileImage(
-      BuildContext context, String imageURL, String username) {
+    BuildContext context,
+    String imageURL,
+    String username,
+  ) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
