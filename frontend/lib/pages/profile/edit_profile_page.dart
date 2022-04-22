@@ -1,7 +1,5 @@
-import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/pages/profile/bloc/profile_bloc.dart';
 import 'package:frontend/pages/profile/model/profile.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -22,13 +20,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   final String langKey = "pages.profile.";
 
+  final String nameText = "Name";
+  final String usernameText = "Username";
+  final String descriptionText = "Description";
+  final String websiteText = "Website";
+  final String editProfileText = "Edit Profile";
+  final String cancelText = "Cancel";
+  final String doneText = "Done";
+
+  late String hcImageURL =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+
   int maxLengthName = 30;
   int maxLengthUsername = 20;
   int maxLengthDescription = 120;
   int maxLengthWebsite = 20;
-
-  late String hcImageURL =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -138,7 +144,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthName,
       controller: _nameController,
-      label: "Name",
+      label: nameText,
       icon: const Icon(Icons.person_outline),
     );
   }
@@ -147,7 +153,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthUsername,
       controller: _usernameController,
-      label: "Username",
+      label: usernameText,
       icon: const Icon(Icons.alternate_email_rounded),
     );
   }
@@ -156,7 +162,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthDescription,
       controller: _descriptionController,
-      label: "Description",
+      label: descriptionText,
       maxLines: 12,
       newLines: 5,
       icon: const Icon(Icons.format_align_left),
@@ -167,7 +173,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return SpeaqTextField(
       maxLength: maxLengthWebsite,
       controller: _websiteController,
-      label: "Website",
+      label: websiteText,
       icon: const Icon(Icons.link),
     );
   }
@@ -195,7 +201,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthName,
         controller: _nameController,
-        label: "Name",
+        label: nameText,
         icon: const Icon(Icons.person_outline),
       ),
     );
@@ -209,7 +215,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthUsername,
         controller: _usernameController,
-        label: "Username",
+        label: usernameText,
         icon: const Icon(Icons.alternate_email_rounded),
       ),
     );
@@ -223,7 +229,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthDescription,
         controller: _descriptionController,
-        label: "Description",
+        label: descriptionText,
         maxLines: 12,
         newLines: 5,
         icon: const Icon(Icons.format_align_left),
@@ -239,7 +245,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthWebsite,
         controller: _websiteController,
-        label: "Website",
+        label: websiteText,
         icon: const Icon(Icons.link),
       ),
     );
@@ -247,16 +253,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   PreferredSizeWidget _buildAppBar(Size deviceSize) {
     return SpqAppBar(
-      title: const Text(
-        "Edit Profile",
+      title: Text(
+        editProfileText,
         textAlign: TextAlign.center,
       ),
       centerTitle: true,
       leading: TextButton(
         onPressed: _cancel,
-        child: const Text(
-          "Cancel",
-          style: TextStyle(
+        child: Text(
+          cancelText,
+          style: const TextStyle(
             color: spqPrimaryBlue,
           ),
         ),
@@ -265,9 +271,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       actionList: [
         TextButton(
           onPressed: _saveProfile,
-          child: const Text(
-            "Done",
-            style: TextStyle(
+          child: Text(
+            doneText,
+            style: const TextStyle(
               color: spqPrimaryBlue,
             ),
           ),
@@ -279,8 +285,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   PreferredSizeWidget _buildLoadingAppBar(Size deviceSize) {
     return SpqAppBar(
-      title: const Text(
-        "Edit Profile",
+      title: Text(
+        editProfileText,
         textAlign: TextAlign.center,
       ),
       centerTitle: true,
