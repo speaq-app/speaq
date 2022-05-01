@@ -10,11 +10,11 @@ import (
 	"strings"
 
 	"github.com/speaq-app/speaq/internal/app/resource"
+	"github.com/speaq-app/speaq/internal/app/settings"
 	"github.com/speaq-app/speaq/internal/app/user"
 	"github.com/speaq-app/speaq/internal/pkg/data/mockdb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
@@ -22,8 +22,9 @@ import (
 var defaultConfig []byte
 
 type Config struct {
-	API      API
-	Database Database
+	API        API
+	Database   Database
+	ImprintURL string
 }
 
 type API struct {
@@ -52,16 +53,9 @@ var (
 		Use:   "infrared",
 		Short: "Starts the infrared proxy",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			logger, err := zap.NewDevelopment()
-			if err != nil {
-				return fmt.Errorf("failed to init logger; err: %s", err)
-			}
+			log.Printf("loading config from %q\n", configPath)
 
-			logger.Info("loading proxy from config",
-				zap.String("config", configPath),
-			)
-
-			_, err = loadConfig()
+			cfg, err := loadConfig()
 			if err != nil {
 				log.Fatalf("Failed to read config from %q, %s", configPath, err)
 			}
@@ -86,6 +80,10 @@ var (
 				DataService: db,
 			}
 			user.RegisterUserServer(srv, userSrv)
+			settingsSrv := settings.Server{
+				ImprintURL: cfg.ImprintURL,
+			}
+			settings.RegisterSettingsServer(srv, settingsSrv)
 
 			l, err := net.Listen("tcp", ":8080")
 			if err != nil {

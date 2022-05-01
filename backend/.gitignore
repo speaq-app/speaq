@@ -25,3 +25,6 @@ go.work
 
 # Generated mock files
 *_mock_test.go
+
+# Dev Configs (generated)
+config.dev.yml
