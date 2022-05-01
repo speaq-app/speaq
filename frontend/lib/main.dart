@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/all_widgets.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   ConnectionUtilSingleton connectionStatus =
       ConnectionUtilSingleton.getInstance();
   connectionStatus.initialize();
-
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProfileAdapter());
+  await Hive.openBox<Profile>("profile");
   runApp(const Speaq());
 }
 

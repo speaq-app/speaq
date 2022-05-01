@@ -1,8 +1,21 @@
-class Resource {
+import 'package:hive/hive.dart';
+part 'resource.g.dart';
+
+@HiveType(typeId: 2)
+class Resource extends HiveObject {
+  @HiveField(0)
   final int id;
+
+  @HiveField(1)
   final List<int> data;
+
+  @HiveField(2)
   final String name;
+
+  @HiveField(3)
   final String mimeType;
+
+  @HiveField(4)
   final int size;
 
   Resource({

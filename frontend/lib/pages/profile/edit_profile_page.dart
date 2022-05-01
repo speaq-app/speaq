@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/pages/profile/bloc/profile_bloc.dart';
-import 'package:frontend/pages/profile/model/profile.dart';
+import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
+import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_loading_widget.dart';
@@ -371,11 +371,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _saveProfile() {
     Profile _profile = Profile(
-      name: _nameController.text,
-      username: _usernameController.text,
-      description: _descriptionController.text,
-      website: _websiteController.text,
-    );
+        name: _nameController.text,
+        username: _usernameController.text,
+        description: _descriptionController.text,
+        website: _websiteController.text);
     _profileBloc.add(SaveProfile(userId: 1, profile: _profile));
   }
 
