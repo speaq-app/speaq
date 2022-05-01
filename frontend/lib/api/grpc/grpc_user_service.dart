@@ -22,6 +22,8 @@ class GRPCUserService implements UserService {
       username: resp.username,
       description: resp.description,
       website: resp.website,
+      profileImageBlurHash: resp.profileImageBlurHash,
+      profileImageResourceId: resp.profileImageResourceId.toInt(),
     );
   }
 

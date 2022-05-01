@@ -43,9 +43,11 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 	log.Println(p)
 
 	return &GetUserProfileResponse{
-		Name:        p.Name,
-		Username:    p.Username,
-		Description: p.Description,
-		Website:     p.Website,
+		Name:                   p.Name,
+		Username:               p.Username,
+		Description:            p.Description,
+		Website:                p.Website,
+		ProfileImageBlurHash:   p.ProfileImageBlurHash,
+		ProfileImageResourceId: p.ProfileImageResourceID,
 	}, nil
 }

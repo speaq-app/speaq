@@ -15,10 +15,18 @@ class Profile extends HiveObject {
   @HiveField(3)
   final String website;
 
+  @HiveField(4)
+  final String profileImageBlurHash;
+
+  @HiveField(5)
+  final int profileImageResourceId;
+
   Profile({
     required this.name,
     required this.username,
     required this.description,
     required this.website,
+    required this.profileImageBlurHash,
+    required this.profileImageResourceId,
   });
 }

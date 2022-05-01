@@ -370,12 +370,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveProfile() {
-    Profile _profile = Profile(
-        name: _nameController.text,
-        username: _usernameController.text,
-        description: _descriptionController.text,
-        website: _websiteController.text);
-    _profileBloc.add(SaveProfile(userId: 1, profile: _profile));
+    // Profile _profile = Profile(
+    //   name: _nameController.text,
+    //   username: _usernameController.text,
+    //   description: _descriptionController.text,
+    //   website: _websiteController.text,
+
+    // );
+    // _profileBloc.add(SaveProfile(userId: 1, profile: _profile));
   }
 
   @override

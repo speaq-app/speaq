@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
@@ -18,11 +23,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
+  final ResourceBloc _resourceBloc = ResourceBloc();
 
   final String langKey = "pages.base.home.";
 
-  String profilePicture =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
   late ScrollController _scrollController;
@@ -49,8 +53,14 @@ class _HomePageState extends State<HomePage> {
     Size deviceSize = MediaQuery.of(context).size;
 
     return SafeArea(
-      child: BlocBuilder<ProfileBloc, ProfileState>(
+      child: BlocConsumer<ProfileBloc, ProfileState>(
         bloc: _profileBloc,
+        listener: (context, state) {
+          if (state is ProfileLoaded) {
+            _resourceBloc.add(
+                LoadResource(resourceId: state.profile.profileImageResourceId));
+          }
+        },
         builder: (context, state) {
           if (state is ProfileLoading) {
             return Scaffold(
@@ -58,7 +68,8 @@ class _HomePageState extends State<HomePage> {
               body: Container(child: _buildListViewShimmer(context)),
             );
           } else if (state is ProfileLoaded) {
-            return _buildHomePage(deviceSize, context);
+            log(state.profile.profileImageBlurHash);
+            return _buildHomePage(context, deviceSize, state.profile);
           } else {
             return const Text("State failed");
           }
@@ -67,7 +78,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Scaffold _buildHomePage(Size deviceSize, BuildContext context) {
+  Scaffold _buildHomePage(
+      BuildContext context, Size deviceSize, Profile profile) {
     return Scaffold(
       appBar: SpqAppBar(
         actionList: [
@@ -79,12 +91,7 @@ class _HomePageState extends State<HomePage> {
           )
         ],
         leading: Builder(builder: (context) {
-          return IconButton(
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage(profilePicture),
-              ));
+          return _buildProfileImage(context, profile.profileImageBlurHash);
         }),
         title: Center(
           child: InkWell(
@@ -141,6 +148,28 @@ class _HomePageState extends State<HomePage> {
           Icons.add,
           size: 35,
         ),
+      ),
+    );
+  }
+
+  Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
+    return IconButton(
+      onPressed: () => Scaffold.of(context).openDrawer(),
+      icon: BlocBuilder<ResourceBloc, ResourceState>(
+        bloc: _resourceBloc,
+        builder: (context, state) {
+          if (state is ResourceLoaded) {
+            return CircleAvatar(
+              radius: 20,
+              backgroundImage: MemoryImage(base64Decode(state.resource.data)),
+            );
+          } else {
+            return CircleAvatar(
+              radius: 20,
+              backgroundImage: BlurHashImage(profileImageBlurHash),
+            );
+          }
+        },
       ),
     );
   }

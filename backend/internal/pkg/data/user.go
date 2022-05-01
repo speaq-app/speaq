@@ -8,14 +8,15 @@ type UserService interface {
 
 type User struct {
 	ID int64
-	ProfilePictureID int64
 
 	Profile UserProfile
 }
 
 type UserProfile struct {
-	Name        string
-	Username    string
-	Description string
-	Website     string
+	Name                   string
+	Username               string
+	Description            string
+	Website                string
+	ProfileImageBlurHash   string
+	ProfileImageResourceID int64
 }
