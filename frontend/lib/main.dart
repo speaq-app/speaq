@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
 import 'widgets/all_widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  ConnectionUtilSingleton connectionStatus =
-      ConnectionUtilSingleton.getInstance();
+  ConnectionUtilSingleton connectionStatus = ConnectionUtilSingleton.getInstance();
   connectionStatus.initialize();
   await Hive.initFlutter();
   Hive.registerAdapter(ProfileAdapter());
   await Hive.openBox<Profile>("profile");
+
+  await Settings.init(cacheProvider: SharePreferenceCache());
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent, systemStatusBarContrastEnforced: true, systemNavigationBarColor: Colors.transparent));
+
   runApp(const Speaq());
 }
 
@@ -27,46 +30,21 @@ class Speaq extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return ChangeNotifierProvider(
       create: (context) => LocaleProvider(),
       builder: (context, child) {
-        final localeProvider =
-            Provider.of<LocaleProvider>(context, listen: true);
+        final localeProvider = Provider.of<LocaleProvider>(context, listen: true);
 
         return MaterialApp(
           title: 'Speaq',
-          theme: ThemeData(
-              primarySwatch: Colors.blue,
-              appBarTheme: const AppBarTheme(
-                  foregroundColor: spqBlack, backgroundColor: spqWhite),
-              scaffoldBackgroundColor: spqWhite,
-              backgroundColor: spqBackgroundGrey,
-              bottomAppBarColor: spqWhite,
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                  backgroundColor: spqWhite,
-                  selectedItemColor: spqPrimaryBlue,
-                  unselectedItemColor: spqDarkGrey),
-              dialogBackgroundColor: spqWhite,
-              primaryColor: spqPrimaryBlue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-              errorColor: spqErrorRed,
-              shadowColor: spqLightGreyTranslucent,
-              //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
-              textTheme: spqTextTheme),
+          theme: spqLightTheme,
+          darkTheme: spqDarkTheme,
+          themeMode: ThemeMode.system,
           initialRoute: 'main',
-          localizationsDelegates: [
-            FlutterI18nDelegate(
-              translationLoader: FileTranslationLoader(
-                  useCountryCode: false,
-                  fallbackFile: 'de',
-                  forcedLocale: LocaleProvider.allSupportedLocales[0],
-                  basePath: 'assets/i18n/'),
-              missingTranslationHandler: (key, locale) {},
-            ),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: LocaleProvider.allSupportedLocales,
           locale: localeProvider.locale,
           onGenerateRoute: RouteGenerator.generateRoute,
@@ -93,8 +71,7 @@ class MainApp extends StatelessWidget {
             return const LoginPage();
           }
         } else {
-          return SpqLoadingWidget(
-              MediaQuery.of(context).size.shortestSide * 0.15);
+          return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
         }
       },
     );

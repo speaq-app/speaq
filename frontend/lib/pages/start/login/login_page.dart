@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,12 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String langKey = "pages.start.login.";
-
   final TextEditingController _usernameTEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -28,12 +30,9 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 120,
               ),
-              I18nText(
-                langKey + "login",
-                child: const Text(
-                  "",
-                  style: TextStyle(fontSize: 40),
-                ),
+              Text(
+                appLocale.login,
+                style: const TextStyle(fontSize: 40),
               ),
               const SizedBox(
                 height: 60,
@@ -44,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 25,
                 ),
                 decoration: InputDecoration(
-                  labelText: FlutterI18n.translate(context, globalLangKey + "username"),
+                  labelText:  appLocale.username,
                   labelStyle: const TextStyle(
                     color: spqPrimaryBlue,
                     fontSize: 25,
@@ -57,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ButtonTheme(
                 child: ElevatedButton(
-                  child: I18nText(langKey + "login"),
+                  child: Text(appLocale.login),
                   onPressed: _loginUser,
                 ),
               )
