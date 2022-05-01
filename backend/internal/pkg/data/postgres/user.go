@@ -15,7 +15,7 @@ func (s Service) UserByID(id int64) (data.User, error) {
 SELECT name, username, description, website, profile_picture_id
 FROM users
 WHERE id = $1;
-`, id).Scan(&u.Profile.Name, &u.Profile.Username, &u.Profile.Description, &u.Profile.Website, &u.ProfilePictureID); err != nil {
+`, id).Scan(&u.Profile.Name, &u.Profile.Username, &u.Profile.Description, &u.Profile.Website); err != nil {
 		return u, err
 	}
 

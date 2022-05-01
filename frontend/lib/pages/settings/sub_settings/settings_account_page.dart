@@ -78,7 +78,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         child: Text(exitText),
                         onPressed: () => Navigator.pop(context)),
                     TextButton(
-                        child: Text("Abbrechen"),
+                        child: const Text("Abbrechen"),
                         onPressed: () => Navigator.pop(context)),
                   ],
                 )));

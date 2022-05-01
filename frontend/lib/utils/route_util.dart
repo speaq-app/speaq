@@ -30,33 +30,33 @@ class RouteGenerator {
       case "notifications":
         return PageTransition(child: const NotificationsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "search":
-        return PageTransition(child: SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const SearchPage(), type: PageTransitionType.fade, alignment: Alignment.center);
         //Settings
       case "settingsPrivacy":
-        return PageTransition(child: SettingsAndPrivacyPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const SettingsAndPrivacyPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settAccount":
-        return PageTransition(child: AccountSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const AccountSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settPrivSafety":
-        return PageTransition(child: PrivacySafetySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const PrivacySafetySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settNotific":
-        return PageTransition(child: NotificationsSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const NotificationsSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settContentPref":
-        return PageTransition(child: ContentPrefSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const ContentPrefSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settDispSound":
-        return PageTransition(child: DisplaySoundSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const DisplaySoundSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settDataUsage":
-        return PageTransition(child: DataUsageSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const DataUsageSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settAccess":
-        return PageTransition(child: AccessibilitySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const AccessibilitySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       
       case "bookmarks":
-        return PageTransition(child: BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":
-        return PageTransition(child: ImpressumPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const ImpressumPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "new_post":
-        return PageTransition(child: NewPostPage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const NewPostPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "qr_code":
-        return PageTransition(child: QrCodePage(), type: PageTransitionType.fade, alignment: Alignment.center);
+        return PageTransition(child: const QrCodePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "edit_profile":
         return PageTransition(child: const EditProfilePage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "follow":
@@ -76,8 +76,8 @@ class RouteGenerator {
   static _errorRoute() {
     return MaterialPageRoute(builder: (context) {
       return Scaffold(
-        appBar: AppBar(title: Text("ERROR")),
-          body: Center(
+        appBar: AppBar(title: const Text("ERROR")),
+          body: const Center(
               child: Text("ERROR")
           )
       );

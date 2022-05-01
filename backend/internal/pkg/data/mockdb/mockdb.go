@@ -2,6 +2,8 @@ package mockdb
 
 import (
 	"errors"
+	"io/ioutil"
+	"log"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
@@ -12,38 +14,50 @@ type service struct {
 }
 
 func New() data.Service {
+	bb, err := ioutil.ReadFile("testImage.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	return service{
 		resources: map[int64]data.Resource{
-			1: {},
+			1: {ID: 1,
+				Data:     string(bb),
+				Name:     "testImage",
+				MIMEType: "image/jpeg",
+				Size:     83935,
+			},
 			2: {},
 			3: {},
 		},
 		users: map[int64]data.User{
 			1: {
-				ProfilePictureID: 1,
 				Profile: data.UserProfile{
-					Name:        "Hendrik Schlehlein",
-					Username:    "schlehlein",
-					Description: "Test Description 1",
-					Website:     "Test Website 1",
+					Name:                   "Hendrik Schlehlein",
+					Username:               "schlehlein",
+					Description:            "Test Description 1",
+					Website:                "Test Website 1",
+					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
+					ProfileImageResourceID: 1,
 				},
 			},
 			2: {
-				ProfilePictureID: 2,
 				Profile: data.UserProfile{
-					Name:        "Daniel Holzwarth",
-					Username:    "dholzwarth",
-					Description: "Test Description 2",
-					Website:     "Test Website 2",
+					Name:                   "Daniel Holzwarth",
+					Username:               "dholzwarth",
+					Description:            "Test Description 2",
+					Website:                "Test Website 2",
+					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
+					ProfileImageResourceID: 1,
 				},
 			},
 			3: {
-				ProfilePictureID: 3,
 				Profile: data.UserProfile{
-					Name:        "Nosakhare",
-					Username:    "nomoruyi",
-					Description: "Test Description 3",
-					Website:     "Test Website 3",
+					Name:                   "Nosakhare",
+					Username:               "nomoruyi",
+					Description:            "Test Description 3",
+					Website:                "Test Website 3",
+					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
+					ProfileImageResourceID: 1,
 				},
 			},
 		},
