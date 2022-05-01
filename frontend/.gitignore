@@ -30,6 +30,9 @@ doc/api/
 ### Protos ###
 *.pb*.dart
 
+### Hive ###
+*.g.dart
+
 ### Dart Patch ###
 # dotenv environment variables file
 .env
@@ -168,3 +171,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
