@@ -370,6 +370,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveProfile() {
+    Navigator.pop(context);
     // Profile _profile = Profile(
     //   name: _nameController.text,
     //   username: _usernameController.text,
