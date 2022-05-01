@@ -1,7 +1,7 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/user_service.dart';
-import 'package:frontend/pages/profile/model/profile.dart';
+import 'package:frontend/api/model/profile.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCUserService implements UserService {
@@ -22,21 +22,23 @@ class GRPCUserService implements UserService {
       username: resp.username,
       description: resp.description,
       website: resp.website,
+      profileImageBlurHash: resp.profileImageBlurHash,
+      profileImageResourceId: resp.profileImageResourceId.toInt(),
     );
   }
 
   @override
   Future<void> updateProfile({
     required int id,
-    required Profile userProfile,
+    required Profile profile,
   }) async {
     await _client.updateUserProfile(
       UpdateUserProfileRequest()
         ..userId = Int64(id)
-        ..name = userProfile.name
-        ..username = userProfile.username
-        ..description = userProfile.description
-        ..website = userProfile.website,
+        ..name = profile.name
+        ..username = profile.username
+        ..description = profile.description
+        ..website = profile.website,
     );
   }
 }
