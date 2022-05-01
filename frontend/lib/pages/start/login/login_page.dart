@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/speaq_text_field_round.dart';
+import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/widgets/all_widgets.dart';
+
+import '../../../utils/speaq_styles.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,9 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   final String name = "Email/Username";
   final String password = "password";
   final String forgot = "Forgot Password";
-  final String login = "Login";
+  final String loginText = "Login";
   final String registerText = "You don't have an Account?";
   final String register = "Register";
+  final String hinweisLogin = "Du hast noch keinen Account?";
+  final String hinweisRegister = "Besitzt du bereits einen Account?";
+  final String homeText = "Du möchtest als Gast beitreten?";
+  final String home = "Gast";
 
   final TextEditingController _usernameTEC = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -33,8 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[buildTop(context),
-            buildBottom(context)],
+            children: <Widget>[buildTop(context), buildBottom(context)],
           ),
         ),
       );
@@ -51,18 +57,66 @@ class _LoginPageState extends State<LoginPage> {
             "assets/images/logo/speaq_text_logo.svg",
             height: 75,
           ),
-          RoundInputField(
-            hintText: name,
-            onChanged: (value) {},
+          Padding(
+            padding: const EdgeInsets.only(top: 100, bottom: 10),
+            child: RoundInputField(
+              hintText: name,
+              onChanged: (value) {},
+            ),
           ),
-           RoundPasswordField(password: password, onChanged: (String value) {  },)
+          RoundPasswordField(
+            password: password,
+            onChanged: (String value) {}
+          )
         ],
       ));
 
   Widget buildBottom(BuildContext context) => Container(
         child: Column(
           children: <Widget>[
-            FloatingActionButton(onPressed: (){}, child: Text(login) )
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: spqPrimaryBlue,
+                    padding: const EdgeInsets.all(15.0),
+                    fixedSize: const Size(200, 50),
+                    primary: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(29))),
+                  ),
+                  onPressed: () {Navigator.popAndPushNamed(context, "base");},
+                  child: Text(loginText)),
+            ),
+            AccountCheck(
+              hinweisLogin: hinweisLogin,
+              hinweisRegister: hinweisRegister,
+              register: register,
+              loginText: loginText,
+              press: () {Navigator.popAndPushNamed(context, "register");},
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 5, bottom: 5),
+              child: Divider(
+                color: Colors.black54,
+                thickness: 0.75,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: Text(homeText, style: const TextStyle(fontSize: 10)),
+                ),
+                GestureDetector(
+                    onTap: () {Navigator.popAndPushNamed(context, "base");},
+                    child: Text(
+                      home,
+                      style: const TextStyle(fontSize: 10,fontWeight: FontWeight.bold),
+                    ))
+              ],
+            ),
           ],
         ),
       );
@@ -70,33 +124,7 @@ class _LoginPageState extends State<LoginPage> {
   void _loginUser() async {
     log(_usernameTEC.text);
     //_checkUser()
-    Navigator.pushNamed(context, "base");
-  }
-}
-
-class RoundPasswordField extends StatelessWidget {
-  final ValueChanged<String> onChanged;
-  const RoundPasswordField({
-    Key? key,
-    required this.password, required this.onChanged,
-  }) : super(key: key);
-
-  final String password;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFieldContainer(
-       child: TextField(
-         obscureText: true,
-          onChanged: onChanged,
-     decoration:
-         InputDecoration(
-           hintText: password,
-           icon: Icon(Icons.lock, color: Colors.black),
-           suffixIcon: Icon(Icons.visibility, color: Colors.black),
-         border: InputBorder.none,
-         ),
-          ));
+    Navigator.popAndPushNamed(context, "base");
   }
 }
 
