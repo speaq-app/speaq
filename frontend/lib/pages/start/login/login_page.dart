@@ -25,12 +25,12 @@ class _LoginPageState extends State<LoginPage> {
           color: spqWhite,
           child: Column(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 120,
               ),
               I18nText(
                 langKey + "login",
-                child: Text(
+                child: const Text(
                   "",
                   style: TextStyle(fontSize: 40),
                 ),
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 decoration: InputDecoration(
                   labelText: FlutterI18n.translate(context, globalLangKey + "username"),
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: spqPrimaryBlue,
                     fontSize: 25,
                   ),

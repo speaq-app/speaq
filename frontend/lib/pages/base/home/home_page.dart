@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
   late ScrollController _scrollController;
-  bool _showBackToTopButton = false;
+  bool showBackToTopButton = false;
 
   @override
   void initState() {
@@ -39,9 +39,9 @@ class _HomePageState extends State<HomePage> {
       ..addListener(() {
         setState(() {
           if (_scrollController.offset >= 400) {
-            _showBackToTopButton = true;
+            showBackToTopButton = true;
           } else {
-            _showBackToTopButton = false;
+            showBackToTopButton = false;
           }
         });
       });

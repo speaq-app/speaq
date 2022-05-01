@@ -38,7 +38,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
               tiles: [
                 //Privates Konto SwitchTile
                 SettingsTile.switchTile(
-                  title: Text("Privates Konto", style: TextStyle(fontSize: 15)),
+                  title: const Text("Privates Konto", style: TextStyle(fontSize: 15)),
                   initialValue: valuePrivateSwitch,
                   onToggle: (value) {
                     setState(() {
@@ -81,7 +81,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                         child: Text(exitText),
                         onPressed: () => Navigator.pop(context)),
                     TextButton(
-                        child: Text("Abbrechen"),
+                        child: const Text("Abbrechen"),
                         onPressed: () => Navigator.pop(context)),
                   ],
                 )));

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -56,7 +55,7 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
 
   SettingsTile buildSettingsSwitchTile(String text) {
     return SettingsTile.switchTile(
-      title: Text(text, style: TextStyle(fontSize: 15)),
+      title: Text(text, style: const TextStyle(fontSize: 15)),
       initialValue: valuePrivateSwitch,
       onToggle: (value) {
         setState(() {

@@ -61,10 +61,7 @@ class Speaq extends StatelessWidget {
                   fallbackFile: 'de',
                   forcedLocale: LocaleProvider.allSupportedLocales[0],
                   basePath: 'assets/i18n/'),
-              missingTranslationHandler: (key, locale) {
-                print(
-                    "--- Missing Key: $key, languageCode: ${locale?.languageCode}");
-              },
+              missingTranslationHandler: (key, locale) {},
             ),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
