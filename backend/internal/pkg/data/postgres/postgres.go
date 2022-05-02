@@ -3,7 +3,6 @@ package postgres
 import (
 	"context"
 	"embed"
-	_ "embed"
 	"fmt"
 	"log"
 	"time"

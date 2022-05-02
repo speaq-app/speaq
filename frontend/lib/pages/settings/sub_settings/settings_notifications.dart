@@ -61,7 +61,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   //Erstelle SettingsTile
   SettingsTile buildSettingsSwitchTile(String text) {
     return SettingsTile.switchTile(
-      title: Text(text, style: TextStyle(fontSize: 15)),
+      title: Text(text, style: const TextStyle(fontSize: 15)),
       initialValue: valuePrivateSwitch,
       onToggle: (value) {
         setState(() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserMenu extends StatefulWidget {
   const UserMenu({Key? key}) : super(key: key);
@@ -8,7 +9,6 @@ class UserMenu extends StatefulWidget {
 }
 
 class _UserMenuState extends State<UserMenu> {
-  final String langKey = "pages.base.home.";
 
   String userName = "@hhn";
 
@@ -21,21 +21,25 @@ class _UserMenuState extends State<UserMenu> {
   String image = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   @override
-  Widget build(BuildContext context) => Drawer(
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                buildHeader(context),
-                buildMenu(context),
-              ],
-            ),
+  Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
+
+    return Drawer(
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              buildHeader(context, appLocale),
+              buildMenu(context, appLocale),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 
-  Widget buildHeader(BuildContext context) => Container(
+  Widget buildHeader(BuildContext context,AppLocalizations appLocale) => Container(
         padding: const EdgeInsets.only(
           top: 24,
           bottom: 24,
@@ -71,11 +75,11 @@ class _UserMenuState extends State<UserMenu> {
                             following,
                             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 2),
+                           Padding(
+                            padding: const EdgeInsets.only(left: 2),
                             child: Text(
-                              'Following',
-                              style: TextStyle(fontSize: 10),
+                              appLocale.following,
+                              style: const TextStyle(fontSize: 10),
                             ),
                           ),
                         ],
@@ -92,9 +96,9 @@ class _UserMenuState extends State<UserMenu> {
                               style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          const Text(
-                            'Followers',
-                            style: TextStyle(fontSize: 10),
+                           Text(
+                            appLocale.follower,
+                            style: const TextStyle(fontSize: 10),
                           )
                         ],
                       ),
@@ -107,45 +111,45 @@ class _UserMenuState extends State<UserMenu> {
         ),
       );
 
-  Widget buildMenu(BuildContext context) => Column(
-    children: [
-      ListTile(
-        leading: const Icon(Icons.person_outline),
-        title: const Text("Profile"),
-        onTap: () {
-          Navigator.popAndPushNamed(context, "profile");
-        },
-      ),
-      ListTile(
-        leading: const Icon(Icons.qr_code_2),
-        title: const Text("QR-Code"),
-        onTap: () {
-          Navigator.popAndPushNamed(context, "qr_ode");
-        },
-      ),
-      ListTile(
-        leading: const Icon(Icons.bookmark_border),
-        title: const Text("Bookmarks"),
-        onTap: () {
-          Navigator.popAndPushNamed(context, "bookmarks");
-        },
-      ),
-      const Divider(
-        color: Colors.black54,
-        thickness: 0.75,
-      ),
-      ListTile(
-        title: const Text("Settings and privacy"),
-        onTap: () {
-          Navigator.popAndPushNamed(context, "settings");
-        },
-      ),
-      ListTile(
-        title: const Text("Impressum"),
-        onTap: () {
-          Navigator.popAndPushNamed(context, "impressum");
-        },
-      ),
-    ],
-  );
+  Widget buildMenu(BuildContext context, AppLocalizations appLocale) => Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.person_outline),
+            title: const Text("Profile"),
+            onTap: () {
+              Navigator.popAndPushNamed(context, "profile");
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.qr_code_2),
+            title: const Text("QR-Code"),
+            onTap: () {
+              Navigator.popAndPushNamed(context, "qr_ode");
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.bookmark_border),
+            title: const Text("Bookmarks"),
+            onTap: () {
+              Navigator.popAndPushNamed(context, "bookmarks");
+            },
+          ),
+          const Divider(
+            color: Colors.black54,
+            thickness: 0.75,
+          ),
+          ListTile(
+            title: const Text("Settings and privacy"),
+            onTap: () {
+              Navigator.popAndPushNamed(context, "settings");
+            },
+          ),
+          ListTile(
+            title: const Text("Impressum"),
+            onTap: () {
+              Navigator.popAndPushNamed(context, "impressum");
+            },
+          ),
+        ],
+      );
 }

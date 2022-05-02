@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_settings_section.dart';
+import 'package:frontend/widgets/speaq_bottom_logo.dart';
 import 'package:settings_ui/settings_ui.dart';
-
-import '../../../widgets/speaq_bottom_logo.dart';
 
 class PrivacySafetySettingsPage extends StatefulWidget {
   const PrivacySafetySettingsPage({Key? key}) : super(key: key);
@@ -29,12 +28,24 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
             style: TextStyle(fontSize: 16),
           ),
         ),
-        body: Stack(children: [
-          SettingsList(
-            sections: [
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(25.0),
+      ),
+      body: Stack(children: [
+        SettingsList(
+          sections: [
+            SpqSettingsSection(
+              title: const Padding(
+                padding: EdgeInsets.all(25.0),
+              ),
+              tiles: [
+                //Privates Konto SwitchTile
+                SettingsTile.switchTile(
+                  title: const Text("Privates Konto", style: TextStyle(fontSize: 15)),
+                  initialValue: valuePrivateSwitch,
+                  onToggle: (value) {
+                    setState(() {
+                      valuePrivateSwitch = value;
+                    });
+                  },
                 ),
                 tiles: [
                   //Privates Konto SwitchTile
@@ -83,7 +94,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                         child: Text(exitText),
                         onPressed: () => Navigator.pop(context)),
                     TextButton(
-                        child: Text("Abbrechen"),
+                        child: const Text("Abbrechen"),
                         onPressed: () => Navigator.pop(context)),
                   ],
                 )));
