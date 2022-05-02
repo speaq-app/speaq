@@ -30,9 +30,6 @@ class Speaq extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return ChangeNotifierProvider(
       create: (context) => LocaleProvider(),
       builder: (context, child) {
