@@ -90,11 +90,9 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => {},
           )
         ],
-        leading: Builder(
-          builder: (context) {
-            return _buildProfileImage(context, profile.profileImageBlurHash);
-          }
-        ),
+        leading: Builder(builder: (context) {
+          return _buildProfileImage(context, profile.profileImageBlurHash);
+        }),
         title: Center(
           child: InkWell(
             onTap: () {
