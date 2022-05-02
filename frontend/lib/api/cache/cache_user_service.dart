@@ -21,8 +21,14 @@ class CacheUserService implements UserService {
   }
 
   @override
-  Future<void> updateProfile({required int id, required Profile profile}) {
+  Future<void> updateProfile({
+    required int id,
+    required Profile profile,
+  }) {
     box.put(id, profile);
-    return _userService.updateProfile(id: id, profile: profile);
+    return _userService.updateProfile(
+      id: id,
+      profile: profile,
+    );
   }
 }

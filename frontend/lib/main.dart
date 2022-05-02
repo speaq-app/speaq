@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,17 +13,30 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  ConnectionUtilSingleton connectionStatus = ConnectionUtilSingleton.getInstance();
+  ConnectionUtilSingleton connectionStatus =
+      ConnectionUtilSingleton.getInstance();
   connectionStatus.initialize();
-  await Hive.initFlutter();
-  Hive.registerAdapter(ProfileAdapter());
-  await Hive.openBox<Profile>("profile");
+
+  await initHive();
 
   await Settings.init(cacheProvider: SharePreferenceCache());
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent, systemStatusBarContrastEnforced: true, systemNavigationBarColor: Colors.transparent));
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        systemStatusBarContrastEnforced: true,
+        systemNavigationBarColor: Colors.transparent),
+  );
 
   runApp(const Speaq());
+}
+
+initHive() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProfileAdapter());
+  await Hive.openBox<Profile>("profile");
+  Hive.registerAdapter(ResourceAdapter());
+  await Hive.openBox<Resource>("resource");
 }
 
 class Speaq extends StatelessWidget {
@@ -33,7 +47,8 @@ class Speaq extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => LocaleProvider(),
       builder: (context, child) {
-        final localeProvider = Provider.of<LocaleProvider>(context, listen: true);
+        final localeProvider =
+            Provider.of<LocaleProvider>(context, listen: true);
 
         return MaterialApp(
           title: 'Speaq',
@@ -68,7 +83,8 @@ class MainApp extends StatelessWidget {
             return const LoginPage();
           }
         } else {
-          return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
+          return SpqLoadingWidget(
+              MediaQuery.of(context).size.shortestSide * 0.15);
         }
       },
     );
@@ -76,5 +92,8 @@ class MainApp extends StatelessWidget {
 }
 
 Future<bool> verifyIDToken() {
-  return Future.delayed(const Duration(seconds: 3), () => false);
+  return Future.delayed(
+    const Duration(seconds: 1),
+    () => false,
+  );
 }
