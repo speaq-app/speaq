@@ -21,10 +21,12 @@ Future<void> main() async {
 
   await Settings.init(cacheProvider: SharePreferenceCache());
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.transparent,
-      systemStatusBarContrastEnforced: true,
-      systemNavigationBarColor: Colors.transparent));
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        systemStatusBarContrastEnforced: true,
+        systemNavigationBarColor: Colors.transparent),
+  );
 
   runApp(const Speaq());
 }
@@ -90,5 +92,8 @@ class MainApp extends StatelessWidget {
 }
 
 Future<bool> verifyIDToken() {
-  return Future.delayed(const Duration(seconds: 3), () => false);
+  return Future.delayed(
+    const Duration(seconds: 3),
+    () => false,
+  );
 }

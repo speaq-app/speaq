@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/resource_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -16,7 +15,10 @@ class CacheResourceService implements ResourceService {
     if (_resource == null) {
       log("loading new Res");
       _resource = await _resourceService.getResource(id);
-      box.put(id, _resource);
+      box.put(
+        id,
+        _resource,
+      );
     }
     log("returning res");
     return _resource;
