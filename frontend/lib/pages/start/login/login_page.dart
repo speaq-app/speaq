@@ -42,55 +42,69 @@ class _LoginPageState extends State<LoginPage> {
       );
 
   Widget buildTop(BuildContext context) => Container(
-      padding: const EdgeInsets.only(
-        top: 125,
-        bottom: 50,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SvgPicture.asset(
-            "assets/images/logo/speaq_text_logo.svg",
-            height: 75,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 80),
-            child: RoundInputField(
-              hintText: name,
-              onChanged: (value) {},
-              controller: _nameController,
+        padding: const EdgeInsets.only(
+          top: 125,
+          bottom: 50,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SvgPicture.asset(
+              "assets/images/logo/speaq_text_logo.svg",
+              height: 75,
             ),
-          ),
-          RoundPasswordField(
-            password: password,
-            isHidden: isHidden,
-            controller: _passwordController,
-            suffixIcon: InkWell(
+            Padding(
+              padding: const EdgeInsets.only(top: 80),
+              child: RoundInputField(
+                hintText: name,
+                onChanged: (value) {},
+                controller: _nameController,
+              ),
+            ),
+            RoundPasswordField(
+              password: password,
+              isHidden: isHidden,
+              controller: _passwordController,
+              suffixIcon: InkWell(
                 onTap: () {
                   setState(() {
                     isHidden = !isHidden;
                   });
                 },
                 child: isHidden
-                    ? const Icon(Icons.visibility_off, color: Colors.black)
-                    : const Icon(Icons.visibility, color: Colors.black)),
-            onChanged: (String value) {},
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Text(
-              forgot,
-              textAlign: TextAlign.right,
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    ? const Icon(
+                        Icons.visibility_off,
+                        color: Colors.black,
+                      )
+                    : const Icon(
+                        Icons.visibility,
+                        color: Colors.black,
+                      ),
+              ),
+              onChanged: (String value) {},
             ),
-          ),
-        ],
-      ));
+            GestureDetector(
+              onTap: () {},
+              child: Text(
+                forgot,
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
   Widget buildBottom(BuildContext context) => Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 30, top: 10),
+            padding: const EdgeInsets.only(
+              bottom: 30,
+              top: 10,
+            ),
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   backgroundColor: spqPrimaryBlue,
@@ -98,7 +112,10 @@ class _LoginPageState extends State<LoginPage> {
                   fixedSize: const Size(200, 50),
                   primary: Colors.white,
                   shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(29))),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(29),
+                    ),
+                  ),
                 ),
                 onPressed: () {
                   Navigator.popAndPushNamed(context, "base");
@@ -126,17 +143,23 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Text(homeText, style: const TextStyle(fontSize: 10)),
+                child: Text(
+                  homeText,
+                  style: const TextStyle(fontSize: 10),
+                ),
               ),
               GestureDetector(
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, "base");
-                  },
-                  child: Text(
-                    home,
-                    style: const TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.bold),
-                  ))
+                onTap: () {
+                  Navigator.popAndPushNamed(context, "base");
+                },
+                child: Text(
+                  home,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
         ],

@@ -13,7 +13,10 @@ class TextFieldContainer extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 5,
+      ),
       width: size.width * 0.8,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -35,7 +38,8 @@ class RoundInputField extends StatelessWidget {
     Key? key,
     required this.hintText,
     this.icon = Icons.person_outline,
-    required this.onChanged, required this.controller,
+    required this.onChanged,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -68,7 +72,8 @@ class RoundPasswordField extends StatelessWidget {
     required this.password,
     required this.onChanged,
     this.isHidden = true,
-    this.suffixIcon, required this.controller,
+    this.suffixIcon,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -79,7 +84,10 @@ class RoundPasswordField extends StatelessWidget {
         onChanged: onChanged,
         decoration: InputDecoration(
           hintText: password,
-          icon: const Icon(Icons.lock, color: Colors.black),
+          icon: const Icon(
+            Icons.lock,
+            color: Colors.black,
+          ),
           suffixIcon: suffixIcon,
           border: InputBorder.none,
         ),

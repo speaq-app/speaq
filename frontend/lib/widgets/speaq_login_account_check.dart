@@ -28,7 +28,10 @@ class AccountCheck extends StatelessWidget {
           padding: const EdgeInsets.only(right: 5),
           child: Text(
             login ? hinweisLogin : hinweisRegister,
-            style: const TextStyle(fontSize: 10, color: Colors.black),
+            style: const TextStyle(
+              fontSize: 10,
+              color: Colors.black,
+            ),
           ),
         ),
         GestureDetector(
@@ -36,7 +39,10 @@ class AccountCheck extends StatelessWidget {
           child: Text(
             login ? register : loginText,
             style: const TextStyle(
-                fontSize: 10, color: Colors.black, fontWeight: FontWeight.bold),
+              fontSize: 10,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],
