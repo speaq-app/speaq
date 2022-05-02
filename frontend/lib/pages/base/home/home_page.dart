@@ -36,19 +36,15 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _profileBloc.add(LoadProfile(userId: 1));
     _scrollController = ScrollController()
-      ..addListener(
-        () {
-          setState(
-            () {
-              if (_scrollController.offset >= 400) {
-                showBackToTopButton = true;
-              } else {
-                showBackToTopButton = false;
-              }
-            },
-          );
-        },
-      );
+      ..addListener(() {
+        setState(() {
+          if (_scrollController.offset >= 400) {
+            showBackToTopButton = true;
+          } else {
+            showBackToTopButton = false;
+          }
+        });
+      });
     super.initState();
   }
 
