@@ -10,6 +10,6 @@ class DataUsageSettingsPage extends StatefulWidget {
 class _DataUsageSettingsPageState extends State<DataUsageSettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SafeArea(child: Scaffold());
   }
 }

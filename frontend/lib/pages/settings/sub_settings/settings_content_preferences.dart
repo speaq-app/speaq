@@ -19,37 +19,39 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: SpqAppBar(
-        preferredSize: deviceSize,
-        title: const Text(
-          "Notifications",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
+    return SafeArea(
+      child: Scaffold(
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+          title: const Text(
+            "Notifications",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
-      ),
-      body: Stack(children: [
-        SettingsList(
-          sections: [
-            SpqSettingsSection(
-              title: const Padding(
-                padding: EdgeInsets.all(25.0),
+        body: Stack(children: [
+          SettingsList(
+            sections: [
+              SpqSettingsSection(
+                title: const Padding(
+                  padding: EdgeInsets.all(25.0),
+                ),
+                tiles: [
+                  //Sprachauswahl
+                  _buildSettingsTile("Sprache", "login"),
+                ],
               ),
-              tiles: [
-                //Sprachauswahl
-                _buildSettingsTile("Sprache", "login"),
-              ],
-            ),
-          ],
-        ),
-        Positioned(
-          child: Align(
-              alignment: Alignment.bottomCenter,
-              child: SpeaqBottomLogo(deviceSize: deviceSize)),
-          bottom: 20,
-          height: deviceSize.height * 0.1,
-        )
-      ]),
+            ],
+          ),
+          Positioned(
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            bottom: 20,
+            height: deviceSize.height * 0.1,
+          )
+        ]),
+      ),
     );
   }
 

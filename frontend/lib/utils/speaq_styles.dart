@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -29,4 +27,36 @@ const Color spqBlackTranslucent = Color(0x77080808);
 
 //region Text
 final TextTheme spqTextTheme = GoogleFonts.poppinsTextTheme();
+//endregion
+
+//region Themes
+final ThemeData spqLightTheme = ThemeData(
+    primarySwatch: Colors.blue,
+    appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
+    scaffoldBackgroundColor: spqWhite,
+    backgroundColor: spqBackgroundGrey,
+    bottomAppBarColor: spqWhite,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
+    dialogBackgroundColor: spqWhite,
+    primaryColor: spqPrimaryBlue,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    errorColor: spqErrorRed,
+    shadowColor: spqLightGreyTranslucent,
+    //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
+    textTheme: spqTextTheme);
+
+final ThemeData spqDarkTheme = ThemeData(
+    primarySwatch: Colors.blue,
+    appBarTheme: const AppBarTheme(foregroundColor: spqBlack, backgroundColor: spqWhite),
+    scaffoldBackgroundColor: spqWhite,
+    backgroundColor: spqBackgroundGrey,
+    bottomAppBarColor: spqWhite,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: spqWhite, selectedItemColor: spqPrimaryBlue, unselectedItemColor: spqDarkGrey),
+    dialogBackgroundColor: spqWhite,
+    primaryColor: spqPrimaryBlue,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    errorColor: spqErrorRed,
+    shadowColor: spqLightGreyTranslucent,
+    //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
+    textTheme: spqTextTheme);
 //endregion

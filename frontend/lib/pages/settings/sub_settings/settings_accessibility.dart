@@ -10,6 +10,10 @@ class AccessibilitySettingsPage extends StatefulWidget {
 class _AccessibilitySettingsPageState extends State<AccessibilitySettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SafeArea(
+      child: Scaffold(
+        
+      ),
+    );
   }
 }

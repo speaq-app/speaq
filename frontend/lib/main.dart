@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
 import 'widgets/all_widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   ConnectionUtilSingleton connectionStatus =
       ConnectionUtilSingleton.getInstance();
   connectionStatus.initialize();
 
+  await initHive();
+
+  await Settings.init(cacheProvider: SharePreferenceCache());
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        systemStatusBarContrastEnforced: true,
+        systemNavigationBarColor: Colors.transparent),
+  );
+
   runApp(const Speaq());
+}
+
+initHive() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProfileAdapter());
+  await Hive.openBox<Profile>("profile");
+  Hive.registerAdapter(ResourceAdapter());
+  await Hive.openBox<Resource>("resource");
 }
 
 class Speaq extends StatelessWidget {
@@ -31,41 +52,11 @@ class Speaq extends StatelessWidget {
 
         return MaterialApp(
           title: 'Speaq',
-          theme: ThemeData(
-              primarySwatch: Colors.blue,
-              appBarTheme: const AppBarTheme(
-                  foregroundColor: spqBlack, backgroundColor: spqWhite),
-              scaffoldBackgroundColor: spqWhite,
-              backgroundColor: spqBackgroundGrey,
-              bottomAppBarColor: spqWhite,
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                  backgroundColor: spqWhite,
-                  selectedItemColor: spqPrimaryBlue,
-                  unselectedItemColor: spqDarkGrey),
-              dialogBackgroundColor: spqWhite,
-              primaryColor: spqPrimaryBlue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-              errorColor: spqErrorRed,
-              shadowColor: spqLightGreyTranslucent,
-              //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
-              textTheme: spqTextTheme),
+          theme: spqLightTheme,
+          darkTheme: spqDarkTheme,
+          themeMode: ThemeMode.system,
           initialRoute: 'main',
-          localizationsDelegates: [
-            FlutterI18nDelegate(
-              translationLoader: FileTranslationLoader(
-                  useCountryCode: false,
-                  fallbackFile: 'de',
-                  forcedLocale: LocaleProvider.allSupportedLocales[0],
-                  basePath: 'assets/i18n/'),
-              missingTranslationHandler: (key, locale) {
-                print(
-                    "--- Missing Key: $key, languageCode: ${locale?.languageCode}");
-              },
-            ),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: LocaleProvider.allSupportedLocales,
           locale: localeProvider.locale,
           onGenerateRoute: RouteGenerator.generateRoute,
@@ -101,5 +92,8 @@ class MainApp extends StatelessWidget {
 }
 
 Future<bool> verifyIDToken() {
-  return Future.delayed(const Duration(seconds: 3), () => false);
+  return Future.delayed(
+    const Duration(seconds: 1),
+    () => false,
+  );
 }

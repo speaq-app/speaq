@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "app/settings";
+
+service Settings {
+    rpc GetImprintURL(google.protobuf.Empty) returns (GetImprintResponse);
+}
+
+message GetImprintResponse {
+    string url = 1;
+}

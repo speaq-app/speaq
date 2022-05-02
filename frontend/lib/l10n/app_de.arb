@@ -1,0 +1,18 @@
+{
+  "langCode": "de",
+  "helloWorld": "Hallo Welt",
+  "greeting": "Hallo {name}",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "default": "Nutzer"
+      }
+    }
+  },
+  "username": "Benutzername",
+  "login": "Anmelden",
+  "register": "Registrieren",
+  "follower": "Follower",
+  "following": "Gefolgt",
+  "newPost": "Speaq it..."
+}
