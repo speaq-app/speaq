@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -20,43 +19,45 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: SpqAppBar(
-        preferredSize: deviceSize,
-        title: const Text(
-          "Notifications",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
+    return SafeArea(
+      child: Scaffold(
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+          title: const Text(
+            "Notifications",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
-      ),
-      body: Stack(children: [
-        SettingsList(
-          sections: [
-            SpqSettingsSection(
-              title: const Padding(
-                padding: EdgeInsets.all(25.0),
+        body: Stack(children: [
+          SettingsList(
+            sections: [
+              SpqSettingsSection(
+                title: const Padding(
+                  padding: EdgeInsets.all(25.0),
+                ),
+                tiles: [
+                  //Darkmode SwitchTile
+                  buildSettingsSwitchTile("Darkmode"),
+                ],
               ),
-              tiles: [
-                //Darkmode SwitchTile
-                buildSettingsSwitchTile("Darkmode"),
-              ],
-            ),
-          ],
-        ),
-        Positioned(
-          child: Align(
-              alignment: Alignment.bottomCenter,
-              child: SpeaqBottomLogo(deviceSize: deviceSize)),
-          bottom: 20,
-          height: deviceSize.height * 0.1,
-        )
-      ]),
+            ],
+          ),
+          Positioned(
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            bottom: 20,
+            height: deviceSize.height * 0.1,
+          )
+        ]),
+      ),
     );
   }
 
   SettingsTile buildSettingsSwitchTile(String text) {
     return SettingsTile.switchTile(
-      title: Text(text, style: TextStyle(fontSize: 15)),
+      title: Text(text, style: const TextStyle(fontSize: 15)),
       initialValue: valuePrivateSwitch,
       onToggle: (value) {
         setState(() {

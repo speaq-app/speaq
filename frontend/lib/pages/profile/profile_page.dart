@@ -14,10 +14,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  bool isFollow = false;
   final String langKey = "pages.profile.";
-
-  final String _postMessage =
-      "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
+  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _link = "hs-heilbronn.de";
   final String _name = "Informatics";
   final String _username = "@hhn";
@@ -25,6 +24,9 @@ class _ProfilePageState extends State<ProfilePage> {
   final String _joined = "Joined August 2022";
   final String _follower = "117k Follower";
   final String _following = "69 Follower";
+  final String _editProfile = "Edit Profile";
+  final String _follow = "Follow";
+  final String _unfollow = "Unfollow";
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +110,36 @@ class _ProfilePageState extends State<ProfilePage> {
         Padding(
           padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
           child: SpqTextbutton(
-            onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
-          ),
+              onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
+              name: _editProfile,
+              style: const TextStyle(color: spqPrimaryBlue)),
         ),
+/*        Padding(
+          padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
+          child: isFollow == true
+               ?SpqTextbutton(
+                  onPressed: () {
+                    setState(
+                      () {
+                        isFollow = false;
+                      },
+                    );
+                  },
+                  name: _unfollow,
+                  style: const TextStyle(color:  spqErrorRed),
+                )
+              : SpqTextbutton(
+                  onPressed: () {
+                    setState(
+                      () {
+                        isFollow = true;
+                      },
+                    );
+                  },
+                  name: _follow,
+                 style: const TextStyle(color:spqPrimaryBlue ),
+                ),
+        )*/
       ],
     );
   }

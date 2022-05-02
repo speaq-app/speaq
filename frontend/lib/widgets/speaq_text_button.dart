@@ -3,19 +3,20 @@ import 'package:frontend/utils/all_utils.dart';
 
 class SpqTextbutton extends StatelessWidget {
   final void Function() onPressed;
-
+  final String name;
+  final TextStyle style;
   const SpqTextbutton({
     Key? key,
-    required this.onPressed,
+    required this.onPressed, required this.name, required this.style,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: const Text(
-        "Edit Profile",
-        style: TextStyle(color: spqPrimaryBlue),
+      child:  Text(
+        name,
+        style: style,
       ),
       style: ElevatedButton.styleFrom(
         primary: spqWhite,

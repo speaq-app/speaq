@@ -65,9 +65,7 @@ class _FollowPageState extends State<FollowPage> {
   }
 
   Widget _buildFollowingList() {
-    return Container(
-      child: const Text("Following"),
-    );
+    return const Text("Following");
   }
 }
 

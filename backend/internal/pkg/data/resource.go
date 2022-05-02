@@ -6,7 +6,7 @@ type ResourceService interface {
 
 type Resource struct {
 	ID       int64
-	Data     []byte
+	Data     string
 	Name     string
 	MIMEType string
 	Size     int64
