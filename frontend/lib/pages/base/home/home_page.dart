@@ -55,21 +55,31 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: BlocConsumer<ProfileBloc, ProfileState>(
         bloc: _profileBloc,
-        listener: (context, state) {
+        listener: (
+          context,
+          state,
+        ) {
           if (state is ProfileLoaded) {
             _resourceBloc.add(
-                LoadResource(resourceId: state.profile.profileImageResourceId));
+              LoadResource(resourceId: state.profile.profileImageResourceId),
+            );
           }
         },
         builder: (context, state) {
           if (state is ProfileLoading) {
             return Scaffold(
               appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: Container(child: _buildListViewShimmer(context)),
+              body: Container(
+                child: _buildListViewShimmer(context),
+              ),
             );
           } else if (state is ProfileLoaded) {
             log(state.profile.profileImageBlurHash);
-            return _buildHomePage(context, deviceSize, state.profile);
+            return _buildHomePage(
+              context,
+              deviceSize,
+              state.profile,
+            );
           } else {
             return const Text("State failed");
           }
@@ -79,7 +89,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Scaffold _buildHomePage(
-      BuildContext context, Size deviceSize, Profile profile) {
+    BuildContext context,
+    Size deviceSize,
+    Profile profile,
+  ) {
     return Scaffold(
       appBar: SpqAppBar(
         actionList: [
@@ -93,13 +106,16 @@ class _HomePageState extends State<HomePage> {
         leading: Builder(
           builder: (context) {
             return _buildProfileImage(context, profile.profileImageBlurHash);
-          }
+          },
         ),
         title: Center(
           child: InkWell(
             onTap: () {
-              _scrollController.animateTo(0,
-                  duration: const Duration(seconds: 1), curve: Curves.linear);
+              _scrollController.animateTo(
+                0,
+                duration: const Duration(seconds: 1),
+                curve: Curves.linear,
+              );
             },
             child: SvgPicture.asset(
               spqImage,
@@ -144,7 +160,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: SpqFloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, 'new_post'),
+        onPressed: () => Navigator.pushNamed(
+          context,
+          'new_post',
+        ),
         heroTag: 'post',
         child: const Icon(
           Icons.add,
@@ -154,12 +173,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
+  Widget _buildProfileImage(
+    BuildContext context,
+    String profileImageBlurHash,
+  ) {
     return IconButton(
       onPressed: () => Scaffold.of(context).openDrawer(),
       icon: BlocBuilder<ResourceBloc, ResourceState>(
         bloc: _resourceBloc,
-        builder: (context, state) {
+        builder: (
+          context,
+          state,
+        ) {
           if (state is ResourceLoaded) {
             return CircleAvatar(
               radius: 20,
