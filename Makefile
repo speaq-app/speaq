@@ -9,8 +9,8 @@ protos:
 		protoc:dev
 
 build: protos
-	cd backend && go get
-	cd frontend && flutter pub get
+	cd backend && go get && make test
+	cd frontend && flutter pub get && 
 
 dev:
 	docker-compose -p speaq-dev -f backend/deployments/docker-compose.dev.yml up --renew-anon-volumes --force-recreate --remove-orphans
