@@ -67,7 +67,7 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return const SafeArea(
+    return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
           title: const Text(
