@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/base/messages/user.dart';
-import 'package:frontend/widgets/all_widgets.dart';
-import '../../../utils/speaq_styles.dart';
-
-//https://dev.to/iizmotabar/flutter-ui-series-whatsapp-clone-51e1
+import 'package:frontend/utils/speaq_styles.dart';
+import 'package:frontend/widgets/speaq_appbar.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({Key? key}) : super(key: key);
@@ -71,43 +69,50 @@ class _MessagesPageState extends State<MessagesPage> {
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-          appBar: SpqAppBar(
-            title: const Text(
-              "Messages",
-              style: TextStyle(fontSize: 20),
-            ),
-            preferredSize: deviceSize,
-            centerTitle: true,
-            actionList: [generateSettingsIcon(context)],
-            leading: Builder(builder: (context) {
-              return IconButton(
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  icon: CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(profilePicture),
-                  ));
-            }),
+        appBar: SpqAppBar(
+          title: const Text(
+            "Messages",
+            style: TextStyle(fontSize: 20),
           ),
-          body: Column(children: <Widget>[
+          preferredSize: deviceSize,
+          centerTitle: true,
+          actionList: [generateSettingsIcon(context)],
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(profilePicture),
+                ),
+              );
+            },
+          ),
+        ),
+        body: Column(
+          children: <Widget>[
             generateSearchBar(deviceSize),
             Expanded(
-                child: ListView.builder(
-              itemCount: _foundUsersList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(_foundUsersList[index].profilePic),
-                  ),
-                  title: Text(
-                    _foundUsersList[index].name,
-                  ),
-                  subtitle: Text(_foundUsersList[index].lastMessage),
-                  trailing: Text(_foundUsersList[index].time),
-                );
-              },
-            )),
-          ])),
+              child: ListView.builder(
+                itemCount: _foundUsersList.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(_foundUsersList[index].profilePic),
+                    ),
+                    title: Text(
+                      _foundUsersList[index].name,
+                    ),
+                    subtitle: Text(_foundUsersList[index].lastMessage),
+                    trailing: Text(_foundUsersList[index].time),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -121,7 +126,6 @@ class _MessagesPageState extends State<MessagesPage> {
           onChanged: (value) => filterSearchResults(value),
           decoration: InputDecoration(
             filled: true,
-            //contentPadding: EdgeInsets.symmetric(vertical: 0),
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
@@ -151,42 +155,16 @@ class _MessagesPageState extends State<MessagesPage> {
   filterSearchResults(String text) {
     List<User> filterList = <User>[];
     if (text != null) {
-      setState(() {
-        filterList.addAll(_allUserList
-            .where((user) => user.name.toString().contains(text))
-            .toList());
-
-        print(_allUserList
-            .where((user) => user.name.toString().contains(text))
-            .toList());
-        _foundUsersList = filterList;
-      });
+      setState(
+        () {
+          filterList.addAll(_allUserList
+              .where((user) => user.name.toString().contains(text))
+              .toList());
+          _foundUsersList = filterList;
+        },
+      );
     } else {
       _foundUsersList = _allUserList;
     }
   }
 }
-
-/*
-  inputText(String text) {
-    //print(text);
-
-    final filteredUsers = _foundedUsers.where((user) {
-      final name = user.name.toLowerCase();
-
-      return name.contains(text);
-    }).toList();
-
-    setState(() {
-      this._foundedUsers = _foundedUsers;
-    });
-
-
-    setState(() {
-      _foundedUsers = _userList
-          .where((user) => user.name.toLowerCase().contains(text))
-          .toList();
-    });
-    //print(_foundedUsers.toString());
-
-     */
