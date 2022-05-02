@@ -7,3 +7,5 @@ database:
   database: postgres
   username: postgres
   password: postgres
+
+imprintURL: "https://example.com/imprint"
