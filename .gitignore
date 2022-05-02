@@ -5,3 +5,6 @@
 
 # IntelliJ related
 .idea/
+
+# Dev Configs (generated)
+config.dev.yml
