@@ -18,7 +18,7 @@ class _MessagesPageState extends State<MessagesPage> {
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
-  List<User> userList = [
+  List<User> _allUserList = [
     User(
         "https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg",
         "Sven Gatnar",
@@ -58,124 +58,135 @@ class _MessagesPageState extends State<MessagesPage> {
     User("https://img1.dreamies.de/img/21/b/p4el6oypvd7.jpg", "Dani Holzwarth",
         "Am Meisten mag ich an mir meine roten Haare", "01:10"),
   ];
-  List<User> _foundedUsers = [];
+  List<User> _foundUsersList = [];
 
   @override
   void initState() {
+    _foundUsersList = _allUserList;
     super.initState();
-
-    setState(() {
-      _foundedUsers = userList;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery
-        .of(context)
-        .size;
+    Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: SpqAppBar(
-          title: const Text(
-            "Messages",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
+          appBar: SpqAppBar(
+            title: const Text(
+              "Messages",
+              style: TextStyle(fontSize: 20),
+            ),
+            preferredSize: deviceSize,
+            centerTitle: true,
+            actionList: [generateSettingsIcon(context)],
+            leading: Builder(builder: (context) {
+              return IconButton(
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  icon: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkImage(profilePicture),
+                  ));
+            }),
           ),
-          preferredSize: deviceSize,
-          centerTitle: true,
-          actionList: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              color: Colors.blue,
-              iconSize: 25,
-              onPressed: () =>
-              {
-                Navigator.popAndPushNamed(context, "settings"),
-              },
-            )
-          ],
-          leading: Builder(builder: (context) {
-            return IconButton(
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                icon: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(profilePicture),
-                ));
-          }),
-
-
-        ),
-        body: ListView.builder(
-          itemCount: _foundedUsers.length, itemBuilder: (context, index) {
-          if (index == 0) {
-            return SizedBox(
-              height: deviceSize.height*0.08,
-              width: deviceSize.width,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                child: TextField(
-                  onChanged: (value) => inputText(value),
-                  decoration: InputDecoration(
-                    filled: true,
-                    //contentPadding: EdgeInsets.symmetric(vertical: 0),
-                    prefixIcon:
-                    const Icon(Icons.search, color: spqDarkGreyTranslucent),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide.none),
-                    hintStyle: const TextStyle(
-                      fontSize: 14,
-                      color: spqDarkGreyTranslucent,
-                    ),
-                    hintText: "Search for chats or groups",
+          body: Column(children: <Widget>[
+            generateSearchBar(deviceSize),
+            Expanded(
+                child: ListView.builder(
+              itemCount: _foundUsersList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(_foundUsersList[index].profilePic),
                   ),
-                ),
-              ),
-            );
-          } else {
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(userList[index].profilePic),
-              ),
-              title: Text(userList[index].name,
-                style: TextStyle(
-                ),
-              ),
-              subtitle: Text(userList[index].lastMessage),
-              trailing: Text(userList[index].time),
-            );
-          }
-        },),
+                  title: Text(
+                    _foundUsersList[index].name,
+                  ),
+                  subtitle: Text(_foundUsersList[index].lastMessage),
+                  trailing: Text(_foundUsersList[index].time),
+                );
+              },
+            )),
+          ])),
+    );
+  }
+
+  SizedBox generateSearchBar(Size deviceSize) {
+    return SizedBox(
+      height: deviceSize.height * 0.08,
+      width: deviceSize.width,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        child: TextField(
+          onChanged: (value) => filterSearchResults(value),
+          decoration: InputDecoration(
+            filled: true,
+            //contentPadding: EdgeInsets.symmetric(vertical: 0),
+            prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+                borderSide: BorderSide.none),
+            hintStyle: const TextStyle(
+              fontSize: 14,
+              color: spqDarkGreyTranslucent,
+            ),
+            hintText: "Search for chats or groups",
+          ),
+        ),
       ),
     );
   }
 
-  inputText(String text) {
-    print(text);
-  }
-
-  usercomponent({required User user}) {
-    return Container(
-      child: Row(children: [
-        Container(
-            width: 60,
-            height: 60,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: Image.network(user.name),
-            )),
-        SizedBox(width: 10),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(user.name,
-              style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 5,
-          ),
-          Text(user.lastMessage, style: TextStyle(color: Colors.grey[500])),
-        ]),
-      ]),
+  IconButton generateSettingsIcon(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.settings),
+      color: Colors.blue,
+      iconSize: 25,
+      onPressed: () => {
+        Navigator.popAndPushNamed(context, "settings"),
+      },
     );
   }
+
+  filterSearchResults(String text) {
+    List<User> filterList = <User>[];
+    if (text != null) {
+      setState(() {
+        filterList.addAll(_allUserList
+            .where((user) => user.name.toString().contains(text))
+            .toList());
+
+        print(_allUserList
+            .where((user) => user.name.toString().contains(text))
+            .toList());
+        _foundUsersList = filterList;
+      });
+    } else {
+      _foundUsersList = _allUserList;
+    }
+  }
 }
+
+/*
+  inputText(String text) {
+    //print(text);
+
+    final filteredUsers = _foundedUsers.where((user) {
+      final name = user.name.toLowerCase();
+
+      return name.contains(text);
+    }).toList();
+
+    setState(() {
+      this._foundedUsers = _foundedUsers;
+    });
+
+
+    setState(() {
+      _foundedUsers = _userList
+          .where((user) => user.name.toLowerCase().contains(text))
+          .toList();
+    });
+    //print(_foundedUsers.toString());
+
+     */
