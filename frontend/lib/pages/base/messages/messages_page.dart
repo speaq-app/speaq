@@ -155,14 +155,12 @@ class _MessagesPageState extends State<MessagesPage> {
   filterSearchResults(String text) {
     List<User> filterList = <User>[];
     if (text != null) {
-      setState(
-        () {
-          filterList.addAll(_allUserList
-              .where((user) => user.name.toString().contains(text))
-              .toList());
-          _foundUsersList = filterList;
-        },
-      );
+      setState(() {
+        filterList.addAll(_allUserList
+            .where((user) => user.name.toString().contains(text))
+            .toList());
+        _foundUsersList = filterList;
+      });
     } else {
       _foundUsersList = _allUserList;
     }
