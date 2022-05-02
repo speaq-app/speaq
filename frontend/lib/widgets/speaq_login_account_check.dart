@@ -32,14 +32,13 @@ class AccountCheck extends StatelessWidget {
           ),
         ),
         GestureDetector(
-            onTap: () {press;},
-            child: Text(
-              login ? register : loginText,
-              style: const TextStyle(
-                  fontSize: 10,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ))
+          onTap: () => press(),
+          child: Text(
+            login ? register : loginText,
+            style: const TextStyle(
+                fontSize: 10, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ),
       ],
     );
   }

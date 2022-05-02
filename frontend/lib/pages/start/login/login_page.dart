@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/utils/speaq_styles.dart';
@@ -20,9 +17,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final String langKey = "pages.start.login.";
 
-  final String name = "Email/Username";
+  final String name = "Username";
   final String password = "password";
-  final String forgot = "Forgot Password";
+  final String forgot = "Forgot Password?";
   final String loginText = "Login";
   final String registerText = "You don't have an Account?";
   final String register = "Register";
@@ -30,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   final String hinweisRegister = "Besitzt du bereits einen Account?";
   final String homeText = "Du möchtest als Gast beitreten?";
   final String home = "Gast";
+  bool isHidden = true;
 
-  final TextEditingController _usernameTEC = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -58,16 +55,35 @@ class _LoginPageState extends State<LoginPage> {
             height: 75,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 100, bottom: 10),
+            padding: const EdgeInsets.only(top: 100),
             child: RoundInputField(
               hintText: name,
-              onChanged: (value) {},
+              onChanged: (value) {}, controller: _nameController,
             ),
           ),
           RoundPasswordField(
             password: password,
-            onChanged: (String value) {}
-          )
+            isHidden: isHidden,
+            controller: _passwordController,
+            suffixIcon: InkWell(
+                onTap: () {
+                  setState(() {
+                    isHidden = !isHidden;
+                  });
+                },
+                child: isHidden
+                    ? const Icon(Icons.visibility_off, color: Colors.black)
+                    : const Icon(Icons.visibility, color: Colors.black)),
+            onChanged: (String value) {},
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: Text(
+              forgot,
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+            ),
+          ),
         ],
       ));
 
@@ -75,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(bottom: 30),
+              padding: const EdgeInsets.only(bottom: 30, top: 10),
               child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     backgroundColor: spqPrimaryBlue,
@@ -85,7 +101,9 @@ class _LoginPageState extends State<LoginPage> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(29))),
                   ),
-                  onPressed: () {Navigator.popAndPushNamed(context, "base");},
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, "base");
+                  },
                   child: Text(loginText)),
             ),
             AccountCheck(
@@ -93,7 +111,9 @@ class _LoginPageState extends State<LoginPage> {
               hinweisRegister: hinweisRegister,
               register: register,
               loginText: loginText,
-              press: () {Navigator.popAndPushNamed(context, "register");},
+              press: () {
+                Navigator.popAndPushNamed(context, "register");
+              },
             ),
             const Padding(
               padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -110,10 +130,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(homeText, style: const TextStyle(fontSize: 10)),
                 ),
                 GestureDetector(
-                    onTap: () {Navigator.popAndPushNamed(context, "base");},
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, "base");
+                    },
                     child: Text(
                       home,
-                      style: const TextStyle(fontSize: 10,fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 10, fontWeight: FontWeight.bold),
                     ))
               ],
             ),
@@ -121,11 +144,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-  void _loginUser() async {
-    log(_usernameTEC.text);
-    //_checkUser()
-    Navigator.popAndPushNamed(context, "base");
+  @override
+  void dispose() {
+    super.dispose();
+    _disposeController();
+  }
+
+  void _disposeController() {
+    _passwordController.dispose();
+    _nameController.dispose();
   }
 }
-
-//void _checkUser()

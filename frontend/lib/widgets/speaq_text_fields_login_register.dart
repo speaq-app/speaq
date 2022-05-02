@@ -29,12 +29,13 @@ class RoundInputField extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final ValueChanged<String> onChanged;
+  final TextEditingController controller;
 
   const RoundInputField({
     Key? key,
     required this.hintText,
     this.icon = Icons.person_outline,
-    required this.onChanged,
+    required this.onChanged, required this.controller,
   }) : super(key: key);
 
   @override
@@ -57,32 +58,32 @@ class RoundInputField extends StatelessWidget {
 
 class RoundPasswordField extends StatelessWidget {
   final ValueChanged<String> onChanged;
-  final bool isHidden = true;
+  final bool isHidden;
   final String password;
+  final Widget? suffixIcon;
+  final TextEditingController controller;
 
   const RoundPasswordField({
     Key? key,
     required this.password,
     required this.onChanged,
+    this.isHidden = true,
+    this.suffixIcon, required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
-        child: TextField(
-      obscureText: isHidden,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        hintText: password,
-        icon: const Icon(Icons.lock, color: Colors.black),
-        suffixIcon: InkWell(onTap: () {_toggleView();}, child: const Icon(Icons.visibility, color: Colors.black)),
-        border: InputBorder.none,
+      child: TextField(
+        obscureText: isHidden,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: password,
+          icon: const Icon(Icons.lock, color: Colors.black),
+          suffixIcon: suffixIcon,
+          border: InputBorder.none,
+        ),
       ),
-    ));
-  }
-
-  void _toggleView() {
-
-    //isHidden = !isHidden;
+    );
   }
 }
