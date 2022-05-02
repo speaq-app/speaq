@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_settings_section.dart';
+import 'package:frontend/widgets/speaq_bottom_logo.dart';
 import 'package:settings_ui/settings_ui.dart';
-
-import '../../../widgets/speaq_bottom_logo.dart';
 
 class PrivacySafetySettingsPage extends StatefulWidget {
   const PrivacySafetySettingsPage({Key? key}) : super(key: key);
@@ -19,50 +18,53 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: SpqAppBar(
-        preferredSize: deviceSize,
-        title: const Text(
-          "Settings and Privacy",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
+    return SafeArea(
+      child: Scaffold(
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+          title: const Text(
+            "Privacy and safety",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
-      ),
-      body: Stack(children: [
-        SettingsList(
-          sections: [
-            SpqSettingsSection(
-              title: const Padding(
-                padding: EdgeInsets.all(25.0),
-              ),
-              tiles: [
-                //Privates Konto SwitchTile
-                SettingsTile.switchTile(
-                  title: const Text("Privates Konto", style: TextStyle(fontSize: 15)),
-                  initialValue: valuePrivateSwitch,
-                  onToggle: (value) {
-                    setState(() {
-                      valuePrivateSwitch = value;
-                    });
-                  },
+        body: Stack(children: [
+          SettingsList(
+            sections: [
+              SpqSettingsSection(
+                title: const Padding(
+                  padding: EdgeInsets.all(25.0),
                 ),
-                //Suchverlauf löschen
-                _buildPopUpWindow(
-                    "Suchverlauf löschen",
-                    "Bist du dir sicher, dass du den Suchverlauf löschen möchtest?",
-                    "Löschen"),
-              ],
-            ),
-          ],
-        ),
-        Positioned(
-          child: Align(
-              alignment: Alignment.bottomCenter,
-              child: SpeaqBottomLogo(deviceSize: deviceSize)),
-          bottom: 20,
-          height: deviceSize.height * 0.1,
-        )
-      ]),
+                tiles: [
+                  //Privates Konto SwitchTile
+                  SettingsTile.switchTile(
+                    title:
+                        Text("Privates Konto", style: TextStyle(fontSize: 15)),
+                    initialValue: valuePrivateSwitch,
+                    onToggle: (value) {
+                      setState(() {
+                        valuePrivateSwitch = value;
+                      });
+                    },
+                  ),
+                  //Suchverlauf löschen
+                  _buildPopUpWindow(
+                      "Suchverlauf löschen",
+                      "Bist du dir sicher, dass du den Suchverlauf löschen möchtest?",
+                      "Löschen"),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            bottom: 20,
+            height: deviceSize.height * 0.1,
+          )
+        ]),
+      ),
     );
   }
 
