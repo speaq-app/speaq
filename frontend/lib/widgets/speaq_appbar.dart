@@ -5,7 +5,7 @@ class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Size preferredSize;
   final List<Widget>? actionList;
   final Widget? leading;
-  final Widget title;
+  final Widget? title;
   final TabBar? bottom;
   final bool? centerTitle;
   final double? leadingWidth;
@@ -17,7 +17,7 @@ class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actionList,
     this.leading,
     this.isAutomaticallyImplyLeading = true,
-    required this.title,
+    this.title,
     this.bottom,
     this.centerTitle,
     this.leadingWidth,
