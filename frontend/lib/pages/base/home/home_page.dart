@@ -10,6 +10,7 @@ import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
+import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/spq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:shimmer/shimmer.dart';
@@ -24,8 +25,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
-
   final String langKey = "pages.base.home.";
+  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
+  final String _name = "Informatics";
+  final String _username = "@hhn";
+  final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
+  final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
+  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
@@ -55,31 +61,21 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: BlocConsumer<ProfileBloc, ProfileState>(
         bloc: _profileBloc,
-        listener: (
-          context,
-          state,
-        ) {
+        listener: (context, state) {
           if (state is ProfileLoaded) {
             _resourceBloc.add(
-              LoadResource(resourceId: state.profile.profileImageResourceId),
-            );
+                LoadResource(resourceId: state.profile.profileImageResourceId));
           }
         },
         builder: (context, state) {
           if (state is ProfileLoading) {
             return Scaffold(
               appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: Container(
-                child: _buildListViewShimmer(context),
-              ),
+              body: Container(child: _buildListViewShimmer(context)),
             );
           } else if (state is ProfileLoaded) {
             log(state.profile.profileImageBlurHash);
-            return _buildHomePage(
-              context,
-              deviceSize,
-              state.profile,
-            );
+            return _buildHomePage(context, deviceSize, state.profile);
           } else {
             return const Text("State failed");
           }
@@ -89,10 +85,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Scaffold _buildHomePage(
-    BuildContext context,
-    Size deviceSize,
-    Profile profile,
-  ) {
+      BuildContext context, Size deviceSize, Profile profile) {
     return Scaffold(
       appBar: SpqAppBar(
         actionList: [
@@ -106,16 +99,13 @@ class _HomePageState extends State<HomePage> {
         leading: Builder(
           builder: (context) {
             return _buildProfileImage(context, profile.profileImageBlurHash);
-          },
+          }
         ),
         title: Center(
           child: InkWell(
             onTap: () {
-              _scrollController.animateTo(
-                0,
-                duration: const Duration(seconds: 1),
-                curve: Curves.linear,
-              );
+              _scrollController.animateTo(0,
+                  duration: const Duration(seconds: 1), curve: Curves.linear);
             },
             child: SvgPicture.asset(
               spqImage,
@@ -131,39 +121,60 @@ class _HomePageState extends State<HomePage> {
         controller: _scrollController,
         child: Column(
           children: [
-            // add a bunch of containers to make the screen longer
-            Container(
-              height: 200,
-              color: Colors.amber,
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+              postImage: Image.network(_postImage),
             ),
-            Container(
-              height: 200,
-              color: Colors.blue[100],
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+              postImage: Image.network(_postImage2),
             ),
-            Container(
-              height: 200,
-              color: Colors.red[200],
-            ),
-            Container(
-              height: 200,
-              color: Colors.orange,
-            ),
-            Container(
-              height: 200,
-              color: Colors.yellow,
-            ),
-            Container(
-              height: 200,
-              color: Colors.lightGreen,
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+              postImage: Image.network(_postImage),
+            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+              postImage: Image.network(_postImage2),
+            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+              postImage: Image.network(_postImage),
+            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+              postImage: Image.network(_postImage2),
+            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            PostContainer(
+              name: _name,
+              username: _username,
+              postMessage: _postMessage,
+              postImage: Image.network(_postImage),
             ),
           ],
         ),
       ),
       floatingActionButton: SpqFloatingActionButton(
-        onPressed: () => Navigator.pushNamed(
-          context,
-          'new_post',
-        ),
+        onPressed: () => Navigator.pushNamed(context, 'new_post'),
         heroTag: 'post',
         child: const Icon(
           Icons.add,
@@ -173,18 +184,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildProfileImage(
-    BuildContext context,
-    String profileImageBlurHash,
-  ) {
+  Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
     return IconButton(
       onPressed: () => Scaffold.of(context).openDrawer(),
       icon: BlocBuilder<ResourceBloc, ResourceState>(
         bloc: _resourceBloc,
-        builder: (
-          context,
-          state,
-        ) {
+        builder: (context, state) {
           if (state is ResourceLoaded) {
             return CircleAvatar(
               radius: 20,
