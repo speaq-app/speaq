@@ -76,10 +76,10 @@ class _UserMenuState extends State<UserMenu> {
                             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                           ),
                            Padding(
-                            padding: EdgeInsets.only(left: 2),
+                            padding: const EdgeInsets.only(left: 2),
                             child: Text(
                               appLocale.following,
-                              style: TextStyle(fontSize: 10),
+                              style: const TextStyle(fontSize: 10),
                             ),
                           ),
                         ],
@@ -98,7 +98,7 @@ class _UserMenuState extends State<UserMenu> {
                           ),
                            Text(
                             appLocale.follower,
-                            style: TextStyle(fontSize: 10),
+                            style: const TextStyle(fontSize: 10),
                           )
                         ],
                       ),

@@ -27,12 +27,12 @@ class _LoginPageState extends State<LoginPage> {
           color: spqWhite,
           child: Column(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 120,
               ),
               Text(
                 appLocale.login,
-                style: TextStyle(fontSize: 40),
+                style: const TextStyle(fontSize: 40),
               ),
               const SizedBox(
                 height: 60,
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 decoration: InputDecoration(
                   labelText:  appLocale.username,
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: spqPrimaryBlue,
                     fontSize: 25,
                   ),
