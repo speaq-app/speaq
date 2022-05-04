@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,8 +10,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String langKey = "pages.start.login.";
-
   final String name = "Username";
   final String password = "password";
   final String forgot = "Forgot Password?";
@@ -67,9 +63,11 @@ class _LoginPageState extends State<LoginPage> {
               controller: _passwordController,
               suffixIcon: InkWell(
                 onTap: () {
-                  setState(() {
-                    isHidden = !isHidden;
-                  });
+                  setState(
+                    () {
+                      isHidden = !isHidden;
+                    },
+                  );
                 },
                 child: isHidden
                     ? const Icon(
@@ -105,22 +103,7 @@ class _LoginPageState extends State<LoginPage> {
               bottom: 30,
               top: 10,
             ),
-            child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: spqPrimaryBlue,
-                  padding: const EdgeInsets.all(15.0),
-                  fixedSize: const Size(200, 50),
-                  primary: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(29),
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, "base");
-                },
-                child: Text(loginText)),
+            child: SpeaqButton(loginText: loginText),
           ),
           AccountCheck(
             hinweisLogin: hinweisLogin,
@@ -132,35 +115,18 @@ class _LoginPageState extends State<LoginPage> {
             },
           ),
           const Padding(
-            padding: EdgeInsets.only(top: 5, bottom: 5),
+            padding: EdgeInsets.only(
+                top: 5,
+                bottom: 5
+            ),
             child: Divider(
               color: Colors.black54,
               thickness: 0.75,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: Text(
-                  homeText,
-                  style: const TextStyle(fontSize: 10),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.popAndPushNamed(context, "base");
-                },
-                child: Text(
-                  home,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+          SpeaqGuestForwarding(
+              homeText: homeText,
+              home: home,
           ),
         ],
       );

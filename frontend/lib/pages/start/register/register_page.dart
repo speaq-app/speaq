@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -27,8 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordCheckController =
-      TextEditingController();
+  final TextEditingController _passwordCheckController = TextEditingController();
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -85,22 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
               bottom: 30,
               top: 10,
             ),
-            child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: spqPrimaryBlue,
-                  padding: const EdgeInsets.all(15.0),
-                  fixedSize: const Size(200, 50),
-                  primary: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(29),
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, "base");
-                },
-                child: Text(register)),
+            child: SpeaqButton(loginText: register),
           ),
           AccountCheck(
             login: false,
@@ -113,35 +96,18 @@ class _RegisterPageState extends State<RegisterPage> {
             hinweisLogin: '',
           ),
           const Padding(
-            padding: EdgeInsets.only(top: 5, bottom: 5),
+            padding: EdgeInsets.only(
+                top: 5,
+                bottom: 5,
+            ),
             child: Divider(
               color: Colors.black54,
               thickness: 0.75,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: Text(
-                  homeText,
-                  style: const TextStyle(fontSize: 10),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.popAndPushNamed(context, "base");
-                },
-                child: Text(
-                  home,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+          SpeaqGuestForwarding(
+              homeText: homeText,
+              home: home,
           ),
         ],
       );
@@ -154,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _disposeController() {
     _passwordController.dispose();
-    _passwordCheckController;
+    _passwordCheckController.dispose();
     _nameController.dispose();
   }
 }
