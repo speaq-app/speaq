@@ -9,6 +9,7 @@
       }
     }
   },
+
   "username": "Benutzername",
   "password": "Passwort",
   "forgotPassword": "Passwort vergessen?",
@@ -20,7 +21,11 @@
   "guest": "Gast",
   "follower": "Follower",
   "following": "Gefolgt",
-  "newPost": "Speaq it..."
-
+  "newPost": "Speaq it...",
+  "profile": "Profil",
+  "qrCode": "QR-Code",
+  "bookmarks": "Lesezeichen",
+  "settingsandprivacy": "Einstellungen und Sicherheit",
+  "imprint": "Impressum"
 
 }

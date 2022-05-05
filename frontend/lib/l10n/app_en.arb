@@ -9,6 +9,7 @@
       }
     }
   },
+
   "username": "Username",
   "password": "Password",
   "forgotPassword": "Forgot Password?",
@@ -20,7 +21,12 @@
   "guest": "Guest",
   "follower": "Follower",
   "following": "Followed",
-  "newPost": "Speaq it..."
+  "newPost": "Speaq it...",
+  "profile": "Profile",
+  "qrCode": "QR code",
+  "bookmarks": "Bookmarks",
+  "settingsandprivacy": "Settings and privacy",
+  "imprint": "Imprint"
 
 }
 

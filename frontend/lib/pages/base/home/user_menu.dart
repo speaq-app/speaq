@@ -9,7 +9,6 @@ class UserMenu extends StatefulWidget {
 }
 
 class _UserMenuState extends State<UserMenu> {
-
   String userName = "@hhn";
 
   String name = "Informatics";
@@ -18,7 +17,8 @@ class _UserMenuState extends State<UserMenu> {
 
   String following = "690";
 
-  String image = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  String image =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,8 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget buildHeader(BuildContext context,AppLocalizations appLocale) => Container(
+  Widget buildHeader(BuildContext context, AppLocalizations appLocale) =>
+      Container(
         padding: const EdgeInsets.only(
           top: 24,
           bottom: 24,
@@ -56,7 +57,8 @@ class _UserMenuState extends State<UserMenu> {
               const SizedBox(height: 5),
               Text(
                 name,
-                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               Text(
                 userName,
@@ -73,9 +75,10 @@ class _UserMenuState extends State<UserMenu> {
                         children: [
                           Text(
                             following,
-                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.bold),
                           ),
-                           Padding(
+                          Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Text(
                               appLocale.following,
@@ -93,10 +96,11 @@ class _UserMenuState extends State<UserMenu> {
                             padding: const EdgeInsets.only(right: 2.0),
                             child: Text(
                               follower,
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.bold),
                             ),
                           ),
-                           Text(
+                          Text(
                             appLocale.follower,
                             style: const TextStyle(fontSize: 10),
                           )
@@ -111,45 +115,47 @@ class _UserMenuState extends State<UserMenu> {
         ),
       );
 
-  Widget buildMenu(BuildContext context, AppLocalizations appLocale) => Column(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.person_outline),
-            title: const Text("Profile"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "profile");
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.qr_code_2),
-            title: const Text("QR-Code"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "qr_ode");
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.bookmark_border),
-            title: const Text("Bookmarks"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "bookmarks");
-            },
-          ),
-          const Divider(
-            color: Colors.black54,
-            thickness: 0.75,
-          ),
-          ListTile(
-            title: const Text("Settings and privacy"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "settings");
-            },
-          ),
-          ListTile(
-            title: const Text("Impressum"),
-            onTap: () {
-              Navigator.popAndPushNamed(context, "impressum");
-            },
-          ),
-        ],
-      );
+  Widget buildMenu(BuildContext context, AppLocalizations appLocale) {
+    return Column(
+      children: [
+        ListTile(
+          leading: const Icon(Icons.person_outline),
+          title: Text(appLocale.profile),
+          onTap: () {
+            Navigator.popAndPushNamed(context, "profile");
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.qr_code_2),
+          title: Text(appLocale.qrCode),
+          onTap: () {
+            Navigator.popAndPushNamed(context, "qr_ode");
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.bookmark_border),
+          title: Text(appLocale.bookmarks),
+          onTap: () {
+            Navigator.popAndPushNamed(context, "bookmarks");
+          },
+        ),
+        const Divider(
+          color: Colors.black54,
+          thickness: 0.75,
+        ),
+        ListTile(
+          title: Text(appLocale.settingsandprivacy),
+          onTap: () {
+            Navigator.popAndPushNamed(context, "settings");
+          },
+        ),
+        ListTile(
+          title: Text(appLocale.imprint),
+          onTap: () {
+            Navigator.popAndPushNamed(context, "impressum");
+          },
+        ),
+      ],
+    );
+  }
 }
