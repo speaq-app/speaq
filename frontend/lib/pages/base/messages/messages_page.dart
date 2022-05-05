@@ -16,6 +16,9 @@ class _MessagesPageState extends State<MessagesPage> {
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
+  String messages = "Messages";
+  String hintTextSearchBar = "Search for chats or groups";
+
   List<User> _allUserList = [
     User(
         "https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg",
@@ -70,8 +73,8 @@ class _MessagesPageState extends State<MessagesPage> {
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
-          title: const Text(
-            "Messages",
+          title: Text(
+            messages,
             style: TextStyle(fontSize: 20),
           ),
           preferredSize: deviceSize,
@@ -134,7 +137,7 @@ class _MessagesPageState extends State<MessagesPage> {
               fontSize: 14,
               color: spqDarkGreyTranslucent,
             ),
-            hintText: "Search for chats or groups",
+            hintText: hintTextSearchBar,
           ),
         ),
       ),

@@ -14,8 +14,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   bool isFollow = false;
-  final String langKey = "pages.profile.";
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _link = "hs-heilbronn.de";
   final String _name = "Informatics";

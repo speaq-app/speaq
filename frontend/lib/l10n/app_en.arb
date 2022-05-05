@@ -10,10 +10,16 @@
     }
   },
   "username": "Username",
+  "password": "Password",
+  "forgotPassword": "Forgot Password?",
   "login": "Login",
-  "register": "Registrieren",
+  "registerText": "You don't have an Account?",
+  "guestText": "Join as a guest?",
+  "askExistingAccount": "Already have an account?",
+  "register": "Register",
+  "guest": "Guest",
   "follower": "Follower",
-  "following": "Gefolgt",
+  "following": "Followed",
   "newPost": "Speaq it..."
 
 }

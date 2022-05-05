@@ -10,9 +10,17 @@
     }
   },
   "username": "Benutzername",
+  "password": "Passwort",
+  "forgotPassword": "Passwort vergessen?",
   "login": "Anmelden",
+  "registerText": "Du hast noch keinen Account?",
+  "guestText": "Als Gast beitreten?",
+  "askExistingAccount": "Besitzt du bereits einen Account?",
   "register": "Registrieren",
+  "guest": "Gast",
   "follower": "Follower",
   "following": "Gefolgt",
   "newPost": "Speaq it..."
+
+
 }

@@ -19,8 +19,6 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-
-
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
