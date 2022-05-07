@@ -9,8 +9,7 @@ part 'resource_event.dart';
 part 'resource_state.dart';
 
 class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
-  final ResourceService _resourceService =
-      CacheResourceService(GRPCResourceService("10.0.2.2", port: 8080));
+  final ResourceService _resourceService = CacheResourceService(GRPCResourceService("10.0.2.2", port: 8080));
 
   ResourceBloc() : super(ResourceInitial()) {
     on<LoadResource>(_onLoadResource);

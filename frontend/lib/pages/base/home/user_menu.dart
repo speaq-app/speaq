@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:frontend/blocs/user_menu_bloc/user_menu_bloc.dart';
+import 'package:frontend/utils/all_utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UserMenu extends StatefulWidget {
   const UserMenu({Key? key}) : super(key: key);
@@ -21,8 +23,7 @@ class _UserMenuState extends State<UserMenu> {
 
   String following = "690";
 
-  String image =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  String image = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   @override
   void initState() {
@@ -45,13 +46,10 @@ class _UserMenuState extends State<UserMenu> {
                 bloc: _userMenuBloc,
                 builder: (context, state) {
                   if (state is UserMenuLoading) {
-                    //Shimmer
-                    return _buildHeaderShimmer(context);
+                    return _buildHeaderShimmer(context, appLocale);
                   } else if (state is UserMenuWithoutPictureLoaded) {
-                    //Data + Blured Image
-                    return _buildHeaderBlured(context, appLocale);
+                    return _buildHeaderBlured(context, appLocale, state.profile.profileImageBlurHash);
                   } else if (state is UserMenuLoaded) {
-                    //Data + Image
                     return _buildHeader(context, appLocale);
                   } else {
                     return const Text("Error UserMenuState");
@@ -66,91 +64,256 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeaderShimmer(BuildContext context) {
-    return Text("shimmer");
-  }
-
-  Widget _buildHeaderBlured(BuildContext context, AppLocalizations appLocale) {
-    return Text("blurred");
-  }
-
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale) =>
-      Container(
-        padding: const EdgeInsets.only(
-          top: 24,
-          bottom: 24,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundImage: NetworkImage(image),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                name,
-                style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
+  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 24,
+        bottom: 24,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: const CircleAvatar(radius: 24),
+            ),
+            const SizedBox(height: 5),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: SizedBox(
+                child: Text(
+                  "Name not locale",
+                  style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Text(
-                userName,
+            ),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: Text(
+                "@" + appLocale.username,
                 style: const TextStyle(fontSize: 15),
               ),
-              InkWell(
-                onTap: () => Navigator.pushNamed(context, 'follow'),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            ),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, 'follow'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Shimmer.fromColors(
+                      baseColor: spqLightGrey,
+                      highlightColor: spqWhite,
                       child: Row(
                         children: [
                           Text(
                             following,
-                            style: const TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Text(
-                              appLocale.following,
+                              appLocale.follower,
                               style: const TextStyle(fontSize: 10),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Shimmer.fromColors(
+                      baseColor: spqLightGrey,
+                      highlightColor: spqWhite,
                       child: Row(
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 2.0),
                             child: Text(
+                              //Get Real-Follower
                               follower,
-                              style: const TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                             ),
                           ),
                           Text(
-                            appLocale.follower,
+                            appLocale.following,
                             style: const TextStyle(fontSize: 10),
                           )
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
+
+  Widget _buildHeaderBlured(BuildContext context, AppLocalizations appLocale, String profileImageBlurHash) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 24,
+        bottom: 24,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundImage: BlurHashImage(profileImageBlurHash),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              userName,
+              style: const TextStyle(fontSize: 15),
+            ),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, 'follow'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          following,
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Text(
+                            appLocale.following,
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 2.0),
+                          child: Text(
+                            follower,
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          appLocale.follower,
+                          style: const TextStyle(fontSize: 10),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 24,
+        bottom: 24,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundImage: NetworkImage(image),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              userName,
+              style: const TextStyle(fontSize: 15),
+            ),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, 'follow'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          following,
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Text(
+                            appLocale.following,
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 2.0),
+                          child: Text(
+                            follower,
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          appLocale.follower,
+                          style: const TextStyle(fontSize: 10),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildMenu(BuildContext context, AppLocalizations appLocale) {
     return Column(

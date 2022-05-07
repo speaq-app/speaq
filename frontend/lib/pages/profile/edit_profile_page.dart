@@ -28,8 +28,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final String cancelText = "Cancel";
   final String doneText = "Done";
 
-  late String hcImageURL =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  late String hcImageURL = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   int maxLengthName = 30;
   int maxLengthUsername = 20;
@@ -74,25 +73,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           builder: (context, state) {
             if (state is ProfileSaving) {
-              return SpqLoadingWidget(
-                  MediaQuery.of(context).size.shortestSide * 0.15);
+              return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
             } else if (state is ProfileSaved) {
               return _buildCheckScreen();
             } else if (state is ProfileLoading) {
               return Scaffold(
                 appBar: _buildLoadingAppBar(deviceSize),
-                body: Container(
-                    padding:
-                        const EdgeInsets.only(left: 30, top: 20, right: 30),
-                    child: _buildListViewShimmer(context)),
+                body: Container(padding: const EdgeInsets.only(left: 30, top: 20, right: 30), child: _buildListViewShimmer(context)),
               );
             } else if (state is ProfileLoaded) {
               return Scaffold(
                 appBar: _buildAppBar(deviceSize),
-                body: Container(
-                    padding:
-                        const EdgeInsets.only(left: 30, top: 20, right: 30),
-                    child: _buildListViewWithData(context, state.profile)),
+                body: Container(padding: const EdgeInsets.only(left: 30, top: 20, right: 30), child: _buildListViewWithData(context, state.profile)),
               );
             }
             return const Text("not workin - edit_profile_page line");
@@ -121,11 +113,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         Center(
           child: GestureDetector(
             onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    _buildFullScreenProfileImage(
-                        context, hcImageURL, _usernameController.text),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
+                pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, hcImageURL, _usernameController.text),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   return child;
                 })),
             child: _buildProfileImage(hcImageURL),

@@ -27,16 +27,12 @@ class _HomePageState extends State<HomePage> {
   final ResourceBloc _resourceBloc = ResourceBloc();
 
   final String langKey = "pages.base.home.";
-  final String _postMessage =
-      "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
+  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _name = "Informatics";
   final String _username = "@hhn";
-  final String _postImage =
-      "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
-  final String _postImage2 =
-      "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
-  String profilePicture =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
+  final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
+  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
@@ -69,8 +65,7 @@ class _HomePageState extends State<HomePage> {
         bloc: _profileBloc,
         listener: (context, state) {
           if (state is ProfileLoaded) {
-            _resourceBloc.add(
-                LoadResource(resourceId: state.profile.profileImageResourceId));
+            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
           }
         },
         builder: (context, state) {
@@ -90,8 +85,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Scaffold _buildHomePage(
-      BuildContext context, Size deviceSize, Profile profile) {
+  Scaffold _buildHomePage(BuildContext context, Size deviceSize, Profile profile) {
     return Scaffold(
       appBar: SpqAppBar(
         actionList: [
@@ -108,8 +102,7 @@ class _HomePageState extends State<HomePage> {
         title: Center(
           child: InkWell(
             onTap: () {
-              _scrollController.animateTo(0,
-                  duration: const Duration(seconds: 1), curve: Curves.linear);
+              _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
             },
             child: SvgPicture.asset(
               spqImage,
