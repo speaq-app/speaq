@@ -12,8 +12,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final String langKey = "pages.start.register.";
 
-  final String name = "username";
-  final String password = "password";
+  final String name = "Username";
+  final String password = "Password";
   final String passwordCheck = "repeat password";
   final String returnPassword = "return password";
   final String register = "Register";
@@ -26,7 +26,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordCheckController = TextEditingController();
+  final TextEditingController _passwordCheckController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -54,21 +55,28 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 80),
-              child: RoundInputField(
+              child: RoundTextField(
                 hintText: name,
-                onChanged: (value) {},
                 controller: _nameController,
+                labelTex: name,
+                onChanged: (value) {},
+                icon: Icons.person,
               ),
             ),
-            RoundPasswordField(
-              password: password,
+            RoundTextField(
+              hintText: password,
+              labelTex: password,
               isHidden: isHidden,
               controller: _passwordController,
+              icon: Icons.lock,
+              suffixIcon: buildVisibility(),
               onChanged: (String value) {},
             ),
-            RoundPasswordField(
-              password: passwordCheck,
+            RoundTextField(
+              hintText: passwordCheck,
+              labelTex: passwordCheck,
               isHidden: isHidden,
+              icon: Icons.lock,
               controller: _passwordCheckController,
               onChanged: (String value) {},
             ),
@@ -97,8 +105,8 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           const Padding(
             padding: EdgeInsets.only(
-                top: 5,
-                bottom: 5,
+              top: 5,
+              bottom: 5,
             ),
             child: Divider(
               color: Colors.black54,
@@ -106,8 +114,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           SpeaqGuestForwarding(
-              homeText: homeText,
-              home: home,
+            homeText: homeText,
+            home: home,
           ),
         ],
       );
@@ -122,5 +130,26 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _passwordCheckController.dispose();
     _nameController.dispose();
+  }
+
+  InkWell buildVisibility() {
+    return InkWell(
+      onTap: () {
+        setState(
+              () {
+            isHidden = !isHidden;
+          },
+        );
+      },
+      child: isHidden
+          ? const Icon(
+        Icons.visibility_off,
+        color: Colors.black,
+      )
+          : const Icon(
+        Icons.visibility,
+        color: Colors.black,
+      ),
+    );
   }
 }

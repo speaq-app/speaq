@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final String name = "Username";
-  final String password = "password";
+  final String password = "Password";
   final String forgot = "Forgot Password?";
   final String loginText = "Login";
   final String registerText = "You don't have an Account?";
@@ -51,34 +51,20 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 80),
-              child: RoundInputField(
+              child: RoundTextField(
+                icon: Icons.person,
                 hintText: name,
                 onChanged: (value) {},
-                controller: _nameController,
+                controller: _nameController, labelTex: name,
               ),
             ),
-            RoundPasswordField(
-              password: password,
+            RoundTextField(
+              icon: Icons.lock,
+              hintText: password,
+              labelTex: password,
               isHidden: isHidden,
               controller: _passwordController,
-              suffixIcon: InkWell(
-                onTap: () {
-                  setState(
-                    () {
-                      isHidden = !isHidden;
-                    },
-                  );
-                },
-                child: isHidden
-                    ? const Icon(
-                        Icons.visibility_off,
-                        color: Colors.black,
-                      )
-                    : const Icon(
-                        Icons.visibility,
-                        color: Colors.black,
-                      ),
-              ),
+              suffixIcon: buildVisibility(),
               onChanged: (String value) {},
             ),
             GestureDetector(
@@ -140,5 +126,26 @@ class _LoginPageState extends State<LoginPage> {
   void _disposeController() {
     _passwordController.dispose();
     _nameController.dispose();
+  }
+
+  InkWell buildVisibility() {
+    return InkWell(
+      onTap: () {
+        setState(
+              () {
+            isHidden = !isHidden;
+          },
+        );
+      },
+      child: isHidden
+          ? const Icon(
+        Icons.visibility_off,
+        color: Colors.black,
+      )
+          : const Icon(
+        Icons.visibility,
+        color: Colors.black,
+      ),
+    );
   }
 }
