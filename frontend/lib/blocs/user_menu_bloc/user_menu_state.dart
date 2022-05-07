@@ -15,6 +15,7 @@ class UserMenuWithoutPictureLoaded extends UserMenuState {
 
 class UserMenuLoaded extends UserMenuState {
   final Resource resource;
+  final Profile profile;
 
-  UserMenuLoaded(this.resource);
+  UserMenuLoaded(this.resource, this.profile);
 }

@@ -21,8 +21,7 @@ class PostContainer extends StatelessWidget {
       children: [
         ListTile(
           leading: const CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
+            backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
           ),
           title: Column(
             children: [
@@ -31,8 +30,7 @@ class PostContainer extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),

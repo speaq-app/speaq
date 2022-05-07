@@ -29,6 +29,6 @@ class UserMenuBloc extends Bloc<UserMenuEvent, UserMenuState> {
 
     var _profileImage = await _resourceService.getResource(_profile.profileImageResourceId);
 
-    emit(UserMenuLoaded(_profileImage));
+    emit(UserMenuLoaded(_profileImage, _profile));
   }
 }

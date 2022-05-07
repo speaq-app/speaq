@@ -9,7 +9,10 @@
       }
     }
   },
+  "name": "Name",
   "username": "Username",
+  "description": "Description",
+  "website": "Website",
   "login": "Login",
   "register": "Registrieren",
   "follower": "Follower",

@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
@@ -14,12 +11,11 @@ class NewPostPage extends StatefulWidget {
 
 class _NewPostPageState extends State<NewPostPage> {
   final TextEditingController _postController = TextEditingController();
-  bool emojiShowing=false;
+  bool emojiShowing = false;
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-
 
     return SafeArea(
       child: Scaffold(
@@ -32,9 +28,25 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Widget _buildPostTextField(AppLocalizations appLocale) => Padding(padding: const EdgeInsets.all(8.0),child: SpqPostTextField(height: double.infinity, minLines: 30,controller: _postController, hintText: appLocale.newPost,));
+  Widget _buildPostTextField(AppLocalizations appLocale) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SpqPostTextField(
+          height: double.infinity,
+          minLines: 30,
+          controller: _postController,
+          hintText: appLocale.newPost,
+        ),
+      );
 
-  Widget _buildSendPostButton() => TextButton(onPressed: ()=> print("Speaq"), child: Container(child: const Text("speaq"),margin: const EdgeInsets.symmetric(horizontal: 4.0),padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),decoration: BoxDecoration(border: Border.all(color: spqPrimaryBlue, width: 1.0),borderRadius: const BorderRadius.all(Radius.circular(16.0))),));
+  Widget _buildSendPostButton() => TextButton(
+        onPressed: () => print("Speaq"),
+        child: Container(
+          child: const Text("speaq"),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+          decoration: BoxDecoration(border: Border.all(color: spqPrimaryBlue, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(16.0))),
+        ),
+      );
 }
 
 class SpqPostTextField extends StatelessWidget {
@@ -105,9 +117,9 @@ class SpqPostTextField extends StatelessWidget {
           alignLabelWithHint: true,
           prefixIcon: prefixIcon != null
               ? Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: prefixIcon,
-          )
+                  padding: const EdgeInsets.all(12.0),
+                  child: prefixIcon,
+                )
               : null,
           suffixIcon: suffixIcon,
           fillColor: spqWhite,
@@ -133,4 +145,3 @@ class SpqPostTextField extends StatelessWidget {
     );
   }
 }
-

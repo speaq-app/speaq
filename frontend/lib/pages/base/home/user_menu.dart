@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/user_menu_bloc/user_menu_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:shimmer/shimmer.dart';
@@ -14,10 +15,6 @@ class UserMenu extends StatefulWidget {
 
 class _UserMenuState extends State<UserMenu> {
   final UserMenuBloc _userMenuBloc = UserMenuBloc();
-
-  String userName = "@hhn";
-
-  String name = "Informatics";
 
   String follower = "234";
 
@@ -48,9 +45,9 @@ class _UserMenuState extends State<UserMenu> {
                   if (state is UserMenuLoading) {
                     return _buildHeaderShimmer(context, appLocale);
                   } else if (state is UserMenuWithoutPictureLoaded) {
-                    return _buildHeaderBlured(context, appLocale, state.profile.profileImageBlurHash);
+                    return _buildHeaderBlured(context, appLocale, state.profile);
                   } else if (state is UserMenuLoaded) {
-                    return _buildHeader(context, appLocale);
+                    return _buildHeader(context, appLocale, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
                   }
@@ -86,7 +83,7 @@ class _UserMenuState extends State<UserMenu> {
               highlightColor: spqWhite,
               child: SizedBox(
                 child: Text(
-                  "Name not locale",
+                  appLocale.name,
                   style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -161,7 +158,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeaderBlured(BuildContext context, AppLocalizations appLocale, String profileImageBlurHash) {
+  Widget _buildHeaderBlured(BuildContext context, AppLocalizations appLocale, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -174,18 +171,18 @@ class _UserMenuState extends State<UserMenu> {
           children: [
             CircleAvatar(
               radius: 24,
-              backgroundImage: BlurHashImage(profileImageBlurHash),
+              backgroundImage: BlurHashImage(profile.profileImageBlurHash),
             ),
             const SizedBox(height: 5),
             Text(
-              name,
+              profile.name,
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              userName,
+              profile.username,
               style: const TextStyle(fontSize: 15),
             ),
             InkWell(
@@ -238,7 +235,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -255,14 +252,14 @@ class _UserMenuState extends State<UserMenu> {
             ),
             const SizedBox(height: 5),
             Text(
-              name,
+              profile.name,
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              userName,
+              profile.username,
               style: const TextStyle(fontSize: 15),
             ),
             InkWell(
