@@ -25,13 +25,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
+
   final String langKey = "pages.base.home.";
-  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
+  final String _postMessage =
+      "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _name = "Informatics";
   final String _username = "@hhn";
-  final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
-  final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
-  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  final String _postImage =
+      "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
+  final String _postImage2 =
+      "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
+  String profilePicture =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
@@ -40,6 +45,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    //Change from Hardcoded
     _profileBloc.add(LoadProfile(userId: 1));
     _scrollController = ScrollController()
       ..addListener(() {
@@ -96,11 +102,9 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => {},
           )
         ],
-        leading: Builder(
-          builder: (context) {
-            return _buildProfileImage(context, profile.profileImageBlurHash);
-          }
-        ),
+        leading: Builder(builder: (context) {
+          return _buildProfileImage(context, profile.profileImageBlurHash);
+        }),
         title: Center(
           child: InkWell(
             onTap: () {
@@ -139,31 +143,36 @@ class _HomePageState extends State<HomePage> {
               name: _name,
               username: _username,
               postMessage: _postMessage,
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage2),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage2),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
