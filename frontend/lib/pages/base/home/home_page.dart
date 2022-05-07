@@ -74,7 +74,10 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           if (state is ProfileLoading) {
             return Scaffold(
-              appBar: SpqAppBarShimmer(preferredSize: deviceSize),
+              appBar: SpqAppBarShimmer(
+                preferredSize: deviceSize,
+                scrollController: _scrollController,
+              ),
               body: Container(child: _buildListViewShimmer(context, appLocale)),
             );
           } else if (state is ProfileLoaded) {
