@@ -15,6 +15,7 @@ part 'user_menu_state.dart';
 class UserMenuBloc extends Bloc<UserMenuEvent, UserMenuState> {
   final UserService _userService = CacheUserService(GRPCUserService());
   final ResourceService _resourceService = CacheResourceService(GRPCResourceService("10.0.2.2", port: 8080));
+  
   UserMenuBloc() : super(UserMenuInitial()) {
     on<LoadUserMenu>(_loadUserMenu);
   }

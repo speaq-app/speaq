@@ -77,79 +77,40 @@ class _UserMenuState extends State<UserMenu> {
               highlightColor: spqWhite,
               child: const CircleAvatar(radius: 24),
             ),
+            const SizedBox(height: 13),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: const SizedBox(
+                width: 180,
+                height: 25,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: spqBlack),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: const SizedBox(
+                width: 100,
+                height: 15,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: spqBlack),
+                ),
+              ),
+            ),
             const SizedBox(height: 5),
             Shimmer.fromColors(
               baseColor: spqLightGrey,
               highlightColor: spqWhite,
-              child: SizedBox(
-                child: Text(
-                  appLocale.name,
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
+              child: const SizedBox(
+                width: 120,
+                height: 10,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: spqBlack),
                 ),
-              ),
-            ),
-            Shimmer.fromColors(
-              baseColor: spqLightGrey,
-              highlightColor: spqWhite,
-              child: Text(
-                "@" + appLocale.username,
-                style: const TextStyle(fontSize: 15),
-              ),
-            ),
-            InkWell(
-              onTap: () => Navigator.pushNamed(context, 'follow'),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Shimmer.fromColors(
-                      baseColor: spqLightGrey,
-                      highlightColor: spqWhite,
-                      child: Row(
-                        children: [
-                          Text(
-                            following,
-                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 2),
-                            child: Text(
-                              appLocale.follower,
-                              style: const TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Shimmer.fromColors(
-                      baseColor: spqLightGrey,
-                      highlightColor: spqWhite,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: Text(
-                              //Get Real-Follower
-                              follower,
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Text(
-                            appLocale.following,
-                            style: const TextStyle(fontSize: 10),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
           ],

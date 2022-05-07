@@ -23,6 +23,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     var _profile = await _userService.getProfile(event.userId);
     emit(ProfileLoaded(profile: _profile));
+
+    
   }
 
   void _onSaveProfile(SaveProfile event, Emitter<ProfileState> emit) async {
