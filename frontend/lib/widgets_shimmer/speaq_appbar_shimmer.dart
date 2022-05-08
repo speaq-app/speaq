@@ -6,13 +6,11 @@ import 'package:shimmer/shimmer.dart';
 class SpqAppBarShimmer extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
-  final ScrollController scrollController;
   final String spqImage = "assets/images/logo/speaq_logo.svg";
 
   const SpqAppBarShimmer({
     Key? key,
     required this.preferredSize,
-    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -24,9 +22,6 @@ class SpqAppBarShimmer extends StatelessWidget implements PreferredSizeWidget {
         toolbarHeight: preferredSize.height * 0.075,
         title: Center(
           child: InkWell(
-            onTap: () {
-              scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
-            },
             child: SvgPicture.asset(
               spqImage,
               height: preferredSize.height * 0.055,
