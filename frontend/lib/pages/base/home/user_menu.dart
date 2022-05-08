@@ -1,8 +1,11 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:frontend/api/model/profile.dart';
-import 'package:frontend/blocs/user_menu_bloc/user_menu_bloc.dart';
+import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -14,18 +17,18 @@ class UserMenu extends StatefulWidget {
 }
 
 class _UserMenuState extends State<UserMenu> {
-  final UserMenuBloc _userMenuBloc = UserMenuBloc();
+  // final UserMenuBloc _userMenuBloc = UserMenuBloc();
+  final ProfileBloc _profileBloc = ProfileBloc();
+  final ResourceBloc _resourceBloc = ResourceBloc();
 
   String follower = "234";
 
   String following = "690";
 
-  String image = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
-
   @override
   void initState() {
     //Change from Hardcoded
-    _userMenuBloc.add(LoadUserMenu(userId: 1));
+    _profileBloc.add(LoadProfile(userId: 1));
     super.initState();
   }
 
@@ -39,14 +42,13 @@ class _UserMenuState extends State<UserMenu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              BlocBuilder<UserMenuBloc, UserMenuState>(
-                bloc: _userMenuBloc,
+              BlocBuilder<ProfileBloc, ProfileState>(
+                bloc: _profileBloc,
                 builder: (context, state) {
-                  if (state is UserMenuLoading) {
+                  if (state is ProfileLoading) {
                     return _buildHeaderShimmer(context, appLocale);
-                  } else if (state is UserMenuWithoutPictureLoaded) {
-                    return _buildHeaderBlured(context, appLocale, state.profile);
-                  } else if (state is UserMenuLoaded) {
+                  } else if (state is ProfileLoaded) {
+                    _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
                     return _buildHeader(context, appLocale, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
@@ -119,83 +121,6 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeaderBlured(BuildContext context, AppLocalizations appLocale, Profile profile) {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 24,
-        bottom: 24,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundImage: BlurHashImage(profile.profileImageBlurHash),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              profile.name,
-              style: const TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              profile.username,
-              style: const TextStyle(fontSize: 15),
-            ),
-            InkWell(
-              onTap: () => Navigator.pushNamed(context, 'follow'),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          following,
-                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2),
-                          child: Text(
-                            appLocale.following,
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 2.0),
-                          child: Text(
-                            follower,
-                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Text(
-                          appLocale.follower,
-                          style: const TextStyle(fontSize: 10),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
@@ -207,9 +132,21 @@ class _UserMenuState extends State<UserMenu> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundImage: NetworkImage(image),
+            BlocBuilder<ResourceBloc, ResourceState>(
+              bloc: _resourceBloc,
+              builder: (context, state) {
+                if (state is ResourceLoaded) {
+                  return CircleAvatar(
+                    radius: 24,
+                    backgroundImage: MemoryImage(state.decodedData),
+                  );
+                } else {
+                  return CircleAvatar(
+                    radius: 24,
+                    backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+                  );
+                }
+              },
             ),
             const SizedBox(height: 5),
             Text(

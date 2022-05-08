@@ -24,8 +24,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
 
-  late Uint8List memoryImage;
-
   final String langKey = "pages.profile.";
 
   final String nameText = "Name";
@@ -125,7 +123,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         Center(
           child: GestureDetector(
             onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, hcImageURL, _usernameController.text),
+                pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, profile.username),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   return child;
                 })),
@@ -300,13 +298,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget _buildProfileImage(String profileImageBlurHash) {
     return Hero(
       tag: 'dash',
-      child: BlocConsumer<ResourceBloc, ResourceState>(
+      child: BlocBuilder<ResourceBloc, ResourceState>(
         bloc: _resourceBloc,
-        listener: (context, state) {
-          if (state is ResourceLoaded) {
-            memoryImage = base64Decode(state.resource.data);
-          }
-        },
         builder: (context, state) {
           if (state is ResourceLoaded) {
             return Container(
@@ -314,7 +307,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               height: 150,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: MemoryImage(memoryImage),
+                  image: MemoryImage(state.decodedData),
                   fit: BoxFit.cover,
                 ),
                 shape: BoxShape.circle,
@@ -359,7 +352,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildFullScreenProfileImage(BuildContext context, String imageURL, String username) {
+  Widget _buildFullScreenProfileImage(BuildContext context, String username) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -372,16 +365,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         backgroundColor: spqWhite,
       ),
-      body: Container(
-        color: spqWhite,
-        child: Center(
-          child: Hero(
-            tag: 'dash',
-            child: Image.network(
-              imageURL,
-            ),
-          ),
-        ),
+      body: BlocBuilder<ResourceBloc, ResourceState>(
+        bloc: _resourceBloc,
+        builder: (context, state) {
+          if(state is ResourceLoaded){
+            return Container(
+              color: spqWhite,
+              child: Center(
+                child: Hero(
+                  tag: 'dash',
+                  child: Image(image: MemoryImage(state.decodedData)),
+                ),
+              ),
+            );
+          } else{
+            return const Text("Error Resource State");
+          }          
+        },
       ),
     );
   }

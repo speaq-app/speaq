@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:frontend/api/cache/cache_resource_service.dart';
 import 'package:frontend/api/grpc/grpc_resource_service.dart';
@@ -24,7 +27,8 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
     await Future.delayed(const Duration(seconds: 2)); //removeable
 
     var resource = await _resourceService.getResource(event.resourceId);
-    emit(ResourceLoaded(resource));
+    var decodedData = base64Decode(resource.data);
+    emit(ResourceLoaded(resource, decodedData));
   }
 
   void _onSaveResource(

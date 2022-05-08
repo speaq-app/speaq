@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,8 +34,6 @@ class _HomePageState extends State<HomePage> {
   String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
-
-  late Uint8List memoryImage;
 
   late ScrollController _scrollController;
   bool showBackToTopButton = false;
@@ -192,18 +189,13 @@ class _HomePageState extends State<HomePage> {
   Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
     return IconButton(
       onPressed: () => Scaffold.of(context).openDrawer(),
-      icon: BlocConsumer<ResourceBloc, ResourceState>(
+      icon: BlocBuilder<ResourceBloc, ResourceState>(
         bloc: _resourceBloc,
-        listener: (context, state) {
-          if (state is ResourceLoaded) {
-            memoryImage = base64Decode(state.resource.data);
-          }
-        },
         builder: (context, state) {
           if (state is ResourceLoaded) {
             return CircleAvatar(
               radius: 20,
-              backgroundImage: MemoryImage(memoryImage),
+              backgroundImage: MemoryImage(state.decodedData),
             );
           } else {
             return CircleAvatar(
