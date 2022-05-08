@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final String hinweisRegister = "Besitzt du bereits einen Account?";
   final String homeText = "Du möchtest als Gast beitreten?";
   final String home = "Gast";
+
   bool isHidden = true;
 
   final TextEditingController _nameController = TextEditingController();
@@ -55,17 +56,20 @@ class _LoginPageState extends State<LoginPage> {
                 icon: Icons.person,
                 hintText: name,
                 onChanged: (value) {},
-                controller: _nameController, labelTex: name,
+                controller: _nameController,
+                labelTex: name,
+                borderColor: Border.all(color: Colors.black26),
               ),
             ),
             RoundTextField(
               icon: Icons.lock,
               hintText: password,
-              labelTex: password,
               isHidden: isHidden,
+              labelTex: password,
               controller: _passwordController,
               suffixIcon: buildVisibility(),
               onChanged: (String value) {},
+              borderColor: Border.all(color: Colors.black26),
             ),
             GestureDetector(
               onTap: () {},
@@ -101,18 +105,15 @@ class _LoginPageState extends State<LoginPage> {
             },
           ),
           const Padding(
-            padding: EdgeInsets.only(
-                top: 5,
-                bottom: 5
-            ),
+            padding: EdgeInsets.only(top: 5, bottom: 5),
             child: Divider(
               color: Colors.black54,
               thickness: 0.75,
             ),
           ),
           SpeaqGuestForwarding(
-              homeText: homeText,
-              home: home,
+            homeText: homeText,
+            home: home,
           ),
         ],
       );
@@ -132,20 +133,20 @@ class _LoginPageState extends State<LoginPage> {
     return InkWell(
       onTap: () {
         setState(
-              () {
+          () {
             isHidden = !isHidden;
           },
         );
       },
       child: isHidden
           ? const Icon(
-        Icons.visibility_off,
-        color: Colors.black,
-      )
+              Icons.visibility,
+              color: Colors.black,
+            )
           : const Icon(
-        Icons.visibility,
-        color: Colors.black,
-      ),
+              Icons.visibility_off,
+              color: Colors.black,
+            ),
     );
   }
 }

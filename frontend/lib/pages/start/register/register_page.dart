@@ -13,7 +13,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final String langKey = "pages.start.register.";
 
   final String name = "Username";
-  final String password = "Password";
+  final String passwordText = "Password";
   final String passwordCheck = "repeat password";
   final String returnPassword = "return password";
   final String register = "Register";
@@ -22,7 +22,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final String hinweisRegister = "Besitzt du bereits einen Account?";
   final String homeText = "Du möchtest als Gast beitreten?";
   final String home = "Gast";
+
   bool isHidden = true;
+  bool _isPasswordCorrect = false;
+  bool _isPasswordSame = false;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -61,24 +64,31 @@ class _RegisterPageState extends State<RegisterPage> {
                 labelTex: name,
                 onChanged: (value) {},
                 icon: Icons.person,
+                borderColor: Border.all(color: Colors.black26),
               ),
             ),
             RoundTextField(
-              hintText: password,
-              labelTex: password,
+              hintText: passwordText,
+              labelTex: passwordText,
               isHidden: isHidden,
               controller: _passwordController,
               icon: Icons.lock,
+              borderColor: _isPasswordCorrect
+                  ? Border.all(color: Colors.lightGreen)
+                  : Border.all(color: Colors.redAccent),
               suffixIcon: buildVisibility(),
-              onChanged: (String value) {},
+              onChanged: (password) => onPasswordChanged(password),
             ),
             RoundTextField(
               hintText: passwordCheck,
               labelTex: passwordCheck,
-              isHidden: isHidden,
+              isHidden: true,
               icon: Icons.lock,
               controller: _passwordCheckController,
-              onChanged: (String value) {},
+              borderColor: _isPasswordSame
+                  ? Border.all(color: Colors.lightGreen)
+                  : Border.all(color: Colors.redAccent),
+              onChanged: (password1) => onPassword1Changed(password1),
             ),
           ],
         ),
@@ -136,20 +146,43 @@ class _RegisterPageState extends State<RegisterPage> {
     return InkWell(
       onTap: () {
         setState(
-              () {
+          () {
             isHidden = !isHidden;
           },
         );
       },
       child: isHidden
           ? const Icon(
-        Icons.visibility_off,
-        color: Colors.black,
-      )
+              Icons.visibility,
+              color: Colors.black,
+            )
           : const Icon(
-        Icons.visibility,
-        color: Colors.black,
-      ),
+              Icons.visibility_off,
+              color: Colors.black,
+            ),
     );
+  }
+
+  onPasswordChanged(String password) {
+    final number = RegExp(r'[0-9]');
+    final capitalize = RegExp(r'[A-Z]');
+
+    setState(() {
+      _isPasswordCorrect = false;
+      if (password.length >= 8 &&
+          number.hasMatch(password) &&
+          capitalize.hasMatch(password)) {
+        _isPasswordCorrect = true;
+      }
+    });
+  }
+
+  onPassword1Changed(String password1) {
+    setState(() {
+      _isPasswordSame = false;
+      if (_passwordCheckController == _passwordController) {
+        _isPasswordSame = true;
+      }
+    });
   }
 }

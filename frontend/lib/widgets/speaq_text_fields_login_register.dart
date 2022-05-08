@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
 
-class TextFieldContainer extends StatelessWidget {
-  final Widget child;
 
-  const TextFieldContainer({
+class RoundTextField extends StatelessWidget {
+  final ValueChanged<String> onChanged;
+  final bool isHidden;
+  final String? hintText;
+  final String? labelTex;
+  final Widget? suffixIcon;
+  final IconData? icon;
+  final TextEditingController controller;
+  final Widget? border;
+  final Border borderColor;
+
+  const RoundTextField({
     Key? key,
-    required this.child,
+    this.hintText,
+    this.labelTex,
+    this.suffixIcon,
+    this.isHidden = false,
+    required this.controller,
+    required this.onChanged,
+    this.icon,
+    this.border,
+    required this.borderColor,
   }) : super(key: key);
 
   @override
@@ -20,38 +37,8 @@ class TextFieldContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(29),
-        border: Border.all(color: Colors.black26),
+        border: borderColor,
       ),
-      child: child,
-    );
-  }
-}
-
-class RoundTextField extends StatelessWidget {
-  final ValueChanged<String> onChanged;
-  final bool isHidden;
-  final String? hintText;
-  final String? labelTex;
-  final String? errorText;
-  final Widget? suffixIcon;
-  final IconData? icon;
-  final TextEditingController controller;
-
-  const RoundTextField({
-    Key? key,
-    this.hintText,
-    this.labelTex,
-    this.suffixIcon,
-    this.errorText,
-    this.isHidden = true,
-    required this.controller,
-    required this.onChanged,
-    this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFieldContainer(
       child: TextField(
         obscureText: isHidden,
         onChanged: onChanged,
@@ -60,7 +47,6 @@ class RoundTextField extends StatelessWidget {
           hintText: hintText,
           suffixIcon: suffixIcon,
           border: InputBorder.none,
-          errorText: errorText,
           icon: Icon(
             icon,
             color: Colors.black,
