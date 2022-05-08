@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
+
+  late Uint8List memoryImage;
 
   late ScrollController _scrollController;
   bool showBackToTopButton = false;
@@ -73,10 +75,9 @@ class _HomePageState extends State<HomePage> {
           if (state is ProfileLoading) {
             return Scaffold(
               appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: Container(child: _buildListViewShimmer(context, appLocale)),
+              body: _buildListViewShimmer(context, appLocale),
             );
           } else if (state is ProfileLoaded) {
-            log(state.profile.profileImageBlurHash);
             return _buildHomePage(context, deviceSize, state.profile);
           } else {
             return const Text("State failed");
@@ -191,13 +192,18 @@ class _HomePageState extends State<HomePage> {
   Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
     return IconButton(
       onPressed: () => Scaffold.of(context).openDrawer(),
-      icon: BlocBuilder<ResourceBloc, ResourceState>(
+      icon: BlocConsumer<ResourceBloc, ResourceState>(
         bloc: _resourceBloc,
+        listener: (context, state) {
+          if (state is ResourceLoaded) {
+            memoryImage = base64Decode(state.resource.data);
+          }
+        },
         builder: (context, state) {
           if (state is ResourceLoaded) {
             return CircleAvatar(
               radius: 20,
-              backgroundImage: MemoryImage(base64Decode(state.resource.data)),
+              backgroundImage: MemoryImage(memoryImage),
             );
           } else {
             return CircleAvatar(
