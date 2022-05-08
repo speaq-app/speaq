@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_loading_widget.dart';
@@ -17,6 +22,9 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
+  final ResourceBloc _resourceBloc = ResourceBloc();
+
+  late Uint8List memoryImage;
 
   final String langKey = "pages.profile.";
 
@@ -67,6 +75,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               _usernameController.text = profile.username;
               _descriptionController.text = profile.description;
               _websiteController.text = profile.website;
+              _resourceBloc.add(LoadResource(resourceId: profile.profileImageResourceId));
             } else if (state is ProfileSaved) {
               Navigator.pop(context);
             }
@@ -79,12 +88,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
             } else if (state is ProfileLoading) {
               return Scaffold(
                 appBar: _buildLoadingAppBar(deviceSize),
-                body: Container(padding: const EdgeInsets.only(left: 30, top: 20, right: 30), child: _buildListViewShimmer(context)),
+                body: Container(
+                  padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
+                  child: _buildListViewShimmer(context),
+                ),
               );
             } else if (state is ProfileLoaded) {
               return Scaffold(
                 appBar: _buildAppBar(deviceSize),
-                body: Container(padding: const EdgeInsets.only(left: 30, top: 20, right: 30), child: _buildListViewWithData(context, state.profile)),
+                body: Container(
+                  padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
+                  child: _buildListViewWithData(context, state.profile),
+                ),
               );
             }
             return const Text("not workin - edit_profile_page line");
@@ -104,10 +119,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  ListView _buildListViewWithData(
-    BuildContext context,
-    Profile profile,
-  ) {
+  ListView _buildListViewWithData(BuildContext context, Profile profile) {
     return ListView(
       children: [
         Center(
@@ -117,7 +129,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   return child;
                 })),
-            child: _buildProfileImage(hcImageURL),
+            child: _buildProfileImage(profile.profileImageBlurHash),
           ),
         ),
         const SizedBox(height: 40),
@@ -285,19 +297,43 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildProfileImage(String imageURL) {
+  Widget _buildProfileImage(String profileImageBlurHash) {
     return Hero(
       tag: 'dash',
-      child: Container(
-        width: 150,
-        height: 150,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(imageURL),
-          ),
-        ),
+      child: BlocConsumer<ResourceBloc, ResourceState>(
+        bloc: _resourceBloc,
+        listener: (context, state) {
+          if (state is ResourceLoaded) {
+            memoryImage = base64Decode(state.resource.data);
+          }
+        },
+        builder: (context, state) {
+          if (state is ResourceLoaded) {
+            return Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: MemoryImage(memoryImage),
+                  fit: BoxFit.cover,
+                ),
+                shape: BoxShape.circle,
+              ),
+            );
+          } else {
+            return Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: BlurHashImage(profileImageBlurHash),
+                  fit: BoxFit.cover,
+                ),
+                shape: BoxShape.circle,
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -323,11 +359,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildFullScreenProfileImage(
-    BuildContext context,
-    String imageURL,
-    String username,
-  ) {
+  Widget _buildFullScreenProfileImage(BuildContext context, String imageURL, String username) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
