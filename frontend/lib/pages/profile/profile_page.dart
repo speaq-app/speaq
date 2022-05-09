@@ -24,7 +24,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final String _joined = "Joined August 2022";
   final String _follower = "117k Follower";
   final String _following = "69 Follower";
-  final String _editProfile = "Edit Profile";
   final String _follow = "Follow";
   final String _unfollow = "Unfollow";
 
@@ -99,6 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildPictureEditProfile(Size deviceSize) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.max,
@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
           padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
           child: SpqTextbutton(
               onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
-              name: _editProfile,
+              name: appLocale.editProfile,
               style: const TextStyle(color: spqPrimaryBlue)),
         ),
 /*        Padding(
