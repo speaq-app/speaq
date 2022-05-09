@@ -11,10 +11,12 @@ class RoundTextField extends StatelessWidget {
   final TextEditingController controller;
   final Widget? border;
   final Border borderColor;
+  final Iterable<String>? autofill;
 
   const RoundTextField({
     Key? key,
     this.hintText,
+    this.autofill,
     this.labelTex,
     this.suffixIcon,
     this.isHidden = false,
@@ -40,6 +42,7 @@ class RoundTextField extends StatelessWidget {
         border: borderColor,
       ),
       child: TextField(
+        autofillHints: autofill,
         obscureText: isHidden,
         onChanged: onChanged,
         decoration: InputDecoration(

@@ -8,14 +8,14 @@ class AccountCheck extends StatelessWidget {
     Key? key,
     this.login = true,
     required this.press,
-    required this.hinweisLogin,
-    required this.hinweisRegister,
+    required this.hintLogin,
+    required this.hintRegister,
     required this.register,
     required this.loginText,
   }) : super(key: key);
 
-  final String hinweisLogin;
-  final String hinweisRegister;
+  final String hintLogin;
+  final String hintRegister;
   final String register;
   final String loginText;
 
@@ -27,7 +27,7 @@ class AccountCheck extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: Text(
-            login ? hinweisLogin : hinweisRegister,
+            login ? hintLogin : hintRegister,
             style: const TextStyle(
               fontSize: 10,
               color: Colors.black,

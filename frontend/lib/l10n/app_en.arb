@@ -11,9 +11,17 @@
   },
   "username": "Username",
   "login": "Login",
-  "register": "Registrieren",
+  "loginHint": "You don't have an account yet?",
+  "register": "Register",
+  "registerHint": "You already have an account?",
+  "password": "Password",
+  "passwordForgot": "Forgot password?",
+  "passwordCheck": "Repeat password",
+  "guest": "Guest",
+  "guestText": "You want to join as a guest?",
+
   "follower": "Follower",
-  "following": "Gefolgt",
+  "following": "Followed",
   "newPost": "Speaq it..."
 
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -10,22 +11,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final String langKey = "pages.start.register.";
-
-  final String name = "Username";
-  final String passwordText = "Password";
-  final String passwordCheck = "repeat password";
-  final String returnPassword = "return password";
-  final String register = "Register";
-  final String login = "login";
-  final String registerText = "You dont't have an Account?";
-  final String hinweisRegister = "Besitzt du bereits einen Account?";
-  final String homeText = "Du möchtest als Gast beitreten?";
-  final String home = "Gast";
-
   bool isHidden = true;
   bool _isPasswordCorrect = false;
-  bool _isPasswordSame = false;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -33,18 +20,22 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
 
   @override
-  Widget build(BuildContext context) => Drawer(
-        child: SafeArea(
-          child: ListView(
-            children: <Widget>[
-              buildTop(context),
-              buildBottom(context),
-            ],
-          ),
-        ),
-      );
+  Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
 
-  Widget buildTop(BuildContext) => Container(
+    return Drawer(
+      child: SafeArea(
+        child: ListView(
+          children: <Widget>[
+            buildTop(context, appLocale),
+            buildBottom(context, appLocale),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildTop(BuildContext, AppLocalizations appLocale) => Container(
         padding: const EdgeInsets.only(
           top: 125,
           bottom: 50,
@@ -59,17 +50,19 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.only(top: 80),
               child: RoundTextField(
-                hintText: name,
+                autofill: const [AutofillHints.name],
+                hintText: appLocale.username,
                 controller: _nameController,
-                labelTex: name,
+                labelTex: appLocale.username,
                 onChanged: (value) {},
                 icon: Icons.person,
                 borderColor: Border.all(color: Colors.black26),
               ),
             ),
             RoundTextField(
-              hintText: passwordText,
-              labelTex: passwordText,
+              autofill: const [AutofillHints.newPassword],
+              hintText: appLocale.password,
+              labelTex: appLocale.password,
               isHidden: isHidden,
               controller: _passwordController,
               icon: Icons.lock,
@@ -80,38 +73,41 @@ class _RegisterPageState extends State<RegisterPage> {
               onChanged: (password) => onPasswordChanged(password),
             ),
             RoundTextField(
-              hintText: passwordCheck,
-              labelTex: passwordCheck,
+              autofill: const [AutofillHints.password],
+              hintText: appLocale.passwordCheck,
+              labelTex: appLocale.passwordCheck,
               isHidden: true,
               icon: Icons.lock,
               controller: _passwordCheckController,
-              borderColor: _isPasswordSame
-                  ? Border.all(color: Colors.lightGreen)
-                  : Border.all(color: Colors.redAccent),
-              onChanged: (password1) => onPassword1Changed(password1),
+              borderColor: Border.all(color: Colors.black26),
+              onChanged: (String value) {},
             ),
           ],
         ),
       );
 
-  Widget buildBottom(BuildContext context) => Column(
+  Widget buildBottom(BuildContext context, AppLocalizations appLocale) =>
+      Column(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(
               bottom: 30,
               top: 10,
             ),
-            child: SpeaqButton(loginText: register),
+            child: SpeaqButton(
+              loginText: appLocale.register,
+              onPressed: () {},
+            ),
           ),
           AccountCheck(
             login: false,
-            hinweisRegister: hinweisRegister,
-            loginText: login,
+            hintRegister: appLocale.registerHint,
+            loginText: appLocale.login,
             press: () {
               Navigator.popAndPushNamed(context, "login");
             },
             register: '',
-            hinweisLogin: '',
+            hintLogin: '',
           ),
           const Padding(
             padding: EdgeInsets.only(
@@ -124,8 +120,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           SpeaqGuestForwarding(
-            homeText: homeText,
-            home: home,
+            homeText: appLocale.guestText,
+            home: appLocale.guest,
           ),
         ],
       );
@@ -173,15 +169,6 @@ class _RegisterPageState extends State<RegisterPage> {
           number.hasMatch(password) &&
           capitalize.hasMatch(password)) {
         _isPasswordCorrect = true;
-      }
-    });
-  }
-
-  onPassword1Changed(String password1) {
-    setState(() {
-      _isPasswordSame = false;
-      if (_passwordCheckController == _passwordController) {
-        _isPasswordSame = true;
       }
     });
   }

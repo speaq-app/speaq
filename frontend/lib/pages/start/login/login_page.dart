@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,35 +11,29 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String name = "Username";
-  final String password = "Password";
-  final String forgot = "Forgot Password?";
-  final String loginText = "Login";
-  final String registerText = "You don't have an Account?";
-  final String register = "Register";
-  final String hinweisLogin = "Du hast noch keinen Account?";
-  final String hinweisRegister = "Besitzt du bereits einen Account?";
-  final String homeText = "Du möchtest als Gast beitreten?";
-  final String home = "Gast";
-
   bool isHidden = true;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) => Drawer(
-        child: SafeArea(
-          child: ListView(
-            children: <Widget>[
-              buildTop(context),
-              buildBottom(context),
-            ],
-          ),
-        ),
-      );
+  Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
 
-  Widget buildTop(BuildContext context) => Container(
+    return Drawer(
+      child: SafeArea(
+        child: ListView(
+          children: <Widget>[
+            buildTop(context, appLocale),
+            buildBottom(context, appLocale),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildTop(BuildContext context, AppLocalizations appLocale) =>
+      Container(
         padding: const EdgeInsets.only(
           top: 125,
           bottom: 50,
@@ -53,19 +48,21 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.only(top: 80),
               child: RoundTextField(
+                autofill: const [AutofillHints.name],
                 icon: Icons.person,
-                hintText: name,
+                hintText: appLocale.username,
                 onChanged: (value) {},
                 controller: _nameController,
-                labelTex: name,
+                labelTex: appLocale.username,
                 borderColor: Border.all(color: Colors.black26),
               ),
             ),
             RoundTextField(
+              autofill: const [AutofillHints.password],
               icon: Icons.lock,
-              hintText: password,
+              hintText: appLocale.password,
               isHidden: isHidden,
-              labelTex: password,
+              labelTex: appLocale.password,
               controller: _passwordController,
               suffixIcon: buildVisibility(),
               onChanged: (String value) {},
@@ -74,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
             GestureDetector(
               onTap: () {},
               child: Text(
-                forgot,
+                appLocale.passwordForgot,
                 textAlign: TextAlign.right,
                 style: const TextStyle(
                   fontSize: 10,
@@ -86,23 +83,27 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-  Widget buildBottom(BuildContext context) => Column(
+  Widget buildBottom(BuildContext context, AppLocalizations appLocale) =>
+      Column(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(
               bottom: 30,
               top: 10,
             ),
-            child: SpeaqButton(loginText: loginText),
+            child: SpeaqButton(
+              loginText: appLocale.login,
+              onPressed: () {
+                Navigator.popAndPushNamed(context, "base");
+              },
+            ),
           ),
           AccountCheck(
-            hinweisLogin: hinweisLogin,
-            hinweisRegister: hinweisRegister,
-            register: register,
-            loginText: loginText,
-            press: () {
-              Navigator.popAndPushNamed(context, "register");
-            },
+            hintLogin: appLocale.loginHint,
+            hintRegister: '',
+            register: appLocale.register,
+            loginText: '',
+            press: () {},
           ),
           const Padding(
             padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -112,8 +113,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           SpeaqGuestForwarding(
-            homeText: homeText,
-            home: home,
+            homeText: appLocale.guestText,
+            home: appLocale.guest,
           ),
         ],
       );

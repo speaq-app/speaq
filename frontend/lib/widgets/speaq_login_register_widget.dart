@@ -4,10 +4,11 @@ import 'package:frontend/utils/speaq_styles.dart';
 class SpeaqButton extends StatelessWidget {
   const SpeaqButton({
     Key? key,
-    required this.loginText,
+    required this.loginText, required this.onPressed,
   }) : super(key: key);
 
   final String loginText;
+  final Function onPressed;
 
   @override
   Widget build(BuildContext context) {

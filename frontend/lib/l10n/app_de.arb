@@ -11,7 +11,15 @@
   },
   "username": "Benutzername",
   "login": "Anmelden",
+  "loginHint": "Du hast noch keinen Account?",
   "register": "Registrieren",
+  "registerHint": "Du hast bereits einen Account?",
+  "password": "Passwort",
+  "passwordForgot": "Passwort vergessen?",
+  "passwordCheck": "Passwort wiederholen",
+  "guest": "Gast",
+  "guestText": "Du möchtest als Gast beitreten?",
+
   "follower": "Follower",
   "following": "Gefolgt",
   "newPost": "Speaq it..."
