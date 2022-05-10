@@ -35,96 +35,99 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget buildTop(BuildContext, AppLocalizations appLocale) => Container(
-        padding: const EdgeInsets.only(
-          top: 125,
-          bottom: 50,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(
-              "assets/images/logo/speaq_text_logo.svg",
-              height: 75,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 80),
-              child: RoundTextField(
-                autofill: const [AutofillHints.name],
-                hintText: appLocale.username,
-                controller: _nameController,
-                labelTex: appLocale.username,
-                onChanged: (value) {},
-                icon: Icons.person,
-                borderColor: Border.all(color: Colors.black26),
-              ),
-            ),
-            RoundTextField(
-              autofill: const [AutofillHints.newPassword],
-              hintText: appLocale.password,
-              labelTex: appLocale.password,
-              isHidden: isHidden,
-              controller: _passwordController,
-              icon: Icons.lock,
-              borderColor: _isPasswordCorrect
-                  ? Border.all(color: Colors.lightGreen)
-                  : Border.all(color: Colors.redAccent),
-              suffixIcon: buildVisibility(),
-              onChanged: (password) => onPasswordChanged(password),
-            ),
-            RoundTextField(
-              autofill: const [AutofillHints.password],
-              hintText: appLocale.passwordCheck,
-              labelTex: appLocale.passwordCheck,
-              isHidden: true,
-              icon: Icons.lock,
-              controller: _passwordCheckController,
-              borderColor: Border.all(color: Colors.black26),
-              onChanged: (String value) {},
-            ),
-          ],
-        ),
-      );
-
-  Widget buildBottom(BuildContext context, AppLocalizations appLocale) =>
-      Column(
+  Widget buildTop(BuildContext context, AppLocalizations appLocale) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 125,
+        bottom: 50,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          SvgPicture.asset(
+            "assets/images/logo/speaq_text_logo.svg",
+            height: 75,
+          ),
           Padding(
-            padding: const EdgeInsets.only(
-              bottom: 30,
-              top: 10,
-            ),
-            child: SpeaqButton(
-              loginText: appLocale.register,
-              onPressed: () {},
-            ),
-          ),
-          AccountCheck(
-            login: false,
-            hintRegister: appLocale.registerHint,
-            loginText: appLocale.login,
-            press: () {
-              Navigator.popAndPushNamed(context, "login");
-            },
-            register: '',
-            hintLogin: '',
-          ),
-          const Padding(
-            padding: EdgeInsets.only(
-              top: 5,
-              bottom: 5,
-            ),
-            child: Divider(
-              color: Colors.black54,
-              thickness: 0.75,
+            padding: const EdgeInsets.only(top: 80),
+            child: RoundTextField(
+              autofill: const [AutofillHints.name],
+              hintText: appLocale.username,
+              controller: _nameController,
+              labelTex: appLocale.username,
+              onChanged: (value) {},
+              icon: Icons.person,
+              borderColor: Border.all(color: Colors.black26),
             ),
           ),
-          SpeaqGuestForwarding(
-            homeText: appLocale.guestText,
-            home: appLocale.guest,
+          RoundTextField(
+            autofill: const [AutofillHints.newPassword],
+            hintText: appLocale.password,
+            labelTex: appLocale.password,
+            isHidden: isHidden,
+            controller: _passwordController,
+            icon: Icons.lock,
+            borderColor: _isPasswordCorrect
+                ? Border.all(color: Colors.lightGreen)
+                : Border.all(color: Colors.redAccent),
+            suffixIcon: _buildVisibility(),
+            onChanged: (password) => _onPasswordChanged(password),
+          ),
+          RoundTextField(
+            autofill: const [AutofillHints.password],
+            hintText: appLocale.passwordCheck,
+            labelTex: appLocale.passwordCheck,
+            isHidden: true,
+            icon: Icons.lock,
+            controller: _passwordCheckController,
+            borderColor: Border.all(color: Colors.black26),
+            onChanged: (String value) {},
           ),
         ],
-      );
+      ),
+    );
+  }
+
+  Widget buildBottom(BuildContext context, AppLocalizations appLocale) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: 30,
+            top: 10,
+          ),
+          child: SpeaqButton(
+            loginText: appLocale.register,
+            onPressed: () {},
+          ),
+        ),
+        AccountCheck(
+          login: false,
+          hintRegister: appLocale.registerHint,
+          loginText: appLocale.login,
+          press: () {
+            Navigator.popAndPushNamed(context, "login");
+          },
+          register: '',
+          hintLogin: '',
+        ),
+        const Padding(
+          padding: EdgeInsets.only(
+            top: 5,
+            bottom: 5,
+          ),
+          child: Divider(
+            color: Colors.black54,
+            thickness: 0.75,
+          ),
+        ),
+        SpeaqGuestForwarding(
+          homeText: appLocale.guestText,
+          home: appLocale.guest,
+        ),
+      ],
+    );
+  }
 
   @override
   void dispose() {
@@ -138,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _nameController.dispose();
   }
 
-  InkWell buildVisibility() {
+  InkWell _buildVisibility() {
     return InkWell(
       onTap: () {
         setState(
@@ -159,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  onPasswordChanged(String password) {
+  _onPasswordChanged(String password) {
     final number = RegExp(r'[0-9]');
     final capitalize = RegExp(r'[A-Z]');
 

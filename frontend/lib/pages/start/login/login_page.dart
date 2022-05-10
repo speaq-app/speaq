@@ -32,8 +32,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildTop(BuildContext context, AppLocalizations appLocale) =>
-      Container(
+  Widget buildTop(BuildContext context, AppLocalizations appLocale) {
+     return Container(
         padding: const EdgeInsets.only(
           top: 125,
           bottom: 50,
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
               isHidden: isHidden,
               labelTex: appLocale.password,
               controller: _passwordController,
-              suffixIcon: buildVisibility(),
+              suffixIcon: _buildVisibility(),
               onChanged: (String value) {},
               borderColor: Border.all(color: Colors.black26),
             ),
@@ -82,42 +82,44 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       );
+  }
 
-  Widget buildBottom(BuildContext context, AppLocalizations appLocale) =>
-      Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 30,
-              top: 10,
-            ),
-            child: SpeaqButton(
-              loginText: appLocale.login,
-              onPressed: () {
-                Navigator.popAndPushNamed(context, "base");
-              },
-            ),
+  Widget buildBottom(BuildContext context, AppLocalizations appLocale) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: 30,
+            top: 10,
           ),
-          AccountCheck(
-            hintLogin: appLocale.loginHint,
-            hintRegister: '',
-            register: appLocale.register,
-            loginText: '',
-            press: () {},
+          child: SpeaqButton(
+            loginText: appLocale.login,
+            onPressed: () {
+              Navigator.popAndPushNamed(context, "base");
+            },
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 5, bottom: 5),
-            child: Divider(
-              color: Colors.black54,
-              thickness: 0.75,
-            ),
+        ),
+        AccountCheck(
+          hintLogin: appLocale.loginHint,
+          hintRegister: '',
+          register: appLocale.register,
+          loginText: '',
+          press: () {},
+        ),
+        const Padding(
+          padding: EdgeInsets.only(top: 5, bottom: 5),
+          child: Divider(
+            color: Colors.black54,
+            thickness: 0.75,
           ),
-          SpeaqGuestForwarding(
-            homeText: appLocale.guestText,
-            home: appLocale.guest,
-          ),
-        ],
-      );
+        ),
+        SpeaqGuestForwarding(
+          homeText: appLocale.guestText,
+          home: appLocale.guest,
+        ),
+      ],
+    );
+  }
 
   @override
   void dispose() {
@@ -130,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
     _nameController.dispose();
   }
 
-  InkWell buildVisibility() {
+  InkWell _buildVisibility() {
     return InkWell(
       onTap: () {
         setState(
