@@ -11,7 +11,7 @@ protos:
 		-v "${CURDIR}/frontend/lib/api/grpc/protos:/out/dart" \
 		protoc:dev
 
-build: clean protos
+build: protos
 	cd backend && go get && make test
 	cd frontend && flutter pub get && make hive
 
