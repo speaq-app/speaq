@@ -101,15 +101,12 @@ class _RegisterPageState extends State<RegisterPage> {
             onPressed: () {},
           ),
         ),
-        AccountCheck(
-          login: false,
-          hintRegister: appLocale.registerHint,
-          loginText: appLocale.login,
+        SpeaqPageForwarding(
+          hintText: appLocale.registerHint,
+          text: appLocale.login,
           press: () {
             Navigator.popAndPushNamed(context, "login");
           },
-          register: '',
-          hintLogin: '',
         ),
         const Padding(
           padding: EdgeInsets.only(
@@ -121,9 +118,12 @@ class _RegisterPageState extends State<RegisterPage> {
             thickness: 0.75,
           ),
         ),
-        SpeaqGuestForwarding(
-          homeText: appLocale.guestText,
-          home: appLocale.guest,
+        SpeaqPageForwarding(
+          hintText: appLocale.guestText,
+          text: appLocale.guest,
+          press: () {
+            Navigator.popAndPushNamed(context, "base");
+          },
         ),
       ],
     );

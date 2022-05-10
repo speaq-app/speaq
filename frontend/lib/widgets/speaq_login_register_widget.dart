@@ -4,7 +4,8 @@ import 'package:frontend/utils/speaq_styles.dart';
 class SpeaqButton extends StatelessWidget {
   const SpeaqButton({
     Key? key,
-    required this.loginText, required this.onPressed,
+    required this.loginText,
+    required this.onPressed,
   }) : super(key: key);
 
   final String loginText;
@@ -31,15 +32,18 @@ class SpeaqButton extends StatelessWidget {
   }
 }
 
-class SpeaqGuestForwarding extends StatelessWidget {
-  const SpeaqGuestForwarding({
+class SpeaqPageForwarding extends StatelessWidget {
+  final Function press;
+
+  const SpeaqPageForwarding({
     Key? key,
-    required this.homeText,
-    required this.home,
+    required this.press,
+    required this.hintText,
+    required this.text,
   }) : super(key: key);
 
-  final String homeText;
-  final String home;
+  final String text;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -49,18 +53,20 @@ class SpeaqGuestForwarding extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: Text(
-            homeText,
-            style: const TextStyle(fontSize: 10),
+            hintText,
+            style: const TextStyle(
+              fontSize: 10,
+              color: Colors.black,
+            ),
           ),
         ),
         GestureDetector(
-          onTap: () {
-            Navigator.popAndPushNamed(context, "base");
-          },
+          onTap: () => press(),
           child: Text(
-            home,
+            text,
             style: const TextStyle(
               fontSize: 10,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),

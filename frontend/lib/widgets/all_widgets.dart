@@ -14,5 +14,4 @@ export 'speaq_post_container.dart';
 export 'speaq_text_button.dart';
 export 'speaq_bottom_logo.dart';
 export 'speaq_text_fields_login_register.dart';
-export 'speaq_login_account_check.dart';
 export 'speaq_login_register_widget.dart';
