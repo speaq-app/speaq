@@ -19,7 +19,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     emit(LoadingImprintURL());
-    await Future.delayed(const Duration(seconds: 2)); //removeable
+    await Future.delayed(const Duration(seconds: 1)); //removeable
 
     var url = await _settingsService.getImprintURL();
     emit(ImprintURLLoaded(url));

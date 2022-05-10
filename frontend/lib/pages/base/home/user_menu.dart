@@ -156,19 +156,28 @@ class _UserMenuState extends State<UserMenu> {
             Navigator.popAndPushNamed(context, "settings");
           },
         ),
-        BlocListener<SettingsBloc, SettingsState>(
+        BlocConsumer<SettingsBloc, SettingsState>(
           bloc: _settingsBloc,
           listener: (context, state) async {
             if (state is ImprintURLLoaded) {
               await launchUrl(state.imprintURL);
             }
           },
-          child: ListTile(
-            title: const Text("Impressum"),
-            onTap: () {
-              _settingsBloc.add(LoadImprintURL());
-            },
-          ),
+          builder: (context, state) {
+            if (state is LoadingImprintURL) {
+              return const ListTile(
+                title: Text("Impressum"),
+                trailing: CircularProgressIndicator(),
+              );
+            }
+
+            return ListTile(
+              title: const Text("Impressum"),
+              onTap: () {
+                _settingsBloc.add(LoadImprintURL());
+              },
+            );
+          },
         ),
       ],
     );
