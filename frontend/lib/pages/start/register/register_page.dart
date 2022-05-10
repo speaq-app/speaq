@@ -12,7 +12,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool isHidden = true;
-  bool _isPasswordCorrect = false;
+  double _passwordStrength = 0;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -63,13 +63,25 @@ class _RegisterPageState extends State<RegisterPage> {
           RoundTextField(
             autofill: const [AutofillHints.newPassword],
             hintText: appLocale.password,
-            labelTex: appLocale.password,
+            labelTex: _passwordStrength == 0
+                ? appLocale.password
+                : _passwordStrength <= 2 / 4
+                    ? appLocale.passwordMin
+                    : _passwordStrength == 3 / 4
+                        ? appLocale.passwordReq
+                        : appLocale.passwordCorrect,
             isHidden: isHidden,
             controller: _passwordController,
             icon: Icons.lock,
-            borderColor: _isPasswordCorrect
-                ? Border.all(color: Colors.lightGreen)
-                : Border.all(color: Colors.redAccent),
+            borderColor: _passwordStrength == 0
+                ? Border.all(color: Colors.black26)
+                : _passwordStrength <= 1 / 4
+                    ? Border.all(color: Colors.redAccent)
+                    : _passwordStrength == 2 / 4
+                        ? Border.all(color: Colors.yellowAccent)
+                        : _passwordStrength == 3 / 4
+                            ? Border.all(color: Colors.lightBlue)
+                            : Border.all(color: Colors.lightGreen),
             suffixIcon: _buildVisibility(),
             onChanged: (password) => _onPasswordChanged(password),
           ),
@@ -163,16 +175,33 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _onPasswordChanged(String password) {
-    final number = RegExp(r'[0-9]');
-    final capitalize = RegExp(r'[A-Z]');
-
-    setState(() {
-      _isPasswordCorrect = false;
-      if (password.length >= 8 &&
-          number.hasMatch(password) &&
-          capitalize.hasMatch(password)) {
-        _isPasswordCorrect = true;
+    RegExp passValid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
+    String _password = password;
+    if (_password.isEmpty) {
+      setState(() {
+        _passwordStrength = 0;
+      });
+    } else if (_password.length < 6) {
+      setState(() {
+        _passwordStrength = 1 / 4;
+      });
+    } else if (_password.length < 8) {
+      setState(() {
+        _passwordStrength = 2 / 4;
+      });
+    } else {
+      if (passValid.hasMatch(_password)) {
+        setState(() {
+          _passwordStrength = 4 / 4;
+        });
+        return true;
+      } else {
+        setState(() {
+          _passwordStrength = 3 / 4;
+        });
+        return false;
       }
-    });
+    }
+    return false;
   }
 }
