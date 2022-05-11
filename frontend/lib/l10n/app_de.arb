@@ -53,6 +53,7 @@
   "privateAccount": "Privater Account",
   "deletesearchhistory": "Suchverlauf löschen",
   "askdeletesearchhistory": "Bist du dir sicher, dass du den Suchverlauf löschen möchtest?",
-  "hintTextSearchBar": "Nach Chats und Gruppen suchen"
+  "hintTextSearchBar": "Nach Chats und Gruppen suchen",
+  "aboutus": "Über uns"
 
 }

@@ -53,7 +53,9 @@
   "privateAccount": "Private account",
   "deletesearchhistory": "Delete search history",
   "askdeletesearchhistory": "Are you sure you want to delete your search history?",
-  "hintTextSearchBar": "Search for chats and groups"
+  "hintTextSearchBar": "Search for chats and groups",
+  "aboutus": "About us"
+
 
 }
 
