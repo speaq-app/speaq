@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 
-class TextFieldContainer extends StatelessWidget {
-  final Widget child;
 
-  const TextFieldContainer({
+class RoundTextField extends StatelessWidget {
+  final ValueChanged<String> onChanged;
+  final bool isHidden;
+  final String? hintText;
+  final String? labelTex;
+  final Widget? suffixIcon;
+  final IconData? icon;
+  final TextEditingController controller;
+  final Widget? border;
+  final Border borderColor;
+  final Iterable<String>? autofill;
+
+  const RoundTextField({
     Key? key,
-    required this.child,
+    this.hintText,
+    this.autofill,
+    this.labelTex,
+    this.suffixIcon,
+    this.isHidden = false,
+    required this.controller,
+    required this.onChanged,
+    this.icon,
+    this.border,
+    required this.borderColor,
   }) : super(key: key);
 
   @override
@@ -15,81 +34,26 @@ class TextFieldContainer extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
-        vertical: 5,
       ),
       width: size.width * 0.8,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(29),
-        border: Border.all(color: Colors.black26),
+        border: borderColor,
       ),
-      child: child,
-    );
-  }
-}
-
-class RoundInputField extends StatelessWidget {
-  final String hintText;
-  final IconData icon;
-  final ValueChanged<String> onChanged;
-  final TextEditingController controller;
-
-  const RoundInputField({
-    Key? key,
-    required this.hintText,
-    this.icon = Icons.person_outline,
-    required this.onChanged,
-    required this.controller,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFieldContainer(
       child: TextField(
+        autofillHints: autofill,
+        obscureText: isHidden,
         onChanged: onChanged,
         decoration: InputDecoration(
+          labelText: labelTex,
+          hintText: hintText,
+          suffixIcon: suffixIcon,
+          border: InputBorder.none,
           icon: Icon(
             icon,
             color: Colors.black,
           ),
-          hintText: hintText,
-          border: InputBorder.none,
-        ),
-      ),
-    );
-  }
-}
-
-class RoundPasswordField extends StatelessWidget {
-  final ValueChanged<String> onChanged;
-  final bool isHidden;
-  final String password;
-  final Widget? suffixIcon;
-  final TextEditingController controller;
-
-  const RoundPasswordField({
-    Key? key,
-    required this.password,
-    required this.onChanged,
-    this.isHidden = true,
-    this.suffixIcon,
-    required this.controller,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFieldContainer(
-      child: TextField(
-        obscureText: isHidden,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          hintText: password,
-          icon: const Icon(
-            Icons.lock,
-            color: Colors.black,
-          ),
-          suffixIcon: suffixIcon,
-          border: InputBorder.none,
         ),
       ),
     );
