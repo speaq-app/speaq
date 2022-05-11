@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_settings_section.dart';
 import 'package:frontend/widgets/speaq_bottom_logo.dart';
@@ -14,16 +15,18 @@ class PrivacySafetySettingsPage extends StatefulWidget {
 
 class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
   bool valuePrivateSwitch = false;
+  late AppLocalizations appLocale;
 
   @override
   Widget build(BuildContext context) {
+    appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
           preferredSize: deviceSize,
-          title: const Text(
-            "Privacy and safety",
+          title: Text(
+            appLocale.privacyandsafety,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
@@ -39,7 +42,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                   //Privates Konto SwitchTile
                   SettingsTile.switchTile(
                     title:
-                        Text("Privates Konto", style: TextStyle(fontSize: 15)),
+                        Text(appLocale.privateAccount, style: TextStyle(fontSize: 15)),
                     initialValue: valuePrivateSwitch,
                     onToggle: (value) {
                       setState(() {
@@ -49,9 +52,9 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                   ),
                   //Suchverlauf löschen
                   _buildPopUpWindow(
-                      "Suchverlauf löschen",
-                      "Bist du dir sicher, dass du den Suchverlauf löschen möchtest?",
-                      "Löschen"),
+                      appLocale.deletesearchhistory,
+                      appLocale.askdeletesearchhistory,
+                      appLocale.delete),
                 ],
               ),
             ],
@@ -83,7 +86,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                         child: Text(exitText),
                         onPressed: () => Navigator.pop(context)),
                     TextButton(
-                        child: const Text("Abbrechen"),
+                        child: Text(appLocale.cancel),
                         onPressed: () => Navigator.pop(context)),
                   ],
                 )));

@@ -16,10 +16,8 @@ export 'profile/profile_page.dart';
 export 'profile/edit_profile_page.dart';
 
 export 'settings/settings_page.dart';
-export 'package:frontend/pages/settings/sub_settings/settings_accessibility.dart';
 export 'package:frontend/pages/settings/sub_settings/settings_account_page.dart';
 export 'package:frontend/pages/settings/sub_settings/settings_content_preferences.dart';
-export 'package:frontend/pages/settings/sub_settings/settings_data_usage.dart';
 export 'package:frontend/pages/settings/sub_settings/settings_display_sound.dart';
 export 'package:frontend/pages/settings/sub_settings/settings_notifications.dart';
 export 'package:frontend/pages/settings/sub_settings/settings_privacy_safety.dart';

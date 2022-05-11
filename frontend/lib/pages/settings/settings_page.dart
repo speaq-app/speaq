@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -14,7 +15,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final String langKey = "pages.settings.";
 
   @override
   initState() {
@@ -25,14 +25,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
           preferredSize: deviceSize,
-          title: const Text(
-            "Settings and Privacy",
+          title: Text(
+            appLocale.settingsandprivacy,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
@@ -53,18 +54,17 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   tiles: [
-                    _buildSettingsTile("Account", "settAccount"),
-                    _buildSettingsTile("Privacy and safety", "settPrivSafety"),
-                    _buildSettingsTile("Notifications", "settNotific"),
-                    _buildSettingsTile(
-                        "Content preferences", "settContentPref"),
+                    _buildSettingsTile(appLocale.account, "settAccount"),
+                    _buildSettingsTile(appLocale.privacyandsafety, "settPrivSafety"),
+                    _buildSettingsTile(appLocale.notifications, "settNotific"),
+                    _buildSettingsTile(appLocale.contentpreferences, "settContentPref"),
                   ],
                 ),
                 SpqSettingsSection(
-                  title: const Padding(
+                  title: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      "General",
+                      appLocale.general,
                       style: TextStyle(
                           color: spqBlack,
                           fontSize: 22,
@@ -72,10 +72,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   tiles: [
-                    _buildSettingsTile("Display and Sound", "settDispSound"),
-                    _buildSettingsTile("Data usage", "settDataUsage"),
-                    _buildSettingsTile("Accessibility", "settAccess"),
-                    _buildSettingsTile("About speaq", "login"),
+                    _buildSettingsTile(appLocale.displayandsound, "settDispSound"),
+                    _buildSettingsTile(appLocale.aboutspeaq, "login"),
                   ],
                 ),
               ],

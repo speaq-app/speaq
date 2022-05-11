@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -54,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
               onChanged: (value) {},
               controller: _nameController,
               labelTex: appLocale.username,
-              borderColor: Border.all(color: Colors.black26),
+              borderColor: Border.all(color: spqBlack),
             ),
           ),
           RoundTextField(
@@ -66,12 +67,12 @@ class _LoginPageState extends State<LoginPage> {
             controller: _passwordController,
             suffixIcon: _buildVisibility(),
             onChanged: (String value) {},
-            borderColor: Border.all(color: Colors.black26),
+            borderColor: Border.all(color: spqBlack),
           ),
           GestureDetector(
             onTap: () {},
             child: Text(
-              appLocale.passwordForgot,
+              appLocale.forgotPassword,
               textAlign: TextAlign.right,
               style: const TextStyle(
                 fontSize: 10,
@@ -100,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         SpeaqPageForwarding(
-          hintText: appLocale.loginHint,
+          hintText: appLocale.registerText,
           text: appLocale.register,
           press: () {
             Navigator.popAndPushNamed(context, "register");
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
         const Padding(
           padding: EdgeInsets.only(top: 5, bottom: 5),
           child: Divider(
-            color: Colors.black54,
+            color: spqBlack,
             thickness: 0.75,
           ),
         ),
@@ -147,11 +148,11 @@ class _LoginPageState extends State<LoginPage> {
       child: isHidden
           ? const Icon(
               Icons.visibility,
-              color: Colors.black,
+              color: spqBlack,
             )
           : const Icon(
               Icons.visibility_off,
-              color: Colors.black,
+              color: spqBlack,
             ),
     );
   }
