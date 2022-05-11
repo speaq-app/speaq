@@ -166,7 +166,7 @@ class _UserMenuState extends State<UserMenu> {
           builder: (context, state) {
             if (state is LoadingImprintURL) {
               return const ListTile(
-                title: Text(appLocale.imprint),
+                title: Text("Imprint"),
                 trailing: CircularProgressIndicator(),
               );
             }

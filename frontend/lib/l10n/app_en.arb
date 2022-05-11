@@ -14,22 +14,15 @@
   "password": "Password",
   "forgotPassword": "Forgot Password?",
   "login": "Login",
-  "loginHint": "You don't have an account yet?",
   "register": "Register",
-  "registerHint": "You already have an account?",
-  "password": "Password",
+  "registerText": "You don't have an Account?",
+  "guestText": "You want to join as a guest?",
+  "askExistingAccount": "Already have an account?",
   "passwordMin": "Length min.8",
   "passwordReq": "Req: 2 Spec. Char/Uppercase",
   "passwordCorrect": "Perfect password",
-  "passwordForgot": "Forgot password?",
   "passwordCheck": "Repeat password",
-  "guest": "Guest",
-  "guestText": "You want to join as a guest?",
-
-  "registerText": "You don't have an Account?",
   "guestText": "Join as a guest?",
-  "askExistingAccount": "Already have an account?",
-  "register": "Register",
   "guest": "Guest",
   "follower": "Follower",
   "following": "Followed",
@@ -66,8 +59,6 @@
   "deletesearchhistory": "Delete search history",
   "askdeletesearchhistory": "Are you sure you want to delete your search history?",
   "hintTextSearchBar": "Search for chats and groups"
-  "following": "Followed",
-  "newPost": "Speaq it..."
 
 }
 

@@ -114,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
         SpeaqPageForwarding(
-          hintText: appLocale.registerHint,
+          hintText: appLocale.askExistingAccount,
           text: appLocale.login,
           press: () {
             Navigator.popAndPushNamed(context, "login");
