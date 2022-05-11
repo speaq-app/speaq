@@ -23,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final String _bio = "I like Hochschule Heilbronn";
   final String _joined = "Joined August 2022";
   final String _follower = "117k Follower";
-  final String _following = "69 Follower";
+  final String _following = "69 Following";
   final String _editProfile = "Edit Profile";
   final String _follow = "Follow";
   final String _unfollow = "Unfollow";
@@ -45,8 +45,8 @@ class _ProfilePageState extends State<ProfilePage> {
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
           children: [
-            _buildHeader(deviceSize, context),
-            _buildTabs(deviceSize),
+            _buildProfileCover(deviceSize, context),
+            _buildProfileStack(deviceSize),
           ],
         ),
         bottomNavigationBar: SpqButtonNavigationBar(
@@ -56,91 +56,6 @@ class _ProfilePageState extends State<ProfilePage> {
           selectedIndex: 0,
         ),
       ),
-    );
-  }
-
-  SizedBox _buildHeader(Size deviceSize, BuildContext context) => SizedBox(
-        width: deviceSize.width,
-        height: deviceSize.height * 0.50,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Positioned(
-              top: 0,
-              child: _buildCover(deviceSize),
-            ),
-            Positioned(
-              top: deviceSize.height * 0.13,
-              height: deviceSize.height * 0.17,
-              width: deviceSize.width,
-              child: _buildPictureEditProfile(deviceSize),
-            ),
-            Positioned(
-              top: 210,
-              child: _buildProfileInformation(context, deviceSize),
-            ),
-          ],
-        ),
-      );
-
-  Widget _buildCover(Size deviceSize) {
-    return Container(
-      height: deviceSize.height * 0.225,
-      width: deviceSize.width,
-      decoration: const BoxDecoration(
-        color: spqPrimaryBlue,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: NetworkImage(
-              'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg'),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPictureEditProfile(Size deviceSize) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 24.0),
-          child: _buildProfilePicture(deviceSize),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
-          child: SpqTextbutton(
-              onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
-              name: _editProfile,
-              style: const TextStyle(color: spqPrimaryBlue)),
-        ),
-/*        Padding(
-          padding: EdgeInsets.only(right: 24.0, top: deviceSize.height * 0.09),
-          child: isFollow == true
-               ?SpqTextbutton(
-                  onPressed: () {
-                    setState(
-                      () {
-                        isFollow = false;
-                      },
-                    );
-                  },
-                  name: _unfollow,
-                  style: const TextStyle(color:  spqErrorRed),
-                )
-              : SpqTextbutton(
-                  onPressed: () {
-                    setState(
-                      () {
-                        isFollow = true;
-                      },
-                    );
-                  },
-                  name: _follow,
-                 style: const TextStyle(color:spqPrimaryBlue ),
-                ),
-        )*/
-      ],
     );
   }
 
@@ -158,90 +73,193 @@ class _ProfilePageState extends State<ProfilePage> {
       child: const Hero(
         tag: 'myImage',
         child: CircleAvatar(
-          radius: 43,
-          backgroundImage: NetworkImage(
-              'https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
+          backgroundColor: spqWhite,
+          radius: 45,
+          child: CircleAvatar(
+            radius: 43,
+            backgroundImage: NetworkImage(
+                'https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildProfileInformation(BuildContext context, Size deviceSize) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
-        width: deviceSize.width,
-        height: deviceSize.height * 0.3,
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              _name,
-              style: const TextStyle(
-                  color: spqBlack, fontWeight: FontWeight.bold, fontSize: 23),
-            ),
-            Text(
-              _username,
-              style: const TextStyle(
-                color: spqDarkGrey,
-                fontSize: 18,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6.0),
-              child: Text(
-                _bio,
-                style: const TextStyle(color: spqBlack, fontSize: 19),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.link),
-                  Text(
-                    _link,
-                    style: const TextStyle(color: spqPrimaryBlue, fontSize: 16),
-                  ),
-                  const SizedBox(width: 15),
-                  const Icon(Icons.calendar_month),
-                  Text(
-                    _joined,
-                    style: const TextStyle(color: spqDarkGrey, fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: () => Navigator.pushNamed(context, 'follow'),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text(
-                      _following,
-                      style: const TextStyle(
-                          color: spqBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(width: 25),
-                  Text(
-                    _follower,
-                    style: const TextStyle(
-                        color: spqBlack,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-          ],
+  Widget _buildProfileImageFullScreen(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          _username,
+          style: const TextStyle(color: spqBlack),
+        ),
+        centerTitle: true,
+        leading: const BackButton(
+          color: spqBlack,
+        ),
+        backgroundColor: spqWhite,
+      ),
+      body: Container(
+        color: spqWhite,
+        child: Center(
+          child: Hero(
+            tag: 'myImage',
+            child: Image.network(
+                "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg"),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildProfileCover(Size deviceSize, BuildContext context) {
+    return Container(
+      height: deviceSize.height * 0.225,
+      width: deviceSize.width,
+      decoration: const BoxDecoration(
+        color: spqPrimaryBlue,
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+              'https://www.jobvector.de/karriere-ratgeber/wp-content/uploads/2021/05/it-security360x240.jpg'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileStack(Size deviceSize) {
+    return Container(
+      transform: Matrix4.translationValues(0, -45, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _buildProfilePicture(deviceSize),
+               Container(
+                  width: deviceSize.width * 0.33,
+                  height: deviceSize.height * 0.05,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: SpqTextbutton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, 'edit_profile'),
+                    name: _editProfile,
+                    style: const TextStyle(color: spqPrimaryBlue),
+                  ),
+                ),
+               /*Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  width: deviceSize.width * 0.31,
+                  height: deviceSize.height * 0.05,
+                  child: isFollow == true
+                      ? SpqTextbutton(
+                          onPressed: () {
+                            setState(
+                              () {
+                                isFollow = false;
+                              },
+                            );
+                          },
+                          name: _unfollow,
+                          style: const TextStyle(color: spqErrorRed),
+                        )
+                      : SpqTextbutton(
+                          onPressed: () {
+                            setState(
+                              () {
+                                isFollow = true;
+                              },
+                            );
+                          },
+                          name: _follow,
+                          style: const TextStyle(color: spqPrimaryBlue),
+                        ),
+                ),*/
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: _buildProfileInformation(context, deviceSize),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: _buildTabs(deviceSize),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileInformation(BuildContext context, Size deviceSize) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          _name,
+          style: const TextStyle(
+              color: spqBlack, fontWeight: FontWeight.bold, fontSize: 23),
+        ),
+        Text(
+          _username,
+          style: const TextStyle(
+            color: spqDarkGrey,
+            fontSize: 18,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
+          child: Text(
+            _bio,
+            style: const TextStyle(color: spqBlack, fontSize: 19),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Row(
+            children: [
+              const Icon(Icons.link),
+              Text(
+                _link,
+                style: const TextStyle(color: spqPrimaryBlue, fontSize: 16),
+              ),
+              const SizedBox(width: 15),
+              const Icon(Icons.calendar_month),
+              Text(
+                _joined,
+                style: const TextStyle(color: spqDarkGrey, fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () => Navigator.pushNamed(context, 'follow'),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  _follower,
+                  style: const TextStyle(
+                      color: spqBlack,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+              ),
+              const SizedBox(width: 25),
+              Text(
+                _following,
+                style: const TextStyle(
+                    color: spqBlack, fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -271,8 +289,8 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 7.0),
             child: TabBarView(
               children: [
-                listViewPostText(deviceSize),
-                listViewPostText(deviceSize)
+                listViewPostText(),
+                listViewPostText(),
               ],
             ),
           ),
@@ -281,7 +299,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget listViewPostText(Size deviceSize) {
+  Widget listViewPostText() {
     return Column(
       children: [
         PostContainer(
@@ -293,32 +311,6 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
             name: _name, username: _username, postMessage: _postMessage),
       ],
-    );
-  }
-
-  Widget _buildProfileImageFullScreen(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _username,
-          style: const TextStyle(color: spqBlack),
-        ),
-        centerTitle: true,
-        leading: const BackButton(
-          color: spqBlack,
-        ),
-        backgroundColor: spqWhite,
-      ),
-      body: Container(
-        color: spqWhite,
-        child: Center(
-          child: Hero(
-            tag: 'myImage',
-            child: Image.network(
-                "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg"),
-          ),
-        ),
-      ),
     );
   }
 }
