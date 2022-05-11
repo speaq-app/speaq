@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../../widgets/speaq_appbar.dart';
@@ -18,13 +19,14 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
           preferredSize: deviceSize,
-          title: const Text(
-            "Notifications",
+          title: Text(
+            appLocale.displayandsound,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
@@ -38,7 +40,7 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
                 ),
                 tiles: [
                   //Darkmode SwitchTile
-                  buildSettingsSwitchTile("Darkmode"),
+                  buildSettingsSwitchTile(appLocale.darkmode),
                 ],
               ),
             ],

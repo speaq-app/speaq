@@ -44,11 +44,6 @@ class RouteGenerator {
         return PageTransition(child: const ContentPrefSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settDispSound":
         return PageTransition(child: const DisplaySoundSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
-      case "settDataUsage":
-        return PageTransition(child: const DataUsageSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
-      case "settAccess":
-        return PageTransition(child: const AccessibilitySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
-      
       case "bookmarks":
         return PageTransition(child: const BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":

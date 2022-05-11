@@ -14,8 +14,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   bool isFollow = false;
-  final String langKey = "pages.profile.";
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _link = "hs-heilbronn.de";
   final String _name = "Informatics";
@@ -127,6 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildProfileStack(Size deviceSize) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     return Container(
       transform: Matrix4.translationValues(0, -45, 0),
       child: Column(
@@ -146,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: SpqTextbutton(
                     onPressed: () =>
                         Navigator.pushNamed(context, 'edit_profile'),
-                    name: _editProfile,
+                    name: appLocale.editProfile,
                     style: const TextStyle(color: spqPrimaryBlue),
                   ),
                 ),

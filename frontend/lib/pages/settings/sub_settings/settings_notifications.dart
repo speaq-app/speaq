@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../../widgets/speaq_appbar.dart';
@@ -18,13 +19,14 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
           preferredSize: deviceSize,
-          title: const Text(
-            "Notifications",
+          title: Text(
+            appLocale.notifications,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
@@ -38,10 +40,10 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                 ),
                 tiles: [
                   //Privates Konto SwitchTile
-                  buildSettingsSwitchTile("Nicht stören"),
+                  buildSettingsSwitchTile(appLocale.notdisturb),
                   //Methode für SettingsTile
-                  _buildSettingsTile("Nachrichten empfängen", "login"),
-                  _buildSettingsTile("Nachrichtentöne", "login"),
+                  _buildSettingsTile(appLocale.receivenotifications, "login"),
+                  _buildSettingsTile(appLocale.notificationSound, "login"),
                 ],
               ),
             ],

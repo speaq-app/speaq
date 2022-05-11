@@ -18,8 +18,6 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
 
-  final String langKey = "pages.profile.";
-
   final String nameText = "Name";
   final String usernameText = "Username";
   final String descriptionText = "Description";

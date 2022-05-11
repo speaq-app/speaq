@@ -127,21 +127,21 @@ class _UserMenuState extends State<UserMenu> {
       children: [
         ListTile(
           leading: const Icon(Icons.person_outline),
-          title: const Text("Profile"),
+          title: Text(appLocale.profile),
           onTap: () {
             Navigator.popAndPushNamed(context, "profile");
           },
         ),
         ListTile(
           leading: const Icon(Icons.qr_code_2),
-          title: const Text("QR-Code"),
+          title: Text(appLocale.qrCode),
           onTap: () {
             Navigator.popAndPushNamed(context, "qr_ode");
           },
         ),
         ListTile(
           leading: const Icon(Icons.bookmark_border),
-          title: const Text("Bookmarks"),
+          title: Text(appLocale.bookmarks),
           onTap: () {
             Navigator.popAndPushNamed(context, "bookmarks");
           },
@@ -151,7 +151,7 @@ class _UserMenuState extends State<UserMenu> {
           thickness: 0.75,
         ),
         ListTile(
-          title: const Text("Settings and privacy"),
+          title: Text(appLocale.settingsandprivacy),
           onTap: () {
             Navigator.popAndPushNamed(context, "settings");
           },
@@ -166,13 +166,13 @@ class _UserMenuState extends State<UserMenu> {
           builder: (context, state) {
             if (state is LoadingImprintURL) {
               return const ListTile(
-                title: Text("Impressum"),
+                title: Text("Imprint"),
                 trailing: CircularProgressIndicator(),
               );
             }
 
             return ListTile(
-              title: const Text("Impressum"),
+              title: Text(appLocale.imprint),
               onTap: () {
                 _settingsBloc.add(LoadImprintURL());
               },
