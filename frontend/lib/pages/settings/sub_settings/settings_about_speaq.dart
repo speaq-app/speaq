@@ -11,12 +11,12 @@ class AboutSpeaqSettingsPage extends StatefulWidget {
 
 class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
   late AppLocalizations appLocale;
-  final numbers = List.generate(100, (index) => '$index');
+  late Size deviceSize;
 
   @override
   Widget build(BuildContext context) {
     appLocale = AppLocalizations.of(context)!;
-    Size deviceSize = MediaQuery.of(context).size;
+    deviceSize = MediaQuery.of(context).size;
 
     return SafeArea(
       child: Scaffold(
@@ -28,92 +28,91 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
           ),
           preferredSize: deviceSize,
         ),
-        body: ListView(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          shrinkWrap: true,
-          children: [
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-                child: SpeaqBottomLogo(deviceSize: deviceSize * 2)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
-              decoration: BoxDecoration(
-                  color: spqPrimaryBlue,
-                  border: Border.all(color: spqPrimaryBlue),
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Container(
-                child: Column(
-                  children: [
-                    Text(appLocale.aboutus,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 32, color: spqWhite)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Text(appLocale.aboutustext,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 16, color: spqWhite)),
-                    ),
-                    Container(
-                      child: Text(appLocale.ourteam,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 32, color: spqWhite)),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: spqWhite,
-                          border: Border.all(color: spqWhite),
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      width: deviceSize.width,
-                      child: GridView.count(
-                        shrinkWrap: true,
-                        // Create a grid with 2 columns. If you change the scrollDirection to
-                        // horizontal, this would produce 2 rows.
-                        crossAxisCount: 2,
-                        // Generate 100 Widgets that display their index in the List
-                        children: [
-                          buildNumber(
-                              "Sven Gatnar",
-                              "assets/images/developer_gatnar.jpg",
-                              appLocale.frontenddeveloper),
-                          buildNumber(
-                              "Nosakhare Omoruyi",
-                              "assets/images/developer_omoruyi.jpg",
-                              appLocale.backenddeveloper),
-                          buildNumber(
-                              "Daniel Holzwarth",
-                              "assets/images/developer_holzwarth.jpg",
-                              appLocale.backenddeveloper),
-                          buildNumber(
-                              "David Löwe",
-                              "assets/images/developer_loewe.jpg",
-                              appLocale.frontenddeveloper),
-                          buildNumber(
-                              "Hendrik Schlehlein",
-                              "assets/images/developer_schlehlein.jpg",
-                              appLocale.backenddeveloper),
-                          buildNumber(
-                              "Eric Eisemann",
-                              "assets/images/developer_eisemann.jpg",
-                              appLocale.frontenddeveloper),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        body: buildListView(deviceSize),
       ),
+    );
+  }
+
+  ListView buildListView(Size deviceSize) {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            child: SpeaqBottomLogo(deviceSize: deviceSize * 2)),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
+          decoration: BoxDecoration(
+              color: spqPrimaryBlue,
+              border: Border.all(color: spqPrimaryBlue),
+              borderRadius: BorderRadius.all(Radius.circular(26))),
+          child: buildColumnForTeam(deviceSize),
+        ),
+      ],
+    );
+  }
+
+  Column buildColumnForTeam(Size deviceSize) {
+    return Column(
+      children: [
+        Text(appLocale.aboutus,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Text(appLocale.aboutustext,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: spqWhite)),
+        ),
+        Text(appLocale.ourteam,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Container(
+            decoration: BoxDecoration(
+              color: spqWhite,
+              border: Border.all(color: spqWhite),
+              borderRadius: BorderRadius.all(Radius.circular(26)),
+            ),
+            width: deviceSize.width,
+            child: buildGridView(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  GridView buildGridView() {
+    return GridView.count(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      children: [
+        buildNumber("Sven Gatnar", "assets/images/developer_gatnar.jpg",
+            appLocale.frontenddeveloper),
+        buildNumber("Nosakhare Omoruyi", "assets/images/developer_omoruyi.jpg",
+            appLocale.backenddeveloper),
+        buildNumber("Daniel Holzwarth", "assets/images/developer_holzwarth.jpg",
+            appLocale.backenddeveloper),
+        buildNumber("David Löwe", "assets/images/developer_loewe.jpg",
+            appLocale.frontenddeveloper),
+        buildNumber(
+            "Hendrik Schlehlein",
+            "assets/images/developer_schlehlein.jpg",
+            appLocale.backenddeveloper),
+        buildNumber("Eric Eisemann", "assets/images/developer_eisemann.jpg",
+            appLocale.frontenddeveloper),
+      ],
     );
   }
 
   Widget buildImage(String jpgString) {
     return CircleAvatar(
       backgroundImage: AssetImage(jpgString),
-      radius: 50,
+      radius: deviceSize.width / 8,
     );
   }
 
