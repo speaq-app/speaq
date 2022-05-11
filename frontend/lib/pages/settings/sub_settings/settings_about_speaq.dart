@@ -29,6 +29,8 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
           preferredSize: deviceSize,
         ),
         body: ListView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
           shrinkWrap: true,
           children: [
             Padding(
@@ -41,61 +43,65 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
                   color: spqPrimaryBlue,
                   border: Border.all(color: spqPrimaryBlue),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Column(
-                children: [
-                  Text("About us",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 32, color: Colors.white)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Text(
-                        "Du willst der Welt deine Meinungen, Gedanken und News mitteilen - mit all deinen Gefühlen und Rhetoriken - ganz persönlich? \nViele Kunden wünschen sich eine persönlichere Form der Online-Kommunikation, wie sie heute noch nicht geboten wird. Und hier kommt Speaq zum Einsatz! Wir bieten mit Speaq eine innovative Kommunikationsplattform, die Abwechslung von bekannten Plattformen wie Twitter und Facebook bietet.",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 16, color: Colors.white)),
-                  ),
-                  Container(
-                    width: deviceSize.width,
-                    child: Column(
-                      children: <Widget>[
-
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: Text("Our team",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 32, color: spqPrimaryBlue)),
-                        ),
-
-
-                  Container(
-                    child: GridView.count(
-                            shrinkWrap: true,
-                            // Create a grid with 2 columns. If you change the scrollDirection to
-                            // horizontal, this would produce 2 rows.
-                            crossAxisCount: 2,
-                            // Generate 100 Widgets that display their index in the List
-                            children: [
-                              buildImage("assets/images/developer_gatnar.jpg"),
-                              buildImage("assets/images/developer_omoruyi.jpg"),
-                              buildImage("assets/images/developer_holzwarth.jpg"),
-                              buildImage("assets/images/developer_loewe.jpg"),
-                              buildImage("assets/images/developer_schlehlein.jpg"),
-                              buildImage("assets/images/developer_eisemann.jpg"),
-                              buildNumber("fdsg")
-                            ],
-                          ),
-                        ),
-                        
-
-                      ],
+              child: Container(
+                child: Column(
+                  children: [
+                    Text(appLocale.aboutus,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 32, color: spqWhite)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Text(appLocale.aboutustext,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 16, color: spqWhite)),
                     ),
-                    padding: EdgeInsets.symmetric(),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                  ),
-                ],
+                    Container(
+                      child: Text(appLocale.ourteam,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 32, color: spqWhite)),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: spqWhite,
+                          border: Border.all(color: spqWhite),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      width: deviceSize.width,
+                      child: GridView.count(
+                        shrinkWrap: true,
+                        // Create a grid with 2 columns. If you change the scrollDirection to
+                        // horizontal, this would produce 2 rows.
+                        crossAxisCount: 2,
+                        // Generate 100 Widgets that display their index in the List
+                        children: [
+                          buildNumber(
+                              "Sven Gatnar",
+                              "assets/images/developer_gatnar.jpg",
+                              appLocale.frontenddeveloper),
+                          buildNumber(
+                              "Nosakhare Omoruyi",
+                              "assets/images/developer_omoruyi.jpg",
+                              appLocale.backenddeveloper),
+                          buildNumber(
+                              "Daniel Holzwarth",
+                              "assets/images/developer_holzwarth.jpg",
+                              appLocale.backenddeveloper),
+                          buildNumber(
+                              "David Löwe",
+                              "assets/images/developer_loewe.jpg",
+                              appLocale.frontenddeveloper),
+                          buildNumber(
+                              "Hendrik Schlehlein",
+                              "assets/images/developer_schlehlein.jpg",
+                              appLocale.backenddeveloper),
+                          buildNumber(
+                              "Eric Eisemann",
+                              "assets/images/developer_eisemann.jpg",
+                              appLocale.frontenddeveloper),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -104,35 +110,27 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
     );
   }
 
-  Image buildImage(String jpgString) {
-    return Image.asset(
-      jpgString,
-      width: 30,
-      height: 30,
-      fit: BoxFit.cover,
+  Widget buildImage(String jpgString) {
+    return CircleAvatar(
+      backgroundImage: AssetImage(jpgString),
+      radius: 50,
     );
   }
-  
 
-  Widget buildNumber(String number) => Container(
-        padding: EdgeInsets.all(16),
-        color: Colors.orange,
-        child: GridTile(
-          header: Text(
-            'Header $number',
-            textAlign: TextAlign.center,
-          ),
-          child: Center(
-            child: Text(
-              number,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 48),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          footer: Text(
-            'Footer $number',
-            textAlign: TextAlign.center,
-          ),
+  Widget buildNumber(String name, String jpgString, String role) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: GridTile(
+        header: Text(
+          name,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-      );
+        child: Center(child: buildImage(jpgString)),
+        footer: Text(role,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
 }
