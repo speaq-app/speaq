@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
   const UserMenu({Key? key}) : super(key: key);
