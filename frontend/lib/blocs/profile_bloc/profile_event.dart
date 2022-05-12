@@ -5,8 +5,9 @@ abstract class ProfileEvent {}
 
 class LoadProfile extends ProfileEvent {
   final int userId;
+  final bool fromCache;
 
-  LoadProfile({required this.userId});
+  LoadProfile({required this.userId, this.fromCache = true});
 }
 
 class SaveProfile extends ProfileEvent {

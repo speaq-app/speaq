@@ -44,7 +44,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _profileBloc.add(LoadProfile(userId: 1));
+    _profileBloc.add(LoadProfile(
+      userId: 1,
+      fromCache: false,
+    ));
   }
 
   @override
@@ -88,7 +91,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               );
             } else if (state is ProfileLoaded) {
               return Scaffold(
-                appBar: _buildAppBar(deviceSize),
+                appBar: _buildAppBar(deviceSize, state.profile),
                 body: Container(
                   padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
                   child: _buildListViewWithData(context, state.profile),
@@ -245,7 +248,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(Size deviceSize) {
+  PreferredSizeWidget _buildAppBar(Size deviceSize, Profile profile) {
     return SpqAppBar(
       title: Text(
         editProfileText,
@@ -264,7 +267,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       leadingWidth: 80,
       actionList: [
         TextButton(
-          onPressed: _saveProfile,
+          onPressed: () => _saveProfile(profile),
           child: Text(
             doneText,
             style: const TextStyle(
@@ -363,7 +366,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       body: BlocBuilder<ResourceBloc, ResourceState>(
         bloc: _resourceBloc,
         builder: (context, state) {
-          if(state is ResourceLoaded){
+          if (state is ResourceLoaded) {
             return Container(
               color: spqWhite,
               child: Center(
@@ -373,9 +376,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
             );
-          } else{
+          } else {
             return const Text("Error Resource State");
-          }          
+          }
         },
       ),
     );
@@ -385,16 +388,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Navigator.pop(context);
   }
 
-  void _saveProfile() {
-    Navigator.pop(context);
-    // Profile _profile = Profile(
-    //   name: _nameController.text,
-    //   username: _usernameController.text,
-    //   description: _descriptionController.text,
-    //   website: _websiteController.text,
-
-    // );
-    // _profileBloc.add(SaveProfile(userId: 1, profile: _profile));
+  void _saveProfile(Profile profile) {
+    Profile _profile = Profile(
+      name: _nameController.text,
+      username: _usernameController.text,
+      description: _descriptionController.text,
+      website: _websiteController.text,
+      profileImageBlurHash: profile.profileImageBlurHash,
+      profileImageResourceId: profile.profileImageResourceId,
+    );
+    _profileBloc.add(SaveProfile(
+      userId: 1,
+      profile: _profile,
+    ));
   }
 
   @override
@@ -402,6 +408,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.dispose();
     _disposeController();
     _profileBloc.close();
+    _resourceBloc.close();
   }
 
   void _disposeController() {
