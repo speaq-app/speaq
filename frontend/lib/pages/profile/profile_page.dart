@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
@@ -24,9 +23,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final String _joined = "Joined August 2022";
   final String _follower = "117k Follower";
   final String _following = "69 Following";
-  final String _editProfile = "Edit Profile";
-  final String _follow = "Follow";
-  final String _unfollow = "Unfollow";
 
   @override
   Widget build(BuildContext context) {

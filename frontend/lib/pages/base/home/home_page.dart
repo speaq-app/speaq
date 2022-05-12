@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -13,7 +11,7 @@ import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/spq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,6 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    //Change from Hardcoded
     _profileBloc.add(LoadProfile(userId: 1));
     _scrollController = ScrollController()
       ..addListener(() {
@@ -55,6 +54,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -62,18 +62,16 @@ class _HomePageState extends State<HomePage> {
         bloc: _profileBloc,
         listener: (context, state) {
           if (state is ProfileLoaded) {
-            _resourceBloc.add(
-                LoadResource(resourceId: state.profile.profileImageResourceId));
+            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
           }
         },
         builder: (context, state) {
           if (state is ProfileLoading) {
             return Scaffold(
               appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: Container(child: _buildListViewShimmer(context)),
+              body: _buildListViewShimmer(context, appLocale),
             );
           } else if (state is ProfileLoaded) {
-            log(state.profile.profileImageBlurHash);
             return _buildHomePage(context, deviceSize, state.profile);
           } else {
             return const Text("State failed");
@@ -83,8 +81,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Scaffold _buildHomePage(
-      BuildContext context, Size deviceSize, Profile profile) {
+  Scaffold _buildHomePage(BuildContext context, Size deviceSize, Profile profile) {
     return Scaffold(
       appBar: SpqAppBar(
         actionList: [
@@ -95,16 +92,13 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => {},
           )
         ],
-        leading: Builder(
-          builder: (context) {
-            return _buildProfileImage(context, profile.profileImageBlurHash);
-          }
-        ),
+        leading: Builder(builder: (context) {
+          return _buildProfileImage(context, profile.profileImageBlurHash);
+        }),
         title: Center(
           child: InkWell(
             onTap: () {
-              _scrollController.animateTo(0,
-                  duration: const Duration(seconds: 1), curve: Curves.linear);
+              _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
             },
             child: SvgPicture.asset(
               spqImage,
@@ -120,6 +114,7 @@ class _HomePageState extends State<HomePage> {
         controller: _scrollController,
         child: Column(
           children: [
+            const SizedBox(height: 10),
             PostContainer(
               name: _name,
               username: _username,
@@ -138,31 +133,36 @@ class _HomePageState extends State<HomePage> {
               name: _name,
               username: _username,
               postMessage: _postMessage,
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage2),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
               postMessage: _postMessage,
               postImage: Image.network(_postImage2),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+            ),
+            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
             PostContainer(
               name: _name,
               username: _username,
@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> {
           if (state is ResourceLoaded) {
             return CircleAvatar(
               radius: 20,
-              backgroundImage: MemoryImage(base64Decode(state.resource.data)),
+              backgroundImage: MemoryImage(state.decodedData),
             );
           } else {
             return CircleAvatar(
@@ -205,26 +205,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildListViewShimmer(BuildContext context) {
+  Widget _buildListViewShimmer(BuildContext context, AppLocalizations appLocale) {
     return ListView(
       children: [
-        _buildShimmerPost(),
-        _buildShimmerPost(),
-        _buildShimmerPost(),
-        _buildShimmerPost(),
-        _buildShimmerPost(),
+        PostShimmer(appLocale: appLocale, hasImage: false),
+        PostShimmer(appLocale: appLocale, hasImage: true),
+        PostShimmer(appLocale: appLocale, hasImage: true),
+        PostShimmer(appLocale: appLocale, hasImage: false),
+        PostShimmer(appLocale: appLocale, hasImage: false),
+        PostShimmer(appLocale: appLocale, hasImage: true),
       ],
-    );
-  }
-
-  Widget _buildShimmerPost() {
-    return Shimmer.fromColors(
-      baseColor: spqLightGrey,
-      highlightColor: spqWhite,
-      child: Container(
-        height: 200,
-        color: spqPrimaryBlue,
-      ),
     );
   }
 

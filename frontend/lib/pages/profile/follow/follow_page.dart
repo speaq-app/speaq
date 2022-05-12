@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
-import 'package:frontend/widgets/speaq_follower_tile.dart';
+import 'package:frontend/widgets/all_widgets.dart';
+
 
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.username}) : super(key: key);
