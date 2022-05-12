@@ -13,16 +13,15 @@
   "username": "Username",
   "password": "Password",
   "forgotPassword": "Forgot Password?",
-  "login": "Login",
-  "register": "Register",
-  "registerText": "You don't have an Account?",
-  "guestText": "You want to join as a guest?",
-  "askExistingAccount": "Already have an account?",
   "passwordMin": "Length min.8",
   "passwordReq": "Req: 2 Spec. Char/Uppercase",
   "passwordCorrect": "Perfect password",
   "passwordCheck": "Repeat password",
+  "login": "Login",
+  "registerText": "You don't have an Account?",
   "guestText": "Join as a guest?",
+  "askExistingAccount": "Already have an account?",
+  "register": "Register",
   "guest": "Guest",
   "follower": "Follower",
   "following": "Followed",
@@ -58,7 +57,12 @@
   "privateAccount": "Private account",
   "deletesearchhistory": "Delete search history",
   "askdeletesearchhistory": "Are you sure you want to delete your search history?",
-  "hintTextSearchBar": "Search for chats and groups"
+  "hintTextSearchBar": "Search for chats and groups",
+  "aboutus": "About us",
+  "ourteam": "Our team",
+  "aboutustext": "You want to share your opinions, thoughts and news with the world - with all your feelings and rhetoric - in a very personal way? \nMany customers want a more personal form of online communication that is not yet offered today. And this is where Speaq comes in! With Speaq, we offer an innovative communication platform that makes a change from familiar platforms like Twitter and Facebook.",
+  "frontenddeveloper": "Frontend developer",
+  "backenddeveloper": "Backend developer"
 
 }
 
