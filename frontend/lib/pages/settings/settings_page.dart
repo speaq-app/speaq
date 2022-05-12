@@ -73,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   tiles: [
                     _buildSettingsTile(appLocale.displayandsound, "settDispSound"),
-                    _buildSettingsTile(appLocale.aboutspeaq, "login"),
+                    _buildSettingsTile(appLocale.aboutspeaq, "settAboutSpeaq"),
                   ],
                 ),
               ],
