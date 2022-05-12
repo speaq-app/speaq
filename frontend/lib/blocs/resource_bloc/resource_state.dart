@@ -9,8 +9,9 @@ class ResourceLoading extends ResourceState {}
 
 class ResourceLoaded extends ResourceState {
   final Resource resource;
+  final Uint8List decodedData;
 
-  ResourceLoaded(this.resource);
+  ResourceLoaded(this.resource, this.decodedData);
 }
 
 class ResourceSaving extends ResourceState {}

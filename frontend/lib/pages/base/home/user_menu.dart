@@ -1,8 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
+import 'package:frontend/utils/all_utils.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,18 +17,19 @@ class UserMenu extends StatefulWidget {
 }
 
 class _UserMenuState extends State<UserMenu> {
+  final ProfileBloc _profileBloc = ProfileBloc();
+  final ResourceBloc _resourceBloc = ResourceBloc();
   final SettingsBloc _settingsBloc = SettingsBloc();
-
-  String userName = "@hhn";
-
-  String name = "Informatics";
 
   String follower = "234";
 
   String following = "690";
 
-  String image =
-      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  @override
+  void initState() {
+    _profileBloc.add(LoadProfile(userId: 1));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +41,20 @@ class _UserMenuState extends State<UserMenu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              buildHeader(context, appLocale),
-              buildMenu(context, appLocale),
+              BlocBuilder<ProfileBloc, ProfileState>(
+                bloc: _profileBloc,
+                builder: (context, state) {
+                  if (state is ProfileLoading) {
+                    return _buildHeaderShimmer(context, appLocale);
+                  } else if (state is ProfileLoaded) {
+                    _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+                    return _buildHeader(context, appLocale, state.profile);
+                  } else {
+                    return const Text("Error UserMenuState");
+                  }
+                },
+              ),
+              _buildMenu(context, appLocale),
             ],
           ),
         ),
@@ -46,7 +62,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget buildHeader(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -57,17 +73,90 @@ class _UserMenuState extends State<UserMenu> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundImage: NetworkImage(image),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: const CircleAvatar(radius: 24),
+            ),
+            const SizedBox(height: 13),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: const SizedBox(
+                width: 180,
+                height: 25,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: spqBlack),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: const SizedBox(
+                width: 100,
+                height: 15,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: spqBlack),
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            Shimmer.fromColors(
+              baseColor: spqLightGrey,
+              highlightColor: spqWhite,
+              child: const SizedBox(
+                width: 120,
+                height: 10,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: spqBlack),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Profile profile) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 24,
+        bottom: 24,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BlocBuilder<ResourceBloc, ResourceState>(
+              bloc: _resourceBloc,
+              builder: (context, state) {
+                if (state is ResourceLoaded) {
+                  return CircleAvatar(
+                    radius: 24,
+                    backgroundImage: MemoryImage(state.decodedData),
+                  );
+                } else {
+                  return CircleAvatar(
+                    radius: 24,
+                    backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+                  );
+                }
+              },
             ),
             const SizedBox(height: 5),
             Text(
-              name,
-              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              profile.name,
+              style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Text(
-              userName,
+              profile.username,
               style: const TextStyle(fontSize: 15),
             ),
             InkWell(
@@ -81,8 +170,7 @@ class _UserMenuState extends State<UserMenu> {
                       children: [
                         Text(
                           following,
-                          style: const TextStyle(
-                              fontSize: 10, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 2),
@@ -102,8 +190,7 @@ class _UserMenuState extends State<UserMenu> {
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Text(
                             follower,
-                            style: const TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                           ),
                         ),
                         Text(
@@ -122,7 +209,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget buildMenu(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildMenu(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: [
         ListTile(
@@ -165,9 +252,9 @@ class _UserMenuState extends State<UserMenu> {
           },
           builder: (context, state) {
             if (state is LoadingImprintURL) {
-              return const ListTile(
-                title: Text("Imprint"),
-                trailing: CircularProgressIndicator(),
+              return ListTile(
+                title: Text(appLocale.imprint),
+                trailing: const CircularProgressIndicator(),
               );
             }
 
