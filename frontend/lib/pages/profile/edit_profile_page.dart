@@ -24,8 +24,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
 
-  final String langKey = "pages.profile.";
-
   final String nameText = "Name";
   final String usernameText = "Username";
   final String descriptionText = "Description";

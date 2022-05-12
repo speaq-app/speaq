@@ -19,8 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
-    await Future.delayed(const Duration(seconds: 2)); //removeable
-
+    await Future.delayed(const Duration(seconds: 1)); //removeable
     var _profile = await _userService.getProfile(event.userId);
     emit(ProfileLoaded(profile: _profile));
 
@@ -29,9 +28,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onSaveProfile(SaveProfile event, Emitter<ProfileState> emit) async {
     emit(ProfileSaving());
+    await Future.delayed(const Duration(seconds: 1)); //removeable
     await _userService.updateProfile(id: event.userId, profile: event.profile);
-    await Future.delayed(const Duration(seconds: 2)); //removeable
-
     emit(ProfileSaved());
   }
 }

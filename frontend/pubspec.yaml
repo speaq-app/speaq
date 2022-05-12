@@ -53,6 +53,7 @@ dependencies:
   app_settings: ^4.1.5
   emoji_picker_flutter: ^1.1.2
   page_transition: ^2.0.5
+  url_launcher: ^6.1.0
 
   # API
   protobuf: ^2.0.1
@@ -103,6 +104,7 @@ flutter:
     - assets/i18n/
     - assets/i18n/de.json
     - assets/i18n/en.json
+    - assets/images/
 
 
   # The following line ensures that the Material Icons font is

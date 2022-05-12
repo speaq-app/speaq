@@ -29,7 +29,7 @@ func TestGetResource(t *testing.T) {
 				ImprintURL: tc.imprintURL,
 			}
 
-			resp, err := srv.GetImprint(context.Background(), &empty.Empty{})
+			resp, err := srv.GetImprintURL(context.Background(), &empty.Empty{})
 			if err != nil {
 				t.Error(err)
 			}

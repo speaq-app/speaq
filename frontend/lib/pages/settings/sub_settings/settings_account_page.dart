@@ -4,6 +4,8 @@ import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_settings_section.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../../../utils/all_utils.dart';
+
 class AccountSettingsPage extends StatefulWidget {
   const AccountSettingsPage({Key? key}) : super(key: key);
 
@@ -12,15 +14,18 @@ class AccountSettingsPage extends StatefulWidget {
 }
 
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
+
+  late AppLocalizations appLocale;
   @override
   Widget build(BuildContext context) {
+    appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
           title: Text(
-            "Account",
+            appLocale.account,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
@@ -34,18 +39,18 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildSettingsTile("Account-Informationen", "login"),
-                  _buildSettingsTile("Passwort ändern", "login"),
+                  _buildSettingsTile(appLocale.accinformation, "login"),
+                  _buildSettingsTile(appLocale.changepassword, "login"),
                   //Account löschen
                   _buildPopUpWindow(
-                      "Account löschen",
-                      "Bist du dir sicher, dass du den Account löschen möchtest?",
-                      "Löschen"),
+                      appLocale.deleteaccount,
+                      appLocale.askdeleteaccount,
+                      appLocale.delete),
                   //Account abmelden
                   _buildPopUpWindow(
-                      "Account abmelden",
-                      "Bist du dir sicher, dass du dich abmelden möchtest?",
-                      "Abmelden"),
+                      appLocale.acclogout,
+                      appLocale.asklogoutaccount,
+                      appLocale.logout),
                 ],
               ),
             ],
@@ -78,7 +83,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         child: Text(exitText),
                         onPressed: () => Navigator.pop(context)),
                     TextButton(
-                        child: const Text("Abbrechen"),
+                        child: Text(appLocale.cancel),
                         onPressed: () => Navigator.pop(context)),
                   ],
                 )));

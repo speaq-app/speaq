@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -8,6 +6,8 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
   const UserMenu({Key? key}) : super(key: key);
@@ -20,6 +20,7 @@ class _UserMenuState extends State<UserMenu> {
   // final UserMenuBloc _userMenuBloc = UserMenuBloc();
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
+  final SettingsBloc _settingsBloc = SettingsBloc();
 
   String follower = "234";
 
@@ -215,21 +216,21 @@ class _UserMenuState extends State<UserMenu> {
       children: [
         ListTile(
           leading: const Icon(Icons.person_outline),
-          title: const Text("Profile"),
+          title: Text(appLocale.profile),
           onTap: () {
             Navigator.popAndPushNamed(context, "profile");
           },
         ),
         ListTile(
           leading: const Icon(Icons.qr_code_2),
-          title: const Text("QR-Code"),
+          title: Text(appLocale.qrCode),
           onTap: () {
             Navigator.popAndPushNamed(context, "qr_ode");
           },
         ),
         ListTile(
           leading: const Icon(Icons.bookmark_border),
-          title: const Text("Bookmarks"),
+          title: Text(appLocale.bookmarks),
           onTap: () {
             Navigator.popAndPushNamed(context, "bookmarks");
           },
@@ -239,18 +240,41 @@ class _UserMenuState extends State<UserMenu> {
           thickness: 0.75,
         ),
         ListTile(
-          title: const Text("Settings and privacy"),
+          title: Text(appLocale.settingsandprivacy),
           onTap: () {
             Navigator.popAndPushNamed(context, "settings");
           },
         ),
-        ListTile(
-          title: const Text("Impressum"),
-          onTap: () {
-            Navigator.popAndPushNamed(context, "impressum");
+        BlocConsumer<SettingsBloc, SettingsState>(
+          bloc: _settingsBloc,
+          listener: (context, state) async {
+            if (state is ImprintURLLoaded) {
+              await launchUrl(state.imprintURL);
+            }
+          },
+          builder: (context, state) {
+            if (state is LoadingImprintURL) {
+              return ListTile(
+                title: Text(appLocale.imprint),
+                trailing: const CircularProgressIndicator(),
+              );
+            }
+
+            return ListTile(
+              title: Text(appLocale.imprint),
+              onTap: () {
+                _settingsBloc.add(LoadImprintURL());
+              },
+            );
           },
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _settingsBloc.close();
+    super.dispose();
   }
 }

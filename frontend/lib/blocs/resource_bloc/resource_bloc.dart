@@ -24,8 +24,7 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
     Emitter<ResourceState> emit,
   ) async {
     emit(ResourceLoading());
-    await Future.delayed(const Duration(seconds: 2)); //removeable
-
+    await Future.delayed(const Duration(seconds: 1)); //removeable
     var resource = await _resourceService.getResource(event.resourceId);
     var decodedData = base64Decode(resource.data);
     emit(ResourceLoaded(resource, decodedData));

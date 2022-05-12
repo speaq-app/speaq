@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"log"
+	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
@@ -11,6 +12,7 @@ import (
 type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
+	delay     time.Duration
 }
 
 func New() data.Service {
@@ -23,6 +25,7 @@ func New() data.Service {
 		log.Fatal(err)
 	}
 	return service{
+		delay: time.Second,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),
@@ -75,6 +78,7 @@ func New() data.Service {
 }
 
 func (s service) ResourceByID(id int64) (data.Resource, error) {
+	time.Sleep(s.delay)
 	r, ok := s.resources[id]
 	if !ok {
 		return r, errors.New("not workin 1")
@@ -84,6 +88,7 @@ func (s service) ResourceByID(id int64) (data.Resource, error) {
 }
 
 func (s service) UserByID(id int64) (data.User, error) {
+	time.Sleep(s.delay)
 	u, ok := s.users[id]
 	if !ok {
 		return u, errors.New("not workin 2")
@@ -93,6 +98,7 @@ func (s service) UserByID(id int64) (data.User, error) {
 }
 
 func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
+	time.Sleep(s.delay)
 	u, err := s.UserByID(id)
 	if err != nil {
 		return err
@@ -105,6 +111,7 @@ func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
 }
 
 func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
+	time.Sleep(s.delay)
 	u, err := s.UserByID(id)
 	if err != nil {
 		return data.UserProfile{}, err

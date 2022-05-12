@@ -11,7 +11,7 @@ type Server struct {
 	UnimplementedSettingsServer
 }
 
-func (s Server) GetImprint(ctx context.Context, req *empty.Empty) (*GetImprintResponse, error) {
+func (s Server) GetImprintURL(ctx context.Context, req *empty.Empty) (*GetImprintResponse, error) {
 	return &GetImprintResponse{
 		Url: s.ImprintURL,
 	}, nil

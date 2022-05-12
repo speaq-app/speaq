@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
+import 'package:frontend/pages/settings/sub_settings/settings_about_speaq.dart';
 
 import 'package:page_transition/page_transition.dart';
 
@@ -44,11 +45,8 @@ class RouteGenerator {
         return PageTransition(child: const ContentPrefSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "settDispSound":
         return PageTransition(child: const DisplaySoundSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
-      case "settDataUsage":
-        return PageTransition(child: const DataUsageSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
-      case "settAccess":
-        return PageTransition(child: const AccessibilitySettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
-      
+      case "settAboutSpeaq":
+        return PageTransition(child: const AboutSpeaqSettingsPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "bookmarks":
         return PageTransition(child: const BookmarksPage(), type: PageTransitionType.fade, alignment: Alignment.center);
       case "impressum":

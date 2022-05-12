@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/base/messages/user.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 
@@ -12,7 +13,6 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
-  final String langKey = "pages.base.messages.";
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
@@ -63,15 +63,17 @@ class _MessagesPageState extends State<MessagesPage> {
     _foundUsersList = _allUserList;
     super.initState();
   }
+  late AppLocalizations appLocale;
 
   @override
   Widget build(BuildContext context) {
+    appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
-          title: const Text(
-            "Messages",
+          title: Text(
+            appLocale.messages,
             style: TextStyle(fontSize: 20),
           ),
           preferredSize: deviceSize,
@@ -134,7 +136,7 @@ class _MessagesPageState extends State<MessagesPage> {
               fontSize: 14,
               color: spqDarkGreyTranslucent,
             ),
-            hintText: "Search for chats or groups",
+            hintText: appLocale.hintTextSearchBar,
           ),
         ),
       ),
