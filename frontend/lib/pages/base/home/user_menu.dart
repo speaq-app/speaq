@@ -17,7 +17,6 @@ class UserMenu extends StatefulWidget {
 }
 
 class _UserMenuState extends State<UserMenu> {
-  // final UserMenuBloc _userMenuBloc = UserMenuBloc();
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
   final SettingsBloc _settingsBloc = SettingsBloc();
@@ -28,7 +27,6 @@ class _UserMenuState extends State<UserMenu> {
 
   @override
   void initState() {
-    //Change from Hardcoded
     _profileBloc.add(LoadProfile(userId: 1));
     super.initState();
   }
