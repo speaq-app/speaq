@@ -24,7 +24,7 @@ class _MessagesPageState extends State<MessagesPage> {
         "12:20"),
     User(
         "https://hotdogworld.de/media/image/dd/5f/5f/HZ_TK_500ml_USD_1280x1280.jpg",
-        "Alois Heinz",
+        "Halois Ainz",
         "Ich kenne jeden Automaten den es gibt",
         "12:33"),
     User(
