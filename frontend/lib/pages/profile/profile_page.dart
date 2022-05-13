@@ -11,6 +11,8 @@ import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/speaq_text_button.dart';
+import 'package:frontend/widgets_shimmer/post_shimmer.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -20,7 +22,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  //Profile
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
 
@@ -55,11 +56,6 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Scaffold(
         appBar: SpqAppBar(
           preferredSize: deviceSize,
-          title: Text(
-            _username,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16),
-          ),
         ),
         body: ListView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -107,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
             if (state is ProfileLoaded) {
               return _buildProfilePage(deviceSize, appLocale, state.profile);
             } else if (state is ProfileLoading) {
-              return const Text("Shimmer");
+              return _buildProfilePageShimmer(deviceSize);
             } else {
               return const Text("State failed");
             }
@@ -131,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: deviceSize.height * 0.05,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: SpqTextbutton(
-                  onPressed: () => Navigator.pushNamed(context, 'edit_profile'),
+                  onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
                   name: appLocale.editProfile,
                   style: const TextStyle(color: spqPrimaryBlue),
                 ),
@@ -174,6 +170,44 @@ class _ProfilePageState extends State<ProfilePage> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: _buildTabs(deviceSize),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfilePageShimmer(Size deviceSize) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              _buildProfilePictureShimmer(),
+              Container(
+                width: deviceSize.width * 0.33,
+                height: deviceSize.height * 0.05,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Shimmer.fromColors(
+                    baseColor: spqLightGrey,
+                    highlightColor: spqWhite,
+                    child: const TextButton(
+                      child: Text(""),
+                      onPressed: null,
+                    )),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: _buildProfileInformationShimmer(),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: _buildTabsShimmer(deviceSize),
         ),
       ],
     );
@@ -241,6 +275,17 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProfilePictureShimmer() {
+    return Shimmer.fromColors(
+      baseColor: spqLightGrey,
+      highlightColor: spqWhite,
+      child: const CircleAvatar(
+        backgroundColor: spqWhite,
+        radius: 45,
       ),
     );
   }
@@ -330,6 +375,44 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Widget _buildProfileInformationShimmer() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildShimmerCube(300, 23),
+        const SizedBox(height: 5),
+        _buildShimmerCube(200, 18),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
+          child: _buildShimmerCube(230, 19),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Row(
+            children: [
+              const Icon(Icons.link),
+              _buildShimmerCube(100, 16),
+              const SizedBox(width: 15),
+              const Icon(Icons.calendar_month),
+              _buildShimmerCube(100, 16),
+            ],
+          ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: _buildShimmerCube(100, 16),
+            ),
+            const SizedBox(width: 25),
+            _buildShimmerCube(100, 16),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildTabs(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
@@ -358,6 +441,42 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 _buildPostContainer(),
                 _buildPostContainer(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabsShimmer(Size deviceSize) {
+    return SizedBox(
+      width: deviceSize.width,
+      height: double.maxFinite,
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: const TabBar(
+            unselectedLabelColor: spqDarkGrey,
+            indicatorColor: spqPrimaryBlue,
+            labelColor: spqPrimaryBlue,
+            tabs: [
+              Text(
+                'Speaqs',
+                style: TextStyle(fontSize: 23),
+              ),
+              Text(
+                'Likes',
+                style: TextStyle(fontSize: 23),
+              )
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.0),
+            child: TabBarView(
+              children: [
+                _buildPostContainerShimmer(),
+                _buildPostContainerShimmer(),
               ],
             ),
           ),
@@ -425,6 +544,33 @@ class _ProfilePageState extends State<ProfilePage> {
           postImage: Image.network(_postImage),
         ),
       ],
+    );
+  }
+
+  Widget _buildPostContainerShimmer() {
+    return ListView(
+      children: const [
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: true),
+        PostShimmer(hasImage: true),
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: true),
+      ],
+    );
+  }
+
+  Widget _buildShimmerCube(double width, double height) {
+    return Shimmer.fromColors(
+      baseColor: spqLightGrey,
+      highlightColor: spqWhite,
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: const DecoratedBox(
+          decoration: BoxDecoration(color: spqBlack),
+        ),
+      ),
     );
   }
 

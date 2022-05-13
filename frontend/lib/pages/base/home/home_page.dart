@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
           if (state is ProfileLoading) {
             return Scaffold(
               appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: _buildListViewShimmer(context, appLocale),
+              body: _buildPostContainerShimmer(),
             );
           } else if (state is ProfileLoaded) {
             return _buildHomePage(context, deviceSize, state.profile);
@@ -208,15 +208,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildListViewShimmer(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildPostContainerShimmer() {
     return ListView(
-      children: [
-        PostShimmer(appLocale: appLocale, hasImage: false),
-        PostShimmer(appLocale: appLocale, hasImage: true),
-        PostShimmer(appLocale: appLocale, hasImage: true),
-        PostShimmer(appLocale: appLocale, hasImage: false),
-        PostShimmer(appLocale: appLocale, hasImage: false),
-        PostShimmer(appLocale: appLocale, hasImage: true),
+      children: const [
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: true),
+        PostShimmer(hasImage: true),
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: true),
       ],
     );
   }
