@@ -25,10 +25,22 @@ class CacheUserService implements UserService {
     required int id,
     required Profile profile,
   }) {
-    _box.put(id, profile);
+    //Checks?
+    Profile cachedProfile = _box.get(id);
+
+    Profile newCachedProfile = Profile(
+      name: profile.name,
+      username: profile.username,
+      description: profile.description,
+      website: profile.website,
+      profileImageBlurHash: cachedProfile.profileImageBlurHash,
+      profileImageResourceId: cachedProfile.profileImageResourceId,
+    );
+
+    _box.put(id, newCachedProfile);
     return _userService.updateProfile(
       id: id,
-      profile: profile,
+      profile: newCachedProfile,
     );
   }
 
