@@ -76,7 +76,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               //Check
               _resourceBloc.add(LoadResource(resourceId: profile.profileImageResourceId));
             } else if (state is ProfileSaved) {
-              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, "profile");
             }
           },
           builder: (context, state) {
