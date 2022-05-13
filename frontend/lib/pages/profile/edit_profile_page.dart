@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -71,6 +73,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               _usernameController.text = profile.username;
               _descriptionController.text = profile.description;
               _websiteController.text = profile.website;
+              //Check
               _resourceBloc.add(LoadResource(resourceId: profile.profileImageResourceId));
             } else if (state is ProfileSaved) {
               Navigator.pop(context);
@@ -394,8 +397,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       username: _usernameController.text,
       description: _descriptionController.text,
       website: _websiteController.text,
-      profileImageBlurHash: profile.profileImageBlurHash,
-      profileImageResourceId: profile.profileImageResourceId,
     );
     _profileBloc.add(SaveProfile(
       userId: 1,
