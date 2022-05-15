@@ -3,12 +3,10 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PostShimmer extends StatelessWidget {
-  final AppLocalizations appLocale;
   final bool hasImage;
 
   const PostShimmer({
     Key? key,
-    required this.appLocale,
     required this.hasImage,
   }) : super(key: key);
 
@@ -45,7 +43,7 @@ class PostShimmer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildShimmerCube(300),
+        _buildShimmerCube(300, 18),
         const SizedBox(height: 5),
       ],
     );
@@ -58,9 +56,9 @@ class PostShimmer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildShimmerCube(300),
+          _buildShimmerCube(300, 18),
           const SizedBox(height: 5),
-          _buildShimmerCube(120),
+          _buildShimmerCube(120, 18),
           const SizedBox(height: 5),
           Visibility(
             visible: hasImage,
@@ -76,13 +74,13 @@ class PostShimmer extends StatelessWidget {
     );
   }
 
-  Widget _buildShimmerCube(double width) {
+  Widget _buildShimmerCube(double width, double height) {
     return Shimmer.fromColors(
       baseColor: spqLightGrey,
       highlightColor: spqWhite,
       child: SizedBox(
         width: width,
-        height: 18,
+        height: height,
         child: const DecoratedBox(
           decoration: BoxDecoration(color: spqBlack),
         ),

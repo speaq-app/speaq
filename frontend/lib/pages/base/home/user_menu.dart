@@ -27,7 +27,9 @@ class _UserMenuState extends State<UserMenu> {
 
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(userId: 1));
+    _profileBloc.add(LoadProfile(
+      userId: 1,
+    ));
     super.initState();
   }
 

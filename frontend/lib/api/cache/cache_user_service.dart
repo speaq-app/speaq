@@ -5,16 +5,16 @@ import 'package:frontend/api/model/profile.dart';
 
 class CacheUserService implements UserService {
   final UserService _userService;
-  final Box box = Hive.box<Profile>("profile");
+  final Box _box = Hive.box<Profile>("profile");
 
   CacheUserService(this._userService);
 
   @override
   Future<Profile> getProfile(int id) async {
-    Profile? _profile = box.get(id);
+    Profile? _profile = _box.get(id);
     if (_profile == null) {
       _profile = await _userService.getProfile(id);
-      box.put(id, _profile);
+      _box.put(id, _profile);
     }
 
     return _profile;
@@ -25,10 +25,26 @@ class CacheUserService implements UserService {
     required int id,
     required Profile profile,
   }) {
-    box.put(id, profile);
+    //Checks?
+    Profile cachedProfile = _box.get(id);
+
+    Profile newCachedProfile = Profile(
+      name: profile.name,
+      username: profile.username,
+      description: profile.description,
+      website: profile.website,
+      profileImageBlurHash: cachedProfile.profileImageBlurHash,
+      profileImageResourceId: cachedProfile.profileImageResourceId,
+    );
+
+    _box.put(id, newCachedProfile);
     return _userService.updateProfile(
       id: id,
-      profile: profile,
+      profile: newCachedProfile,
     );
+  }
+
+  Future<void> clearProfile(int id) {
+    return _box.delete(id);
   }
 }
