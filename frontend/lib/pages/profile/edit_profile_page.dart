@@ -267,7 +267,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       leadingWidth: 80,
       actionList: [
         TextButton(
-          onPressed: () => _saveProfile(profile),
+          onPressed: () => _saveProfile(),
           child: Text(
             doneText,
             style: const TextStyle(
@@ -388,7 +388,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Navigator.pop(context);
   }
 
-  void _saveProfile(Profile profile) {
+  void _saveProfile() {
     Profile _profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,
