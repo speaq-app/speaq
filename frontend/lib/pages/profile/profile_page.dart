@@ -25,6 +25,9 @@ class _ProfilePageState extends State<ProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
 
+  //Background picture
+  final String _backgroundImage = "https://cdn0.scrvt.com/5b9bbd140a15e188780a6244ebe572d4/772147c289ad227c/ca6d6d455211/v/1abab81df2ad/C_Sont_001_300dpi.jpg";
+
   //Hardcoded for posts - delete later
   final String _name = "testname";
   final String _username = "testUsername";
@@ -78,11 +81,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return Container(
       height: deviceSize.height * 0.225,
       width: deviceSize.width,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: spqPrimaryBlue,
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: NetworkImage('https://cdn0.scrvt.com/5b9bbd140a15e188780a6244ebe572d4/772147c289ad227c/ca6d6d455211/v/1abab81df2ad/C_Sont_001_300dpi.jpg'),
+          image: NetworkImage(_backgroundImage),
         ),
       ),
     );
