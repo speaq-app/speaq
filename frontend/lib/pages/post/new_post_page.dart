@@ -20,14 +20,6 @@ class _NewPostPageState extends State<NewPostPage> {
   bool emojiShowing = false;
 
   @override
-  void initState() {
-    Post _post = Post(
-        id: 1, resourceID: 1, date: dateNow, description: _postController.text);
-    super.initState();
-    _postBloc.add(SavePost(userId: 1, post: _post));
-  }
-
-  @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery
         .of(context)
@@ -47,16 +39,14 @@ class _NewPostPageState extends State<NewPostPage> {
               return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
             } else if (state is PostSaved) {
               Navigator.popAndPushNamed(context, "base");
-            } else {
-              return Scaffold(
-                  appBar: SpqAppBar(
-                    preferredSize: deviceSize,
-                    actionList: [_buildSendPostButton()],
-                  ),
-                  body: _buildPostTextField(appLocale)
-                  );
             }
-            return const Text("not working - new_post_page line");
+            return Scaffold(
+                appBar: SpqAppBar(
+                  preferredSize: deviceSize,
+                  actionList: [_buildSendPostButton()],
+                ),
+                body: _buildPostTextField(appLocale)
+            );
           }
       ),
     );
@@ -75,7 +65,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Widget _buildSendPostButton() =>
       TextButton(
-        onPressed: () => print("Speaq"),
+        onPressed: _savePost,
         child: Container(
           child: const Text("speaq"),
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -86,11 +76,7 @@ class _NewPostPageState extends State<NewPostPage> {
         ),
       );
 
-  void _cancel() {
-    Navigator.pop(context);
-  }
-
-  void _saveProfile() {
+  void _savePost() {
     Navigator.pop(context);
     Post _post = Post(
         id: 1, resourceID: 1, date: dateNow, description: _postController.text);
