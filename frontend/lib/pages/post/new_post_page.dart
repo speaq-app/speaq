@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/api/model/post.dart';
+import 'package:frontend/blocs/post_bloc/post_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
@@ -10,24 +13,57 @@ class NewPostPage extends StatefulWidget {
 }
 
 class _NewPostPageState extends State<NewPostPage> {
+  final PostBloc _postBloc = PostBloc();
+  final dateNow = DateTime.now();
   final TextEditingController _postController = TextEditingController();
+
   bool emojiShowing = false;
+
+  @override
+  void initState() {
+    Post _post = Post(
+        id: 1, resourceID: 1, date: dateNow, description: _postController.text);
+    super.initState();
+    _postBloc.add(SavePost(userId: 1, post: _post));
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
+    Size deviceSize = MediaQuery
+        .of(context)
+        .size;
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     return SafeArea(
-      child: Scaffold(
-        appBar: SpqAppBar(
-          preferredSize: deviceSize,
-          actionList: [_buildSendPostButton()],
-        ),
-        body: _buildPostTextField(appLocale),
+      child: BlocConsumer<PostBloc, PostState>(
+          bloc: _postBloc,
+          listener: (context, state) async {
+            if (state is PostSaving) {
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+
+            if (state is PostSaving) {
+              return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
+            } else if (state is PostSaved) {
+              Navigator.popAndPushNamed(context, "base");
+            } else {
+              return Scaffold(
+                  appBar: SpqAppBar(
+                    preferredSize: deviceSize,
+                    actionList: [_buildSendPostButton()],
+                  ),
+                  body: _buildPostTextField(appLocale)
+                  );
+            }
+            return const Text("not working - new_post_page line");
+          }
       ),
     );
   }
 
-  Widget _buildPostTextField(AppLocalizations appLocale) => Padding(
+  Widget _buildPostTextField(AppLocalizations appLocale) =>
+      Padding(
         padding: const EdgeInsets.all(8.0),
         child: SpqPostTextField(
           height: double.infinity,
@@ -37,15 +73,42 @@ class _NewPostPageState extends State<NewPostPage> {
         ),
       );
 
-  Widget _buildSendPostButton() => TextButton(
+  Widget _buildSendPostButton() =>
+      TextButton(
         onPressed: () => print("Speaq"),
         child: Container(
           child: const Text("speaq"),
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-          decoration: BoxDecoration(border: Border.all(color: spqPrimaryBlue, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(16.0))),
+          decoration: BoxDecoration(
+              border: Border.all(color: spqPrimaryBlue, width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(16.0))),
         ),
       );
+
+  void _cancel() {
+    Navigator.pop(context);
+  }
+
+  void _saveProfile() {
+    Navigator.pop(context);
+    Post _post = Post(
+        id: 1, resourceID: 1, date: dateNow, description: _postController.text);
+    _postBloc.add(SavePost(userId: 1, post: _post));
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _disposeController();
+    _postBloc.close();
+  }
+
+  void _disposeController() {
+    _postController.dispose();
+  }
+
 }
 
 class SpqPostTextField extends StatelessWidget {
@@ -64,7 +127,8 @@ class SpqPostTextField extends StatelessWidget {
     this.maxLines,
     this.width,
     this.height = 56,
-    this.contentPadding = const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+    this.contentPadding =
+    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
     this.enabled = true,
   }) : super(key: key);
 
@@ -107,18 +171,21 @@ class SpqPostTextField extends StatelessWidget {
           isDense: true,
           label: Container(
             margin: const EdgeInsets.only(bottom: 12.0),
-            child: Text(hintText, style: const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100)),
+            child: Text(hintText,
+                style: const TextStyle(
+                    color: spqLightGrey, fontWeight: FontWeight.w100)),
           ),
           contentPadding: contentPadding,
-          labelStyle: const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100),
+          labelStyle:
+          const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           floatingLabelAlignment: FloatingLabelAlignment.start,
           alignLabelWithHint: true,
           prefixIcon: prefixIcon != null
               ? Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: prefixIcon,
-                )
+            padding: const EdgeInsets.all(12.0),
+            child: prefixIcon,
+          )
               : null,
           suffixIcon: suffixIcon,
           fillColor: spqWhite,
@@ -127,7 +194,8 @@ class SpqPostTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
             borderSide: const BorderSide(color: spqPrimaryBlue, width: 1.0),
           ),
-          hintStyle: const TextStyle(color: spqLightGrey, fontSize: 16, fontWeight: FontWeight.w100),
+          hintStyle: const TextStyle(
+              color: spqLightGrey, fontSize: 16, fontWeight: FontWeight.w100),
           //hintText: hintText,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
