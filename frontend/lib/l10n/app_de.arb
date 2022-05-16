@@ -66,6 +66,24 @@
   "aboutustext": "Du willst der Welt deine Meinungen, Gedanken und News mitteilen - mit all deinen Gefühlen und Rhetoriken - ganz persönlich? \nViele Kunden wünschen sich eine persönlichere Form der Online-Kommunikation, wie sie heute noch nicht geboten wird. Und hier kommt Speaq zum Einsatz! Wir bieten mit Speaq eine innovative Kommunikationsplattform, die Abwechslung von bekannten Plattformen wie Twitter und Facebook bietet.",
   "frontenddeveloper": "Frontend-Entwickler",
   "backenddeveloper": "Backend-Entwickler",
-  "errorSavingEditProfile": "Falsche Eingabe - Bitte prüfen Sie: "
-
+  "wrongInput": "Falsche Eingabe: ",
+  "nameIsToLong" : "Name ist zu lang!",
+  "nameIsEmpty" : "Name darf nicht leer sein!",
+  "nameEndsWithSpace" : "Name darf nicht mit Leertaste enden!",
+  "nameHasBackslashN" : "Name darf kein \\n beinhalten!",
+  "nameHasBackslashT" : "Name darf kein \\t beinhalten!",
+  "usernameIsToLong" : "Benutzername ist zu lang!",
+  "usernameIsEmpty" : "Benutzername darf nicht leer sein!",
+  "usernameEndsWithSpace" : "Benutzername darf nicht mit Leertaste enden!",
+  "usernameHasBackslashN" : "Benutzername darf kein \\n beinhalten!",
+  "usernameHasBackslashT" : "Benutzername darf kein \\t beinhalten!",
+  "descriptionIsToLong" : "Beschreibung ist zu lang!",
+  "descriptionEndsWithSpace" : "Beschreibung darf nicht mit Leertaste enden!",
+  "descriptionHasBackslashN": "Beschreibung darf kein \\n beinhalten!",
+  "descriptionHasBackslashT" : "Beschreibung darf kein \\t beinhalten!",
+  "websiteIsToLong" : "Website ist zu lang!",
+  "websiteHasNoDot" : "Website muss einen Punkt haben!",
+  "websiteEndsWithSpace" : "Website darf nicht mit Leertaste enden!",
+  "websiteHasBackslashN" : "Website darf kein \\n beinhalten!",
+  "websiteHasBackslashT" : "Website darf kein \\t beinhalten!"
 }

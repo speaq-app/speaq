@@ -399,7 +399,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     } else {
       final snackBar = SnackBar(
           content: Text(
-        appLocale.errorSavingEditProfile + errorAt + "!",
+        appLocale.wrongInput + errorAt,
         textAlign: TextAlign.center,
       ));
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -408,13 +408,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   String _checkIfInputIsValid(Profile profile, AppLocalizations appLocale) {
-    if (profile.name.length > maxLengthName || profile.name.isEmpty || profile.name.endsWith(" ") || profile.name.contains("\n") || profile.name.contains("\t")) return appLocale.name;
+    if (profile.name.length > maxLengthName) return appLocale.nameIsToLong;
+    if (profile.name.isEmpty) return appLocale.nameIsEmpty;
+    if (profile.name.endsWith(" ")) return appLocale.nameEndsWithSpace;
+    if (profile.name.contains("\\n")) return appLocale.nameHasBackslashN;
+    if (profile.name.contains("\\t")) return appLocale.nameHasBackslashT;
 
-    if (profile.username.length > maxLengthUsername || profile.username.isEmpty || profile.username.endsWith(" ") || profile.username.contains("\n") || profile.username.contains("\t")) return appLocale.username;
+    if (profile.username.length > maxLengthUsername) return appLocale.usernameIsToLong;
+    if (profile.username.isEmpty) return appLocale.usernameIsEmpty;
+    if (profile.username.endsWith(" ")) return appLocale.usernameEndsWithSpace;
+    if (profile.username.contains("\\n")) return appLocale.usernameHasBackslashN;
+    if (profile.username.contains("\\t")) return appLocale.usernameHasBackslashT;
 
-    if (profile.description.length > maxLengthDescription) return appLocale.description;
+    if (profile.description.length > maxLengthDescription) return appLocale.descriptionIsToLong;
+    if (profile.description.endsWith(" ")) return appLocale.descriptionEndsWithSpace;
+    if (profile.description.contains("\\n")) return appLocale.descriptionHasBackslashN;
+    if (profile.description.contains("\\t")) return appLocale.descriptionHasBackslashT;
 
-    if (profile.website.length > maxLengthWebsite || !profile.website.contains(".") || profile.website.endsWith(" ") || profile.website.contains("\n") || profile.website.contains("\t")) return appLocale.website;
+    if (profile.website.length > maxLengthWebsite) return appLocale.websiteIsToLong;
+    if (!profile.website.contains(".")) return appLocale.websiteHasNoDot;
+    if (profile.website.endsWith(" ")) return appLocale.websiteEndsWithSpace;
+    if (profile.website.contains("\\n")) return appLocale.websiteHasBackslashN;
+    if (profile.website.contains("\\t")) return appLocale.websiteHasBackslashT;
 
     return "";
   }
