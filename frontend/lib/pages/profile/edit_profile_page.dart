@@ -267,7 +267,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
       leadingWidth: 80,
       actionList: [
         TextButton(
-          onPressed: () => _saveProfile(),
+          onPressed: () {
+            if (_saveProfile() == false) {
+              const snackBar = SnackBar(
+                  content: Text(
+                "Wrong input!",
+                textAlign: TextAlign.center,
+              ));
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          },
           child: Text(
             doneText,
             style: const TextStyle(
@@ -388,17 +398,35 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Navigator.pop(context);
   }
 
-  void _saveProfile() {
+  bool _saveProfile() {
     Profile _profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,
       description: _descriptionController.text,
       website: _websiteController.text,
     );
-    _profileBloc.add(SaveProfile(
-      userId: 1,
-      profile: _profile,
-    ));
+    if (_checkIfInputIsValid(_profile)) {
+      _profileBloc.add(
+        SaveProfile(
+          userId: 1,
+          profile: _profile,
+        ),
+      );
+      return true;
+    }
+    return false;
+  }
+
+  bool _checkIfInputIsValid(Profile profile) {
+    if (profile.name.length > maxLengthName || profile.name.isEmpty || profile.name.endsWith(" ") || profile.name.contains("\n") || profile.name.contains("\t")) return false;
+
+    if (profile.username.length > maxLengthUsername || profile.username.isEmpty || profile.username.endsWith(" ") || profile.username.contains("\n") || profile.username.contains("\t")) return false;
+
+    if (profile.description.length > maxLengthDescription) return false;
+
+    if (profile.website.length > maxLengthWebsite || !profile.website.contains(".") || profile.website.endsWith(" ") || profile.website.contains("\n") || profile.website.contains("\t")) return false;
+
+    return true;
   }
 
   @override
