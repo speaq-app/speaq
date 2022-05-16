@@ -43,6 +43,7 @@
   "displayandsound": "Display and sound",
   "aboutspeaq": "About Speaq",
   "cancel": "Cancel",
+  "done": "Done",
   "accinformation": "Account information",
   "deleteaccount": "Delete account",
   "acclogout": "Account log out",
@@ -64,7 +65,8 @@
   "ourteam": "Our team",
   "aboutustext": "You want to share your opinions, thoughts and news with the world - with all your feelings and rhetoric - in a very personal way? \nMany customers want a more personal form of online communication that is not yet offered today. And this is where Speaq comes in! With Speaq, we offer an innovative communication platform that makes a change from familiar platforms like Twitter and Facebook.",
   "frontenddeveloper": "Frontend developer",
-  "backenddeveloper": "Backend developer"
+  "backenddeveloper": "Backend developer",
+  "errorSavingEditProfile": "Wrong Input - Please check: "
 
 }
 

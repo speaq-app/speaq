@@ -21,14 +21,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
 
-  final String nameText = "Name";
-  final String usernameText = "Username";
-  final String descriptionText = "Description";
-  final String websiteText = "Website";
-  final String editProfileText = "Edit Profile";
-  final String cancelText = "Cancel";
-  final String doneText = "Done";
-
   late String hcImageURL = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   int maxLengthName = 30;
@@ -52,6 +44,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -83,18 +76,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
               return _buildCheckScreen();
             } else if (state is ProfileLoading) {
               return Scaffold(
-                appBar: _buildLoadingAppBar(deviceSize),
+                appBar: _buildLoadingAppBar(deviceSize, appLocale),
                 body: Container(
                   padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-                  child: _buildListViewShimmer(context),
+                  child: _buildListViewShimmer(context, appLocale),
                 ),
               );
             } else if (state is ProfileLoaded) {
               return Scaffold(
-                appBar: _buildAppBar(deviceSize, state.profile),
+                appBar: _buildAppBar(deviceSize, state.profile, appLocale),
                 body: Container(
                   padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-                  child: _buildListViewWithData(context, state.profile),
+                  child: _buildListViewWithData(context, appLocale, state.profile),
                 ),
               );
             }
@@ -115,7 +108,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  ListView _buildListViewWithData(BuildContext context, Profile profile) {
+  ListView _buildListViewWithData(BuildContext context, AppLocalizations appLocale, Profile profile) {
     return ListView(
       children: [
         Center(
@@ -129,68 +122,68 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ),
         const SizedBox(height: 40),
-        _buildNameTextField(),
-        _buildUsernameTextField(),
-        _buildDescriptionTextField(),
-        _buildWebsiteTextField(),
+        _buildNameTextField(appLocale),
+        _buildUsernameTextField(appLocale),
+        _buildDescriptionTextField(appLocale),
+        _buildWebsiteTextField(appLocale),
       ],
     );
   }
 
-  Widget _buildNameTextField() {
+  Widget _buildNameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
       maxLength: maxLengthName,
       controller: _nameController,
-      label: nameText,
+      label: appLocale.name,
       icon: const Icon(Icons.person_outline),
     );
   }
 
-  Widget _buildUsernameTextField() {
+  Widget _buildUsernameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
       maxLength: maxLengthUsername,
       controller: _usernameController,
-      label: usernameText,
+      label: appLocale.username,
       icon: const Icon(Icons.alternate_email_rounded),
     );
   }
 
-  Widget _buildDescriptionTextField() {
+  Widget _buildDescriptionTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
       maxLength: maxLengthDescription,
       controller: _descriptionController,
-      label: descriptionText,
+      label: appLocale.description,
       maxLines: 12,
       newLines: 5,
       icon: const Icon(Icons.format_align_left),
     );
   }
 
-  Widget _buildWebsiteTextField() {
+  Widget _buildWebsiteTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
       maxLength: maxLengthWebsite,
       controller: _websiteController,
-      label: websiteText,
+      label: appLocale.website,
       icon: const Icon(Icons.link),
     );
   }
 
-  Widget _buildListViewShimmer(BuildContext context) {
+  Widget _buildListViewShimmer(BuildContext context, AppLocalizations appLocale) {
     return ListView(
       children: [
         Center(
           child: _buildProfileImageShimmer(hcImageURL),
         ),
         const SizedBox(height: 40),
-        _buildNameTextFieldShimmer(),
-        _buildUsernameTextFieldShimmer(),
-        _buildDescriptionTextFieldShimmer(),
-        _buildWebsiteTextFieldShimmer(),
+        _buildNameTextFieldShimmer(appLocale),
+        _buildUsernameTextFieldShimmer(appLocale),
+        _buildDescriptionTextFieldShimmer(appLocale),
+        _buildWebsiteTextFieldShimmer(appLocale),
       ],
     );
   }
 
-  Widget _buildNameTextFieldShimmer() {
+  Widget _buildNameTextFieldShimmer(AppLocalizations appLocale) {
     return Shimmer.fromColors(
       baseColor: spqBlack,
       highlightColor: spqLightGrey,
@@ -198,13 +191,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthName,
         controller: _nameController,
-        label: nameText,
+        label: appLocale.name,
         icon: const Icon(Icons.person_outline),
       ),
     );
   }
 
-  Widget _buildUsernameTextFieldShimmer() {
+  Widget _buildUsernameTextFieldShimmer(AppLocalizations appLocale) {
     return Shimmer.fromColors(
       baseColor: spqBlack,
       highlightColor: spqLightGrey,
@@ -212,13 +205,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthUsername,
         controller: _usernameController,
-        label: usernameText,
+        label: appLocale.username,
         icon: const Icon(Icons.alternate_email_rounded),
       ),
     );
   }
 
-  Widget _buildDescriptionTextFieldShimmer() {
+  Widget _buildDescriptionTextFieldShimmer(AppLocalizations appLocale) {
     return Shimmer.fromColors(
       baseColor: spqBlack,
       highlightColor: spqLightGrey,
@@ -226,7 +219,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthDescription,
         controller: _descriptionController,
-        label: descriptionText,
+        label: appLocale.description,
         maxLines: 12,
         newLines: 5,
         icon: const Icon(Icons.format_align_left),
@@ -234,7 +227,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildWebsiteTextFieldShimmer() {
+  Widget _buildWebsiteTextFieldShimmer(AppLocalizations appLocale) {
     return Shimmer.fromColors(
       baseColor: spqBlack,
       highlightColor: spqLightGrey,
@@ -242,23 +235,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
         isEnabled: false,
         maxLength: maxLengthWebsite,
         controller: _websiteController,
-        label: websiteText,
+        label: appLocale.website,
         icon: const Icon(Icons.link),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar(Size deviceSize, Profile profile) {
+  PreferredSizeWidget _buildAppBar(Size deviceSize, Profile profile, AppLocalizations appLocale) {
     return SpqAppBar(
       title: Text(
-        editProfileText,
+        appLocale.editProfile,
         textAlign: TextAlign.center,
       ),
       centerTitle: true,
       leading: TextButton(
         onPressed: _cancel,
         child: Text(
-          cancelText,
+          appLocale.cancel,
           style: const TextStyle(
             color: spqPrimaryBlue,
           ),
@@ -267,19 +260,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       leadingWidth: 80,
       actionList: [
         TextButton(
-          onPressed: () {
-            if (_saveProfile() == false) {
-              const snackBar = SnackBar(
-                  content: Text(
-                "Wrong input!",
-                textAlign: TextAlign.center,
-              ));
-              ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-          },
+          onPressed: () => _saveProfile(appLocale),
           child: Text(
-            doneText,
+            appLocale.done,
             style: const TextStyle(
               color: spqPrimaryBlue,
             ),
@@ -290,10 +273,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  PreferredSizeWidget _buildLoadingAppBar(Size deviceSize) {
+  PreferredSizeWidget _buildLoadingAppBar(Size deviceSize, AppLocalizations appLocale) {
     return SpqAppBar(
       title: Text(
-        editProfileText,
+        appLocale.editProfile,
         textAlign: TextAlign.center,
       ),
       centerTitle: true,
@@ -398,35 +381,42 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Navigator.pop(context);
   }
 
-  bool _saveProfile() {
+  void _saveProfile(AppLocalizations appLocale) {
     Profile _profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,
       description: _descriptionController.text,
       website: _websiteController.text,
     );
-    if (_checkIfInputIsValid(_profile)) {
+    String errorAt = _checkIfInputIsValid(_profile, appLocale);
+    if (errorAt.isEmpty) {
       _profileBloc.add(
         SaveProfile(
           userId: 1,
           profile: _profile,
         ),
       );
-      return true;
+    } else {
+      final snackBar = SnackBar(
+          content: Text(
+        appLocale.errorSavingEditProfile + errorAt + "!",
+        textAlign: TextAlign.center,
+      ));
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-    return false;
   }
 
-  bool _checkIfInputIsValid(Profile profile) {
-    if (profile.name.length > maxLengthName || profile.name.isEmpty || profile.name.endsWith(" ") || profile.name.contains("\n") || profile.name.contains("\t")) return false;
+  String _checkIfInputIsValid(Profile profile, AppLocalizations appLocale) {
+    if (profile.name.length > maxLengthName || profile.name.isEmpty || profile.name.endsWith(" ") || profile.name.contains("\n") || profile.name.contains("\t")) return appLocale.name;
 
-    if (profile.username.length > maxLengthUsername || profile.username.isEmpty || profile.username.endsWith(" ") || profile.username.contains("\n") || profile.username.contains("\t")) return false;
+    if (profile.username.length > maxLengthUsername || profile.username.isEmpty || profile.username.endsWith(" ") || profile.username.contains("\n") || profile.username.contains("\t")) return appLocale.username;
 
-    if (profile.description.length > maxLengthDescription) return false;
+    if (profile.description.length > maxLengthDescription) return appLocale.description;
 
-    if (profile.website.length > maxLengthWebsite || !profile.website.contains(".") || profile.website.endsWith(" ") || profile.website.contains("\n") || profile.website.contains("\t")) return false;
+    if (profile.website.length > maxLengthWebsite || !profile.website.contains(".") || profile.website.endsWith(" ") || profile.website.contains("\n") || profile.website.contains("\t")) return appLocale.website;
 
-    return true;
+    return "";
   }
 
   @override
