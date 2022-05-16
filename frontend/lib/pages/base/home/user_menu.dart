@@ -225,7 +225,7 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.qr_code_2),
           title: Text(appLocale.qrCode),
           onTap: () {
-            Navigator.popAndPushNamed(context, "qr_ode");
+            Navigator.popAndPushNamed(context, "qr_code");
           },
         ),
         ListTile(
