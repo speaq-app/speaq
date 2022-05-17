@@ -8,6 +8,7 @@ option go_package = "app/user";
 service User {
     rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
     rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);    
+    rpc Login(LoginRequest) returns (LoginResponse);
 }
 
 message GetUserProfileRequest {

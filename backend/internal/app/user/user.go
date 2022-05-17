@@ -53,15 +53,13 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 }
 
 func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
-	p, err := s.DataService.Login(req.username, req.password)
+	p, err := s.DataService.Login(req.Username, req.Password)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &LoginResponse{
-		ID: p.ID
-		Profile: p.UserProfile
+		UserId: p.ID,
 	}, nil
 }
-
