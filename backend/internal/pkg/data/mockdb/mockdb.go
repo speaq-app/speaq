@@ -44,10 +44,10 @@ func New() data.Service {
 		users: map[int64]data.User{
 			1: {
 				Profile: data.UserProfile{
-					Name:                 "Hendrik Schlehlein",
-					Username:             "schlehlein",
-					Description:          "Test Description 1",
-					Website:              "Test Website 1",
+					Name:        "Hendrik Schlehlein",
+					Username:    "schlehlein",
+					Description: "Test Description 1",
+					Website:     "Test Website 1",
 					//ProfileImageBlurHash: "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo", //ID 1
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
@@ -120,4 +120,13 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	}
 
 	return u.Profile, nil
+}
+
+func (s service) Login(username string, password string) (data.User, error) {
+
+	//TODO implement me
+	//Get user by username. If doesn't exists, ERROR
+	//Compare entered password with user password. If not identical, ERROR
+	//Return User
+	panic("implement me")
 }

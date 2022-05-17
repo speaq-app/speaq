@@ -19,6 +19,14 @@ type Service struct {
 	timeout time.Duration
 }
 
+func (s Service) Login(username string, password string) (data.User, error) {
+	//TODO implement me
+	//Get user by username. If doesn't exists, ERROR
+	//Compare entered password with user password. If not identical, ERROR
+	//Return User
+	panic("implement me")
+}
+
 func Open(dsn string, timeout time.Duration) (data.Service, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()

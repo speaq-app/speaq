@@ -51,3 +51,17 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 		ProfileImageResourceId: p.ProfileImageResourceID,
 	}, nil
 }
+
+func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
+	p, err := s.DataService.Login(req.username, req.password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &LoginResponse{
+		ID: p.ID
+		Profile: p.UserProfile
+	}, nil
+}
+

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
-
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.username}) : super(key: key);
 
@@ -51,7 +50,7 @@ class _FollowPageState extends State<FollowPage> {
                     "$followingCount Following",
                     style: const TextStyle(fontSize: 20),
                   ),
-                )
+                ),
               ],
             ),
             preferredSize: deviceSize,
