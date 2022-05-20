@@ -38,5 +38,5 @@ message LoginRequest{
 }
 
 message LoginResponse{
-    int64 user_id = 1;
+    string token = 1;
 }

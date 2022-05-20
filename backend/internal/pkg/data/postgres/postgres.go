@@ -110,10 +110,9 @@ func (s *Service) migrateSchema(from, to int) error {
 	return err
 }
 
-func (s Service) Login(username string, password string) (data.User, error) {
+func (s Service) PasswordHashByUsername(username string) ([]byte, int64, error) {
 	//TODO implement me
-	//Get user by username. If doesn't exists, ERROR
-	//Compare entered password with user password. If not identical, ERROR
-	//Return User
 	panic("implement me")
+
+	return nil, 0, nil
 }

@@ -10,8 +10,12 @@ class User extends HiveObject {
   @HiveField(1)
   final Profile profile;
 
-  User({
+  @HiveField(2)
+  final Profile password;
+
+  User( {
     required this.id,
     required this.profile,
+    required this.password,
   });
 }

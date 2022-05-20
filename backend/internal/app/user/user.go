@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 
 	"github.com/golang/protobuf/ptypes/empty"
@@ -53,13 +54,19 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 }
 
 func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
-	p, err := s.DataService.Login(req.Username, req.Password)
+	hash, err := s.DataService.PasswordHashByUsername(req.Username)
 
 	if err != nil {
 		return nil, err
 	}
 
+	if err := bcrypt.CompareHashAndPassword(hash, []byte(req.Password)); err != nil {
+		return nil, err
+	}
+
+	token := "Sheeeh"
+
 	return &LoginResponse{
-		UserId: p.ID,
+		Token: token,
 	}, nil
 }

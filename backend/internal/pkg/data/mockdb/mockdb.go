@@ -122,11 +122,25 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-func (s service) Login(username string, password string) (data.User, error) {
+func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 
+	//passwort hash getten
 	//TODO implement me
-	//Get user by username. If doesn't exists, ERROR
+	//Get user by username (for loop). If doesn't exists, ERROR
 	//Compare entered password with user password. If not identical, ERROR
 	//Return User
-	panic("implement me")
+	//panic("implement me")
+
+	/*	var password []byte
+		var id int64*/
+
+	for _, value := range s.users {
+		if value.Profile.Username == username {
+			password := value.Password
+
+			return password, nil
+		}
+	}
+
+	return nil, errors.New("no user found")
 }

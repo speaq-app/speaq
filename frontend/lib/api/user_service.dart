@@ -1,3 +1,4 @@
+import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/model/profile.dart';
 
 abstract class UserService {
@@ -7,4 +8,6 @@ abstract class UserService {
     required int id,
     required Profile profile,
   });
+
+  Future<LoginResponse> login({required String username, required String password});
 }

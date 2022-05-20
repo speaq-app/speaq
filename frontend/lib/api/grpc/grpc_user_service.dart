@@ -40,4 +40,16 @@ class GRPCUserService implements UserService {
         ..website = profile.website,
     );
   }
+
+  @override
+  Future<LoginResponse> login({required String username, required String password}) async {
+    // TODO: implement login
+    LoginResponse resp = await _client.login(
+      LoginRequest()
+        ..username = username
+        ..password = password
+    );
+
+    return resp;
+  }
 }

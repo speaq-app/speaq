@@ -1,3 +1,4 @@
+import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:frontend/api/user_service.dart';
@@ -46,5 +47,11 @@ class CacheUserService implements UserService {
 
   Future<void> clearProfile(int id) {
     return _box.delete(id);
+  }
+
+  @override
+  Future<LoginResponse> login({required String username, required String password}) {
+    // TODO: implement login
+    throw UnimplementedError();
   }
 }
