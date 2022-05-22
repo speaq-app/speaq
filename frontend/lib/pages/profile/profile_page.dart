@@ -11,6 +11,8 @@ import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/speaq_text_button.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -183,33 +185,28 @@ class _ProfilePageState extends State<ProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: deviceSize.width / 100 * 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              _buildProfilePictureShimmer(),
+              const ShimmerProfilePicture(diameter: 21.5),
               Container(
-                width: deviceSize.width * 0.33,
-                height: deviceSize.height * 0.05,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Shimmer.fromColors(
-                    baseColor: spqLightGrey,
-                    highlightColor: spqWhite,
-                    child: const TextButton(
-                      child: Text(""),
-                      onPressed: null,
-                    )),
+                padding: EdgeInsets.symmetric(horizontal: deviceSize.width / 100 * 4),
+                child: const ShimmerCube(width: 27, height: 10),
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: _buildProfileInformationShimmer(),
+          padding: EdgeInsets.symmetric(
+            horizontal: deviceSize.width / 100 * 4,
+            vertical: deviceSize.width / 100 * 1,
+          ),
+          child: _buildProfileInformationShimmer(deviceSize),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 1),
           child: _buildTabsShimmer(deviceSize),
         ),
       ],
@@ -278,17 +275,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildProfilePictureShimmer() {
-    return Shimmer.fromColors(
-      baseColor: spqLightGrey,
-      highlightColor: spqWhite,
-      child: const CircleAvatar(
-        backgroundColor: spqWhite,
-        radius: 45,
       ),
     );
   }
@@ -378,38 +364,44 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfileInformationShimmer() {
+  Widget _buildProfileInformationShimmer(Size deviceSize) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildShimmerCube(300, 23),
-        const SizedBox(height: 5),
-        _buildShimmerCube(200, 18),
+        SizedBox(height: deviceSize.width / 100 * 2),
+        const ShimmerCube(width: 20, height: 5),
+        SizedBox(height: deviceSize.width / 100 * 3),
+        const ShimmerCube(width: 30, height: 4),
+        SizedBox(height: deviceSize.width / 100 * 3),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6.0),
-          child: _buildShimmerCube(230, 19),
+          padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const ShimmerCube(width: 100, height: 4),
+              SizedBox(height: deviceSize.width / 100 * 3),
+              const ShimmerCube(width: 40, height: 4),
+            ],
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 3),
           child: Row(
             children: [
-              const Icon(Icons.link),
-              _buildShimmerCube(100, 16),
-              const SizedBox(width: 15),
-              const Icon(Icons.calendar_month),
-              _buildShimmerCube(100, 16),
+              Icon(Icons.link, size: deviceSize.width / 100 * 6),
+              const ShimmerCube(width: 20, height: 3),
+              SizedBox(width: deviceSize.width / 100 * 1),
+              Icon(Icons.calendar_month, size: deviceSize.width / 100 * 6),
+              const ShimmerCube(width: 30, height: 3),
             ],
           ),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: _buildShimmerCube(100, 16),
-            ),
-            const SizedBox(width: 25),
-            _buildShimmerCube(100, 16),
+            const ShimmerCube(width: 25, height: 3),
+            SizedBox(width: deviceSize.width / 100 * 7),
+            const ShimmerCube(width: 25, height: 3),
           ],
         ),
       ],
@@ -460,9 +452,6 @@ class _ProfilePageState extends State<ProfilePage> {
         length: 2,
         child: Scaffold(
           appBar: const TabBar(
-            unselectedLabelColor: spqDarkGrey,
-            indicatorColor: spqPrimaryBlue,
-            labelColor: spqPrimaryBlue,
             tabs: [
               Text(
                 'Speaqs',
@@ -553,27 +542,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildPostContainerShimmer() {
     return ListView(
       children: const [
-        PostShimmer(hasImage: false),
+        PostShimmer(),
         PostShimmer(hasImage: true),
-        PostShimmer(hasImage: true),
-        PostShimmer(hasImage: false),
-        PostShimmer(hasImage: false),
+        PostShimmer(hasAudio: true),
+        PostShimmer(),
+        PostShimmer(),
         PostShimmer(hasImage: true),
       ],
-    );
-  }
-
-  Widget _buildShimmerCube(double width, double height) {
-    return Shimmer.fromColors(
-      baseColor: spqLightGrey,
-      highlightColor: spqWhite,
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: const DecoratedBox(
-          decoration: BoxDecoration(color: spqBlack),
-        ),
-      ),
     );
   }
 
