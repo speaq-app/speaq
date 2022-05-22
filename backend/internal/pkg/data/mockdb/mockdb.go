@@ -52,6 +52,7 @@ func New() data.Service {
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
+				Password: []byte("Password"),
 			},
 			2: {
 				Profile: data.UserProfile{
@@ -62,16 +63,29 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
+				Password: []byte("Sheeesh"),
 			},
 			3: {
 				Profile: data.UserProfile{
-					Name:                   "Nosakhare",
+					Name:                   "Nosakhare Omoruyi",
 					Username:               "nomoruyi",
 					Description:            "Test Description 3",
 					Website:                "Test Website 3",
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
+				Password: []byte("OpenToWork"),
+			},
+			4: {
+				Profile: data.UserProfile{
+					Name:                   "David Löwe",
+					Username:               "dloewe",
+					Description:            "Test Description 4",
+					Website:                "Test Website 4",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: []byte("OpenToWork"),
 			},
 		},
 	}
@@ -134,9 +148,9 @@ func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 	/*	var password []byte
 		var id int64*/
 
-	for _, value := range s.users {
-		if value.Profile.Username == username {
-			password := value.Password
+	for _, u := range s.users {
+		if u.Profile.Username == username {
+			password := u.Password
 
 			return password, nil
 		}

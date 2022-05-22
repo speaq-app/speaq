@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/resource.dart';
+import 'package:frontend/api/model/user.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -37,6 +38,8 @@ initHive() async {
   await Hive.openBox<Profile>("profile");
   Hive.registerAdapter(ResourceAdapter());
   await Hive.openBox<Resource>("resource");
+  Hive.registerAdapter(UserAdapter());
+  await Hive.openBox<Resource>("user");
 }
 
 class Speaq extends StatelessWidget {

@@ -50,7 +50,7 @@ class CacheUserService implements UserService {
   }
 
   @override
-  Future<LoginResponse> login({required String username, required String password}) {
+  Future<String> login({required String username, required String password}) {
     // TODO: implement login
     throw UnimplementedError();
   }

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/api/cache/cache_user_service.dart';
+import 'package:frontend/api/grpc/grpc_user_service.dart';
+import 'package:frontend/api/grpc/protos/user.pb.dart';
+import 'package:frontend/api/user_service.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
@@ -11,9 +15,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final UserService _userService = CacheUserService(GRPCUserService());
+
   bool isHidden = true;
 
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -52,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
               icon: Icons.person,
               hintText: appLocale.username,
               onChanged: (value) {},
-              controller: _nameController,
+              controller: _usernameController,
               labelTex: appLocale.username,
               borderColor: Border.all(color: spqBlack),
             ),
@@ -94,8 +100,14 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: SpeaqButton(
             loginText: appLocale.login,
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "base");
+            onPressed: () async {
+              //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              print("sdjklhfujkhsjklgfhsjklrhgjsh");
+              String token = await _userService.login( username: _usernameController.text, password: _passwordController.text);
+              print(token);
+              if(token=="Sheeesh") {
+                //Navigator.popAndPushNamed(context, "base");
+              }
             },
           ),
         ),
@@ -132,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _disposeController() {
     _passwordController.dispose();
-    _nameController.dispose();
+    _usernameController.dispose();
   }
 
   InkWell _buildVisibility() {

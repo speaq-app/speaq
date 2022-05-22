@@ -42,7 +42,7 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<LoginResponse> login({required String username, required String password}) async {
+  Future<String> login({required String username, required String password}) async {
     // TODO: implement login
     LoginResponse resp = await _client.login(
       LoginRequest()
@@ -50,6 +50,6 @@ class GRPCUserService implements UserService {
         ..password = password
     );
 
-    return resp;
+    return resp.token;
   }
 }

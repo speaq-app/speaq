@@ -64,7 +64,7 @@ func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, e
 		return nil, err
 	}
 
-	token := "Sheeeh"
+	token := "Sheeesh"
 
 	return &LoginResponse{
 		Token: token,
