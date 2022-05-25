@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_post_text_field.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class NewPostPage extends StatefulWidget {
   const NewPostPage({Key? key}) : super(key: key);
@@ -14,17 +19,46 @@ class _NewPostPageState extends State<NewPostPage> {
   late Size deviceSize;
   late AppLocalizations appLocale;
   final TextEditingController _postController = TextEditingController();
+  final TextEditingController _controllerEmoji = TextEditingController();
   bool emojiShowing = false;
+  bool keyboardShowing = true;
   bool visibilityContainer = false;
   bool checkValue = false;
 
   @override
   void initState() {
-    setState(
-      () {
-        visibilityContainer = checkValue;
+    super.initState();
+    setState(() {
+      visibilityContainer = checkValue;
+    });
+
+    KeyboardVisibility.onChange.listen(
+      (bool keyboardShowing) {
+        setState(
+          () {
+            this.keyboardShowing = keyboardShowing;
+          },
+        );
+
+        if (keyboardShowing && emojiShowing) {
+          emojiShowing = false;
+        }
       },
     );
+  }
+
+  onEmojiSelected(Emoji emoji) {
+    _postController
+      ..text += emoji.emoji
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: _postController.text.length));
+  }
+
+  _onBackspacePressed() {
+    _postController
+      ..text = _postController.text.characters.skipLast(1).toString()
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: _postController.text.length));
   }
 
   @override
@@ -44,6 +78,43 @@ class _NewPostPageState extends State<NewPostPage> {
               ),
               buildVisibilityContainer(),
               buildMainContainer(deviceSize),
+              Offstage(
+                offstage: !emojiShowing,
+                child: SizedBox(
+                  height: 280,
+                  child: EmojiPicker(
+                      onEmojiSelected: (Category category, Emoji emoji) {
+                        onEmojiSelected(emoji);
+                      },
+                      onBackspacePressed: _onBackspacePressed,
+                      config: Config(
+                          columns: 7,
+                          emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+                          verticalSpacing: 0,
+                          horizontalSpacing: 0,
+                          initCategory: Category.RECENT,
+                          bgColor: const Color(0xFFF2F2F2),
+                          indicatorColor: Colors.blue,
+                          iconColor: Colors.grey,
+                          iconColorSelected: Colors.blue,
+                          progressIndicatorColor: Colors.blue,
+                          backspaceColor: Colors.blue,
+                          skinToneDialogBgColor: Colors.white,
+                          skinToneIndicatorColor: Colors.grey,
+                          enableSkinTones: true,
+                          showRecentsTab: true,
+                          recentsLimit: 28,
+                          noRecents: const Text(
+                            'No Recents',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black26),
+                            textAlign: TextAlign.center,
+                          ),
+                          tabIndicatorAnimDuration: kTabScrollDuration,
+                          categoryIcons: const CategoryIcons(),
+                          buttonMode: ButtonMode.MATERIAL)),
+                ),
+              ),
             ],
           )
           //_buildPostTextField(appLocale),
@@ -119,12 +190,13 @@ class _NewPostPageState extends State<NewPostPage> {
       height: deviceSize.height * 0.08,
       child: Row(
         children: [
-          buildMaterial(Icons.emoji_emotions, null),
+          buildMaterial(Icons.emoji_emotions, emojiClick),
           buildMaterial(Icons.gif_box, null),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: TextFormField(
+                autofocus: true,
                 controller: _postController,
                 minLines: 1,
                 style: const TextStyle(fontSize: 20.0, color: Colors.black87),
@@ -211,4 +283,15 @@ class _NewPostPageState extends State<NewPostPage> {
           ),
         ),
       );
+
+  void emojiClick() {
+    if (keyboardShowing) {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
+    setState(
+      () {
+        emojiShowing = !emojiShowing;
+      },
+    );
+  }
 }
