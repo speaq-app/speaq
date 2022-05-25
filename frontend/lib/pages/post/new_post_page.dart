@@ -126,8 +126,31 @@ class _NewPostPageState extends State<NewPostPage> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: TextFormField(
                 controller: _postController,
+                minLines: 1,
                 style: const TextStyle(fontSize: 20.0, color: Colors.black87),
                 decoration: InputDecoration(
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Container(
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          setState(
+                            () {
+                              if (checkValue) {
+                                checkValue = false;
+                              } else {
+                                checkValue = true;
+                              }
+                            },
+                          );
+                        },
+                        child: const Icon(
+                          Icons.add,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
                   hintText: 'Speaq',
                   contentPadding: const EdgeInsets.only(
                       left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
@@ -139,27 +162,10 @@ class _NewPostPageState extends State<NewPostPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 40,
-              width: 40,
-              child: FloatingActionButton(
-                onPressed: () {
-                  setState(
-                    () {
-                      if (checkValue) {
-                        checkValue = false;
-                      } else {
-                        checkValue = true;
-                      }
-                    },
-                  );
-                },
-                child: const Icon(
-                  Icons.add,
-                  size: 24,
-                ),
-              ),
+            padding: EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: new Icon(Icons.multitrack_audio),
+              onPressed: () {},
             ),
           ),
         ],
