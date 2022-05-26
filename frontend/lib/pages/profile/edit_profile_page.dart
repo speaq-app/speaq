@@ -8,6 +8,7 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_loading_widget.dart';
 import 'package:frontend/widgets/speaq_text_field.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:shimmer/shimmer.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -171,8 +172,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget _buildListViewShimmer(BuildContext context, AppLocalizations appLocale) {
     return ListView(
       children: [
-        Center(
-          child: _buildProfileImageShimmer(hcImageURL),
+        const Center(
+          child: ShimmerProfilePicture(diameter: 36.5,)
         ),
         const SizedBox(height: 40),
         _buildNameTextFieldShimmer(appLocale),
@@ -318,27 +319,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
             );
           }
         },
-      ),
-    );
-  }
-
-  Widget _buildProfileImageShimmer(String imageURL) {
-    return Hero(
-      tag: 'dash',
-      child: Shimmer.fromColors(
-        baseColor: spqLightGrey,
-        highlightColor: spqWhite,
-        child: Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(imageURL),
-            ),
-          ),
-        ),
       ),
     );
   }

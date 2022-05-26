@@ -96,24 +96,25 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildProfileStack(Size deviceSize) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     return Container(
-        transform: Matrix4.translationValues(0, -45, 0),
-        child: BlocConsumer<ProfileBloc, ProfileState>(
-          bloc: _profileBloc,
-          listener: (context, state) {
-            if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-            }
-          },
-          builder: (context, state) {
-            if (state is ProfileLoaded) {
-              return _buildProfilePage(deviceSize, appLocale, state.profile);
-            } else if (state is ProfileLoading) {
-              return _buildProfilePageShimmer(deviceSize);
-            } else {
-              return const Text("State failed");
-            }
-          },
-        ));
+      transform: Matrix4.translationValues(0, -45, 0),
+      child: BlocConsumer<ProfileBloc, ProfileState>(
+        bloc: _profileBloc,
+        listener: (context, state) {
+          if (state is ProfileLoaded) {
+            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileLoaded) {
+            return _buildProfilePage(deviceSize, appLocale, state.profile);
+          } else if (state is ProfileLoading) {
+            return _buildProfilePageShimmer(deviceSize, appLocale);
+          } else {
+            return const Text("State failed");
+          }
+        },
+      ),
+    );
   }
 
   Widget _buildProfilePage(Size deviceSize, AppLocalizations appLocale, Profile profile) {
@@ -127,16 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _buildProfilePicture(deviceSize, profile.profileImageBlurHash),
-              Container(
-                width: deviceSize.width * 0.33,
-                height: deviceSize.height * 0.05,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: SpqTextbutton(
-                  onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
-                  name: appLocale.editProfile,
-                  style: const TextStyle(color: spqPrimaryBlue),
-                ),
-              ),
+              _buildEditPofileButton(deviceSize, appLocale),
               /*Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: deviceSize.width * 0.31,
@@ -180,23 +172,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfilePageShimmer(Size deviceSize) {
+  Widget _buildProfilePageShimmer(Size deviceSize, AppLocalizations appLocale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: deviceSize.width / 100 * 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const ShimmerProfilePicture(diameter: 21.5),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: deviceSize.width / 100 * 4),
-                child: const ShimmerCube(width: 27, height: 10),
-              ),
-            ],
-          ),
+          padding: EdgeInsets.symmetric(horizontal: deviceSize.width / 100 * 5),
+          child: const ShimmerProfilePicture(diameter: 21.5),
         ),
         Padding(
           padding: EdgeInsets.symmetric(
@@ -210,6 +192,19 @@ class _ProfilePageState extends State<ProfilePage> {
           child: _buildTabsShimmer(deviceSize),
         ),
       ],
+    );
+  }
+
+  Widget _buildEditPofileButton(Size deviceSize, AppLocalizations appLocale) {
+    return Container(
+      width: deviceSize.width * 0.33,
+      height: deviceSize.height * 0.05,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SpqTextbutton(
+        onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
+        name: appLocale.editProfile,
+        style: const TextStyle(color: spqPrimaryBlue),
+      ),
     );
   }
 
@@ -373,37 +368,11 @@ class _ProfilePageState extends State<ProfilePage> {
         SizedBox(height: deviceSize.width / 100 * 3),
         const ShimmerCube(width: 30, height: 4),
         SizedBox(height: deviceSize.width / 100 * 3),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 1),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const ShimmerCube(width: 100, height: 4),
-              SizedBox(height: deviceSize.width / 100 * 3),
-              const ShimmerCube(width: 40, height: 4),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 3),
-          child: Row(
-            children: [
-              Icon(Icons.link, size: deviceSize.width / 100 * 6),
-              const ShimmerCube(width: 20, height: 3),
-              SizedBox(width: deviceSize.width / 100 * 1),
-              Icon(Icons.calendar_month, size: deviceSize.width / 100 * 6),
-              const ShimmerCube(width: 30, height: 3),
-            ],
-          ),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const ShimmerCube(width: 25, height: 3),
-            SizedBox(width: deviceSize.width / 100 * 7),
-            const ShimmerCube(width: 25, height: 3),
-          ],
-        ),
+        const ShimmerCube(width: 100, height: 4),
+        SizedBox(height: deviceSize.width / 100 * 2),
+        const ShimmerCube(width: 100, height: 4),
+        SizedBox(height: deviceSize.width / 100 * 2),
+        const ShimmerCube(width: 60, height: 4),
       ],
     );
   }
