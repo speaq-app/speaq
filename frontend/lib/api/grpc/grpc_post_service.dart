@@ -36,7 +36,7 @@ class GRPCPostService implements PostService {
   }
 
   @override
-  Future<void> createPost({
+  Future<void> savePost({
     required int id,
     required Post post,
   }) async {

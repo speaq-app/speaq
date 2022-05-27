@@ -21,39 +21,39 @@ class _NewPostPageState extends State<NewPostPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery
-        .of(context)
-        .size;
+    Size deviceSize = MediaQuery.of(context).size;
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     return SafeArea(
       child: BlocConsumer<PostBloc, PostState>(
           bloc: _postBloc,
           listener: (context, state) async {
             if (state is PostSaving) {
-              Navigator.pop(context);
+
             }
           },
           builder: (context, state) {
-
             if (state is PostSaving) {
-              return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
+              return SpqLoadingWidget(
+                  MediaQuery.of(context).size.shortestSide * 0.15,
+              );
+
             } else if (state is PostSaved) {
-              Navigator.popAndPushNamed(context, "base");
+              Navigator.popAndPushNamed(context, "home");
             }
             return Scaffold(
                 appBar: SpqAppBar(
                   preferredSize: deviceSize,
-                  actionList: [_buildSendPostButton()],
+                  actionList: [_buildSendPostButton()
+                  ],
                 ),
                 body: _buildPostTextField(appLocale)
             );
           }
-      ),
+          ),
     );
   }
 
-  Widget _buildPostTextField(AppLocalizations appLocale) =>
-      Padding(
+  Widget _buildPostTextField(AppLocalizations appLocale) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: SpqPostTextField(
           height: double.infinity,
@@ -63,8 +63,7 @@ class _NewPostPageState extends State<NewPostPage> {
         ),
       );
 
-  Widget _buildSendPostButton() =>
-      TextButton(
+  Widget _buildSendPostButton() => TextButton(
         onPressed: _savePost,
         child: Container(
           child: const Text("speaq"),
@@ -79,10 +78,9 @@ class _NewPostPageState extends State<NewPostPage> {
   void _savePost() {
     Navigator.pop(context);
     Post _post = Post(
-        id: 1, resourceID: 1, date: dateNow, description: _postController.text);
+        date: dateNow, description: _postController.text, resourceID: 1, id: 1);
     _postBloc.add(SavePost(userId: 1, post: _post));
   }
-
 
   @override
   void dispose() {
@@ -94,7 +92,6 @@ class _NewPostPageState extends State<NewPostPage> {
   void _disposeController() {
     _postController.dispose();
   }
-
 }
 
 class SpqPostTextField extends StatelessWidget {
@@ -114,7 +111,7 @@ class SpqPostTextField extends StatelessWidget {
     this.width,
     this.height = 56,
     this.contentPadding =
-    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+        const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
     this.enabled = true,
   }) : super(key: key);
 
@@ -163,15 +160,15 @@ class SpqPostTextField extends StatelessWidget {
           ),
           contentPadding: contentPadding,
           labelStyle:
-          const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100),
+              const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           floatingLabelAlignment: FloatingLabelAlignment.start,
           alignLabelWithHint: true,
           prefixIcon: prefixIcon != null
               ? Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: prefixIcon,
-          )
+                  padding: const EdgeInsets.all(12.0),
+                  child: prefixIcon,
+                )
               : null,
           suffixIcon: suffixIcon,
           fillColor: spqWhite,

@@ -17,7 +17,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   void _onSavePost(SavePost event, Emitter<PostState> emit) async {
     emit(PostSaving());
-    await Future.delayed(const Duration(seconds: 2)); //removable
+    await Future.delayed(const Duration(seconds: 5)); //removable
+    await _postService.savePost(post: event.post, id: event.userId);
     emit(PostSaved());
   }
 }
