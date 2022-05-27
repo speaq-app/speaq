@@ -29,20 +29,21 @@ class SpeaqTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-        enabled: isEnabled,
-        inputFormatters: [MaxLinesTextInputFormatter(newLines)],
-        minLines: minLines,
-        maxLines: maxLines,
-        maxLength: maxLength,
-        maxLengthEnforcement: enforcement,
-        controller: controller,
-        decoration: InputDecoration(
-          errorStyle: const TextStyle(
-            color: spqErrorRed,
-          ),
-          labelText: label,
-          prefixIcon: icon,
-          border: const OutlineInputBorder(),
-        ));
+      enabled: isEnabled,
+      inputFormatters: [MaxLinesTextInputFormatter(newLines)],
+      minLines: minLines,
+      maxLines: maxLines,
+      maxLength: maxLength,
+      maxLengthEnforcement: enforcement,
+      controller: controller,
+      decoration: InputDecoration(
+        errorStyle: const TextStyle(
+          color: spqErrorRed,
+        ),
+        labelText: label,
+        prefixIcon: icon,
+        border: const OutlineInputBorder(),
+      ),
+    );
   }
 }

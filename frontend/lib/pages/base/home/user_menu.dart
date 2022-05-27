@@ -5,6 +5,8 @@ import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,6 +38,7 @@ class _UserMenuState extends State<UserMenu> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
+    Size deviceSize = MediaQuery.of(context).size;
 
     return Drawer(
       child: SafeArea(
@@ -47,7 +50,7 @@ class _UserMenuState extends State<UserMenu> {
                 bloc: _profileBloc,
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return _buildHeaderShimmer(context, appLocale);
+                    return _buildHeaderShimmer(context, appLocale, deviceSize);
                   } else if (state is ProfileLoaded) {
                     _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
                     return _buildHeader(context, appLocale, state.profile);
@@ -64,60 +67,33 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
-      padding: const EdgeInsets.only(
-        top: 24,
-        bottom: 24,
+      padding: EdgeInsets.only(
+        top: deviceSize.width / 100 * 6,
+        bottom: deviceSize.width / 100 * 5,
+        left: deviceSize.width / 100 * 3.7,
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Shimmer.fromColors(
-              baseColor: spqLightGrey,
-              highlightColor: spqWhite,
-              child: const CircleAvatar(radius: 24),
-            ),
-            const SizedBox(height: 13),
-            Shimmer.fromColors(
-              baseColor: spqLightGrey,
-              highlightColor: spqWhite,
-              child: const SizedBox(
-                width: 180,
-                height: 25,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: spqBlack),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Shimmer.fromColors(
-              baseColor: spqLightGrey,
-              highlightColor: spqWhite,
-              child: const SizedBox(
-                width: 100,
-                height: 15,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: spqBlack),
-                ),
-              ),
-            ),
-            const SizedBox(height: 5),
-            Shimmer.fromColors(
-              baseColor: spqLightGrey,
-              highlightColor: spqWhite,
-              child: const SizedBox(
-                width: 120,
-                height: 10,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: spqBlack),
-                ),
-              ),
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const ShimmerProfilePicture(diameter: 11.5),
+          SizedBox(height: deviceSize.width / 100 * 2.6),
+          const ShimmerCube(
+            width: 20,
+            height: 6,
+          ),
+          SizedBox(height: deviceSize.width / 100 * 2.6),
+          const ShimmerCube(
+            width: 30,
+            height: 4,
+          ),
+          SizedBox(height: deviceSize.width / 100 * 1.1),
+          const ShimmerCube(
+            width: 40,
+            height: 4,
+          ),
+        ],
       ),
     );
   }
@@ -225,7 +201,7 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.qr_code_2),
           title: Text(appLocale.qrCode),
           onTap: () {
-            Navigator.popAndPushNamed(context, "qr_ode");
+            Navigator.popAndPushNamed(context, "qr_code");
           },
         ),
         ListTile(

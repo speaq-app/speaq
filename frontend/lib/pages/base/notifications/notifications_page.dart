@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/all_widgets.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -12,9 +14,19 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    Size deviceSize = MediaQuery.of(context).size;
+    return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.yellow,
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+        ),
+        backgroundColor: spqPrimaryBlue,
+        body: const Center(
+          child: Text(
+            "coming soon...",
+            style: TextStyle(fontSize: 25),
+          ),
+        ),
       ),
     );
   }

@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
         ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        const Divider(thickness: 1, color: spqLightGreyTranslucent),
         PostContainer(
           name: _name,
           username: _username,
@@ -211,11 +211,11 @@ class _HomePageState extends State<HomePage> {
   Widget _buildPostContainerShimmer() {
     return ListView(
       children: const [
-        PostShimmer(hasImage: false),
+        PostShimmer(),
         PostShimmer(hasImage: true),
-        PostShimmer(hasImage: true),
-        PostShimmer(hasImage: false),
-        PostShimmer(hasImage: false),
+        PostShimmer(hasAudio: true),
+        PostShimmer(),
+        PostShimmer(),
         PostShimmer(hasImage: true),
       ],
     );
