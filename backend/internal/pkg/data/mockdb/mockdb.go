@@ -80,7 +80,7 @@ func New() data.Service {
 				Post: data.PostInfo{
 					UserID:         1,
 					PostResourceID: 1,
-					Decription:     "Mein erster Post",
+					Description:    "Mein erster Post",
 					Date:           "22/02/2022",
 				},
 			},
@@ -88,7 +88,7 @@ func New() data.Service {
 				Post: data.PostInfo{
 					UserID:         1,
 					PostResourceID: 1,
-					Decription:     "Mein zweiter Post",
+					Description:    "Mein zweiter Post",
 					Date:           "22/02/2023",
 				},
 			},
@@ -141,12 +141,12 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 
 func (s service) PostByID(id int64) (data.Post, error) {
 	time.Sleep(s.delay)
-	u, ok := s.post[id]
+	p, ok := s.post[id]
 	if !ok {
 		return u, errors.New("not workin 2")
 	}
-	u.ID = id
-	return u, nil
+	p.ID = id
+	return p, nil
 }
 
 func (s service) SavePost(id int64, post data.PostInfo) {
@@ -156,7 +156,7 @@ func (s service) SavePost(id int64, post data.PostInfo) {
 		return err
 	}
 	u.Post = post
-	s.users[id] = u
+	s.post[id] = u
 
 	return nil
 }
