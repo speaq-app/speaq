@@ -5,14 +5,22 @@ class PostContainer extends StatelessWidget {
   final String name;
   final String username;
   final String postMessage;
+  //final DateTime creationTime;
   final Widget postImage;
+  //final Widget postGif;
+  //final Widget postAudio;
+  //final Widget postVideo;
 
   const PostContainer({
     Key? key,
     required this.name,
     required this.username,
-    required this.postMessage,
-    this.postImage = const SizedBox(height: 1),
+    //required this.creationTime,
+    this.postMessage = "",
+    this.postImage = const SizedBox(height: 0),
+    //this.postGif = const SizedBox(height: 0),
+    //this.postAudio = const SizedBox(height: 0),
+    //this.postVideo = const SizedBox(height: 0),
   }) : super(key: key);
 
   @override
@@ -23,64 +31,77 @@ class PostContainer extends StatelessWidget {
           leading: const CircleAvatar(
             backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
           ),
-          title: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Text(
-                      username,
-                      style: const TextStyle(fontSize: 15, color: spqDarkGrey),
-                    ),
-                  ),
-                  const Text(
-                    "12/39/19",
-                    style: TextStyle(fontSize: 15, color: spqDarkGrey),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          subtitle: Column(
-            children: [
-              Text(
-                postMessage,
-                overflow: TextOverflow.clip,
-                style: const TextStyle(color: spqBlack, fontSize: 18),
-              ),
-              const SizedBox(height: 10),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: postImage,
-              ),
-              const SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Icon(
-                    Icons.mic,
-                    color: spqDarkGrey,
-                  ),
-                  Text("69"),
-                  SizedBox(width: 30),
-                  Icon(Icons.favorite, color: spqErrorRed),
-                  Text("238"),
-                  SizedBox(width: 30),
-                  Icon(Icons.ios_share, color: spqDarkGrey),
-                  SizedBox(width: 30),
-                  Icon(Icons.bookmark, color: spqDarkGrey)
-                ],
-              ),
-            ],
-          ),
+          title: _buildPostTitle(),
+          subtitle: _buildContent(),
         ),
       ],
     );
   }
+
+  Column _buildPostTitle() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Text(
+                username,
+                style: const TextStyle(fontSize: 15, color: spqDarkGrey),
+              ),
+            ),
+            const Text(
+              "12/39/19",
+              style: TextStyle(fontSize: 15, color: spqDarkGrey),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column _buildContent() {
+    return Column(
+      children: [
+        Text(
+          postMessage,
+          overflow: TextOverflow.clip,
+          style: const TextStyle(color: spqBlack, fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: postImage,
+        ),
+        //Other Elements
+        const SizedBox(height: 5),
+        _buildReactionList(),
+      ],
+    );
+  }
+}
+
+Widget _buildReactionList() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: const [
+      Icon(
+        Icons.mic,
+        color: spqDarkGrey,
+      ),
+      Text("69"),
+      SizedBox(width: 30),
+      Icon(Icons.favorite, color: spqErrorRed),
+      Text("238"),
+      SizedBox(width: 30),
+      Icon(Icons.ios_share, color: spqDarkGrey),
+      SizedBox(width: 30),
+      Icon(Icons.bookmark, color: spqDarkGrey)
+    ],
+  );
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -23,6 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
+
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _name = "Informatics";
   final String _username = "@hhn";
@@ -53,31 +56,37 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: BlocConsumer<ProfileBloc, ProfileState>(
-        bloc: _profileBloc,
-        listener: (context, state) {
-          if (state is ProfileLoaded) {
-            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-          }
-        },
-        builder: (context, state) {
-          if (state is ProfileLoading) {
-            return Scaffold(
-              appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: _buildPostContainerShimmer(),
-            );
-          } else if (state is ProfileLoaded) {
-            return _buildHomePage(context, deviceSize, state.profile);
-          } else {
-            return const Text("State failed");
-          }
-        },
+    return RefreshIndicator(
+      onRefresh: _pullRefresh,
+      child: SafeArea(
+        child: BlocConsumer<ProfileBloc, ProfileState>(
+          bloc: _profileBloc,
+          listener: (context, state) {
+            if (state is ProfileLoaded) {
+              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+            }
+          },
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return Scaffold(
+                appBar: SpqAppBarShimmer(preferredSize: deviceSize),
+                body: _buildPostContainerShimmer(),
+              );
+            } else if (state is ProfileLoaded) {
+              return _buildHomePage(context, deviceSize, state.profile);
+            } else {
+              return const Text("State failed");
+            }
+          },
+        ),
       ),
     );
+  }
+
+  Future<void> _pullRefresh() async {
+    log("test");
   }
 
   Scaffold _buildHomePage(BuildContext context, Size deviceSize, Profile profile) {
@@ -154,7 +163,6 @@ class _HomePageState extends State<HomePage> {
           name: _name,
           username: _username,
           postMessage: _postMessage,
-          postImage: Image.network(_postImage),
         ),
         const Divider(thickness: 1, color: spqLightGreyTranslucent),
         PostContainer(
