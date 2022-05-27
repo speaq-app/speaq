@@ -12,6 +12,7 @@ import (
 type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
+	post      map[int64]data.Post
 	delay     time.Duration
 }
 
@@ -44,12 +45,12 @@ func New() data.Service {
 		users: map[int64]data.User{
 			1: {
 				Profile: data.UserProfile{
-					Name:                 "Hendrik Schlehlein",
-					Username:             "schlehlein",
-					Description:          "Test Description 1",
-					Website:              "Test Website 1",
+					Name:        "Hendrik Schlehlein",
+					Username:    "schlehlein",
+					Description: "Test Description 1",
+					Website:     "Test Website 1",
 					//ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo", //ID 1
-					ProfileImageBlurHash: "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
 			},
@@ -71,6 +72,24 @@ func New() data.Service {
 					Website:                "Test Website 3",
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
+				},
+			},
+		},
+		post: map[int64]data.Post{
+			1: {
+				Post: data.PostInfo{
+					UserID:         1,
+					PostResourceID: 1,
+					Decription:     "Mein erster Post",
+					Date:           "22/02/2022",
+				},
+			},
+			2: {
+				Post: data.PostInfo{
+					UserID:         1,
+					PostResourceID: 1,
+					Decription:     "Mein zweiter Post",
+					Date:           "22/02/2023",
 				},
 			},
 		},
@@ -118,4 +137,26 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	}
 
 	return u.Profile, nil
+}
+
+func (s service) PostByID(id int64) (data.Post, error) {
+	time.Sleep(s.delay)
+	u, ok := s.post[id]
+	if !ok {
+		return u, errors.New("not workin 2")
+	}
+	u.ID = id
+	return u, nil
+}
+
+func (s service) SavePost(id int64, post data.PostInfo) {
+	time.Sleep(s.delay)
+	u, err := s.PostByID(id)
+	if err != nil {
+		return err
+	}
+	u.Post = post
+	s.users[id] = u
+
+	return nil
 }
