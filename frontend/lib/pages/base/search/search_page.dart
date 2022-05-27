@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/all_widgets.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -12,9 +14,19 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    Size deviceSize = MediaQuery.of(context).size;
+    return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.green,
+        appBar: SpqAppBar(
+          preferredSize: deviceSize,
+        ),
+        backgroundColor: spqPrimaryBlue,
+        body: const Center(
+          child: Text(
+            "coming soon...",
+            style: TextStyle(fontSize: 25),
+          ),
+        ),
       ),
     );
   }

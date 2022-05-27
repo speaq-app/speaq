@@ -11,6 +11,8 @@ import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/speaq_text_button.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -94,24 +96,25 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildProfileStack(Size deviceSize) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     return Container(
-        transform: Matrix4.translationValues(0, -45, 0),
-        child: BlocConsumer<ProfileBloc, ProfileState>(
-          bloc: _profileBloc,
-          listener: (context, state) {
-            if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-            }
-          },
-          builder: (context, state) {
-            if (state is ProfileLoaded) {
-              return _buildProfilePage(deviceSize, appLocale, state.profile);
-            } else if (state is ProfileLoading) {
-              return _buildProfilePageShimmer(deviceSize);
-            } else {
-              return const Text("State failed");
-            }
-          },
-        ));
+      transform: Matrix4.translationValues(0, -45, 0),
+      child: BlocConsumer<ProfileBloc, ProfileState>(
+        bloc: _profileBloc,
+        listener: (context, state) {
+          if (state is ProfileLoaded) {
+            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileLoaded) {
+            return _buildProfilePage(deviceSize, appLocale, state.profile);
+          } else if (state is ProfileLoading) {
+            return _buildProfilePageShimmer(deviceSize, appLocale);
+          } else {
+            return const Text("State failed");
+          }
+        },
+      ),
+    );
   }
 
   Widget _buildProfilePage(Size deviceSize, AppLocalizations appLocale, Profile profile) {
@@ -125,16 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _buildProfilePicture(deviceSize, profile.profileImageBlurHash),
-              Container(
-                width: deviceSize.width * 0.33,
-                height: deviceSize.height * 0.05,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: SpqTextbutton(
-                  onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
-                  name: appLocale.editProfile,
-                  style: const TextStyle(color: spqPrimaryBlue),
-                ),
-              ),
+              _buildEditPofileButton(deviceSize, appLocale),
               /*Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: deviceSize.width * 0.31,
@@ -178,41 +172,39 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfilePageShimmer(Size deviceSize) {
+  Widget _buildProfilePageShimmer(Size deviceSize, AppLocalizations appLocale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _buildProfilePictureShimmer(),
-              Container(
-                width: deviceSize.width * 0.33,
-                height: deviceSize.height * 0.05,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Shimmer.fromColors(
-                    baseColor: spqLightGrey,
-                    highlightColor: spqWhite,
-                    child: const TextButton(
-                      child: Text(""),
-                      onPressed: null,
-                    )),
-              ),
-            ],
+          padding: EdgeInsets.symmetric(horizontal: deviceSize.width / 100 * 5),
+          child: const ShimmerProfilePicture(diameter: 21.5),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: deviceSize.width / 100 * 4,
+            vertical: deviceSize.width / 100 * 1,
           ),
+          child: _buildProfileInformationShimmer(deviceSize),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: _buildProfileInformationShimmer(),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 1),
           child: _buildTabsShimmer(deviceSize),
         ),
       ],
+    );
+  }
+
+  Widget _buildEditPofileButton(Size deviceSize, AppLocalizations appLocale) {
+    return Container(
+      width: deviceSize.width * 0.33,
+      height: deviceSize.height * 0.05,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SpqTextbutton(
+        onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
+        name: appLocale.editProfile,
+        style: const TextStyle(color: spqPrimaryBlue),
+      ),
     );
   }
 
@@ -278,17 +270,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildProfilePictureShimmer() {
-    return Shimmer.fromColors(
-      baseColor: spqLightGrey,
-      highlightColor: spqWhite,
-      child: const CircleAvatar(
-        backgroundColor: spqWhite,
-        radius: 45,
       ),
     );
   }
@@ -378,40 +359,20 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfileInformationShimmer() {
+  Widget _buildProfileInformationShimmer(Size deviceSize) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildShimmerCube(300, 23),
-        const SizedBox(height: 5),
-        _buildShimmerCube(200, 18),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6.0),
-          child: _buildShimmerCube(230, 19),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
-          child: Row(
-            children: [
-              const Icon(Icons.link),
-              _buildShimmerCube(100, 16),
-              const SizedBox(width: 15),
-              const Icon(Icons.calendar_month),
-              _buildShimmerCube(100, 16),
-            ],
-          ),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: _buildShimmerCube(100, 16),
-            ),
-            const SizedBox(width: 25),
-            _buildShimmerCube(100, 16),
-          ],
-        ),
+        SizedBox(height: deviceSize.width / 100 * 2),
+        const ShimmerCube(width: 20, height: 5),
+        SizedBox(height: deviceSize.width / 100 * 3),
+        const ShimmerCube(width: 30, height: 4),
+        SizedBox(height: deviceSize.width / 100 * 3),
+        const ShimmerCube(width: 100, height: 4),
+        SizedBox(height: deviceSize.width / 100 * 2),
+        const ShimmerCube(width: 100, height: 4),
+        SizedBox(height: deviceSize.width / 100 * 2),
+        const ShimmerCube(width: 60, height: 4),
       ],
     );
   }
@@ -460,9 +421,6 @@ class _ProfilePageState extends State<ProfilePage> {
         length: 2,
         child: Scaffold(
           appBar: const TabBar(
-            unselectedLabelColor: spqDarkGrey,
-            indicatorColor: spqPrimaryBlue,
-            labelColor: spqPrimaryBlue,
             tabs: [
               Text(
                 'Speaqs',
@@ -553,27 +511,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildPostContainerShimmer() {
     return ListView(
       children: const [
-        PostShimmer(hasImage: false),
+        PostShimmer(),
         PostShimmer(hasImage: true),
-        PostShimmer(hasImage: true),
-        PostShimmer(hasImage: false),
-        PostShimmer(hasImage: false),
+        PostShimmer(hasAudio: true),
+        PostShimmer(),
+        PostShimmer(),
         PostShimmer(hasImage: true),
       ],
-    );
-  }
-
-  Widget _buildShimmerCube(double width, double height) {
-    return Shimmer.fromColors(
-      baseColor: spqLightGrey,
-      highlightColor: spqWhite,
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: const DecoratedBox(
-          decoration: BoxDecoration(color: spqBlack),
-        ),
-      ),
     );
   }
 
