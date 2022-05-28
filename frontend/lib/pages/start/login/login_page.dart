@@ -4,6 +4,7 @@ import 'package:frontend/api/cache/cache_user_service.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/user_service.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
@@ -15,7 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final UserService _userService = CacheUserService(GRPCUserService());
+  final UserService _userService = GRPCUserService();
 
   bool isHidden = true;
 
@@ -75,7 +76,9 @@ class _LoginPageState extends State<LoginPage> {
             borderColor: Border.all(color: spqBlack),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              print("Forgot password");
+            },
             child: Text(
               appLocale.forgotPassword,
               textAlign: TextAlign.right,
@@ -101,13 +104,21 @@ class _LoginPageState extends State<LoginPage> {
           child: SpeaqButton(
             loginText: appLocale.login,
             onPressed: () async {
+              //Navigator.popAndPushNamed(context, "base");
               //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              print("sdjklhfujkhsjklgfhsjklrhgjsh");
-              String token = await _userService.login( username: _usernameController.text, password: _passwordController.text);
-              print(token);
-              if(token=="Sheeesh") {
-                //Navigator.popAndPushNamed(context, "base");
+              print("3. sdjklhfujkhsjklgfhsjklrhgjsh");
+              print("username: " + _usernameController.text);
+              print("password: " + _passwordController.text);
+
+              LoginResponse loginResponse = await _userService.login( username: _usernameController.text, password: _passwordController.text);
+
+              print(loginResponse.token);
+              if(loginResponse.token == null && loginResponse.token.isNotEmpty) {
+                Navigator.popAndPushNamed(context, "base");
+              } else {
+                print("UFF!");
               }
+
             },
           ),
         ),
@@ -115,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
           hintText: appLocale.registerText,
           text: appLocale.register,
           press: () {
-            Navigator.popAndPushNamed(context, "register");
+            print("2. sikugfzuishgdfuis");
+
           },
         ),
         const Padding(
@@ -129,7 +141,9 @@ class _LoginPageState extends State<LoginPage> {
           hintText: appLocale.guestText,
           text: appLocale.guest,
           press: () {
-            Navigator.popAndPushNamed(context, "base");
+            print("1. jbnklhskl")
+                ;
+            //Navigator.popAndPushNamed(context, "base");
           },
         ),
       ],

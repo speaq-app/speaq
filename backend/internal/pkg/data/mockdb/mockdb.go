@@ -2,6 +2,7 @@ package mockdb
 
 import (
 	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"log"
 	"time"
@@ -24,6 +25,11 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+	passHash, err := bcrypt.GenerateFromPassword([]byte("OpenToWork"), 10)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return service{
 		delay: time.Second,
 		resources: map[int64]data.Resource{
@@ -43,6 +49,7 @@ func New() data.Service {
 		},
 		users: map[int64]data.User{
 			1: {
+				ID: 1,
 				Profile: data.UserProfile{
 					Name:        "Hendrik Schlehlein",
 					Username:    "schlehlein",
@@ -52,9 +59,10 @@ func New() data.Service {
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
-				Password: []byte("Password"),
+				Password: passHash,
 			},
 			2: {
+				ID: 2,
 				Profile: data.UserProfile{
 					Name:                   "Daniel Holzwarth",
 					Username:               "dholzwarth",
@@ -63,9 +71,10 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
-				Password: []byte("Sheeesh"),
+				Password: passHash,
 			},
 			3: {
+				ID: 3,
 				Profile: data.UserProfile{
 					Name:                   "Nosakhare Omoruyi",
 					Username:               "nomoruyi",
@@ -74,9 +83,10 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
-				Password: []byte("OpenToWork"),
+				Password: passHash,
 			},
 			4: {
+				ID: 4,
 				Profile: data.UserProfile{
 					Name:                   "David Löwe",
 					Username:               "dloewe",
@@ -85,7 +95,7 @@ func New() data.Service {
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
 					ProfileImageResourceID: 2,
 				},
-				Password: []byte("OpenToWork"),
+				Password: passHash,
 			},
 		},
 	}
@@ -136,7 +146,7 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-func (s service) PasswordHashByUsername(username string) ([]byte, error) {
+func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
 
 	//passwort hash getten
 	//TODO implement me
@@ -152,9 +162,9 @@ func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 		if u.Profile.Username == username {
 			password := u.Password
 
-			return password, nil
+			return password, u.ID, nil
 		}
 	}
 
-	return nil, errors.New("no user found")
+	return nil, 0, errors.New("no user found")
 }

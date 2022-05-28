@@ -4,7 +4,7 @@ type UserService interface {
 	UserByID(id int64) (User, error)
 	UpdateUserProfile(userID int64, profile UserProfile) error
 	UserProfileByID(userID int64) (UserProfile, error)
-	PasswordHashByUsername(username string) ([]byte, error)
+	PasswordHashByUsername(username string) ([]byte, int64, error)
 }
 
 type User struct {

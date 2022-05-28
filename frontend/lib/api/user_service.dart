@@ -9,5 +9,5 @@ abstract class UserService {
     required Profile profile,
   });
 
-  Future<String> login({required String username, required String password});
+  Future<LoginResponse> login({required String username, required String password});
 }

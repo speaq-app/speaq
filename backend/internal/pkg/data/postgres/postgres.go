@@ -111,6 +111,7 @@ func (s *Service) migrateSchema(from, to int) error {
 }
 
 func (s Service) PasswordHashByUsername(username string) ([]byte, int64, error) {
+
 	//TODO implement me
 	panic("implement me")
 
