@@ -1,20 +1,13 @@
 package data
 
 type PostService interface {
-	SavePost(userID int64, post PostInfo) error
-	PostByID(userID int64) (PostInfo, error)
+	CreatePost(userID int64, post Post) error
+	PostByID(userID int64) (Post, error)
 }
 
 type Post struct {
-	ID int64
-
-	Post PostInfo
-}
-
-type PostInfo struct {
-	UserID         int64
-	PostID         int64
-	PostResourceID int64
-	Description    string
-	Date           string
+	ID          int64
+	UserID      int64
+	Description string
+	Date        string
 }

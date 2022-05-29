@@ -77,20 +77,24 @@ func New() data.Service {
 		},
 		post: map[int64]data.Post{
 			1: {
-				Post: data.PostInfo{
-					UserID:         1,
-					PostResourceID: 1,
-					Description:    "Mein erster Post",
-					Date:           "22/02/2022",
-				},
+				ID:          1,
+				UserID:      1,
+				Description: "Mein erster Post",
+				Date:        "22/02/2022",
 			},
+
 			2: {
-				Post: data.PostInfo{
-					UserID:         1,
-					PostResourceID: 1,
-					Description:    "Mein zweiter Post",
-					Date:           "22/02/2023",
-				},
+				ID:          2,
+				UserID:      2,
+				Description: "Mein zweiter Post",
+				Date:        "22/02/2023",
+			},
+
+			3: {
+				ID:          3,
+				UserID:      3,
+				Description: "Mein dritter Post",
+				Date:        "22/02/2024",
 			},
 		},
 	}
@@ -143,20 +147,19 @@ func (s service) PostByID(id int64) (data.Post, error) {
 	time.Sleep(s.delay)
 	p, ok := s.post[id]
 	if !ok {
-		return u, errors.New("not workin 2")
+		return p, errors.New("not workin 3")
 	}
 	p.ID = id
 	return p, nil
 }
 
-func (s service) SavePost(id int64, post data.PostInfo) {
+func (s service) CreatePost(id int64, post data.Post) error {
 	time.Sleep(s.delay)
-	u, err := s.PostByID(id)
+	c, err := s.PostByID(id)
 	if err != nil {
 		return err
 	}
-	u.Post = post
-	s.post[id] = u
+	s.post[id] = c
 
 	return nil
 }

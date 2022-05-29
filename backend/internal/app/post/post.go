@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type Server struct {
@@ -17,15 +16,23 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 	log.Printf("Post with ID %d should be updated", req.UserId)
 
 	p := data.Post{
-		ID:   req.UserId,
-		Post: req.PostInfo{},
+		ID:          req.Id,
+		UserID:      req.UserId,
+		Description: req.Description,
+		Date:        req.Date,
 	}
 
 	log.Println(p)
 	err := s.DataService.CreatePost(req.UserId, p)
+
 	if err != nil {
 		return nil, err
 	}
 
-	return &emptypb.Empty{}, nil
+	return &CreatePostResponse{
+		Id:          p.ID,
+		UserId:      p.UserID,
+		Description: p.Description,
+		Date:        p.Date,
+	}, nil
 }
