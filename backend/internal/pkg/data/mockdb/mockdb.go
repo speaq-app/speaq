@@ -150,6 +150,7 @@ func (s service) PostByID(id int64) (data.Post, error) {
 		return p, errors.New("not workin 3")
 	}
 	p.ID = id
+
 	return p, nil
 }
 
@@ -160,6 +161,8 @@ func (s service) CreatePost(id int64, post data.Post) error {
 		return err
 	}
 	s.post[id] = c
+
+	log.Println(c)
 
 	return nil
 }
