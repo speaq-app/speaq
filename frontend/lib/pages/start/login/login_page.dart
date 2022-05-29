@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/api/cache/cache_user_service.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/user_service.dart';
+import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
@@ -17,12 +19,42 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final UserService _userService = GRPCUserService();
+  final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
+
 
   bool isHidden = true;
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
+    Size deviceSize = MediaQuery.of(context).size;
+
+    return GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+      child: SafeArea(
+        child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+          bloc: _authenticationBloc,
+          listener: (context, state){
+
+          },
+          builder: (context, state){
+if(state is )
+          }
+
+
+        ),
+      ),
+    );
+  }
+/*
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
@@ -38,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+*/
 
   Widget buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
@@ -112,9 +145,10 @@ class _LoginPageState extends State<LoginPage> {
 
               LoginResponse loginResponse = await _userService.login( username: _usernameController.text, password: _passwordController.text);
 
-              print(loginResponse.token);
-              if(loginResponse.token == null && loginResponse.token.isNotEmpty) {
+              if(loginResponse.token != null && loginResponse.token.isNotEmpty) {
+                print(loginResponse.token);
                 Navigator.popAndPushNamed(context, "base");
+
               } else {
                 print("UFF!");
               }
@@ -127,7 +161,6 @@ class _LoginPageState extends State<LoginPage> {
           text: appLocale.register,
           press: () {
             print("2. sikugfzuishgdfuis");
-
           },
         ),
         const Padding(
@@ -141,8 +174,7 @@ class _LoginPageState extends State<LoginPage> {
           hintText: appLocale.guestText,
           text: appLocale.guest,
           press: () {
-            print("1. jbnklhskl")
-                ;
+            print("1. jbnklhskl");
             //Navigator.popAndPushNamed(context, "base");
           },
         ),

@@ -20,7 +20,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   }
 
   void _onLogin(Login event, Emitter<AuthenticationState> emit) async {
-    emit(LoggingIn());
+    emit(TryLoggingIn());
     LoginResponse resp;
 
     try {
@@ -35,7 +35,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
   }
   void _onSaveToken(SaveToken event, Emitter<AuthenticationState> emit) async {
-    emit(LoggingIn());
+    emit(TryLoggingIn());
   }
   void _onVerifyToken(VerifyToken event, Emitter<AuthenticationState> emit) async {
     emit(TokenLoading());

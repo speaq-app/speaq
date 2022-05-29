@@ -13,7 +13,7 @@ class TokenLoaded extends AuthenticationState {
 
 }
 
-class LoggingIn extends AuthenticationState {
+class TryLoggingIn extends AuthenticationState {
 
 }
 
