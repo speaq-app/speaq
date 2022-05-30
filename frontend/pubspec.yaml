@@ -56,6 +56,8 @@ dependencies:
   page_transition: ^2.0.5
   url_launcher: ^6.1.0
   image_picker: ^0.8.5+3
+  flutter_sound: ^9.2.1
+  permission_handler: ^9.2.0
 
   # API
   protobuf: ^2.0.1
