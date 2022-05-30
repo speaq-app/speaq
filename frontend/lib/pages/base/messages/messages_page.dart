@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/base/messages/user.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 
 class MessagesPage extends StatefulWidget {
@@ -16,7 +14,7 @@ class _MessagesPageState extends State<MessagesPage> {
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
-  List<User> _allUserList = [
+  final List<User> _allUserList = [
     User(
         "https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg",
         "Sven Gatnar",
@@ -74,7 +72,7 @@ class _MessagesPageState extends State<MessagesPage> {
         appBar: SpqAppBar(
           title: Text(
             appLocale.messages,
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
           preferredSize: deviceSize,
           centerTitle: true,

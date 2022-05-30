@@ -20,6 +20,10 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+	bc, err := ioutil.ReadFile("testImage2.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	return service{
 		delay: time.Second,
 		resources: map[int64]data.Resource{
@@ -29,18 +33,24 @@ func New() data.Service {
 				MIMEType: "image/jpeg",
 				Size:     83935,
 			},
-			2: {},
+			2: {ID: 2,
+				Data:     string(bc),
+				Name:     "testImageKarl",
+				MIMEType: "image/png",
+				Size:     1111111,
+			},
 			3: {},
 		},
 		users: map[int64]data.User{
 			1: {
 				Profile: data.UserProfile{
-					Name:                   "Hendrik Schlehlein",
-					Username:               "schlehlein",
-					Description:            "Test Description 1",
-					Website:                "Test Website 1",
-					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
-					ProfileImageResourceID: 1,
+					Name:                 "Hendrik Schlehlein",
+					Username:             "schlehlein",
+					Description:          "Test Description 1",
+					Website:              "Test Website 1",
+					//ProfileImageBlurHash: "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo", //ID 1
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
+					ProfileImageResourceID: 2,
 				},
 			},
 			2: {
@@ -94,6 +104,8 @@ func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
 		return err
 	}
 
+	profile.ProfileImageBlurHash = u.Profile.ProfileImageBlurHash
+	profile.ProfileImageResourceID = u.Profile.ProfileImageResourceID
 	u.Profile = profile
 	s.users[id] = u
 

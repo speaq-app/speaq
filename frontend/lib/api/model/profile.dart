@@ -26,7 +26,7 @@ class Profile extends HiveObject {
     required this.username,
     required this.description,
     required this.website,
-    required this.profileImageBlurHash,
-    required this.profileImageResourceId,
+    this.profileImageBlurHash = "",
+    this.profileImageResourceId = -1,
   });
 }

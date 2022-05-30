@@ -15,8 +15,7 @@ class GRPCUserService implements UserService {
 
   @override
   Future<Profile> getProfile(int id) async {
-    GetUserProfileResponse resp = await _client
-        .getUserProfile(GetUserProfileRequest()..userId = Int64(id));
+    GetUserProfileResponse resp = await _client.getUserProfile(GetUserProfileRequest()..userId = Int64(id));
     return Profile(
       name: resp.name,
       username: resp.username,

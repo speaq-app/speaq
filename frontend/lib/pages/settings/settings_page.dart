@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
+import 'package:frontend/widgets/all_widgets.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../widgets/speaq_settings_section.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);

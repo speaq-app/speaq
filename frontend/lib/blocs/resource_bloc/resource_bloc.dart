@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:frontend/api/cache/cache_resource_service.dart';
 import 'package:frontend/api/grpc/grpc_resource_service.dart';
@@ -9,8 +12,7 @@ part 'resource_event.dart';
 part 'resource_state.dart';
 
 class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
-  final ResourceService _resourceService =
-      CacheResourceService(GRPCResourceService("10.0.2.2", port: 8080));
+  final ResourceService _resourceService = CacheResourceService(GRPCResourceService("10.0.2.2", port: 8080));
 
   ResourceBloc() : super(ResourceInitial()) {
     on<LoadResource>(_onLoadResource);
@@ -24,7 +26,8 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
     emit(ResourceLoading());
     await Future.delayed(const Duration(seconds: 1)); //removeable
     var resource = await _resourceService.getResource(event.resourceId);
-    emit(ResourceLoaded(resource));
+    var decodedData = base64Decode(resource.data);
+    emit(ResourceLoaded(resource, decodedData));
   }
 
   void _onSaveResource(

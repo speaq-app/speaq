@@ -9,8 +9,10 @@
       }
     }
   },
-
+  "name": "Name",
   "username": "Username",
+  "description": "Description",
+  "website": "Website",
   "password": "Password",
   "forgotPassword": "Forgot Password?",
   "passwordMin": "Length min.8",

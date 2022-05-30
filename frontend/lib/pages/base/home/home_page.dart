@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -13,7 +11,7 @@ import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/spq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   final String _username = "@hhn";
   final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
   final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
-  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
@@ -39,7 +36,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(userId: 1));
+    //Change from Hardcoded
+    _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -55,6 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -62,18 +61,16 @@ class _HomePageState extends State<HomePage> {
         bloc: _profileBloc,
         listener: (context, state) {
           if (state is ProfileLoaded) {
-            _resourceBloc.add(
-                LoadResource(resourceId: state.profile.profileImageResourceId));
+            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
           }
         },
         builder: (context, state) {
           if (state is ProfileLoading) {
             return Scaffold(
               appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: Container(child: _buildListViewShimmer(context)),
+              body: _buildPostContainerShimmer(),
             );
           } else if (state is ProfileLoaded) {
-            log(state.profile.profileImageBlurHash);
             return _buildHomePage(context, deviceSize, state.profile);
           } else {
             return const Text("State failed");
@@ -83,8 +80,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Scaffold _buildHomePage(
-      BuildContext context, Size deviceSize, Profile profile) {
+  Scaffold _buildHomePage(BuildContext context, Size deviceSize, Profile profile) {
     return Scaffold(
       appBar: SpqAppBar(
         actionList: [
@@ -95,16 +91,13 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => {},
           )
         ],
-        leading: Builder(
-          builder: (context) {
-            return _buildProfileImage(context, profile.profileImageBlurHash);
-          }
-        ),
+        leading: Builder(builder: (context) {
+          return _buildProfileImage(context, profile.profileImageBlurHash);
+        }),
         title: Center(
           child: InkWell(
             onTap: () {
-              _scrollController.animateTo(0,
-                  duration: const Duration(seconds: 1), curve: Curves.linear);
+              _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
             },
             child: SvgPicture.asset(
               spqImage,
@@ -118,59 +111,7 @@ class _HomePageState extends State<HomePage> {
       drawer: const UserMenu(),
       body: SingleChildScrollView(
         controller: _scrollController,
-        child: Column(
-          children: [
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage2),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage2),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage2),
-            ),const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),
-          ],
-        ),
+        child: _buildPostContainer(),
       ),
       floatingActionButton: SpqFloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, 'new_post'),
@@ -192,7 +133,7 @@ class _HomePageState extends State<HomePage> {
           if (state is ResourceLoaded) {
             return CircleAvatar(
               radius: 20,
-              backgroundImage: MemoryImage(base64Decode(state.resource.data)),
+              backgroundImage: MemoryImage(state.decodedData),
             );
           } else {
             return CircleAvatar(
@@ -205,31 +146,85 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildListViewShimmer(BuildContext context) {
-    return ListView(
+  Widget _buildPostContainer() {
+    return Column(
       children: [
-        _buildShimmerPost(),
-        _buildShimmerPost(),
-        _buildShimmerPost(),
-        _buildShimmerPost(),
-        _buildShimmerPost(),
+        const SizedBox(height: 10),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage2),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage2),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage2),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
       ],
     );
   }
 
-  Widget _buildShimmerPost() {
-    return Shimmer.fromColors(
-      baseColor: spqLightGrey,
-      highlightColor: spqWhite,
-      child: Container(
-        height: 200,
-        color: spqPrimaryBlue,
-      ),
+  Widget _buildPostContainerShimmer() {
+    return ListView(
+      children: const [
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: true),
+        PostShimmer(hasImage: true),
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: false),
+        PostShimmer(hasImage: true),
+      ],
     );
   }
 
   @override
   void dispose() {
+    _profileBloc.close();
+    _resourceBloc.close();
     _scrollController.dispose();
     super.dispose();
   }
