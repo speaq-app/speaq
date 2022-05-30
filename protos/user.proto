@@ -7,7 +7,8 @@ option go_package = "app/user";
 
 service User {
     rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
-    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);    
+    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
+    rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowerResponse);
 }
 
 message GetUserProfileRequest {
@@ -21,7 +22,18 @@ message GetUserProfileResponse {
     string website = 4;
     string profile_image_blur_hash = 5;
     int64 profile_image_resource_id = 6;
+
 }
+
+message GetUserFollowerRequest{
+    int64 user_id=1;
+
+}
+
+message GetUserFollowerResponse{
+   repeated int64 follower_ids =1 [packed=true];
+}
+
 
 message UpdateUserProfileRequest {
     int64  user_id = 1;

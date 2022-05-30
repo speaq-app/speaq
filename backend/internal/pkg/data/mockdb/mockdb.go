@@ -42,7 +42,8 @@ func New() data.Service {
 			3: {},
 		},
 		users: map[int64]data.User{
-			1: {
+
+			1: {FollowerIDs: []int64{2},
 				Profile: data.UserProfile{
 					Name:        "Karl Ess",
 					Username:    "essiggurke",
@@ -85,6 +86,15 @@ func (s service) ResourceByID(id int64) (data.Resource, error) {
 	}
 	r.ID = id
 	return r, nil
+}
+func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
+	time.Sleep(s.delay)
+	r, ok := s.users[userID]
+	if !ok {
+		return []int64{}, errors.New("not workin 1")
+	}
+	r.ID = userID
+	return []int64{}, nil
 }
 
 func (s service) UserByID(id int64) (data.User, error) {
