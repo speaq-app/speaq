@@ -11,33 +11,44 @@ part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserService _userService = CacheUserService(GRPCUserService());
+  final UserService _userService = GRPCUserService();
 
   AuthenticationBloc() : super(AuthenticationInitial()) {
-    on<Login>(_onLogin);
+    on<LoggingIn>(_onLogin);
     on<SaveToken>(_onSaveToken);
     on<VerifyToken>(_onVerifyToken);
   }
 
-  void _onLogin(Login event, Emitter<AuthenticationState> emit) async {
+  void _onLogin(LoggingIn event, Emitter<AuthenticationState> emit) async {
     emit(TryLoggingIn());
     LoginResponse resp;
 
     try {
-      if(event.fromCache) {
-        resp = await (_userService as GRPCUserService).login(username: event.username, password: event.password);
-      } else {
-        resp = await (_userService as CacheUserService).login(username: event.username, password: event.password);
-      }
-      emit(LogInSuccess());
-    } on Error {
-     emit(LogInFail());
+      print("username BloC: " + event.username);
+      print("password BloC: " + event.password);
+
+      resp = await _userService.login(username: event.username, password: event.password);
+      print("user id BloC: ${resp.userId}");
+      print("token BloC: " + resp.token);
+      emit(LogInSuccess(userID: resp.userId.toInt(), token: resp.token));
+      print("Login Success !");
+    } catch (err)  {
+      print("Login Failed !:" + err.toString());
+      print("Login Failed !:" + err.runtimeType.toString());
+
+      emit(LogInFail(message: err.toString()));
     }
   }
   void _onSaveToken(SaveToken event, Emitter<AuthenticationState> emit) async {
-    emit(TryLoggingIn());
+    emit(TokenSaving());
+
+    emit(TokenSaved());
+
   }
   void _onVerifyToken(VerifyToken event, Emitter<AuthenticationState> emit) async {
     emit(TokenLoading());
+
+    emit(TokenLoaded());
+
   }
 }

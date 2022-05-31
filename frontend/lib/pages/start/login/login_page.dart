@@ -1,8 +1,11 @@
+/*
+import 'package:another_flushbar/flushbar.dart';
+*/
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -36,18 +39,48 @@ class _LoginPageState extends State<LoginPage> {
           currentFocus.unfocus();
         }
       },
-      child: SafeArea(
-        child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-            bloc: _authenticationBloc,
-            listener: (context, state) {
-              if (state is LogInFail) {
-              } else if (state is LogInSuccess) {
-                Navigator.of(context).pushNamed("");
-              }
-            },
-            builder: (context, state) {
-              return SizedBox.shrink();
-            }),
+      child: ColorfulSafeArea(
+        color: spqWhite,
+        child: Scaffold(
+          body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+              bloc: _authenticationBloc,
+              listener: (context, state) {
+                if (state is LogInSuccess) {
+                  print("Login Success");
+                  Navigator.pushNamed(context, "base", arguments: {"userId": state.userID, "token": state.token});
+                }
+              },
+              builder: (context, state) {
+                if (state is TryLoggingIn) {
+                  return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
+/*
+                } else if (state is LogInFail) {
+                  Flushbar(
+                    backgroundColor: spqPrimaryBlue,
+                    messageColor: spqWhite,
+                    message: state.message,
+                    duration: const Duration(seconds: 5),
+                  ).show(context);
+*/
+                  return ListView(
+                    children: <Widget>[
+                      buildTop(context, appLocale),
+                      buildBottom(context, appLocale),
+                    ],
+                  );
+                } /*else if (state is LogInSuccess) {
+                  Navigator.pushNamed(context, "base", arguments: {"userId": state.userID, "token": state.token});
+                  return SizedBox.shrink();
+                }*/ else {
+                  return ListView(
+                    children: <Widget>[
+                      buildTop(context, appLocale),
+                      buildBottom(context, appLocale),
+                    ],
+                  );
+                }
+              }),
+        ),
       ),
     );
   }
@@ -134,22 +167,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: SpeaqButton(
             loginText: appLocale.login,
-            onPressed: () async {
-              //Navigator.popAndPushNamed(context, "base");
-              //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              print("3. sdjklhfujkhsjklgfhsjklrhgjsh");
-              print("username: " + _usernameController.text);
-              print("password: " + _passwordController.text);
-
-              LoginResponse loginResponse = await _userService.login(username: _usernameController.text, password: _passwordController.text);
-
-              if (loginResponse.token != null && loginResponse.token.isNotEmpty) {
-                print(loginResponse.token);
-                Navigator.popAndPushNamed(context, "base");
-              } else {
-                print("UFF!");
-              }
-            },
+            onPressed: () => tryLogin(),
           ),
         ),
         SpeaqPageForwarding(
@@ -178,10 +196,28 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Future<void> tryLogin() async {
+    print("3. sdjklhfujkhsjklgfhsjklrhgjsh");
+    print("username UI: " + _usernameController.text);
+    print("password UI: " + _passwordController.text);
+
+    _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
+
+    //LoginResponse loginResponse = await _userService.login(username: _usernameController.text, password: _passwordController.text);
+
+/*    if (loginResponse.token != null && loginResponse.token.isNotEmpty) {
+      print(loginResponse.token);
+      Navigator.popAndPushNamed(context, "base");
+    } else {
+      print("UFF!");
+    }*/
+  }
+
   @override
   void dispose() {
     super.dispose();
     _disposeController();
+    _authenticationBloc.close();
   }
 
   void _disposeController() {

@@ -18,10 +18,17 @@ class TryLoggingIn extends AuthenticationState {
 }
 
 class LogInSuccess extends AuthenticationState {
+  final int userID;
+  final String token;
+
+  LogInSuccess({required this.userID, required this.token});
 
 }
 
 class LogInFail extends AuthenticationState {
+final String message;
+
+  LogInFail({required this.message});
 
 }
 

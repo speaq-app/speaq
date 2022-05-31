@@ -3,12 +3,11 @@ part of 'authentication_bloc.dart';
 @immutable
 abstract class AuthenticationEvent {}
 
-class Login extends AuthenticationEvent{
+class LoggingIn extends AuthenticationEvent{
   final String username;
   final String password;
-  final bool fromCache;
 
-  Login( {required this.username, required this.password, this.fromCache = true});
+  LoggingIn( {required this.username, required this.password});
 }
 
 class SaveToken extends AuthenticationEvent{
