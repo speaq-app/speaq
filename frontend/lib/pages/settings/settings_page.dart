@@ -4,7 +4,6 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -13,7 +12,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-
   @override
   initState() {
     super.initState();
@@ -45,10 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: EdgeInsets.all(8.0),
                     child: Text(
                       "@eric",
-                      style: TextStyle(
-                          color: spqBlack,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                   tiles: [
@@ -63,10 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: EdgeInsets.all(8.0),
                     child: Text(
                       appLocale.general,
-                      style: TextStyle(
-                          color: spqBlack,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                   tiles: [
@@ -77,9 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             Positioned(
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: _buildLogoPictures(deviceSize)),
+              child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
               bottom: 20,
               height: deviceSize.height * 0.1,
             )
@@ -92,8 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg",
-          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
+      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
     );
   }
 
