@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               onChanged: (value) {},
               controller: _nameController,
               labelTex: appLocale.username,
-              borderColor: Border.all(color: Colors.black26),
+              borderColor: Border.all(color: spqLightBlack),
             ),
           ),
           RoundTextField(
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: _passwordController,
             suffixIcon: _buildVisibility(),
             onChanged: (String value) {},
-            borderColor: Border.all(color: Colors.black26),
+            borderColor: Border.all(color: spqLightBlack),
           ),
           GestureDetector(
             onTap: () {},

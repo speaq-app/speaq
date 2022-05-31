@@ -39,7 +39,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
             } else if (state is PostSaved) {
               Navigator.popAndPushNamed(context, "home");
-            }
+            }  
             return Scaffold(
                 appBar: SpqAppBar(
                   preferredSize: deviceSize,
@@ -48,8 +48,8 @@ class _NewPostPageState extends State<NewPostPage> {
                 ),
                 body: _buildPostTextField(appLocale)
             );
-          }
-          ),
+        },
+      ),
     );
   }
 
@@ -78,7 +78,11 @@ class _NewPostPageState extends State<NewPostPage> {
   void _savePost() {
     Navigator.pop(context);
     Post _post = Post(
-        date: dateNow, description: _postController.text, resourceID: 1, id: 1);
+        date: dateNow, 
+        description: _postController.text, 
+        resourceID: 1, 
+        id: 1
+    );
     _postBloc.add(SavePost(userId: 1, post: _post));
   }
 
