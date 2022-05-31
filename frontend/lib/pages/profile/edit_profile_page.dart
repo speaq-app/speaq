@@ -69,6 +69,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             } else if (state is ProfileSaved) {
               Navigator.pop(context);
             }
+
           },
           builder: (context, state) {
             if (state is ProfileSaving) {
