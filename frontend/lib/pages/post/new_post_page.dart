@@ -27,9 +27,7 @@ class _NewPostPageState extends State<NewPostPage> {
       child: BlocConsumer<PostBloc, PostState>(
           bloc: _postBloc,
           listener: (context, state) async {
-            if (state is PostSaving) {
-
-            }
+            null;
           },
           builder: (context, state) {
             if (state is PostSaving) {
