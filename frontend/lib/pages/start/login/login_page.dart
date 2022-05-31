@@ -53,8 +53,9 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context, state) {
                 if (state is TryLoggingIn) {
                   return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
-/*
+
                 } else if (state is LogInFail) {
+                  /*
                   Flushbar(
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
