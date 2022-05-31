@@ -1,6 +1,7 @@
 /*
 import 'package:another_flushbar/flushbar.dart';
 */
+
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,14 +56,12 @@ class _LoginPageState extends State<LoginPage> {
                   return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
 
                 } else if (state is LogInFail) {
-                  /*
-                  Flushbar(
+/*                  Flushbar(
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
                     message: state.message,
                     duration: const Duration(seconds: 5),
-                  ).show(context);
-*/
+                  ).show(context);*/
                   return ListView(
                     children: <Widget>[
                       buildTop(context, appLocale),
