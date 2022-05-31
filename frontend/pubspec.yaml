@@ -76,6 +76,7 @@ dependencies:
 
   # Design
   colorful_safe_area: ^0.3.0
+  another_flushbar: ^1.10.29
 
 dev_dependencies:
   flutter_test:
