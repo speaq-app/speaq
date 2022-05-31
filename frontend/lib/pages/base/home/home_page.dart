@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   final String _username = "@hhn";
   final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
   final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
-  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
@@ -38,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     //Change from Hardcoded
-    _profileBloc.add(LoadProfile(userId: 1));
+    _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -69,7 +68,7 @@ class _HomePageState extends State<HomePage> {
           if (state is ProfileLoading) {
             return Scaffold(
               appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: _buildListViewShimmer(context, appLocale),
+              body: _buildPostContainerShimmer(),
             );
           } else if (state is ProfileLoaded) {
             return _buildHomePage(context, deviceSize, state.profile);
@@ -112,65 +111,7 @@ class _HomePageState extends State<HomePage> {
       drawer: const UserMenu(),
       body: SingleChildScrollView(
         controller: _scrollController,
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage2),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage2),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage2),
-            ),
-            const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-            PostContainer(
-              name: _name,
-              username: _username,
-              postMessage: _postMessage,
-              postImage: Image.network(_postImage),
-            ),
-          ],
-        ),
+        child: _buildPostContainer(),
       ),
       floatingActionButton: SpqFloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, 'new_post'),
@@ -205,21 +146,85 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildListViewShimmer(BuildContext context, AppLocalizations appLocale) {
-    return ListView(
+  Widget _buildPostContainer() {
+    return Column(
       children: [
-        PostShimmer(appLocale: appLocale, hasImage: false),
-        PostShimmer(appLocale: appLocale, hasImage: true),
-        PostShimmer(appLocale: appLocale, hasImage: true),
-        PostShimmer(appLocale: appLocale, hasImage: false),
-        PostShimmer(appLocale: appLocale, hasImage: false),
-        PostShimmer(appLocale: appLocale, hasImage: true),
+        const SizedBox(height: 10),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
+        const Divider(thickness: 1, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage2),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage2),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage2),
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          postMessage: _postMessage,
+          postImage: Image.network(_postImage),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPostContainerShimmer() {
+    return ListView(
+      children: const [
+        PostShimmer(),
+        PostShimmer(hasImage: true),
+        PostShimmer(hasAudio: true),
+        PostShimmer(),
+        PostShimmer(),
+        PostShimmer(hasImage: true),
       ],
     );
   }
 
   @override
   void dispose() {
+    _profileBloc.close();
+    _resourceBloc.close();
     _scrollController.dispose();
     super.dispose();
   }

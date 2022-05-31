@@ -10,6 +10,10 @@ type User struct {
 	ID int64
 
 	Profile UserProfile
+	/*Settings    UserSettings
+	FollowerIDs []int64
+	FolloweeIDs []int64
+	PostIDs     []int64*/
 }
 
 type UserProfile struct {
@@ -20,3 +24,8 @@ type UserProfile struct {
 	ProfileImageBlurHash   string
 	ProfileImageResourceID int64
 }
+
+/*type UserSettings struct {
+	Darkmode bool
+	Language string
+}*/
