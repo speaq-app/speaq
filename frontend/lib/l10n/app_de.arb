@@ -67,8 +67,7 @@
   "frontenddeveloper": "Frontend-Entwickler",
   "backenddeveloper": "Backend-Entwickler",
   "search": "Suche",
-  "hintTextSearchBarSearchPage": "Nach Personen suchen"
-
+  "hintTextSearchBarSearchPage": "Nach Personen suchen",
   "backenddeveloper": "Backend-Entwickler",
   "wrongInput": "Falsche Eingabe: ",
   "nameIsToLong" : "Name ist zu lang!",
@@ -90,4 +89,5 @@
   "websiteEndsWithSpace" : "Website darf nicht mit Leertaste enden!",
   "websiteHasBackslashN" : "Website darf kein \\n beinhalten!",
   "websiteHasBackslashT" : "Website darf kein \\t beinhalten!"
+
 }

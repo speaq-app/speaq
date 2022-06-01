@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/base/messages/user.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/all_widgets.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
