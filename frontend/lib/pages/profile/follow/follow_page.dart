@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
-
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.username}) : super(key: key);
 
@@ -18,7 +17,11 @@ class _FollowPageState extends State<FollowPage> {
   int followerCount = 522;
   int followingCount = 14;
 
-  List<Follower> follower = [Follower(username: "nomoruyi", firstname: "Nosakhare", lastname: "Omoruyi"), Follower(username: "dloewe", firstname: "David", lastname: "Loewe"), Follower(username: "sgatnar", firstname: "Sven", lastname: "Gatnar")];
+  List<Follower> follower = [
+    Follower(username: "nomoruyi", firstname: "Nosakhare", lastname: "Omoruyi"),
+    Follower(username: "dloewe", firstname: "David", lastname: "Loewe"),
+    Follower(username: "sgatnar", firstname: "Sven", lastname: "Gatnar")
+  ];
   List<Follower> following = [];
 
   @override
@@ -40,24 +43,32 @@ class _FollowPageState extends State<FollowPage> {
               tabs: [
                 SizedBox(
                   height: deviceSize.height * 0.05,
-                  child: Text(
-                    "$followerCount Follower",
-                    style: const TextStyle(fontSize: 20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Text(
+                      "$followerCount Follower",
+                      style: const TextStyle(fontSize: 20),
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: deviceSize.height * 0.05,
-                  child: Text(
-                    "$followingCount Following",
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                )
+                    height: deviceSize.height * 0.05,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        "$followingCount Following",
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    )),
               ],
             ),
             preferredSize: deviceSize,
           ),
           body: TabBarView(
-            children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList()],
+            children: [
+              _buildFollowerTab(deviceSize, follower),
+              _buildFollowingList()
+            ],
           ),
         ),
       ),
@@ -103,7 +114,8 @@ ListView _buildFollowList(List<Follower> followerList) {
 
         availableImage = Image.asset('resources/images/no_profile_picture.jpg');
 
-        return FollowerTile(follower: currentFollower, followerImage: currentFollower.username);
+        return FollowerTile(
+            follower: currentFollower, followerImage: currentFollower.username);
       },
       itemCount: followerList.length);
 }
@@ -115,12 +127,17 @@ class FollowerSearchDelegate extends SearchDelegate {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return [IconButton(onPressed: () => query = "", icon: const Icon(Icons.clear_outlined))];
+    return [
+      IconButton(
+          onPressed: () => query = "", icon: const Icon(Icons.clear_outlined))
+    ];
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return IconButton(onPressed: () => close(context, null), icon: Icon(Icons.adaptive.arrow_back_rounded));
+    return IconButton(
+        onPressed: () => close(context, null),
+        icon: Icon(Icons.adaptive.arrow_back_rounded));
   }
 
   @override
@@ -128,8 +145,16 @@ class FollowerSearchDelegate extends SearchDelegate {
     List<Follower> matchQuery = [];
 
     for (Follower currentFollower in followerList) {
-      if ((currentFollower.firstname.isNotEmpty ? currentFollower.firstname.toLowerCase().contains(query.toLowerCase()) : false) ||
-          (currentFollower.lastname.isNotEmpty ? currentFollower.lastname.toLowerCase().contains(query.toLowerCase()) : false)) {
+      if ((currentFollower.firstname.isNotEmpty
+              ? currentFollower.firstname
+                  .toLowerCase()
+                  .contains(query.toLowerCase())
+              : false) ||
+          (currentFollower.lastname.isNotEmpty
+              ? currentFollower.lastname
+                  .toLowerCase()
+                  .contains(query.toLowerCase())
+              : false)) {
         matchQuery.add(currentFollower);
       }
     }
@@ -142,8 +167,16 @@ class FollowerSearchDelegate extends SearchDelegate {
     List<Follower> matchQuery = [];
 
     for (Follower currentFollower in followerList) {
-      if ((currentFollower.firstname.isNotEmpty ? currentFollower.firstname.toLowerCase().contains(query.toLowerCase()) : false) ||
-          (currentFollower.lastname.isNotEmpty ? currentFollower.lastname.toLowerCase().contains(query.toLowerCase()) : false)) {
+      if ((currentFollower.firstname.isNotEmpty
+              ? currentFollower.firstname
+                  .toLowerCase()
+                  .contains(query.toLowerCase())
+              : false) ||
+          (currentFollower.lastname.isNotEmpty
+              ? currentFollower.lastname
+                  .toLowerCase()
+                  .contains(query.toLowerCase())
+              : false)) {
         matchQuery.add(currentFollower);
       }
     }

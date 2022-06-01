@@ -33,4 +33,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await _userService.updateProfile(id: event.userId, profile: event.profile);
     emit(ProfileSaved());
   }
+
+
 }

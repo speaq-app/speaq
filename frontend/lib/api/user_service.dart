@@ -7,4 +7,8 @@ abstract class UserService {
     required int id,
     required Profile profile,
   });
+
+  Future<List<int>> getFollower({
+    required int id,
+  });
 }

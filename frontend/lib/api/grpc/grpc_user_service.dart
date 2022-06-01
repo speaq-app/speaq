@@ -1,5 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
+import 'package:frontend/api/model/user.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:grpc/grpc.dart';
@@ -15,7 +16,8 @@ class GRPCUserService implements UserService {
 
   @override
   Future<Profile> getProfile(int id) async {
-    GetUserProfileResponse resp = await _client.getUserProfile(GetUserProfileRequest()..userId = Int64(id));
+    GetUserProfileResponse resp = await _client
+        .getUserProfile(GetUserProfileRequest()..userId = Int64(id));
     return Profile(
       name: resp.name,
       username: resp.username,
@@ -39,5 +41,16 @@ class GRPCUserService implements UserService {
         ..description = profile.description
         ..website = profile.website,
     );
+  }
+
+  @override
+  Future<List<int>> getFollower({required int id}) async {
+    GetUserFollowerResponse resp = await _client
+        .getUserFollower(GetUserFollowerRequest()..userId = Int64(id));
+    List<int> follower = [];
+    for (Int64 i in resp.followerIds) {
+      follower.add(i.toInt());
+    }
+    return follower;
   }
 }

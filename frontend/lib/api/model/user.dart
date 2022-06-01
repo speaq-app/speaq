@@ -10,8 +10,12 @@ class User extends HiveObject {
   @HiveField(1)
   final Profile profile;
 
+  @HiveField(3)
+ // final List<int> followerIDs,
+
   User({
     required this.id,
     required this.profile,
+ //  required this.followerIDs,
   });
 }

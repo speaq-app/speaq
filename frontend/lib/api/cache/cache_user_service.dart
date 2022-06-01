@@ -47,4 +47,10 @@ class CacheUserService implements UserService {
   Future<void> clearProfile(int id) {
     return _box.delete(id);
   }
+
+  @override
+  Future<List<int>> getFollower({required int id}) {
+    // TODO: implement getFollower
+    throw UnimplementedError();
+  }
 }
