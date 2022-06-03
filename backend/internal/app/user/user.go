@@ -54,13 +54,14 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*GetUserFollowerResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 
-	p, err := s.DataService.FollowerIDsByID(req.UserId)
+	er, ing, err := s.DataService.FollowerIDsByID(req.UserId)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(p)
+	log.Println(er)
 
 	return &GetUserFollowerResponse{
-		FollowerIds: []int64{122000, 12},
+		FollowerIds:  er,
+		FollowingIds: ing,
 	}, nil
 }

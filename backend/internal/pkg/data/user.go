@@ -4,7 +4,7 @@ type UserService interface {
 	UserByID(id int64) (User, error)
 	UpdateUserProfile(userID int64, profile UserProfile) error
 	UserProfileByID(userID int64) (UserProfile, error)
-	FollowerIDsByID(userID int64) ([]int64, error)
+	FollowerIDsByID(userID int64) ([]int64, []int64, error)
 }
 
 type User struct {
@@ -12,7 +12,8 @@ type User struct {
 
 	Profile UserProfile
 	//Settings    UserSettings
-	FollowerIDs []int64
+	FollowerIDs  []int64
+	FollowingIDs []int64
 
 	//FolloweeIDs []int64
 	//PostIDs     []int64

@@ -32,6 +32,7 @@ message GetUserFollowerRequest{
 
 message GetUserFollowerResponse{
    repeated int64 follower_ids =1 [packed=true];
+   repeated int64 following_ids =2 [packed=true];
 }
 
 

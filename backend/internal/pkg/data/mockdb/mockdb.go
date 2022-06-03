@@ -43,7 +43,7 @@ func New() data.Service {
 		},
 		users: map[int64]data.User{
 
-			1: {FollowerIDs: []int64{2},
+			1: {
 				Profile: data.UserProfile{
 					Name:        "Karl Ess",
 					Username:    "essiggurke",
@@ -53,6 +53,8 @@ func New() data.Service {
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
+				FollowerIDs:  []int64{2},
+				FollowingIDs: []int64{2},
 			},
 			2: {
 				Profile: data.UserProfile{
@@ -63,6 +65,8 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
+				FollowerIDs:  []int64{1, 3},
+				FollowingIDs: []int64{1, 3},
 			},
 			3: {
 				Profile: data.UserProfile{
@@ -73,6 +77,8 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
+				FollowerIDs:  []int64{1, 2},
+				FollowingIDs: []int64{1, 2},
 			},
 		},
 	}
@@ -87,14 +93,14 @@ func (s service) ResourceByID(id int64) (data.Resource, error) {
 	r.ID = id
 	return r, nil
 }
-func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
+func (s service) FollowerIDsByID(userID int64) ([]int64, []int64, error) {
 	time.Sleep(s.delay)
-	r, ok := s.users[userID]
+	u, ok := s.users[userID]
 	if !ok {
-		return []int64{}, errors.New("not workin 1")
+		return nil, nil, errors.New("followers by ID not working")
 	}
-	r.ID = userID
-	return []int64{}, nil
+	u.ID = userID
+	return u.FollowerIDs, u.FollowingIDs, nil
 }
 
 func (s service) UserByID(id int64) (data.User, error) {
