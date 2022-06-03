@@ -13,6 +13,7 @@ import (
 type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
+	post      map[int64]data.Post
 	delay     time.Duration
 }
 
@@ -98,6 +99,28 @@ func New() data.Service {
 				Password: passHash,
 			},
 		},
+		post: map[int64]data.Post{
+			1: {
+				ID:          1,
+				UserID:      1,
+				Description: "Mein erster Post",
+				Date:        "22/02/2022",
+			},
+
+			2: {
+				ID:          2,
+				UserID:      2,
+				Description: "Mein zweiter Post",
+				Date:        "22/02/2023",
+			},
+
+			3: {
+				ID:          3,
+				UserID:      3,
+				Description: "Mein dritter Post",
+				Date:        "22/02/2024",
+			},
+		},
 	}
 }
 
@@ -146,6 +169,7 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
+
 func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
 
 	//passwort hash getten
@@ -167,4 +191,28 @@ func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) 
 	}
 
 	return nil, 0, errors.New("no user found")
+
+func (s service) PostByID(id int64) (data.Post, error) {
+	time.Sleep(s.delay)
+	p, ok := s.post[id]
+	if !ok {
+		return p, errors.New("not workin 3")
+	}
+	p.ID = id
+
+	return p, nil
+}
+
+func (s service) CreatePost(id int64, post data.Post) error {
+	time.Sleep(s.delay)
+	c, err := s.PostByID(id)
+	if err != nil {
+		return err
+	}
+	s.post[id] = c
+
+	log.Println(c)
+
+	return nil
+
 }
