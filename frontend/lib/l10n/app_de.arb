@@ -66,6 +66,9 @@
   "aboutustext": "Du willst der Welt deine Meinungen, Gedanken und News mitteilen - mit all deinen Gefühlen und Rhetoriken - ganz persönlich? \nViele Kunden wünschen sich eine persönlichere Form der Online-Kommunikation, wie sie heute noch nicht geboten wird. Und hier kommt Speaq zum Einsatz! Wir bieten mit Speaq eine innovative Kommunikationsplattform, die Abwechslung von bekannten Plattformen wie Twitter und Facebook bietet.",
   "frontenddeveloper": "Frontend-Entwickler",
   "backenddeveloper": "Backend-Entwickler",
+  "search": "Suche",
+  "hintTextSearchBarSearchPage": "Nach Personen suchen",
+  "backenddeveloper": "Backend-Entwickler",
   "wrongInput": "Falsche Eingabe: ",
   "nameIsToLong" : "Name ist zu lang!",
   "nameIsEmpty" : "Name darf nicht leer sein!",
@@ -86,4 +89,5 @@
   "websiteEndsWithSpace" : "Website darf nicht mit Leertaste enden!",
   "websiteHasBackslashN" : "Website darf kein \\n beinhalten!",
   "websiteHasBackslashT" : "Website darf kein \\t beinhalten!"
+
 }

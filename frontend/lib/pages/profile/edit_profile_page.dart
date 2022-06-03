@@ -34,6 +34,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
 
+  late AppLocalizations appLocale;
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +47,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations appLocale = AppLocalizations.of(context)!;
+    appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return GestureDetector(
