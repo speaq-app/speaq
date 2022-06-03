@@ -1,13 +1,14 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
+
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_post_text_field.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -25,9 +26,11 @@ class _NewPostPageState extends State<NewPostPage> {
   final TextEditingController _postController = TextEditingController();
 
   // Keyboard
-  bool keyboardMainVisible = true;
+  bool mainKeyboardVisible = true;
+/*
   bool visibilityContainer = false;
-  bool checkValue = false;
+*/
+  bool cameraContainerVisible = false;
 
   // Emoji
   bool emojiKeyboardVisible = false;
@@ -43,6 +46,57 @@ class _NewPostPageState extends State<NewPostPage> {
   bool isRecorderReady = false;
   String recordingText = "00:00";
 
+  //region GENERAL
+  void keyboardInput() {
+    KeyboardVisibility.onChange.listen(
+          (bool keyboardShowing) {
+        setState(
+              () {
+            switchOffStage("MAIN", mainVisible: keyboardShowing);
+
+          },
+        );
+      },
+    );
+  }
+
+  void switchOffStage(String offstage, {bool? mainVisible}) {
+    switch (offstage) {
+      case "MAIN":
+        if(mainVisible! == true) {
+          audioKeyboardVisible = false;
+          emojiKeyboardVisible = false;
+        }
+        mainKeyboardVisible = mainVisible;
+        break;
+
+      case "AUDIO":
+        mainKeyboardVisible = false;
+        audioKeyboardVisible = !audioKeyboardVisible;
+        emojiKeyboardVisible = false;
+        break;
+
+      case "EMOJI":
+        mainKeyboardVisible = false;
+        emojiKeyboardVisible = !emojiKeyboardVisible;
+        audioKeyboardVisible = false;
+        break;
+
+      case "CAMERA":
+        cameraContainerVisible = !cameraContainerVisible;
+        break;
+
+      case "BACK":
+        mainKeyboardVisible = false;
+        cameraContainerVisible = false;
+        audioKeyboardVisible = false;
+        emojiKeyboardVisible = false;
+        break;
+    }
+  }
+
+  //endregion
+
   @override
   void initState() {
     super.initState();
@@ -53,11 +107,6 @@ class _NewPostPageState extends State<NewPostPage> {
     // KEYBOARD VISIBILITY
     keyboardInput();
 
-    setState(
-      () {
-        visibilityContainer = checkValue;
-      },
-    );
   }
 
   @override
@@ -68,15 +117,15 @@ class _NewPostPageState extends State<NewPostPage> {
       child: Scaffold(
         appBar: SpqAppBar(
           preferredSize: deviceSize,
-          actionList: [_buildSendPostButton(appLocale)],
+          actionList: [_buildSendPostButton()],
         ),
         body: Column(
           children: [
             Expanded(
-              child: _buildPostTextField(appLocale),
+              child: _buildPostTextField(),
             ),
             buildVisibilityContainer(),
-            buildMainContainer(deviceSize),
+            buildMainContainer(),
             buildOffstageEmoji(),
             buildOffstageAudio(),
           ],
@@ -85,30 +134,9 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  void keyboardInput() {
-    KeyboardVisibility.onChange.listen(
-      (bool keyboardShowing) {
-        setState(
-          () {
-            this.keyboardMainVisible = keyboardShowing;
-          },
-        );
-
-        if (keyboardShowing && emojiKeyboardVisible) {
-          emojiKeyboardVisible = false;
-        } else if (keyboardShowing && audioKeyboardVisible) {
-          audioKeyboardVisible = false;
-        } else if (emojiKeyboardVisible && audioKeyboardVisible) {
-          audioKeyboardVisible = false;
-        }
-      },
-    );
-  }
-
-  /// MAIN CONTAINER
-
-  Container buildMainContainer(Size deviceSize) {
-    return Container(
+  //region MAIN CONTAINER
+  Widget buildMainContainer() {
+    return SizedBox(
       height: deviceSize.height * 0.08,
       child: Row(
         children: [
@@ -124,29 +152,22 @@ class _NewPostPageState extends State<NewPostPage> {
                 decoration: InputDecoration(
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Container(
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          setState(
-                            () {
-                              if (checkValue) {
-                                checkValue = false;
-                              } else {
-                                checkValue = true;
-                              }
-                            },
-                          );
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          size: 24,
-                        ),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        setState(
+                          () {
+                            switchOffStage("CAMERA");
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        size: 24,
                       ),
                     ),
                   ),
                   hintText: 'Speaq',
-                  contentPadding: const EdgeInsets.only(
-                      left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+                  contentPadding: const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50.0),
                   ),
@@ -162,30 +183,24 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Visibility buildVisibilityContainer() {
     return Visibility(
-      child: Container(
+      child: SizedBox(
         height: deviceSize.height * 0.1,
         width: deviceSize.width,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              buildContainerCamera(
-                  'https://i.pinimg.com/736x/61/54/18/61541805b3069740ecd60d483741e5bb.jpg'),
-              buildContainerPictures(
-                  'https://9to5fortnite.com/de/wp-content/uploads/2022/04/Corinna-Kopf-Twitch-Zuschauerzahlen-boomen-nach-dem-Wechsel-zu-IRL-Streams.jpg'),
-              buildContainerPictures(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7k50ZmoaI9mkcYWJArxPWdkpSNf7QM8UzOd43LIj69CP2XzLkq9tD-4uz4s_Al9EJfK4&usqp=CAU'),
-              buildContainerPictures(
-                  'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1557376304.186_U5U7u5_n.jpg'),
-              buildContainerPictures(
-                  'https://media-exp1.licdn.com/dms/image/C4D03AQFFnndLd3cUog/profile-displayphoto-shrink_800_800/0/1649862939707?e=1658966400&v=beta&t=UzNwV5wS111quhYnnInTrSNO1mHknooTLsO_iceQ0d0'),
-              buildContainerPictures(
-                  'https://media-exp1.licdn.com/dms/image/C4D03AQFFnndLd3cUog/profile-displayphoto-shrink_800_800/0/1649862939707?e=1658966400&v=beta&t=UzNwV5wS111quhYnnInTrSNO1mHknooTLsO_iceQ0d0'),
+              buildContainerCamera('https://i.pinimg.com/736x/61/54/18/61541805b3069740ecd60d483741e5bb.jpg'),
+              buildContainerPictures('https://9to5fortnite.com/de/wp-content/uploads/2022/04/Corinna-Kopf-Twitch-Zuschauerzahlen-boomen-nach-dem-Wechsel-zu-IRL-Streams.jpg'),
+              buildContainerPictures('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7k50ZmoaI9mkcYWJArxPWdkpSNf7QM8UzOd43LIj69CP2XzLkq9tD-4uz4s_Al9EJfK4&usqp=CAU'),
+              buildContainerPictures('https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1557376304.186_U5U7u5_n.jpg'),
+              buildContainerPictures('https://media-exp1.licdn.com/dms/image/C4D03AQFFnndLd3cUog/profile-displayphoto-shrink_800_800/0/1649862939707?e=1658966400&v=beta&t=UzNwV5wS111quhYnnInTrSNO1mHknooTLsO_iceQ0d0'),
+              buildContainerPictures('https://media-exp1.licdn.com/dms/image/C4D03AQFFnndLd3cUog/profile-displayphoto-shrink_800_800/0/1649862939707?e=1658966400&v=beta&t=UzNwV5wS111quhYnnInTrSNO1mHknooTLsO_iceQ0d0'),
             ],
           ),
         ),
       ),
-      visible: checkValue,
+      visible: cameraContainerVisible,
     );
   }
 
@@ -200,9 +215,9 @@ class _NewPostPageState extends State<NewPostPage> {
       ),
     );
   }
+  //endregion
 
-  /// EMOJI
-
+  //region EMOJI
   Offstage buildOffstageEmoji() {
     return Offstage(
       offstage: !emojiKeyboardVisible,
@@ -245,40 +260,31 @@ class _NewPostPageState extends State<NewPostPage> {
   onEmojiSelected(Emoji emoji) {
     _postController
       ..text += emoji.emoji
-      ..selection = TextSelection.fromPosition(
-          TextPosition(offset: _postController.text.length));
+      ..selection = TextSelection.fromPosition(TextPosition(offset: _postController.text.length));
   }
 
   _onBackspacePressed() {
     setState(() {
-      if (emojiKeyboardVisible) {
-        emojiKeyboardVisible = !emojiKeyboardVisible;
-        audioKeyboardVisible = true;
-      } else {
-        emojiKeyboardVisible = true;
-        audioKeyboardVisible = false;
-      }
-      ;
+      switchOffStage("BACK");
     });
     _postController
       ..text = _postController.text.characters.skipLast(1).toString()
-      ..selection = TextSelection.fromPosition(
-          TextPosition(offset: _postController.text.length));
+      ..selection = TextSelection.fromPosition(TextPosition(offset: _postController.text.length));
   }
 
   void emojiClick() {
-    if (keyboardMainVisible) {
+    if (mainKeyboardVisible) {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     }
     setState(
       () {
-        emojiKeyboardVisible = !emojiKeyboardVisible;
+        switchOffStage("EMOJI");
       },
     );
   }
+  //endregion
 
-  /// BUILD CAMERA/GALLERY AND FUNCTIONALITIES
-
+  //region CAMERA/GALLERY AND FUNCTIONALITIES
   Padding buildContainerPictures(String url) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -294,8 +300,7 @@ class _NewPostPageState extends State<NewPostPage> {
           });
         },
         child: Container(
-          decoration: BoxDecoration(
-              color: spqBlack, borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(color: spqBlack, borderRadius: BorderRadius.circular(5)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: SizedBox.fromSize(
@@ -330,8 +335,7 @@ class _NewPostPageState extends State<NewPostPage> {
           getImage(true);
         },
         child: Container(
-          decoration: BoxDecoration(
-              color: Colors.black12, borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(5)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: SizedBox.fromSize(
@@ -344,7 +348,9 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  /// BUILD ALL BUTTONS IN KEYBOARD
+  //endregion
+
+  //region BUILD ALL BUTTONS IN KEYBOARD
 
   Padding buildAudio() {
     return Padding(
@@ -352,18 +358,19 @@ class _NewPostPageState extends State<NewPostPage> {
       child: IconButton(
         icon: new Icon(Icons.multitrack_audio),
         onPressed: () {
-          if (keyboardMainVisible) {
+          if (mainKeyboardVisible) {
             SystemChannels.textInput.invokeMethod('TextInput.hide');
           }
           setState(() {
-            audioKeyboardVisible = !audioKeyboardVisible;
+            print("Button");
+            switchOffStage("AUDIO");
           });
         },
       ),
     );
   }
 
-  Widget _buildPostTextField(AppLocalizations appLocale) => Padding(
+  Widget _buildPostTextField() => Padding(
         padding: const EdgeInsets.all(8.0),
         child: SpqPostTextField(
           suffixIcon: Visibility(
@@ -382,7 +389,7 @@ class _NewPostPageState extends State<NewPostPage> {
         ),
       );
 
-  Widget _buildSendPostButton(AppLocalizations appLocale) {
+  Widget _buildSendPostButton() {
     return TextButton(
       onPressed: () => showDialog(
         context: context,
@@ -412,52 +419,36 @@ class _NewPostPageState extends State<NewPostPage> {
       ),
     );
   }
+  //endregion
 
-  /// AUDIO
-
+  //region AUDIO
   Offstage buildOffstageAudio() {
     return Offstage(
       offstage: !audioKeyboardVisible,
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            if (audioKeyboardVisible) {
-              audioKeyboardVisible = !audioKeyboardVisible;
-            } else {
-              audioKeyboardVisible = true;
-            }
-          });
-        },
-        child: Container(
-          height: 280,
-          width: 80,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildAudioButtonFunction(),
-                StreamBuilder<RecordingDisposition>(
-                  stream: recorder.onProgress,
-                  builder: (context, snapshot) {
-                    final duration = snapshot.hasData
-                        ? snapshot.data!.duration
-                        : Duration.zero;
+      child: SizedBox(
+        height: 280,
+        width: 80,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildAudioButtonFunction(),
+              StreamBuilder<RecordingDisposition>(
+                stream: recorder.onProgress,
+                builder: (context, snapshot) {
+                  final duration = snapshot.hasData ? snapshot.data!.duration : Duration.zero;
 
-                    String twoDigits(int n) => n.toString().padLeft(2, "0");
-                    String twoDigitMinutes =
-                        twoDigits(duration.inMinutes.remainder(60));
-                    String twoDigitSeconds =
-                        twoDigits(duration.inSeconds.remainder(60));
+                  String twoDigits(int n) => n.toString().padLeft(2, "0");
+                  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+                  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
 
-                    return Text(
-                      '$twoDigitMinutes:$twoDigitSeconds',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-              ],
-            ),
+                  return Text(
+                    '$twoDigitMinutes:$twoDigitSeconds',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -467,8 +458,7 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget buildAudioButtonFunction() {
     return ElevatedButton(
       child: Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 32),
-      style: ElevatedButton.styleFrom(
-          fixedSize: Size(132, 132), shape: CircleBorder()),
+      style: ElevatedButton.styleFrom(fixedSize: Size(132, 132), shape: CircleBorder()),
       onPressed: () async {
         if (recorder.isRecording) {
           await stop();
@@ -482,11 +472,19 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  @override
-  void dispose() {
-    recorder.closeRecorder();
+  Future initRecorder() async {
+    final status = await Permission.microphone.request();
 
-    super.dispose();
+    if (status != PermissionStatus.granted) {
+      throw 'Microphone permission not granted';
+    }
+
+    await recorder.openRecorder();
+    isRecorderReady = true;
+
+    recorder.setSubscriptionDuration(
+      const Duration(milliseconds: 500),
+    );
   }
 
   Future record() async {
@@ -504,18 +502,14 @@ class _NewPostPageState extends State<NewPostPage> {
     print('Recorded audio: $audiopath');
   }
 
-  Future initRecorder() async {
-    final status = await Permission.microphone.request();
+  //endregion
 
-    if (status != PermissionStatus.granted) {
-      throw 'Microphone permission not granted';
-    }
+  @override
+  void dispose() {
+    recorder.closeRecorder();
+    _postController.dispose();
 
-    await recorder.openRecorder();
-    isRecorderReady = true;
-
-    recorder.setSubscriptionDuration(
-      const Duration(milliseconds: 500),
-    );
+    super.dispose();
   }
+
 }
