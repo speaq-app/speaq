@@ -33,7 +33,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       print("token BloC: " + resp.token);
       emit(LogInSuccess(userID: resp.userId.toInt(), token: resp.token));
       print("Login Success !");
-    } on  GrpcError catch (err)  {
+    } on GrpcError catch (err)  {
       print("Login Failed GRPC ERROR!:" + err.toString());
       print("Login Failed GRPC ERROR!:" + err.runtimeType.toString());
 

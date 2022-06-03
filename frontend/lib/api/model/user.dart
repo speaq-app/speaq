@@ -11,7 +11,7 @@ class User extends HiveObject {
   final Profile profile;
 
   @HiveField(2)
-  final Profile password;
+  final String password;
 
   User( {
     required this.id,
