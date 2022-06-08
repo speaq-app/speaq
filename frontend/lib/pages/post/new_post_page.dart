@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/model/post.dart';
 import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/blocs/post_bloc/post_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/api/model/post.dart';
+import 'package:frontend/blocs/post_bloc/post_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
@@ -28,24 +31,27 @@ class _NewPostPageState extends State<NewPostPage> {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     return SafeArea(
       child: BlocConsumer<PostBloc, PostState>(
-        bloc: _postBloc,
-        listener: (context, state) async {
-          null;
-        },
-        builder: (context, state) {
-          if (state is PostSaving) {
-            return SpqLoadingWidget(
-              MediaQuery.of(context).size.shortestSide * 0.15,
+          bloc: _postBloc,
+          listener: (context, state) async {
+            null;
+          },
+          builder: (context, state) {
+            if (state is PostSaving) {
+              return SpqLoadingWidget(
+                  MediaQuery.of(context).size.shortestSide * 0.15,
+              );
+
+            } else if (state is PostSaved) {
+              Navigator.popAndPushNamed(context, "home");
+            }
+            return Scaffold(
+                appBar: SpqAppBar(
+                  preferredSize: deviceSize,
+                  actionList: [_buildSendPostButton()
+                  ],
+                ),
+                body: _buildPostTextField(appLocale)
             );
-          } else if (state is PostSaved) {
-            Navigator.popAndPushNamed(context, "home");
-          }
-          return Scaffold(
-              appBar: SpqAppBar(
-                preferredSize: deviceSize,
-                actionList: [_buildSendPostButton()],
-              ),
-              body: _buildPostTextField(appLocale));
         },
       ),
     );
@@ -67,7 +73,9 @@ class _NewPostPageState extends State<NewPostPage> {
           child: const Text("speaq"),
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-          decoration: BoxDecoration(border: Border.all(color: spqPrimaryBlue, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(16.0))),
+          decoration: BoxDecoration(
+              border: Border.all(color: spqPrimaryBlue, width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(16.0))),
         ),
       );
 
@@ -117,7 +125,8 @@ class SpqPostTextField extends StatelessWidget {
     this.maxLines,
     this.width,
     this.height = 56,
-    this.contentPadding = const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+    this.contentPadding =
+        const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
     this.enabled = true,
   }) : super(key: key);
 
@@ -160,10 +169,13 @@ class SpqPostTextField extends StatelessWidget {
           isDense: true,
           label: Container(
             margin: const EdgeInsets.only(bottom: 12.0),
-            child: Text(hintText, style: const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100)),
+            child: Text(hintText,
+                style: const TextStyle(
+                    color: spqLightGrey, fontWeight: FontWeight.w100)),
           ),
           contentPadding: contentPadding,
-          labelStyle: const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100),
+          labelStyle:
+              const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           floatingLabelAlignment: FloatingLabelAlignment.start,
           alignLabelWithHint: true,
@@ -180,7 +192,8 @@ class SpqPostTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
             borderSide: const BorderSide(color: spqPrimaryBlue, width: 1.0),
           ),
-          hintStyle: const TextStyle(color: spqLightGrey, fontSize: 16, fontWeight: FontWeight.w100),
+          hintStyle: const TextStyle(
+              color: spqLightGrey, fontSize: 16, fontWeight: FontWeight.w100),
           //hintText: hintText,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),

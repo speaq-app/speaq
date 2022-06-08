@@ -81,6 +81,7 @@ func New() data.Service {
 				ID:          1,
 				UserID:      1,
 				Description: "Mein erster Post",
+				ResourceID: 1,
 				Date:        "22/02/2022",
 			},
 
@@ -88,6 +89,7 @@ func New() data.Service {
 				ID:          2,
 				UserID:      1,
 				Description: "Mein zweiter Post",
+				ResourceID: 1,
 				Date:        "22/02/2023",
 			},
 
@@ -95,6 +97,7 @@ func New() data.Service {
 				ID:          3,
 				UserID:      3,
 				Description: "Mein dritter Post",
+				ResourceID: 1,
 				Date:        "22/02/2024",
 			},
 		},
