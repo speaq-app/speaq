@@ -37,7 +37,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
   // Camera/Gallery
   bool checkImage = false;
-  File? _image = new File("assets/images/developer_sven.jpg");
+  File? _image = File("assets/images/developer_sven.jpg");
   late XFile? im;
 
   // Audio
@@ -356,7 +356,7 @@ class _NewPostPageState extends State<NewPostPage> {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: IconButton(
-        icon: new Icon(Icons.multitrack_audio),
+        icon: Icon(Icons.multitrack_audio),
         onPressed: () {
           if (mainKeyboardVisible) {
             SystemChannels.textInput.invokeMethod('TextInput.hide');
