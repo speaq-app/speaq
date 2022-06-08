@@ -6,12 +6,13 @@ option go_package = "app/user";
 
 
 service User {
-    rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
+    rpc GetUserProfile(GetUserInfoRequest) returns (GetUserProfileResponse);
     rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
-    rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowerResponse);
+    rpc GetUserFollower(GetUserInfoRequest) returns (GetUserFollowerResponse);
+    rpc GetUserFollowing(GetUserInfoRequest) returns (GetUserFollowingResponse);
 }
 
-message GetUserProfileRequest {
+message GetUserInfoRequest {
     int64 user_id = 1;
 }
 
@@ -25,14 +26,11 @@ message GetUserProfileResponse {
 
 }
 
-message GetUserFollowerRequest{
-    int64 user_id=1;
-
-}
-
 message GetUserFollowerResponse{
    repeated int64 follower_ids =1 [packed=true];
-   repeated int64 following_ids =2 [packed=true];
+}
+message GetUserFollowingResponse{
+   repeated int64 following_ids =1 [packed=true];
 }
 
 

@@ -33,7 +33,7 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 	return &emptypb.Empty{}, nil
 }
 
-func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) (*GetUserProfileResponse, error) {
+func (s Server) GetUserProfile(ctx context.Context, req *GetUserInfoRequest) (*GetUserProfileResponse, error) {
 	log.Printf("User Profile with ID %d should be loaded", req.UserId)
 
 	p, err := s.DataService.UserProfileByID(req.UserId)
@@ -51,17 +51,30 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 		ProfileImageResourceId: p.ProfileImageResourceID,
 	}, nil
 }
-func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*GetUserFollowerResponse, error) {
+func (s Server) GetUserFollower(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowerResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 
-	er, ing, err := s.DataService.FollowerIDsByID(req.UserId)
+	er, err := s.DataService.FollowerIDsByID(req.UserId)
 	if err != nil {
 		return nil, err
 	}
 	log.Println(er)
 
 	return &GetUserFollowerResponse{
-		FollowerIds:  er,
+		FollowerIds: er,
+	}, nil
+}
+
+func (s Server) GetUserFollowing(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowingResponse, error) {
+	log.Printf("Follower with ID %d should be loaded", req.UserId)
+
+	ing, err := s.DataService.FollowerIDsByID(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+	log.Println(ing)
+
+	return &GetUserFollowingResponse{
 		FollowingIds: ing,
 	}, nil
 }

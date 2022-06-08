@@ -93,14 +93,23 @@ func (s service) ResourceByID(id int64) (data.Resource, error) {
 	r.ID = id
 	return r, nil
 }
-func (s service) FollowerIDsByID(userID int64) ([]int64, []int64, error) {
+func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 	time.Sleep(s.delay)
 	u, ok := s.users[userID]
 	if !ok {
-		return nil, nil, errors.New("followers by ID not working")
+		return nil, errors.New("followers by ID not working")
 	}
 	u.ID = userID
-	return u.FollowerIDs, u.FollowingIDs, nil
+	return u.FollowerIDs, nil
+}
+func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
+	time.Sleep(s.delay)
+	u, ok := s.users[userID]
+	if !ok {
+		return nil, errors.New("following by ID not working")
+	}
+	u.ID = userID
+	return u.FollowingIDs, nil
 }
 
 func (s service) UserByID(id int64) (data.User, error) {

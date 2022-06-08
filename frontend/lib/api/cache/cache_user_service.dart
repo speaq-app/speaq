@@ -53,4 +53,9 @@ class CacheUserService implements UserService {
     // TODO: implement getFollower
     throw UnimplementedError();
   }
+  @override
+  Future<List<int>> getFollowing({required int id}) {
+    // TODO: implement getFollower
+    throw UnimplementedError();
+  }
 }

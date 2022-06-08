@@ -17,7 +17,7 @@ class GRPCUserService implements UserService {
   @override
   Future<Profile> getProfile(int id) async {
     GetUserProfileResponse resp = await _client
-        .getUserProfile(GetUserProfileRequest()..userId = Int64(id));
+        .getUserProfile(GetUserInfoRequest()..userId = Int64(id));
     return Profile(
       name: resp.name,
       username: resp.username,
@@ -46,11 +46,21 @@ class GRPCUserService implements UserService {
   @override
   Future<List<int>> getFollower({required int id}) async {
     GetUserFollowerResponse resp = await _client
-        .getUserFollower(GetUserFollowerRequest()..userId = Int64(id));
+        .getUserFollower(GetUserInfoRequest()..userId = Int64(id));
     List<int> follower = [];
     for (Int64 i in resp.followerIds) {
       follower.add(i.toInt());
     }
     return follower;
+  }
+  @override
+  Future<List<int>> getFollowing({required int id}) async {
+    GetUserFollowingResponse resp = await _client
+        .getUserFollowing(GetUserInfoRequest()..userId = Int64(id));
+    List<int> following = [];
+    for (Int64 i in resp.followingIds) {
+      following.add(i.toInt());
+    }
+    return following;
   }
 }

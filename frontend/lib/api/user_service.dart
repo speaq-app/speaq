@@ -11,4 +11,7 @@ abstract class UserService {
   Future<List<int>> getFollower({
     required int id,
   });
+  Future<List<int>> getFollowing({
+    required int id,
+  });
 }
