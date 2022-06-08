@@ -9,7 +9,6 @@ service Post {
 }
 
 message CreatePostRequest {
-
   int64 user_id = 1;
   string description = 2;
   int64 resource_id = 3;
@@ -24,7 +23,6 @@ message CreatePostResponse {
 }
 
 message GetPostRequest {
-
   int64 id = 1;
 }
 

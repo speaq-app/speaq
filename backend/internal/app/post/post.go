@@ -19,6 +19,7 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 	p := data.Post{
 		UserID:      req.UserId,
 		Description: req.Description,
+		ResourceID:  req.ResourceId,
 		Date:        time.Now().String(),
 	}
 
