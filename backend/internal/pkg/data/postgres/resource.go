@@ -21,3 +21,7 @@ WHERE id = $1;
 
 	return r, nil
 }
+
+func (s Service) UploadResource(res data.Resource) (int64, error) {
+	return 0, nil
+}

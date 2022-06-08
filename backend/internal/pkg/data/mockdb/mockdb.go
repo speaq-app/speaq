@@ -86,7 +86,7 @@ func New() data.Service {
 
 			2: {
 				ID:          2,
-				UserID:      2,
+				UserID:      1,
 				Description: "Mein zweiter Post",
 				Date:        "22/02/2023",
 			},
@@ -150,22 +150,32 @@ func (s service) PostByID(id int64) (data.Post, error) {
 	time.Sleep(s.delay)
 	p, ok := s.post[id]
 	if !ok {
-		return p, errors.New("not workin 3")
+		return p, errors.New("getting post by id failed")
 	}
 	p.ID = id
 
 	return p, nil
 }
 
-func (s service) CreatePost(id int64, post data.Post) error {
+func (s service) CreatePost(post data.Post) error {
 	time.Sleep(s.delay)
-	c, err := s.PostByID(id)
-	if err != nil {
-		return err
-	}
-	s.post[id] = c
 
-	log.Println(c)
+	n := int64(len(s.post) + 1)
+
+	s.post[n] = post
 
 	return nil
+}
+
+func (s service) UploadResource(res data.Resource) (int64, error) {
+	time.Sleep(s.delay)
+
+	n := int64(len(s.post) + 1)
+
+	s.resources[n] = res
+
+	if n == 0 {
+		return 0, errors.New("invalid resource")
+	}
+	return n, nil
 }

@@ -16,3 +16,13 @@ message GetResourceResponse {
     string mime_type = 3;
     int64 size = 4;
 }
+
+message UploadResourceRequest {
+    string data = 1;
+    string name = 2;
+    string mime_type = 3;
+    int64 size = 4;
+}
+message UploadResourceResponse {
+    int64 id = 1;
+}

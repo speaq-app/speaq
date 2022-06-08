@@ -7,18 +7,23 @@ class Post extends HiveObject {
   final int id;
 
   @HiveField(1)
-  final int resourceID;
+  final int userID;
 
   @HiveField(2)
-  final DateTime date;
-
-  @HiveField(3)
   final String description;
 
-  Post({
+  @HiveField(4)
+  final int resourceID;
+
+  @HiveField(5)
+  final DateTime date;
+
+
+  Post( {
     required this.id,
+    required this.userID,
+    required this.description,
     required this.resourceID,
     required this.date,
-    required this.description,
   });
 }

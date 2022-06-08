@@ -29,9 +29,10 @@ class GRPCPostService implements PostService {
 
     return Post(
       id: id,
-      date: DateTime.parse(response.date),
-      description: response.description,
-      resourceID: response.resourceId.toInt(),
+        userID: response.userId.toInt(),
+        description: response.description,
+        resourceID: response.resourceId.toInt(),
+        date: DateTime.parse(response.date),
     );
   }
 

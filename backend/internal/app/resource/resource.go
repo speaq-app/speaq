@@ -2,9 +2,8 @@ package resource
 
 import (
 	"context"
-	"log"
-
 	"github.com/speaq-app/speaq/internal/pkg/data"
+	"log"
 )
 
 type Server struct {
@@ -25,4 +24,21 @@ func (s Server) GetResource(ctx context.Context, req *GetResourceRequest) (*GetR
 		MimeType: r.MIMEType,
 		Size:     r.Size,
 	}, nil
+}
+func (s Server) UploadResource(ctx context.Context, req *UploadResourceRequest) (*UploadResourceResponse, error) {
+	r := data.Resource{
+		Data:     req.Data,
+		Name:     req.Name,
+		MIMEType: req.MimeType,
+		Size:     req.Size,
+	}
+
+	i, err := s.DataService.UploadResource(r)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &UploadResourceResponse{Id: i}, nil
+
 }
