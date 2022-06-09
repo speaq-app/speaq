@@ -13,6 +13,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   PostBloc() : super(PostInitial()) {
     on<SavePost>(_onSavePost);
+    on<LoadPosts>(_onLoadPosts);
   }
 
   void _onSavePost(SavePost event, Emitter<PostState> emit) async {
@@ -20,5 +21,16 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     await Future.delayed(const Duration(seconds: 5)); //removable
     await _postService.createPost(post: event.post, id: event.userId);
     emit(PostSaved());
+  }
+
+  void _onLoadPosts(LoadPosts event, Emitter<PostState> emit) async {
+    //User ID nehmen
+    //Alle Nutzer holen denen man folgt
+    //Alle Beiträge der Nutzer holen
+    //Beiträge chronologisch anzeigen
+
+    emit(PostsLoading());
+    await Future.delayed(const Duration(seconds: 1)); //removable
+    emit(PostsLoaded());
   }
 }

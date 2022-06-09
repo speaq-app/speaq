@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/blocs/post_bloc/post_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
+  final PostBloc _postBloc = PostBloc();
 
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
   final String _name = "Informatics";
@@ -34,6 +36,8 @@ class _HomePageState extends State<HomePage> {
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
+  late List<Widget> postList;
+
   late ScrollController _scrollController;
   bool showBackToTopButton = false;
 
@@ -41,6 +45,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     //Change from Hardcoded
     _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
+    //If no internet connection Load from cache?
+    _postBloc.add(LoadPosts(userId: 1));
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -72,12 +78,17 @@ class _HomePageState extends State<HomePage> {
             if (state is ProfileLoading) {
               return Scaffold(
                 appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-                body: _buildPostContainerShimmer(),
+                body: _buildPostView()
               );
             } else if (state is ProfileLoaded) {
-              return _buildHomePage(context, deviceSize, state.profile);
+              return Scaffold(
+                appBar: _buildLoadedAppBar(deviceSize, state.profile),
+                drawer: const UserMenu(),
+                body: _buildPostView(),
+                floatingActionButton: _buildFloatingActionButton(),
+              );
             } else {
-              return const Text("State failed");
+              return const Text("Profile State failed");
             }
           },
         ),
@@ -86,9 +97,71 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _pullRefresh() async {
-    log("test");
+    log("Load Posts");
+    _postBloc.add(LoadPosts(userId: 1));
   }
 
+  PreferredSizeWidget _buildLoadedAppBar(Size deviceSize, Profile profile) {
+    return SpqAppBar(
+      actionList: [
+        IconButton(
+          icon: const Icon(Icons.filter_alt_outlined),
+          color: spqPrimaryBlue,
+          iconSize: 25,
+          onPressed: () => {},
+        )
+      ],
+      leading: Builder(builder: (context) {
+        return _buildProfileImage(context, profile.profileImageBlurHash);
+      }),
+      title: Center(
+        child: InkWell(
+          onTap: () {
+            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+          },
+          child: SvgPicture.asset(
+            spqImage,
+            height: deviceSize.height * 0.055,
+            alignment: Alignment.center,
+          ),
+        ),
+      ),
+      preferredSize: deviceSize,
+    );
+  }
+
+  Widget _buildPostView() {
+    return BlocBuilder<PostBloc, PostState>(
+      bloc: _postBloc,
+      builder: (context, state) {
+        if (state is PostsLoaded) {
+          return SingleChildScrollView(
+            controller: _scrollController,
+            child: _buildPostContainer(),
+          );
+        }
+        else if(state is PostsLoading){
+          return _buildPostContainerShimmer();
+        }
+        else{
+          return const Text("Post State Failed.");
+        }
+      },
+    );
+  }
+
+  Widget _buildFloatingActionButton() {
+    return SpqFloatingActionButton(
+      onPressed: () => Navigator.pushNamed(context, 'new_post'),
+      heroTag: 'post',
+      child: const Icon(
+        Icons.add,
+        size: 35,
+      ),
+    );
+  }
+
+/*
   Scaffold _buildHomePage(BuildContext context, Size deviceSize, Profile profile) {
     return Scaffold(
       appBar: SpqAppBar(
@@ -132,6 +205,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  */
 
   Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
     return IconButton(
@@ -156,6 +230,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPostContainer() {
+    //Liste der geladenen Posts anzeigen
     return Column(
       children: [
         const SizedBox(height: 10),

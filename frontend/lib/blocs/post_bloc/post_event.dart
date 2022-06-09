@@ -12,3 +12,11 @@ class SavePost extends PostEvent {
     required this.post,
   });
 }
+
+class LoadPosts extends PostEvent {
+  final int userId;
+
+  LoadPosts({
+    required this.userId,
+  });
+}

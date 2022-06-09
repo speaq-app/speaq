@@ -8,3 +8,7 @@ class PostInitial extends PostState {}
 class PostSaving extends PostState {}
 
 class PostSaved extends PostState {}
+
+class PostsLoading extends PostState {}
+
+class PostsLoaded extends PostState {}
