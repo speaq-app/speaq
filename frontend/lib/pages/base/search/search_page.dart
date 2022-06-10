@@ -71,11 +71,11 @@ class _SearchPageState extends State<SearchPage> {
         appBar: SpqAppBar(
           title: Column(
             children: [
-              Text(appLocale.search, style: TextStyle(fontSize: 20)),
+              Text(appLocale.search, style: const TextStyle(fontSize: 20)),
               generateSearchBar(deviceSize),
             ],
           ),
-          preferredSize: Size.fromHeight(1600),
+          preferredSize: const Size.fromHeight(1600),
           centerTitle: true,
         ),
         body: Column(
