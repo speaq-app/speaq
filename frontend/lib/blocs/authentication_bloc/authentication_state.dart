@@ -5,17 +5,11 @@ abstract class AuthenticationState {}
 
 class AuthenticationInitial extends AuthenticationState {}
 
-class TokenLoading extends AuthenticationState {
+class TokenLoading extends AuthenticationState {}
 
-}
+class TokenLoaded extends AuthenticationState {}
 
-class TokenLoaded extends AuthenticationState {
-
-}
-
-class TryLoggingIn extends AuthenticationState {
-
-}
+class TryLoggingIn extends AuthenticationState {}
 
 class LogInSuccess extends AuthenticationState {
   final int userID;
@@ -32,10 +26,6 @@ final String message;
 
 }
 
-class TokenSaving extends AuthenticationState {
+class TokenSaving extends AuthenticationState {}
 
-}
-
-class TokenSaved extends AuthenticationState {
-
-}
+class TokenSaved extends AuthenticationState {}

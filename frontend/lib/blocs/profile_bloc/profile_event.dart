@@ -16,6 +16,6 @@ class SaveProfile extends ProfileEvent {
 
   SaveProfile({
     required this.userId,
-    required this.profile
+    required this.profile,
   });
 }

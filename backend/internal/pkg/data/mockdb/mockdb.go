@@ -169,7 +169,6 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-
 func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
 
 	//passwort hash getten
@@ -191,7 +190,7 @@ func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) 
 	}
 
 	return nil, 0, errors.New("no user found")
-
+}
 func (s service) PostByID(id int64) (data.Post, error) {
 	time.Sleep(s.delay)
 	p, ok := s.post[id]

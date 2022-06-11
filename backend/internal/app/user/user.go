@@ -2,10 +2,13 @@ package user
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/empty"
@@ -88,7 +91,7 @@ func CheckPasswordHash(hash []byte, password string) bool {
 }
 
 func GenerateJWT(username, role string) (string, error) {
-	var mySigningKey = []byte("Sheeesh")
+	mySigningKey := []byte("Sheeesh")
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 
@@ -105,6 +108,51 @@ func GenerateJWT(username, role string) (string, error) {
 	return tokenString, nil
 }
 
-func verifyToken() {
+/*func verifyToken(token string) (string, error) {
 
+}
+*/
+func IsAuthorized(handler http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		if r.Header["Token"] == nil {
+
+			err := errors.New("no Token Found")
+			json.NewEncoder(w).Encode(err)
+			return
+		}
+
+		var mySigningKey = []byte("Sheeesh")
+
+		token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("there was an error in parsing")
+			}
+			return mySigningKey, nil
+		})
+
+		if err != nil {
+			err := errors.New("your Token has been expired")
+			json.NewEncoder(w).Encode(err)
+			return
+		}
+
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			if claims["role"] == "admin" {
+
+				r.Header.Set("Role", "admin")
+				handler.ServeHTTP(w, r)
+				return
+
+			} else if claims["role"] == "user" {
+
+				r.Header.Set("Role", "user")
+				handler.ServeHTTP(w, r)
+				return
+			}
+		}
+
+		err = errors.New("not Authorized")
+		json.NewEncoder(w).Encode(err)
+	}
 }
