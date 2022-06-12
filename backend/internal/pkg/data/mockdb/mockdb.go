@@ -79,23 +79,53 @@ func New() data.Service {
 		post: map[int64]data.Post{
 			1: {
 				ID:          1,
-				UserID:      1,
+				OwnerID:     1,
+				Date:        time.Now(),
 				Description: "Mein erster Post",
-				Date:        "22/02/2022",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
 			},
 
 			2: {
 				ID:          2,
-				UserID:      2,
+				OwnerID:     1,
+				Date:        time.Now().Add(1 * time.Hour),
 				Description: "Mein zweiter Post",
-				Date:        "22/02/2023",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
 			},
 
 			3: {
 				ID:          3,
-				UserID:      3,
+				OwnerID:     2,
+				Date:        time.Now().Add(5 * time.Hour),
 				Description: "Mein dritter Post",
-				Date:        "22/02/2024",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
 			},
 		},
 	}
@@ -146,19 +176,24 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-func (s service) PostByID(id int64) (data.Post, error) {
+func (s service) PostsByID(id int64) ([]data.Post, error) {
 	time.Sleep(s.delay)
+	
+	postList := []data.Post{}
+
 	p, ok := s.post[id]
 	if !ok {
-		return p, errors.New("not workin 3")
+		return postList, errors.New("not workin 17")
 	}
-	p.ID = id
 
-	return p, nil
+	postList = append(postList, p)
+
+	return postList, nil
 }
 
 func (s service) CreatePost(id int64, post data.Post) error {
 	time.Sleep(s.delay)
+	/*
 	c, err := s.PostByID(id)
 	if err != nil {
 		return err
@@ -166,6 +201,6 @@ func (s service) CreatePost(id int64, post data.Post) error {
 	s.post[id] = c
 
 	log.Println(c)
-
+	*/
 	return nil
 }

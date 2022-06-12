@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/post.pbgrpc.dart';
 import 'package:frontend/api/model/post.dart';
@@ -15,24 +17,39 @@ class GRPCPostService implements PostService {
       ClientChannel(
         ip,
         port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
   }
 
   @override
-  Future<Post> getPost(int id) async {
-    GetPostResponse response = await _client.getPost(
-      GetPostRequest()..id = Int64(id),
-    );
+  Future<List<Post>> getPosts(int id) async {
+    GetPostsResponse response = await _client.getPosts(GetPostsRequest()..userId = Int64(id));
 
-    return Post(
-      id: id,
-      date: DateTime.parse(response.date),
-      description: response.description,
-      resourceID: response.resourceId.toInt(),
-    );
+    List<Post> postList = <Post>[
+      //remove Items
+      Post(id: 1, resourceID: 1, date: DateTime.now(), description: "test 1", ownerID: 1, numberOfLikes: 10, numberOfComments: 5),
+      Post(id: 2, resourceID: 2, date: DateTime.now(), description: "test 2", ownerID: 1, numberOfLikes: 15, numberOfComments: 3),
+      Post(id: 3, resourceID: 3, date: DateTime.now(), description: "test 3", ownerID: 1, numberOfLikes: 20, numberOfComments: 10),
+    ];
+
+    for (int i = 0; i < response.postList.length; i++) {
+      log("Datetime of post: ${response.postList.elementAt(i).date}"); //remove
+
+      postList.add(
+        Post(
+          id: response.postList.elementAt(i).postId.toInt(),
+          resourceID: response.postList.elementAt(i).resourceId.toInt(),
+          date: DateTime.fromMillisecondsSinceEpoch(response.postList.elementAt(i).date.toInt()),
+          description: response.postList.elementAt(i).description,
+          ownerID: response.postList.elementAt(i).ownerId.toInt(),
+          numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
+          numberOfComments: response.postList.elementAt(i).numberOfComments.toInt(),
+        ),
+      );
+    }
+
+    return postList;
   }
 
   @override
@@ -40,8 +57,10 @@ class GRPCPostService implements PostService {
     required int id,
     required Post post,
   }) async {
-    await _client.createPost(CreatePostRequest()
-      ..userId = Int64(id)
-      ..description = post.description);
+    await _client.createPost(
+      CreatePostRequest()
+        ..ownerId = Int64(id)
+        ..description = post.description,
+    );
   }
 }

@@ -15,10 +15,22 @@ class Post extends HiveObject {
   @HiveField(3)
   final String description;
 
+  @HiveField(4)
+  final int ownerID;
+
+  @HiveField(5)
+  final int numberOfLikes;
+
+  @HiveField(6)
+  final int numberOfComments;
+
   Post({
     required this.id,
     required this.resourceID,
     required this.date,
     required this.description,
+    required this.ownerID,
+    this.numberOfLikes = 0,
+    this.numberOfComments = 0,
   });
 }

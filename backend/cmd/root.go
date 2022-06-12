@@ -85,7 +85,9 @@ var (
 				ImprintURL: cfg.ImprintURL,
 			}
 			settings.RegisterSettingsServer(srv, settingsSrv)
-			postSrv := post.Server{}
+			postSrv := post.Server{
+				DataService: db,
+			}
 			post.RegisterPostServer(srv, postSrv)
 
 			l, err := net.Listen("tcp", ":8080")

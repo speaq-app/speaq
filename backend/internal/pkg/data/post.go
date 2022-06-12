@@ -1,13 +1,18 @@
 package data
 
+import "time"
+
 type PostService interface {
 	CreatePost(userID int64, post Post) error
-	PostByID(userID int64) (Post, error)
+	PostsByID(userID int64) ([]Post, error)
 }
 
 type Post struct {
 	ID          int64
-	UserID      int64
+	OwnerID     int64
+	Date        time.Time
 	Description string
-	Date        string
+	ResourceID  int64
+	LikeIDs     []int64
+	CommentIDs  []int64
 }

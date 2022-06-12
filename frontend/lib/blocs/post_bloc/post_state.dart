@@ -11,4 +11,8 @@ class PostSaved extends PostState {}
 
 class PostsLoading extends PostState {}
 
-class PostsLoaded extends PostState {}
+class PostsLoaded extends PostState {
+  final List<Post> postList;
+
+  PostsLoaded({required this.postList});
+}
