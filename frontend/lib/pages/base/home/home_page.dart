@@ -216,9 +216,11 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (BuildContext context, int index) {
                 if(index < state.postList.length){
                   return PostContainer(
-                  name: "name $index",
-                  username: "username $index",
+                  name: "Name $index",
+                  username: "Username $index",
+                  creationTime: state.postList.elementAt(index).date,
                   postMessage: state.postList.elementAt(index).description,
+
                 );
                 }
                 return const Text("hallo");

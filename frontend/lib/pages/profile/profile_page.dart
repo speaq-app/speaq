@@ -453,6 +453,7 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
         ),
@@ -460,6 +461,7 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage2),
         ),
@@ -467,12 +469,14 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
         ),
@@ -480,6 +484,7 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage2),
         ),
@@ -487,6 +492,7 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
         ),
@@ -494,6 +500,7 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage2),
         ),
@@ -501,6 +508,7 @@ class _ProfilePageState extends State<ProfilePage> {
         PostContainer(
           name: _name,
           username: _username,
+          creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
         ),

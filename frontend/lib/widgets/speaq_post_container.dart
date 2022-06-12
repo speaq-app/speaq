@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:intl/intl.dart';
 
 class PostContainer extends StatelessWidget {
   final String name;
   final String username;
   final String postMessage;
-  //final DateTime creationTime;
+  final DateTime creationTime;
   final Widget postImage;
   //final Widget postGif;
   //final Widget postAudio;
@@ -15,7 +16,7 @@ class PostContainer extends StatelessWidget {
     Key? key,
     required this.name,
     required this.username,
-    //required this.creationTime,
+    required this.creationTime,
     this.postMessage = "",
     this.postImage = const SizedBox(height: 0),
     //this.postGif = const SizedBox(height: 0),
@@ -39,6 +40,7 @@ class PostContainer extends StatelessWidget {
   }
 
   Column _buildPostTitle() {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd H:m');
     return Column(
       children: [
         Row(
@@ -55,9 +57,9 @@ class PostContainer extends StatelessWidget {
                 style: const TextStyle(fontSize: 15, color: spqDarkGrey),
               ),
             ),
-            const Text(
-              "12/39/19",
-              style: TextStyle(fontSize: 15, color: spqDarkGrey),
+            Text(
+              formatter.format(creationTime),
+              style: const TextStyle(fontSize: 15, color: spqDarkGrey),
             ),
           ],
         ),
