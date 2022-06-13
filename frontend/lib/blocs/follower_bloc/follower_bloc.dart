@@ -22,7 +22,8 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
   void _onLoadFollower(LoadFollower event, Emitter<FollowerState> emit) async {
     emit(FollowerLoading());
     await Future.delayed(const Duration(seconds: 2)); //removeable
-    var _follower = await _userService.getFollower(id: event.userId);
-    emit(FollowerLoaded(follower: _follower.length));
+    List<int> _follower = await _userService.getFollower(id: event.userId);
+    List<int> _following = await _userService.getFollowing(id: event.userId);
+    emit(FollowerLoaded(follower: _follower, following: _following));
   }
 }

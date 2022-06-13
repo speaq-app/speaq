@@ -1,5 +1,6 @@
 import 'package:frontend/api/model/profile.dart';
 import 'package:hive/hive.dart';
+
 part 'user.g.dart';
 
 @HiveType(typeId: 0)
@@ -11,11 +12,15 @@ class User extends HiveObject {
   final Profile profile;
 
   @HiveField(3)
- // final List<int> followerIDs,
+  final List<int> followerIDs;
+
+  @HiveField(4)
+  final List<int> followingIDs;
 
   User({
     required this.id,
     required this.profile,
- //  required this.followerIDs,
+    required this.followerIDs,
+    required this.followingIDs,
   });
 }

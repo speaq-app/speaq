@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/api/model/user.dart';
+import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
 class FollowPage extends StatefulWidget {
-  const FollowPage({Key? key, required this.username}) : super(key: key);
+  const FollowPage({Key? key, required this.user})
+      : super(key: key);
 
-  final String username;
+
+  final User? user;
 
   @override
   State<FollowPage> createState() => _FollowPageState();
 }
 
 class _FollowPageState extends State<FollowPage> {
-  final String langKey = "pages.profile.follow.";
+  final FollowerBloc _followerBloc = FollowerBloc();
+  late final User? _user;
 
-  int followerCount = 522;
+  @override
+  void initState() {
+    super.initState();
+    //_user=widget.user;
+    _user=User(id: 1, profile: Profile(name: "name", username: "username", description: "description", website: "website"), followerIDs: [], followingIDs: []);
+    _followerBloc.add(LoadFollower(
+      userId: 1,
+
+    ));
+  }
+
+  int followerCount = 0;
   int followingCount = 14;
 
   List<Follower> follower = [
@@ -31,45 +49,52 @@ class _FollowPageState extends State<FollowPage> {
     return DefaultTabController(
       length: 2,
       child: SafeArea(
-        child: Scaffold(
-          appBar: SpqAppBar(
-            title: Text(widget.username),
-            bottom: TabBar(
-              indicatorWeight: 1.5,
-              indicatorSize: TabBarIndicatorSize.tab,
-              unselectedLabelColor: spqLightGrey,
-              indicatorColor: spqPrimaryBlue,
-              labelColor: spqPrimaryBlue,
-              tabs: [
-                SizedBox(
-                  height: deviceSize.height * 0.05,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Text(
-                      "$followerCount Follower",
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                    height: deviceSize.height * 0.05,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        "$followingCount Following",
-                        style: const TextStyle(fontSize: 20),
+        child: BlocConsumer<FollowerBloc, FollowerState>(
+          bloc: _followerBloc,
+          listener: (context, state) async {
+            if (state is FollowerLoaded) {
+              var follower = state.follower;
+              followerCount = follower as int;
+
+            }
+          },
+          builder: (context, state) {
+            return Scaffold(
+                appBar: TabBar(
+                  indicatorWeight: 1.5,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  unselectedLabelColor: spqLightGrey,
+                  indicatorColor: spqPrimaryBlue,
+                  labelColor: spqPrimaryBlue,
+                  tabs: [
+                    SizedBox(
+                      height: deviceSize.height * 0.05,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          "$followerCount Follower",
+                          style: const TextStyle(fontSize: 20),
+                        ),
                       ),
-                    )),
-              ],
-            ),
-            preferredSize: deviceSize,
-          ),
-          body: TabBarView(
-            children: [
-              _buildFollowerTab(deviceSize, follower),
-              _buildFollowingList()
-            ],
-          ),
+                    ),
+                    SizedBox(
+                        height: deviceSize.height * 0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            "$followingCount Following",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        )),
+                  ],
+                ),
+                body: TabBarView(
+                  children: [
+                    _buildFollowerTab(deviceSize, follower),
+                    _buildFollowingList()
+                  ],
+                ));
+          },
         ),
       ),
     );

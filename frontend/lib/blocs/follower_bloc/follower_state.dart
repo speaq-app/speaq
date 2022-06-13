@@ -8,7 +8,8 @@ class FollowerInitial extends FollowerState {}
 class FollowerLoading extends FollowerState {}
 
 class FollowerLoaded extends FollowerState {
-  final int follower;
+  final List<int> follower;
+  final List<int> following;
 
-  FollowerLoaded({required this.follower});
+  FollowerLoaded( {required this.follower, required this.following});
 }
