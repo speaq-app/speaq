@@ -103,14 +103,14 @@ flutter_native_splash:
 # The following section is specific to Flutter.
 flutter:
   generate: true
-
   assets:
     - assets/images/logo/
     - assets/i18n/
     - assets/i18n/de.json
     - assets/i18n/en.json
     - assets/images/
-
+    - assets/images/camera.png
+    - assets/images/gallery.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

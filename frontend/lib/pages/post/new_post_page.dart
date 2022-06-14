@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +10,8 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_post_text_field.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
 
 class NewPostPage extends StatefulWidget {
   const NewPostPage({Key? key}) : super(key: key);
@@ -36,11 +36,14 @@ class _NewPostPageState extends State<NewPostPage> {
 
   // Camera/Gallery
   bool checkImageVisible = false;
-  late File? _image = File("assets/images/developer_sven.jpg"); //File('images/logo/speaq_logo_white.svg');
+  String pathImageFile = "";
+  late File? _imageFile = File(pathImageFile);
   late XFile? im;
 
   // Audio
-  final recorder = FlutterSoundRecorder();
+  late final recorder = FlutterSoundRecorder();
+  String fileName = 'recordedAudio.aac';
+  late String path;
   bool audioKeyboardVisible = false;
   bool isRecorderReady = false;
   bool isRecording = false;
@@ -138,7 +141,7 @@ class _NewPostPageState extends State<NewPostPage> {
     return Visibility(
       visible: picAndAudioOffstateVisible,
       child: Container(
-        padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(8.0),
         width: deviceSize.width,
         height: deviceSize.height * 0.1,
         color: spqPrimaryBlue,
@@ -154,18 +157,21 @@ class _NewPostPageState extends State<NewPostPage> {
             ),
             Center(
               child: Image.file(
-                _image!,
+                _imageFile!,
                 alignment: Alignment.center,
               ),
             ),
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
-                icon: Icon(Icons.delete_forever_rounded, color: spqErrorRed),
+                icon: const Icon(Icons.delete_forever_rounded,
+                    color: spqErrorRed),
                 onPressed: () {
-                  setState(() {
-                    picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
-                  });
+                  setState(
+                    () {
+                      picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
+                    },
+                  );
                 },
               ),
             )
@@ -224,27 +230,17 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Visibility buildCameraAndGalleryVisibleContainer() {
     return Visibility(
-      child: SizedBox(
+      child: Container(
         height: deviceSize.height * 0.1,
+        color: spqLightGrey,
         width: deviceSize.width,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              buildContainerCamera(
-                  'https://i.pinimg.com/736x/61/54/18/61541805b3069740ecd60d483741e5bb.jpg'),
-              buildContainerPictures(
-                  'https://9to5fortnite.com/de/wp-content/uploads/2022/04/Corinna-Kopf-Twitch-Zuschauerzahlen-boomen-nach-dem-Wechsel-zu-IRL-Streams.jpg'),
-              buildContainerPictures(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7k50ZmoaI9mkcYWJArxPWdkpSNf7QM8UzOd43LIj69CP2XzLkq9tD-4uz4s_Al9EJfK4&usqp=CAU'),
-              buildContainerPictures(
-                  'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1557376304.186_U5U7u5_n.jpg'),
-              buildContainerPictures(
-                  'https://media-exp1.licdn.com/dms/image/C4D03AQFFnndLd3cUog/profile-displayphoto-shrink_800_800/0/1649862939707?e=1658966400&v=beta&t=UzNwV5wS111quhYnnInTrSNO1mHknooTLsO_iceQ0d0'),
-              buildContainerPictures(
-                  'https://media-exp1.licdn.com/dms/image/C4D03AQFFnndLd3cUog/profile-displayphoto-shrink_800_800/0/1649862939707?e=1658966400&v=beta&t=UzNwV5wS111quhYnnInTrSNO1mHknooTLsO_iceQ0d0'),
-            ],
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            buildContainerCamera(),
+            Container(width: 6, color: spqWhite),
+            buildContainerGallery(),
+          ],
         ),
       ),
       visible: cameraOffstateVisible,
@@ -313,13 +309,16 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   _onBackspacePressed() {
-    setState(() {
-      switchOffStage("BACK");
-    });
+    setState(
+      () {
+        switchOffStage("BACK");
+      },
+    );
     _postController
       ..text = _postController.text.characters.skipLast(1).toString()
       ..selection = TextSelection.fromPosition(
-          TextPosition(offset: _postController.text.length));
+        TextPosition(offset: _postController.text.length),
+      );
   }
 
   void emojiClick() {
@@ -336,30 +335,33 @@ class _NewPostPageState extends State<NewPostPage> {
   //endregion
 
   //region CAMERA/GALLERY AND FUNCTIONALITIES
-  Padding buildContainerPictures(String url) {
+  Padding buildContainerGallery() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
           getImage(false);
-          setState(() {
-            picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
-            if (checkImageVisible) {
-              checkImageVisible = !checkImageVisible;
-            } else {
-              checkImageVisible = true;
-            }
-            audioKeyboardVisible = true;
-          });
+          setState(
+            () {
+              picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
+              if (checkImageVisible) {
+                checkImageVisible = !checkImageVisible;
+              } else {
+                checkImageVisible = true;
+              }
+              audioKeyboardVisible = true;
+            },
+          );
         },
         child: Container(
           decoration: BoxDecoration(
-              color: spqBlack, borderRadius: BorderRadius.circular(5)),
+              color: spqLightGrey, borderRadius: BorderRadius.circular(5)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: SizedBox.fromSize(
               size: Size.fromRadius(32), // Image radius
-              child: Image.network(url, fit: BoxFit.cover),
+              child:
+                  Image.asset('assets/images/gallery.png', fit: BoxFit.cover),
             ),
           ),
         ),
@@ -368,7 +370,6 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   Future getImage(bool isCamera) async {
-
     if (isCamera) {
       im = await ImagePicker().pickImage(source: ImageSource.camera);
     } else {
@@ -376,13 +377,13 @@ class _NewPostPageState extends State<NewPostPage> {
     }
 
     setState(
-          () {
-        _image = File(im!.path);
+      () {
+        _imageFile = File(im!.path);
       },
     );
   }
 
-  buildContainerCamera(String url) {
+  buildContainerCamera() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -391,12 +392,16 @@ class _NewPostPageState extends State<NewPostPage> {
         },
         child: Container(
           decoration: BoxDecoration(
-              color: spqBlack, borderRadius: BorderRadius.circular(5)),
+            color: spqLightGrey,
+            borderRadius: BorderRadius.circular(5),
+          ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: SizedBox.fromSize(
               size: Size.fromRadius(32), // Image radius
-              child: Image.network(url, fit: BoxFit.cover),
+              child: const Image(
+                  image: AssetImage('assets/images/camera.png'),
+                  fit: BoxFit.cover),
             ),
           ),
         ),
@@ -417,10 +422,12 @@ class _NewPostPageState extends State<NewPostPage> {
           if (mainKeyboardVisible) {
             SystemChannels.textInput.invokeMethod('TextInput.hide');
           }
-          setState(() {
-            print("Button");
-            switchOffStage("AUDIO");
-          });
+          setState(
+            () {
+              print("Button");
+              switchOffStage("AUDIO");
+            },
+          );
         },
       ),
     );
@@ -453,9 +460,10 @@ class _NewPostPageState extends State<NewPostPage> {
             );
             return const Center(
               child: SizedBox(
-                  height: 72,
-                  width: 72,
-                  child: CircularProgressIndicator(strokeWidth: 8),),
+                height: 72,
+                width: 72,
+                child: CircularProgressIndicator(strokeWidth: 8),
+              ),
             );
           },
         );
@@ -481,12 +489,17 @@ class _NewPostPageState extends State<NewPostPage> {
     return Offstage(
       offstage: !audioKeyboardVisible,
       child: SizedBox(
-        height: 280,
-        width: 80,
+        height: deviceSize.height * 0.333,
+        width: deviceSize.width * 0.25,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              IconButton(color: spqPrimaryBlue,
+                  icon: Icon(Icons.refresh, color: spqWhite,),
+                  onPressed: () {
+                    setState(() {});
+                  }),
               buildAudioButtonFunction(),
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
@@ -522,14 +535,18 @@ class _NewPostPageState extends State<NewPostPage> {
       onPressed: () async {
         if (recorder.isRecording) {
           await stop();
-          setState(() async {
-            picAndAudioOffstateVisible = true;
-          });
+          setState(
+            () async {
+              picAndAudioOffstateVisible = true;
+            },
+          );
         } else {
           await record();
-          setState(() {
-            picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
-          });
+          setState(
+            () {
+              picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
+            },
+          );
         }
       },
     );
@@ -545,6 +562,9 @@ class _NewPostPageState extends State<NewPostPage> {
     await recorder.openRecorder();
     isRecorderReady = true;
 
+    final directory = await getApplicationDocumentsDirectory();
+    path = directory.path;
+
     recorder.setSubscriptionDuration(
       const Duration(milliseconds: 500),
     );
@@ -553,7 +573,18 @@ class _NewPostPageState extends State<NewPostPage> {
   Future record() async {
     if (!isRecorderReady) return;
     isRecording = true;
-    await recorder.startRecorder(toFile: 'audio');
+    //await recorder.startRecorder(toFile: 'audio');
+    print('recording....');
+    await recorder!.startRecorder(
+      toFile: '$fileName',
+      //codec: Codec.aacMP4,
+    );
+  }
+
+  void _writeFileToStorage() async {
+    File audiofile = File('$path/$fileName');
+    Uint8List bytes = await audiofile.readAsBytes();
+    audiofile.writeAsBytes(bytes);
   }
 
   Future stop() async {
@@ -572,6 +603,7 @@ class _NewPostPageState extends State<NewPostPage> {
     recorder.closeRecorder();
     _postController.dispose();
 
+    isRecorderReady = false;
     super.dispose();
   }
 }
