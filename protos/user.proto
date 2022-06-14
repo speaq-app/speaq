@@ -8,8 +8,14 @@ option go_package = "app/user";
 service User {
     rpc GetUserProfile(GetUserInfoRequest) returns (GetUserProfileResponse);
     rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
-    rpc GetUserFollower(GetUserInfoRequest) returns (GetUserFollowerResponse);
-    rpc GetUserFollowing(GetUserInfoRequest) returns (GetUserFollowingResponse);
+    rpc GetUserFollowerIDs(GetUserInfoRequest) returns (GetUserFollowerIDsResponse);
+    rpc GetUserFollowingIDs(GetUserInfoRequest) returns (GetUserFollowingIDsResponse);
+/*
+    rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowingResponse);
+    rpc GetUserFollowing(GetUserFollowingRequest) returns (GetUserFollowingResponse);
+*/
+
+
 }
 
 message GetUserInfoRequest {
@@ -26,13 +32,25 @@ message GetUserProfileResponse {
 
 }
 
-message GetUserFollowerResponse{
+message GetUserFollowerIDsResponse{
    repeated int64 follower_ids =1 [packed=true];
+}
+message GetUserFollowingIDsResponse{
+   repeated int64 following_ids =1 [packed=true];
+}
+
+message GetUserFollowerRequest{
+   repeated int64 follower_ids =1 [packed=true];
+}
+message GetUserFollowingRequest{
+   repeated int64 following_ids =1 [packed=true];
+}
+message GetUserFollowerResponse{
+   repeated int64 following_ids =1 [packed=true];
 }
 message GetUserFollowingResponse{
    repeated int64 following_ids =1 [packed=true];
 }
-
 
 message UpdateUserProfileRequest {
     int64  user_id = 1;
