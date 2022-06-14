@@ -2,14 +2,18 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_post_text_field.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -38,7 +42,9 @@ class _NewPostPageState extends State<NewPostPage> {
   bool checkImageVisible = false;
   String pathImageFile = "";
   late File? _imageFile = File(pathImageFile);
-  late XFile? im;
+  late PickedFile im;
+
+  bool dataIsAudio = false;
 
   // Audio
   late final recorder = FlutterSoundRecorder();
@@ -47,6 +53,7 @@ class _NewPostPageState extends State<NewPostPage> {
   bool audioKeyboardVisible = false;
   bool isRecorderReady = false;
   bool isRecording = false;
+  String _recorderTxt = '00:00:00';
 
   //region GENERAL
   void keyboardInput() {
@@ -156,10 +163,14 @@ class _NewPostPageState extends State<NewPostPage> {
               ),
             ),
             Center(
-              child: Image.file(
-                _imageFile!,
-                alignment: Alignment.center,
-              ),
+              child: dataIsAudio
+                  ? InkWell(
+                      onTap: () => print("test"),
+                      child: SvgPicture.asset(                          "assets/images/logo/speaq_logo_white.svg"),)
+                  : Image.file(
+                      _imageFile!,
+                      alignment: Alignment.center,
+                    ),
             ),
             Align(
               alignment: Alignment.centerRight,
@@ -343,7 +354,9 @@ class _NewPostPageState extends State<NewPostPage> {
           getImage(false);
           setState(
             () {
-              picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
+              _imageFile = File(im!.path);
+              dataIsAudio = false;
+              picAndAudioOffstateVisible = true;
               if (checkImageVisible) {
                 checkImageVisible = !checkImageVisible;
               } else {
@@ -371,16 +384,10 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Future getImage(bool isCamera) async {
     if (isCamera) {
-      im = await ImagePicker().pickImage(source: ImageSource.camera);
+      im = (await ImagePicker.platform.pickImage(source: ImageSource.camera))!;
     } else {
-      im = await ImagePicker().pickImage(source: ImageSource.gallery);
+      im = (await ImagePicker.platform.pickImage(source: ImageSource.gallery))!;
     }
-
-    setState(
-      () {
-        _imageFile = File(im!.path);
-      },
-    );
   }
 
   buildContainerCamera() {
@@ -495,8 +502,12 @@ class _NewPostPageState extends State<NewPostPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(color: spqPrimaryBlue,
-                  icon: Icon(Icons.refresh, color: spqWhite,),
+              IconButton(
+                  color: spqPrimaryBlue,
+                  icon: Icon(
+                    Icons.refresh,
+                    color: spqWhite,
+                  ),
                   onPressed: () {
                     setState(() {});
                   }),
@@ -536,7 +547,8 @@ class _NewPostPageState extends State<NewPostPage> {
         if (recorder.isRecording) {
           await stop();
           setState(
-            () async {
+            () {
+              dataIsAudio = true;
               picAndAudioOffstateVisible = true;
             },
           );
@@ -544,6 +556,7 @@ class _NewPostPageState extends State<NewPostPage> {
           await record();
           setState(
             () {
+              dataIsAudio = false;
               picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
             },
           );
@@ -568,23 +581,17 @@ class _NewPostPageState extends State<NewPostPage> {
     recorder.setSubscriptionDuration(
       const Duration(milliseconds: 500),
     );
+    await initializeDateFormatting();
   }
 
   Future record() async {
     if (!isRecorderReady) return;
-    isRecording = true;
     //await recorder.startRecorder(toFile: 'audio');
     print('recording....');
     await recorder!.startRecorder(
       toFile: '$fileName',
       //codec: Codec.aacMP4,
     );
-  }
-
-  void _writeFileToStorage() async {
-    File audiofile = File('$path/$fileName');
-    Uint8List bytes = await audiofile.readAsBytes();
-    audiofile.writeAsBytes(bytes);
   }
 
   Future stop() async {
