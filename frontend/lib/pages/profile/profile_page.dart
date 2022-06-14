@@ -456,6 +456,8 @@ class _ProfilePageState extends State<ProfilePage> {
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
@@ -464,6 +466,8 @@ class _ProfilePageState extends State<ProfilePage> {
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage2),
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
@@ -471,6 +475,8 @@ class _ProfilePageState extends State<ProfilePage> {
           username: _username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
@@ -479,6 +485,8 @@ class _ProfilePageState extends State<ProfilePage> {
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
@@ -487,6 +495,8 @@ class _ProfilePageState extends State<ProfilePage> {
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage2),
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
@@ -495,6 +505,8 @@ class _ProfilePageState extends State<ProfilePage> {
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
@@ -503,6 +515,8 @@ class _ProfilePageState extends State<ProfilePage> {
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage2),
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
@@ -511,6 +525,8 @@ class _ProfilePageState extends State<ProfilePage> {
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           postImage: Image.network(_postImage),
+          numberOfComments: 0,
+          numberOfLikes: 0,
         ),
       ],
     );

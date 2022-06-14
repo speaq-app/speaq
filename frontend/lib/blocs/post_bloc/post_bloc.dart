@@ -17,15 +17,16 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   void _onCreatePost(CreatePost event, Emitter<PostState> emit) async {
     emit(PostSaving());
-    await Future.delayed(const Duration(seconds: 5)); //removable
-    await _postService.createPost(ownerId: event.ownerId, post: event.post, );
+    await _postService.createPost(
+      ownerId: event.ownerId,
+      post: event.post,
+    );
 
     emit(PostSaved());
   }
 
   void _onLoadPosts(LoadPosts event, Emitter<PostState> emit) async {
     emit(PostsLoading());
-    await Future.delayed(const Duration(seconds: 1)); //removable
 
     emit(PostsLoaded(postList: await _postService.getPosts(event.userId)));
   }

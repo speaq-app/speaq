@@ -5,8 +5,12 @@ import 'package:intl/intl.dart';
 class PostContainer extends StatelessWidget {
   final String name;
   final String username;
-  final String postMessage;
   final DateTime creationTime;
+
+  final int numberOfLikes;
+  final int numberOfComments;
+
+  final String postMessage;
   final Widget postImage;
   //final Widget postGif;
   //final Widget postAudio;
@@ -17,6 +21,10 @@ class PostContainer extends StatelessWidget {
     required this.name,
     required this.username,
     required this.creationTime,
+
+    required this.numberOfLikes,
+    required this.numberOfComments,
+    
     this.postMessage = "",
     this.postImage = const SizedBox(height: 0),
     //this.postGif = const SizedBox(height: 0),
@@ -39,7 +47,7 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Column _buildPostTitle() {
+  Widget _buildPostTitle() {
     final DateFormat formatter = DateFormat('yyyy-MM-dd H:m');
     return Column(
       children: [
@@ -67,7 +75,7 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Column _buildContent() {
+  Widget _buildContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -93,10 +101,7 @@ Widget _buildReactionList() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     children: const [
-      Icon(
-        Icons.mic,
-        color: spqDarkGrey,
-      ),
+      Icon(Icons.mic, color: spqDarkGrey),
       Text("69"),
       SizedBox(width: 30),
       Icon(Icons.favorite, color: spqErrorRed),

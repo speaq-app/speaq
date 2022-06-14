@@ -26,12 +26,7 @@ class GRPCPostService implements PostService {
   Future<List<Post>> getPosts(int id) async {
     GetPostsResponse response = await _client.getPosts(GetPostsRequest()..userId = Int64(id));
 
-    List<Post> postList = <Post>[
-      //remove Items
-      Post(id: 1, resourceID: 1, date: DateTime.now(), description: "test 1", ownerID: 1, numberOfLikes: 10, numberOfComments: 5),
-      Post(id: 2, resourceID: 2, date: DateTime.now(), description: "test 2", ownerID: 1, numberOfLikes: 15, numberOfComments: 3),
-      Post(id: 3, resourceID: 3, date: DateTime.now(), description: "test 3", ownerID: 1, numberOfLikes: 20, numberOfComments: 10),
-    ];
+    List<Post> postList = <Post>[];
 
     for (int i = 0; i < response.postList.length; i++) {
       log("Datetime of post: ${response.postList.elementAt(i).date}"); //remove

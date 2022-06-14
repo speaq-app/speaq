@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -112,66 +110,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _pullRefresh() async {
-    log("Load Posts");
+    //Change from Hardcoded
     _postBloc.add(LoadPosts(userId: 1));
-    /*
-    postList = <Widget>[
-      const SizedBox(height: 10),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-      ),
-      const Divider(thickness: 1, color: spqLightGreyTranslucent),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-        postImage: Image.network(_postImage2),
-      ),
-      const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-      ),
-      const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-        postImage: Image.network(_postImage),
-      ),
-      const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-        postImage: Image.network(_postImage2),
-      ),
-      const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-        postImage: Image.network(_postImage),
-      ),
-      const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-        postImage: Image.network(_postImage2),
-      ),
-      const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-      PostContainer(
-        name: _name,
-        username: _username,
-        postMessage: _postMessage,
-        postImage: Image.network(_postImage),
-      ),
-    ];
-    */
   }
 
   PreferredSizeWidget _buildLoadedAppBar(Size deviceSize, Profile profile) {
@@ -211,19 +151,40 @@ class _HomePageState extends State<HomePage> {
           return SingleChildScrollView(
             child: ListView.builder(
               controller: _scrollController,
-              itemCount: 20,
+              itemCount: state.postList.length + 1,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
-                if(index < state.postList.length){
+                if (index < state.postList.length) {
                   return PostContainer(
-                  name: "Name $index",
-                  username: "Username $index",
-                  creationTime: state.postList.elementAt(index).date,
-                  postMessage: state.postList.elementAt(index).description,
-
-                );
+                    name: "Name $index",
+                    username: "Username $index",
+                    creationTime: state.postList.elementAt(index).date,
+                    postMessage: state.postList.elementAt(index).description,
+                    numberOfLikes: state.postList.elementAt(index).numberOfLikes,
+                    numberOfComments: state.postList.elementAt(index).numberOfComments,
+                  );
                 }
-                return const Text("hallo");
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 50),
+                    const Text("Es scheint, als ob es keine neuen Posts mehr gibt!"),
+                    const SizedBox(height: 30),
+                    const Text(
+                      "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!",
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    IconButton(
+                      onPressed: _pullRefresh,
+                      icon: const Icon(
+                        Icons.refresh,
+                        size: 40,
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                  ],
+                );
               },
             ),
           );
