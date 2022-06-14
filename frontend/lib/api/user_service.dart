@@ -8,10 +8,10 @@ abstract class UserService {
     required Profile profile,
   });
 
-  Future<List<int>> getFollower({
+  Future<List<int>> getFollowerIDs({
     required int id,
   });
-  Future<List<int>> getFollowing({
+  Future<List<int>> getFollowingIDs({
     required int id,
   });
 }

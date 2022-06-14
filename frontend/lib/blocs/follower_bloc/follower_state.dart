@@ -5,11 +5,19 @@ abstract class FollowerState {}
 
 class FollowerInitial extends FollowerState {}
 
+class FollowerIDsLoading extends FollowerState {}
+
+class FollowerIDsLoaded extends FollowerState {
+  final List<int> followerIDs;
+  final List<int> followingIDs;
+
+  FollowerIDsLoaded({required this.followerIDs, required this.followingIDs});
+}
 class FollowerLoading extends FollowerState {}
 
 class FollowerLoaded extends FollowerState {
-  final List<int> follower;
-  final List<int> following;
+  final List<User> followerIDs;
+  final List<User> followingIDs;
 
-  FollowerLoaded( {required this.follower, required this.following});
+  FollowerLoaded({required this.followerIDs, required this.followingIDs});
 }

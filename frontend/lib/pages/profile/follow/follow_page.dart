@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
+import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
 class FollowPage extends StatefulWidget {
-  const FollowPage({Key? key, required this.user})
-      : super(key: key);
-
+  const FollowPage({Key? key, required this.user}) : super(key: key);
 
   final User? user;
 
@@ -19,16 +18,25 @@ class FollowPage extends StatefulWidget {
 
 class _FollowPageState extends State<FollowPage> {
   final FollowerBloc _followerBloc = FollowerBloc();
+  final ProfileBloc _profileBloc = ProfileBloc();
   late final User? _user;
+  List<User> followingList = [];
 
   @override
   void initState() {
     super.initState();
     //_user=widget.user;
-    _user=User(id: 1, profile: Profile(name: "name", username: "username", description: "description", website: "website"), followerIDs: [], followingIDs: []);
-    _followerBloc.add(LoadFollower(
+    _user = User(
+        id: 1,
+        profile: Profile(
+            name: "name",
+            username: "username",
+            description: "description",
+            website: "website"),
+        followerIDs: [],
+        followingIDs: []);
+    _followerBloc.add(LoadFollowerIDs(
       userId: 1,
-
     ));
   }
 
@@ -40,7 +48,9 @@ class _FollowPageState extends State<FollowPage> {
     Follower(username: "dloewe", firstname: "David", lastname: "Loewe"),
     Follower(username: "sgatnar", firstname: "Sven", lastname: "Gatnar")
   ];
-  List<Follower> following = [];
+  List<Follower> following = [
+    Follower(username: "sgatnar", firstname: "Sven", lastname: "Gatnar")
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +62,20 @@ class _FollowPageState extends State<FollowPage> {
         child: BlocConsumer<FollowerBloc, FollowerState>(
           bloc: _followerBloc,
           listener: (context, state) async {
-            if (state is FollowerLoaded) {
-              var follower = state.follower;
-              followerCount = follower as int;
-
+            if (state is FollowerIDsLoaded) {
+              var follower = state.followerIDs;
+              print(follower);
             }
           },
           builder: (context, state) {
-            return Scaffold(
+            if (state is FollowerIDsLoaded) {
+              var test = state.followerIDs;
+              _followerBloc.add(LoadFollower(
+                  followerIDs: state.followerIDs,
+                  followingIDs: state.followingIDs));
+              print(test);
+
+              return Scaffold(
                 appBar: TabBar(
                   indicatorWeight: 1.5,
                   indicatorSize: TabBarIndicatorSize.tab,
@@ -91,26 +107,37 @@ class _FollowPageState extends State<FollowPage> {
                 body: TabBarView(
                   children: [
                     _buildFollowerTab(deviceSize, follower),
-                    _buildFollowingList()
+                    _buildFollowingList(deviceSize, following)
                   ],
-                ));
+                ),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
           },
         ),
       ),
     );
   }
 
-  Widget _buildFollowingList() {
-    return const Text("Following");
+  Widget _buildFollowingList(Size deviceSize, List<Follower> followerList) {
+    return Column(
+      children: [
+        SizedBox(
+          height: deviceSize.height * 0.75,
+          child: _buildFollowList(followerList),
+        ),
+      ],
+    );
   }
 }
 
-Widget _buildFollowerTab(Size deviceSize, List<Follower> followerList) {
+Widget _buildFollowerTab(Size deviceSize, List<Follower> followingList) {
   return Column(
     children: [
       SizedBox(
         height: deviceSize.height * 0.75,
-        child: _buildFollowList(followerList),
+        child: _buildFollowList(followingList),
       ),
     ],
   );

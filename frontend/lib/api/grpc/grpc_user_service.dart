@@ -44,7 +44,7 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<List<int>> getFollower({required int id}) async {
+  Future<List<int>> getFollowerIDs({required int id}) async {
     GetUserFollowerResponse resp = await _client
         .getUserFollower(GetUserInfoRequest()..userId = Int64(id));
     List<int> follower = [];
@@ -54,7 +54,7 @@ class GRPCUserService implements UserService {
     return follower;
   }
   @override
-  Future<List<int>> getFollowing({required int id}) async {
+  Future<List<int>> getFollowingIDs({required int id}) async {
     GetUserFollowingResponse resp = await _client
         .getUserFollowing(GetUserInfoRequest()..userId = Int64(id));
     List<int> following = [];
