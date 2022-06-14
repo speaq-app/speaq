@@ -350,8 +350,8 @@ class _NewPostPageState extends State<NewPostPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
-          getImage(false);
+        onTap: () async {
+          await getImage(false);
           setState(
             () {
               _imageFile = File(im!.path);
@@ -394,8 +394,19 @@ class _NewPostPageState extends State<NewPostPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
-          getImage(true);
+        onTap: () async {
+          await getImage(true);
+          setState(() {
+            _imageFile = File(im!.path);
+            dataIsAudio = false;
+            picAndAudioOffstateVisible = true;
+            if (checkImageVisible) {
+              checkImageVisible = !checkImageVisible;
+            } else {
+              checkImageVisible = true;
+            }
+            audioKeyboardVisible = true;
+          });
         },
         child: Container(
           decoration: BoxDecoration(
