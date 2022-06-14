@@ -35,7 +35,7 @@ class _NewPostPageState extends State<NewPostPage> {
               MediaQuery.of(context).size.shortestSide * 0.15,
             );
           } else if (state is PostSaved) {
-            Navigator.popAndPushNamed(context, "home");
+              Navigator.pop(context);
           }
           return Scaffold(
               appBar: SpqAppBar(
@@ -69,9 +69,8 @@ class _NewPostPageState extends State<NewPostPage> {
       );
 
   void _createPost() {
-    Navigator.pop(context);
     Post _post = Post(date: dateNow, description: _postController.text, resourceID: 1, id: 1, ownerID: 1);
-    _postBloc.add(CreatePost(userId: 1, post: _post));
+    _postBloc.add(CreatePost(ownerId: 1, post: _post));
   }
 
   @override

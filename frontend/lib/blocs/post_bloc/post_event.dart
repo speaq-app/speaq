@@ -4,11 +4,11 @@ part of 'post_bloc.dart';
 abstract class PostEvent {}
 
 class CreatePost extends PostEvent {
-  final int userId;
+  final int ownerId;
   final Post post;
 
   CreatePost({
-    required this.userId,
+    required this.ownerId,
     required this.post,
   });
 }

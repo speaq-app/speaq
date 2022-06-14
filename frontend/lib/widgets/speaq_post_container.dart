@@ -69,6 +69,7 @@ class PostContainer extends StatelessWidget {
 
   Column _buildContent() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           postMessage,

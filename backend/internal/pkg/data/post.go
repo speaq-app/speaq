@@ -3,7 +3,7 @@ package data
 import "time"
 
 type PostService interface {
-	CreatePost(userID int64, post Post) error
+	CreatePost(ownerID int64, post Post) error
 	PostsByID(userID int64) ([]Post, error)
 }
 

@@ -54,12 +54,12 @@ class GRPCPostService implements PostService {
 
   @override
   Future<void> createPost({
-    required int id,
+    required int ownerId,
     required Post post,
   }) async {
     await _client.createPost(
       CreatePostRequest()
-        ..ownerId = Int64(id)
+        ..ownerId = Int64(ownerId)
         ..description = post.description,
     );
   }

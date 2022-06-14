@@ -12,7 +12,7 @@ import (
 type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
-	post      map[int64]data.Post
+	posts      map[int64]data.Post
 	delay     time.Duration
 }
 
@@ -26,7 +26,7 @@ func New() data.Service {
 		log.Fatal(err)
 	}
 	return service{
-		delay: time.Second,
+		delay: time.Second * 3,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),
@@ -76,7 +76,7 @@ func New() data.Service {
 				},
 			},
 		},
-		post: map[int64]data.Post{
+		posts: map[int64]data.Post{
 			1: {
 				ID:          1,
 				OwnerID:     1,
@@ -181,26 +181,30 @@ func (s service) PostsByID(id int64) ([]data.Post, error) {
 	
 	postList := []data.Post{}
 
-	p, ok := s.post[id]
-	if !ok {
-		return postList, errors.New("not workin 17")
+	for _, dbpost := range s.posts {
+		postList = append(postList, dbpost)
 	}
-
-	postList = append(postList, p)
 
 	return postList, nil
 }
 
-func (s service) CreatePost(id int64, post data.Post) error {
+func (s service) CreatePost(ownerID int64, post data.Post) error {
 	time.Sleep(s.delay)
-	/*
-	c, err := s.PostByID(id)
-	if err != nil {
-		return err
-	}
-	s.post[id] = c
 
-	log.Println(c)
-	*/
+	var nextID int64 = 1
+
+	for id := range s.posts {
+		if id >= nextID{
+			nextID = id + 1
+		}
+	}
+
+	post.ID = nextID
+	post.Date = time.Now()
+	post.OwnerID = ownerID
+
+	s.posts[nextID] = post
+
+	log.Printf("Saved Post: %v", post)
 	return nil
 }
