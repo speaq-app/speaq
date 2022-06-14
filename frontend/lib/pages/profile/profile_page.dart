@@ -328,7 +328,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         InkWell(
-          onTap: () => Navigator.pushNamed(context, 'follow'),
+          onTap: () => Navigator.pushNamed(context, 'follow',arguments: {"user":null}),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
