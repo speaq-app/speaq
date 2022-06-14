@@ -112,6 +112,26 @@ func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 	return u.FollowingIDs, nil
 }
 
+func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
+	time.Sleep(s.delay)
+	var ul []data.User
+	for _, u := range userIDs {
+		ul = append(ul, s.users[u])
+	}
+
+	return ul, nil
+}
+
+func (s service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
+	time.Sleep(s.delay)
+	var ul []data.User
+	for _, u := range userIDs {
+		ul = append(ul, s.users[u])
+	}
+
+	return ul, nil
+}
+
 func (s service) UserByID(id int64) (data.User, error) {
 	time.Sleep(s.delay)
 	u, ok := s.users[id]

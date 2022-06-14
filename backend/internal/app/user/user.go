@@ -51,6 +51,35 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserInfoRequest) (*G
 		ProfileImageResourceId: p.ProfileImageResourceID,
 	}, nil
 }
+func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowerResponse, error) {
+	log.Printf("Follower with ID %d should be loaded", req.UserId)
+
+	er, err := s.DataService.FollowerIDsByID(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+	log.Println(er)
+
+	return &GetUserFollowerResponse{
+		FollowingIds: er,
+	}, nil
+}
+
+func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowingResponse, error) {
+	log.Printf("Follower with ID %d should be loaded", req.UserId)
+
+	ing, err := s.DataService.FollowerIDsByID(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+	log.Println(ing)
+
+	return &GetUserFollowingResponse{
+		FollowingIds: ing,
+	}, nil
+}
+
+//region needs to be implemented
 func (s Server) GetUserFollower(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowerResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 
@@ -61,7 +90,7 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserInfoRequest) (*
 	log.Println(er)
 
 	return &GetUserFollowerResponse{
-		FollowerIds: er,
+		FollowingIds: er,
 	}, nil
 }
 
@@ -78,3 +107,5 @@ func (s Server) GetUserFollowing(ctx context.Context, req *GetUserInfoRequest) (
 		FollowingIds: ing,
 	}, nil
 }
+
+//endregion

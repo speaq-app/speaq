@@ -21,6 +21,18 @@ WHERE id = $1;
 
 	return u, nil
 }
+func (s Service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
+	//TODO implement me
+	panic("implement me")
+	return nil, nil
+}
+
+func (s Service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
+	//TODO implement me
+	panic("implement me")
+	return nil, nil
+}
+
 func (s Service) FollowerIDsByID(userID int64) ([]int64, error) {
 	return []int64{}, nil
 }
