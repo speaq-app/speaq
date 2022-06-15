@@ -24,6 +24,12 @@ class Post extends HiveObject {
   @HiveField(6)
   final int numberOfComments;
 
+  @HiveField(7)
+  final String ownerName;
+
+  @HiveField(8)
+  final String ownerUsername;
+
   Post({
     required this.id,
     required this.resourceID,
@@ -32,5 +38,7 @@ class Post extends HiveObject {
     required this.ownerID,
     this.numberOfLikes = 0,
     this.numberOfComments = 0,
+    this.ownerName = "",
+    this.ownerUsername = "",
   });
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -155,9 +157,10 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 if (index < state.postList.length) {
+                  log("Date: " + state.postList.elementAt(index).date.toString());
                   return PostContainer(
-                    name: "Name $index",
-                    username: "Username $index",
+                    name: state.postList.elementAt(index).ownerName,
+                    username: state.postList.elementAt(index).ownerUsername,
                     creationTime: state.postList.elementAt(index).date,
                     postMessage: state.postList.elementAt(index).description,
                     numberOfLikes: state.postList.elementAt(index).numberOfLikes,

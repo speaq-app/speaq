@@ -33,4 +33,6 @@ message SinglePost {
     int64 resource_id = 5;
     int64 number_of_likes = 6;
     int64 number_of_comments = 7;
+    string owner_name = 8;
+    string owner_username = 9;
 }

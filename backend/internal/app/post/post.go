@@ -59,6 +59,8 @@ func (s Server) GetPosts(ctx context.Context, req *GetPostsRequest) (*GetPostsRe
 			ResourceId:       post.ResourceID,
 			NumberOfLikes:    int64(len(post.LikeIDs)),
 			NumberOfComments: int64(len(post.CommentIDs)),
+			OwnerName:        post.OwnerName,
+			OwnerUsername:    post.OwnerUsername,
 		})
 	}
 

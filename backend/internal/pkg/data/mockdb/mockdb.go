@@ -102,8 +102,6 @@ func New() data.Service {
 				ResourceID:  1,
 				LikeIDs: []int64{
 					1,
-					2,
-					3,
 				},
 				CommentIDs: []int64{
 					1,
@@ -125,6 +123,7 @@ func New() data.Service {
 				CommentIDs: []int64{
 					1,
 					2,
+					3,
 				},
 			},
 		},
@@ -142,7 +141,7 @@ func (s service) ResourceByID(id int64) (data.Resource, error) {
 }
 
 func (s service) UserByID(id int64) (data.User, error) {
-	time.Sleep(s.delay)
+	// time.Sleep(s.delay)
 	u, ok := s.users[id]
 	if !ok {
 		return u, errors.New("not workin 2")
@@ -182,6 +181,16 @@ func (s service) PostsByID(id int64) ([]data.Post, error) {
 	postList := []data.Post{}
 
 	for _, dbpost := range s.posts {
+		owner, err := s.UserByID(dbpost.OwnerID)
+		if err != nil {
+			return nil, err
+		}
+
+		dbpost.OwnerName = owner.Profile.Name
+		dbpost.OwnerUsername = owner.Profile.Username
+
+		log.Printf("Loading Post %v", dbpost)
+
 		postList = append(postList, dbpost)
 	}
 

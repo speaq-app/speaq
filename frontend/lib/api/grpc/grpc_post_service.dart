@@ -29,8 +29,8 @@ class GRPCPostService implements PostService {
     List<Post> postList = <Post>[];
 
     for (int i = 0; i < response.postList.length; i++) {
-      log("Datetime of post: ${response.postList.elementAt(i).date}"); //remove
-
+      //DateTime Convertion not correct!
+      log(DateTime.fromMillisecondsSinceEpoch(response.postList.elementAt(i).date.toInt()).toString());
       postList.add(
         Post(
           id: response.postList.elementAt(i).postId.toInt(),
@@ -40,6 +40,8 @@ class GRPCPostService implements PostService {
           ownerID: response.postList.elementAt(i).ownerId.toInt(),
           numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
           numberOfComments: response.postList.elementAt(i).numberOfComments.toInt(),
+          ownerName: response.postList.elementAt(i).ownerName,
+          ownerUsername: response.postList.elementAt(i).ownerUsername,
         ),
       );
     }
@@ -48,10 +50,7 @@ class GRPCPostService implements PostService {
   }
 
   @override
-  Future<void> createPost({
-    required int ownerId,
-    required Post post,
-  }) async {
+  Future<void> createPost({required int ownerId, required Post post}) async {
     await _client.createPost(
       CreatePostRequest()
         ..ownerId = Int64(ownerId)

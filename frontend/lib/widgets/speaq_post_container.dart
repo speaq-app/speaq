@@ -21,10 +21,8 @@ class PostContainer extends StatelessWidget {
     required this.name,
     required this.username,
     required this.creationTime,
-
     required this.numberOfLikes,
     required this.numberOfComments,
-    
     this.postMessage = "",
     this.postImage = const SizedBox(height: 0),
     //this.postGif = const SizedBox(height: 0),
@@ -48,26 +46,52 @@ class PostContainer extends StatelessWidget {
   }
 
   Widget _buildPostTitle() {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd H:m');
+    late DateFormat formatter;
+    if (!DateTime.now().isBefore(creationTime.add(const Duration(days: 1)))) {
+      formatter = DateFormat('H:m');
+    } else if (!DateTime.now().isBefore(creationTime.add(const Duration(days: 365)))) {
+      formatter = DateFormat('MM-dd');
+    } else {
+      formatter = DateFormat('yyyy-MM');
+    }
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            Expanded(
+              flex: 5,
               child: Text(
-                username,
-                style: const TextStyle(fontSize: 15, color: spqDarkGrey),
+                name,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                maxLines: 1,
+                overflow: TextOverflow.clip,
+                softWrap: false,
               ),
             ),
-            Text(
-              formatter.format(creationTime),
-              style: const TextStyle(fontSize: 15, color: spqDarkGrey),
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  "@" + username,
+                  style: const TextStyle(fontSize: 15, color: spqDarkGrey),
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
+                  softWrap: false,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                formatter.format(creationTime),
+                style: const TextStyle(fontSize: 15, color: spqDarkGrey),
+                maxLines: 1,
+                overflow: TextOverflow.clip,
+                softWrap: false,
+              ),
             ),
           ],
         ),
@@ -95,21 +119,21 @@ class PostContainer extends StatelessWidget {
       ],
     );
   }
-}
 
-Widget _buildReactionList() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: const [
-      Icon(Icons.mic, color: spqDarkGrey),
-      Text("69"),
-      SizedBox(width: 30),
-      Icon(Icons.favorite, color: spqErrorRed),
-      Text("238"),
-      SizedBox(width: 30),
-      Icon(Icons.ios_share, color: spqDarkGrey),
-      SizedBox(width: 30),
-      Icon(Icons.bookmark, color: spqDarkGrey)
-    ],
-  );
+  Widget _buildReactionList() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Icon(Icons.mic, color: spqDarkGrey),
+        Text(numberOfComments.toString()),
+        const SizedBox(width: 30),
+        const Icon(Icons.favorite, color: spqErrorRed),
+        Text(numberOfLikes.toString()),
+        const SizedBox(width: 30),
+        const Icon(Icons.ios_share, color: spqLightGrey),
+        const SizedBox(width: 30),
+        const Icon(Icons.bookmark, color: spqLightGrey)
+      ],
+    );
+  }
 }

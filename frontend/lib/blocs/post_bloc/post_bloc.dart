@@ -17,10 +17,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   void _onCreatePost(CreatePost event, Emitter<PostState> emit) async {
     emit(PostSaving());
-    await _postService.createPost(
-      ownerId: event.ownerId,
-      post: event.post,
-    );
+    await _postService.createPost(ownerId: event.ownerId, post: event.post);
 
     emit(PostSaved());
   }

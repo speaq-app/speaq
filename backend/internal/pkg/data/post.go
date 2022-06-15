@@ -8,11 +8,13 @@ type PostService interface {
 }
 
 type Post struct {
-	ID          int64
-	OwnerID     int64
-	Date        time.Time
-	Description string
-	ResourceID  int64
-	LikeIDs     []int64
-	CommentIDs  []int64
+	ID            int64
+	OwnerID       int64
+	Date          time.Time
+	Description   string
+	ResourceID    int64
+	LikeIDs       []int64
+	CommentIDs    []int64
+	OwnerName     string
+	OwnerUsername string
 }
