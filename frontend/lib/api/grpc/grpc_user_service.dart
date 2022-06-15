@@ -45,22 +45,56 @@ class GRPCUserService implements UserService {
 
   @override
   Future<List<int>> getFollowerIDs({required int id}) async {
-    GetUserFollowerResponse resp = await _client
-        .getUserFollower(GetUserInfoRequest()..userId = Int64(id));
+    GetUserFollowerIDsResponse resp = await _client
+        .getUserFollowerIDs(GetUserInfoRequest()..userId = Int64(id));
     List<int> follower = [];
     for (Int64 i in resp.followerIds) {
       follower.add(i.toInt());
     }
     return follower;
   }
+
   @override
   Future<List<int>> getFollowingIDs({required int id}) async {
-    GetUserFollowingResponse resp = await _client
-        .getUserFollowing(GetUserInfoRequest()..userId = Int64(id));
+    GetUserFollowingIDsResponse resp = await _client
+        .getUserFollowingIDs(GetUserInfoRequest()..userId = Int64(id));
     List<int> following = [];
     for (Int64 i in resp.followingIds) {
       following.add(i.toInt());
     }
     return following;
   }
+
+
+  @override
+  Future<List<FollowUser>> getFollower({required List<int> ids}) async {
+    List<Int64> _int64IDs = [];
+    for (int i in ids) {
+      _int64IDs.add(Int64(i));
+    }
+
+    GetUserFollowerResponse _resp = await _client.getUserFollower(GetUserFollowerRequest(followerIds: _int64IDs));
+    List<User> _follower = [];
+    for (FollowUser fu in _resp.follower) {
+      _follower.add(User(id: fu.id.toInt(), profile: Profile(name: fu.name, username: fu.username, website: '', description: '', ), followerIDs: [], followingIDs: []));
+    }
+
+    return _resp.follower;
+  }
+  @override
+  Future<List<FollowUser>> getFollowing({required List<int> ids}) async {
+    List<Int64> _int64IDs = [];
+    for (int i in ids) {
+      _int64IDs.add(Int64(i));
+    }
+
+    GetUserFollowingResponse _resp = await _client.getUserFollowing(GetUserFollowingRequest(followingIds: _int64IDs));
+    List<User> _following = [];
+    for (FollowUser fu in _resp.following) {
+      _following.add(User(id: fu.id.toInt(), profile: Profile(name: fu.name, username: fu.username, website: '', description: '', ), followerIDs: [], followingIDs: []));
+    }
+
+    return _resp.following;
+  }
+
 }

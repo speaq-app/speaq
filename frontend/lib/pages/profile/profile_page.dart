@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -33,6 +34,12 @@ class _ProfilePageState extends State<ProfilePage> {
   //Hardcoded for posts - delete later
   final String _name = "testname";
   final String _username = "testUsername";
+  final User _user = User(
+    id: 1,
+    profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
+    followerIDs: [2, 3],
+    followingIDs: [2, 3],
+  );
 
   //Follower
   final String _follower = "117k Follower";
@@ -128,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _buildProfilePicture(deviceSize, profile.profileImageBlurHash),
-              _buildEditPofileButton(deviceSize, appLocale),
+              _buildEditProfileButton(deviceSize, appLocale),
               /*Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: deviceSize.width * 0.31,
@@ -195,7 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildEditPofileButton(Size deviceSize, AppLocalizations appLocale) {
+  Widget _buildEditProfileButton(Size deviceSize, AppLocalizations appLocale) {
     return Container(
       width: deviceSize.width * 0.33,
       height: deviceSize.height * 0.05,
@@ -328,7 +335,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         InkWell(
-          onTap: () => Navigator.pushNamed(context, 'follow',arguments: {"user":null}),
+          onTap: () => Navigator.pushNamed(context, 'follow', arguments: _user),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

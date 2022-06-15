@@ -6,56 +6,64 @@ option go_package = "app/user";
 
 
 service User {
-    rpc GetUserProfile(GetUserInfoRequest) returns (GetUserProfileResponse);
-    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
-    rpc GetUserFollowerIDs(GetUserInfoRequest) returns (GetUserFollowerIDsResponse);
-    rpc GetUserFollowingIDs(GetUserInfoRequest) returns (GetUserFollowingIDsResponse);
-/*
-    rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowingResponse);
-    rpc GetUserFollowing(GetUserFollowingRequest) returns (GetUserFollowingResponse);
-*/
+  rpc GetUserProfile(GetUserInfoRequest) returns (GetUserProfileResponse);
+  rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
+  rpc GetUserFollowerIDs(GetUserInfoRequest) returns (GetUserFollowerIDsResponse);
+  rpc GetUserFollowingIDs(GetUserInfoRequest) returns (GetUserFollowingIDsResponse);
+  rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowerResponse);
+  rpc GetUserFollowing(GetUserFollowingRequest) returns (GetUserFollowingResponse);
+
 
 
 }
 
+
 message GetUserInfoRequest {
-    int64 user_id = 1;
+  int64 user_id = 1;
 }
 
 message GetUserProfileResponse {
-    string name = 1;
-    string username = 2;
-    string description = 3;
-    string website = 4;
-    string profile_image_blur_hash = 5;
-    int64 profile_image_resource_id = 6;
+  string name = 1;
+  string username = 2;
+  string description = 3;
+  string website = 4;
+  string profile_image_blur_hash = 5;
+  int64 profile_image_resource_id = 6;
 
 }
 
 message GetUserFollowerIDsResponse{
-   repeated int64 follower_ids =1 [packed=true];
+  repeated int64 follower_ids = 1 [packed = true];
 }
 message GetUserFollowingIDsResponse{
-   repeated int64 following_ids =1 [packed=true];
+  repeated int64 following_ids = 1 [packed = true];
 }
 
 message GetUserFollowerRequest{
-   repeated int64 follower_ids =1 [packed=true];
+  repeated int64 follower_ids = 1 [packed = true];
 }
 message GetUserFollowingRequest{
-   repeated int64 following_ids =1 [packed=true];
+  repeated int64 following_ids = 1 [packed = true];
 }
+
+message FollowUser{
+  int64 id = 1;
+  string name = 2;
+  string username = 3;
+}
+
 message GetUserFollowerResponse{
-   repeated int64 following_ids =1 [packed=true];
+  repeated FollowUser follower = 1;
 }
+
 message GetUserFollowingResponse{
-   repeated int64 following_ids =1 [packed=true];
+  repeated FollowUser following = 1;
 }
 
 message UpdateUserProfileRequest {
-    int64  user_id = 1;
-    string name = 2;
-    string username = 3;
-    string description = 4;
-    string website = 5;
+  int64  user_id = 1;
+  string name = 2;
+  string username = 3;
+  string description = 4;
+  string website = 5;
 }

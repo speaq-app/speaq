@@ -6,6 +6,7 @@ type UserService interface {
 	UserProfileByID(userID int64) (UserProfile, error)
 	FollowerIDsByID(userID int64) ([]int64, error)
 	FollowingIDsByID(userID int64) ([]int64, error)
+
 	FollowerByIDs(userIDs []int64) ([]User, error)
 	FollowingByIDs(userIDs []int64) ([]User, error)
 }

@@ -1,3 +1,5 @@
+import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
+import 'package:frontend/api/model/user.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:frontend/api/user_service.dart';
@@ -55,6 +57,16 @@ class CacheUserService implements UserService {
   }
   @override
   Future<List<int>> getFollowingIDs({required int id}) {
+    // TODO: implement getFollower
+    throw UnimplementedError();
+  }
+  @override
+  Future<List<FollowUser>> getFollower({required List<int> ids}) {
+    // TODO: implement getFollower
+    throw UnimplementedError();
+  }
+  @override
+  Future<List<FollowUser>> getFollowing({required List<int> ids}) {
     // TODO: implement getFollower
     throw UnimplementedError();
   }

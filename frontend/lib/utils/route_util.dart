@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
-import 'package:frontend/pages/post/comment_page.dart';
 import 'package:frontend/pages/settings/sub_settings/settings_about_speaq.dart';
 
 import 'package:page_transition/page_transition.dart';
@@ -125,15 +124,16 @@ class RouteGenerator {
             type: PageTransitionType.fade,
             alignment: Alignment.center);
 
+/*
       case "comments":
         return PageTransition(
             child: const CommentPage(),
             type: PageTransitionType.fade,
             alignment: Alignment.center);
+*/
 
       case "follow":
-        Map map = args as Map;
-        User? user = map["user"];
+        User? user = args as User;
         return PageTransition(
             child: FollowPage(
               user: user,

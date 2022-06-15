@@ -13,11 +13,15 @@ class FollowerIDsLoaded extends FollowerState {
 
   FollowerIDsLoaded({required this.followerIDs, required this.followingIDs});
 }
-class FollowerLoading extends FollowerState {}
+class FollowerLoading extends FollowerState {
+
+  FollowerLoading();
+
+}
 
 class FollowerLoaded extends FollowerState {
-  final List<User> followerIDs;
-  final List<User> followingIDs;
+  final List<FollowUser> follower;
+  final List<FollowUser> following;
 
-  FollowerLoaded({required this.followerIDs, required this.followingIDs});
+  FollowerLoaded({required this.follower, required this.following});
 }

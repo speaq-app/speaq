@@ -53,8 +53,8 @@ func New() data.Service {
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
-				FollowerIDs:  []int64{2},
-				FollowingIDs: []int64{2},
+				FollowerIDs:  []int64{2, 3},
+				FollowingIDs: []int64{2, 3},
 			},
 			2: {
 				Profile: data.UserProfile{

@@ -51,7 +51,7 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserInfoRequest) (*G
 		ProfileImageResourceId: p.ProfileImageResourceID,
 	}, nil
 }
-func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowerResponse, error) {
+func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowerIDsResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 
 	er, err := s.DataService.FollowerIDsByID(req.UserId)
@@ -60,12 +60,12 @@ func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserInfoRequest)
 	}
 	log.Println(er)
 
-	return &GetUserFollowerResponse{
-		FollowingIds: er,
+	return &GetUserFollowerIDsResponse{
+		FollowerIds: er,
 	}, nil
 }
 
-func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowingResponse, error) {
+func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowingIDsResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 
 	ing, err := s.DataService.FollowerIDsByID(req.UserId)
@@ -74,37 +74,58 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserInfoRequest
 	}
 	log.Println(ing)
 
-	return &GetUserFollowingResponse{
+	return &GetUserFollowingIDsResponse{
 		FollowingIds: ing,
 	}, nil
 }
 
 //region needs to be implemented
-func (s Server) GetUserFollower(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowerResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
+func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*GetUserFollowerResponse, error) {
+	log.Printf("Follower with ID %d should be loaded", req.FollowerIds)
 
-	er, err := s.DataService.FollowerIDsByID(req.UserId)
+	us, err := s.DataService.FollowerByIDs(req.FollowerIds)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(er)
+	log.Println(us)
+
+	var fu []*FollowUser
+
+	for _, u := range us {
+
+		fu = append(fu, &FollowUser{
+			Id:       u.ID,
+			Name:     u.Profile.Name,
+			Username: u.Profile.Username,
+		})
+	}
 
 	return &GetUserFollowerResponse{
-		FollowingIds: er,
+		Follower: fu,
 	}, nil
 }
 
-func (s Server) GetUserFollowing(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowingResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
+func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*GetUserFollowingResponse, error) {
 
-	ing, err := s.DataService.FollowerIDsByID(req.UserId)
+	us, err := s.DataService.FollowingByIDs(req.FollowingIds)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(ing)
+	log.Println(us)
+
+	var fu []*FollowUser
+
+	for _, u := range us {
+
+		fu = append(fu, &FollowUser{
+			Id:       u.ID,
+			Name:     u.Profile.Name,
+			Username: u.Profile.Username,
+		})
+	}
 
 	return &GetUserFollowingResponse{
-		FollowingIds: ing,
+		Following: fu,
 	}, nil
 }
 
