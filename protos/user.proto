@@ -12,9 +12,6 @@ service User {
   rpc GetUserFollowingIDs(GetUserInfoRequest) returns (GetUserFollowingIDsResponse);
   rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowerResponse);
   rpc GetUserFollowing(GetUserFollowingRequest) returns (GetUserFollowingResponse);
-
-
-
 }
 
 
