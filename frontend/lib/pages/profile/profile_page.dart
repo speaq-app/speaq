@@ -349,37 +349,10 @@ class _ProfilePageState extends State<ProfilePage> {
             }
           },
           builder: (context, state) {
-            if (state is FollowerIDsLoaded) {
-              return InkWell(
-                onTap: () => Navigator.pushNamed(context, 'follow', arguments: _user),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        "${_followerCount} ${appLocale.follower}",
-                        style: const TextStyle(
-                          color: spqBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 25),
-                    Text(
-                      "${_followingCount} ${appLocale.following}",
-                      style: const TextStyle(
-                        color: spqBlack,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else if (state is FollowerIDsLoading) {
-              return SpqLoadingWidget(deviceSize.shortestSide * 0.01);
+            if (state is FollowerIDsLoading) {
+              return _buildShimmerFollowerInfo(deviceSize);
+            } else if (state is FollowerIDsLoaded) {
+              return _buildFollowerInfo(context, appLocale);
             } else {
               return SizedBox.shrink();
             }
@@ -387,6 +360,52 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ],
     );
+  }
+
+  Widget _buildShimmerFollowerInfo(Size deviceSize) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: deviceSize.width * 0.006,
+        bottom: deviceSize.width * 0.005,
+        left: deviceSize.width * 0.0037,
+      ),
+      child:  ShimmerCube(
+        width: deviceSize.width * 0.2,
+        height: 8,
+      ),
+    );
+  }
+
+
+  InkWell _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
+    return InkWell(
+              onTap: () => Navigator.pushNamed(context, 'follow', arguments: _user),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      "$_followerCount ${appLocale.follower}",
+                      style: const TextStyle(
+                        color: spqBlack,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 25),
+                  Text(
+                    "$_followingCount ${appLocale.following}",
+                    style: const TextStyle(
+                      color: spqBlack,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            );
   }
 
   Widget _buildProfileInformationShimmer(Size deviceSize) {

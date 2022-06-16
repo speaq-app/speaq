@@ -28,10 +28,16 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       print("username BloC: " + event.username);
       print("password BloC: " + event.password);
 
-      resp = await _userService.login(username: event.username, password: event.password);
+      //REAL LOGIN
+      //resp = await _userService.login(username: event.username, password: event.password);
+
+      resp = await _userService.login(username: "nomoruyi", password: "OpenToWork");
+
       print("user id BloC: ${resp.userId}");
       print("token BloC: " + resp.token);
       emit(LogInSuccess(userID: resp.userId.toInt(), token: resp.token));
+
+
       print("Login Success !");
     } on GrpcError catch (err)  {
       print("Login Failed GRPC ERROR!:" + err.toString());

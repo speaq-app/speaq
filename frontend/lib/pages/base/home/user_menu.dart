@@ -11,7 +11,6 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
@@ -28,8 +27,8 @@ class _UserMenuState extends State<UserMenu> {
   final FollowerBloc _followerBloc = FollowerBloc();
 
   //Follower
-   int _followerCount = 0;
-   int _followingCount = 0;
+  int _followerCount = 0;
+  int _followingCount = 0;
 
   //App User (beim login holen)
   final User _user = User(
@@ -39,7 +38,6 @@ class _UserMenuState extends State<UserMenu> {
     followingIDs: [2, 3],
     password: 'OpenToWork',
   );
-
 
   @override
   void initState() {
@@ -68,7 +66,7 @@ class _UserMenuState extends State<UserMenu> {
                   } else if (state is ProfileLoaded) {
                     _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
                     _followerBloc.add(LoadFollowerIDs(userId: _user.id));
-                    return _buildHeader(context, appLocale,deviceSize, state.profile);
+                    return _buildHeader(context, appLocale, deviceSize, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
                   }
@@ -85,25 +83,25 @@ class _UserMenuState extends State<UserMenu> {
   Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
-        top: deviceSize.width / 100 * 6,
-        bottom: deviceSize.width / 100 * 5,
-        left: deviceSize.width / 100 * 3.7,
+        top: deviceSize.width * 0.06,
+        bottom: deviceSize.width * 0.05,
+        left: deviceSize.width * 0.037,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ShimmerProfilePicture(diameter: 11.5),
-          SizedBox(height: deviceSize.width / 100 * 2.6),
+          SizedBox(height: deviceSize.width * 0.026),
           const ShimmerCube(
             width: 20,
             height: 6,
           ),
-          SizedBox(height: deviceSize.width / 100 * 2.6),
+          SizedBox(height: deviceSize.width * 0.026),
           const ShimmerCube(
             width: 30,
             height: 4,
           ),
-          SizedBox(height: deviceSize.width / 100 * 1.1),
+          SizedBox(height: deviceSize.width * 0.011),
           const ShimmerCube(
             width: 40,
             height: 4,
@@ -113,7 +111,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale,Size deviceSize, Profile profile) {
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Size deviceSize, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -162,59 +160,77 @@ class _UserMenuState extends State<UserMenu> {
               },
               builder: (context, state) {
                 if (state is FollowerIDsLoaded) {
-                  return InkWell(
-                    onTap: () => Navigator.pushNamed(context, 'follow'),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "$_followerCount",
-                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text(
-                                  appLocale.follower,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 2.0),
-                                child: Text(
-                                  "$_followingCount",
-                                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Text(
-                                appLocale.following,
-                                style: const TextStyle(fontSize: 10),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  return _buildFollowerInfo(context, appLocale);
                 } else if (state is FollowerIDsLoading) {
-                  return SpqLoadingWidget(deviceSize.shortestSide * 0.01);
+                  return _buildShimmerFollowerInfo(deviceSize);
                 } else {
-                  return SizedBox.shrink();
+                  return _buildShimmerFollowerInfo(deviceSize);
                 }
               },
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerFollowerInfo(Size deviceSize) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: deviceSize.width * 0.006,
+        bottom: deviceSize.width * 0.005,
+        left: deviceSize.width * 0.0037,
+      ),
+      child: const ShimmerCube(
+        width: 20,
+        height:3,
+      ),
+    );
+  }
+
+  Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, 'follow'),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            child: Row(
+              children: [
+                Text(
+                  "$_followerCount",
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 2),
+                  child: Text(
+                    appLocale.follower,
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  child: Text(
+                    "$_followingCount",
+                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(
+                  appLocale.following,
+                  style: const TextStyle(fontSize: 10),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

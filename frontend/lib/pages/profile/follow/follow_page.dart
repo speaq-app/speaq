@@ -6,8 +6,9 @@ import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.user}) : super(key: key);
@@ -31,7 +32,8 @@ class _FollowPageState extends State<FollowPage> {
       id: 1,
       profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
       followerIDs: [2, 3],
-      followingIDs: [2, 3], password: 'OpenToWork',
+      followingIDs: [2, 3],
+      password: 'OpenToWork',
     );
     _followerBloc.add(LoadFollowerIDs(
       userId: 1,
@@ -65,11 +67,13 @@ class _FollowPageState extends State<FollowPage> {
             }
           },
           builder: (context, state) {
-            if (state is FollowerIDsLoaded) {
-              var test = state.followerIDs;
-              print(test);
-
-
+            if (state is FollowerIDsLoading) {
+              return Scaffold(
+                /*appBar: SpqAppBarShimmer(preferredSize: deviceSize),*/
+                body: _buildShimmerList(deviceSize),
+              );
+            }
+            else if (state is FollowerIDsLoaded) {
               return Scaffold(
                 appBar: TabBar(
                   indicatorWeight: 1.5,
@@ -83,7 +87,7 @@ class _FollowPageState extends State<FollowPage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
-                          "$followerCount " + appLocale.follower,
+                          "$followerCount ${appLocale.follower}",
                           style: const TextStyle(fontSize: 20),
                         ),
                       ),
@@ -93,23 +97,46 @@ class _FollowPageState extends State<FollowPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            "$followingCount " + appLocale.following,
+                            "$followingCount ${appLocale.following}",
                             style: const TextStyle(fontSize: 20),
                           ),
                         )),
                   ],
                 ),
-                body: const TabBarView(
-                  children: [
-                    //Shimmer-Widgets
-                    SizedBox.shrink(),
-                    SizedBox.shrink(),
-/*
-                    _buildFollowerTab(deviceSize, follower),
-                    _buildFollowingList(deviceSize, following)
-*/
+                body: _buildShimmerList(deviceSize),
+              );
+            }
+            else if (state is FollowerLoading) {
+              return Scaffold(
+                appBar: TabBar(
+                  indicatorWeight: 1.5,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  unselectedLabelColor: spqLightGrey,
+                  indicatorColor: spqPrimaryBlue,
+                  labelColor: spqPrimaryBlue,
+                  tabs: [
+                    SizedBox(
+                      height: deviceSize.height * 0.05,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          "$followerCount ${appLocale.follower}",
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                        height: deviceSize.height * 0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            "$followingCount ${appLocale.following}",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        )),
                   ],
                 ),
+                body: _buildShimmerList(deviceSize),
               );
             }
             else if (state is FollowerLoaded) {
@@ -132,7 +159,7 @@ class _FollowPageState extends State<FollowPage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
-                          "$followerCount Follower",
+                          "$followerCount ${appLocale.follower}",
                           style: const TextStyle(fontSize: 20),
                         ),
                       ),
@@ -142,7 +169,7 @@ class _FollowPageState extends State<FollowPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            "$followingCount Following",
+                            "$followingCount ${appLocale.following}",
                             style: const TextStyle(fontSize: 20),
                           ),
                         )),
@@ -160,6 +187,14 @@ class _FollowPageState extends State<FollowPage> {
         ),
       ),
     );
+  }
+
+  SingleChildScrollView _buildShimmerList(Size deviceSize) {
+    return SingleChildScrollView(
+                child: Column(children: [
+                  for(int i = 0; i <= 10; i++) Padding(padding:const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0), child: ShimmerCube(width: double.infinity, height: deviceSize.height * 0.025))
+                ],),
+              );
   }
 
   Widget _buildFollowingList(Size deviceSize, List<FollowUser> followerList) {

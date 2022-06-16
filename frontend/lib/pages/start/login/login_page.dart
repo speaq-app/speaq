@@ -78,10 +78,9 @@ class _LoginPageState extends State<LoginPage> {
                       buildBottom(context, appLocale),
                     ],
                   );
-                } /*else if (state is LogInSuccess) {
-                  Navigator.pushNamed(context, "base", arguments: {"userId": state.userID, "token": state.token});
-                  return SizedBox.shrink();
-                }*/ else {
+                } else if (state is LogInSuccess) {
+                  return const SizedBox.shrink();
+                } else {
                   return ListView(
                     children: <Widget>[
                       buildTop(context, appLocale),
