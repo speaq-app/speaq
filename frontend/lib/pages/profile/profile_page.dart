@@ -574,6 +574,8 @@ class _ProfilePageState extends State<ProfilePage> {
   void dispose() {
     _profileBloc.close();
     _resourceBloc.close();
+    _followerBloc.close();
+
     super.dispose();
   }
 }

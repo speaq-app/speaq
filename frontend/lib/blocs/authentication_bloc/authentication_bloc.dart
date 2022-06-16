@@ -23,8 +23,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     LoginResponse resp;
 
     try {
-      print("username BloC: " + event.username);
-      print("password BloC: " + event.password);
+      print("username BloC: ${event.username}");
+      print("password BloC: ${event.password}");
 
       //REAL LOGIN
       //resp = await _userService.login(username: event.username, password: event.password);
@@ -32,18 +32,18 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       resp = await _userService.login(username: "nomoruyi", password: "OpenToWork");
 
       print("user id BloC: ${resp.userId}");
-      print("token BloC: " + resp.token);
+      print("token BloC: ${resp.token}");
       emit(LogInSuccess(userID: resp.userId.toInt(), token: resp.token));
 
       print("Login Success !");
     } on GrpcError catch (err) {
-      print("Login Failed GRPC ERROR!:" + err.toString());
-      print("Login Failed GRPC ERROR!:" + err.runtimeType.toString());
+      print("Login Failed GRPC ERROR!:$err");
+      print("Login Failed GRPC ERROR!:${err.runtimeType}");
 
       emit(LogInFail(message: "ERROR: ${err.message}"));
     } catch (err) {
-      print("Login Failed ERROR!:" + err.toString());
-      print("Login Failed ERROR!:" + err.runtimeType.toString());
+      print("Login Failed ERROR!:$err");
+      print("Login Failed ERROR!:${err.runtimeType}");
 
       emit(LogInFail(message: err.toString()));
     }

@@ -7,7 +7,6 @@ import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 
 class FollowPage extends StatefulWidget {
@@ -72,8 +71,7 @@ class _FollowPageState extends State<FollowPage> {
                 /*appBar: SpqAppBarShimmer(preferredSize: deviceSize),*/
                 body: _buildShimmerList(deviceSize),
               );
-            }
-            else if (state is FollowerIDsLoaded) {
+            } else if (state is FollowerIDsLoaded) {
               return Scaffold(
                 appBar: TabBar(
                   indicatorWeight: 1.5,
@@ -105,8 +103,7 @@ class _FollowPageState extends State<FollowPage> {
                 ),
                 body: _buildShimmerList(deviceSize),
               );
-            }
-            else if (state is FollowerLoading) {
+            } else if (state is FollowerLoading) {
               return Scaffold(
                 appBar: TabBar(
                   indicatorWeight: 1.5,
@@ -138,8 +135,7 @@ class _FollowPageState extends State<FollowPage> {
                 ),
                 body: _buildShimmerList(deviceSize),
               );
-            }
-            else if (state is FollowerLoaded) {
+            } else if (state is FollowerLoaded) {
               followerCount = state.follower.length;
               followingCount = state.following.length;
 
@@ -176,7 +172,6 @@ class _FollowPageState extends State<FollowPage> {
                   ],
                 ),
                 body: TabBarView(
-
                   children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList(deviceSize, following)],
                 ),
               );
@@ -191,10 +186,10 @@ class _FollowPageState extends State<FollowPage> {
 
   SingleChildScrollView _buildShimmerList(Size deviceSize) {
     return SingleChildScrollView(
-                child: Column(children: [
-                  for(int i = 0; i <= 10; i++) Padding(padding:const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0), child: ShimmerCube(width: double.infinity, height: deviceSize.height * 0.025))
-                ],),
-              );
+      child: Column(
+        children: [for (int i = 0; i <= 10; i++) Padding(padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0), child: ShimmerCube(width: double.infinity, height: deviceSize.height * 0.025))],
+      ),
+    );
   }
 
   Widget _buildFollowingList(Size deviceSize, List<FollowUser> followerList) {
@@ -206,6 +201,14 @@ class _FollowPageState extends State<FollowPage> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _profileBloc.close();
+    _followerBloc.close();
+
+    super.dispose();
   }
 }
 

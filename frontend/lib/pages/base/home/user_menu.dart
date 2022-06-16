@@ -8,7 +8,6 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -44,6 +43,7 @@ class _UserMenuState extends State<UserMenu> {
     _profileBloc.add(LoadProfile(
       userId: 1,
     ));
+    
     super.initState();
   }
 
@@ -183,7 +183,7 @@ class _UserMenuState extends State<UserMenu> {
       ),
       child: const ShimmerCube(
         width: 20,
-        height:3,
+        height: 3,
       ),
     );
   }
@@ -300,6 +300,10 @@ class _UserMenuState extends State<UserMenu> {
   @override
   void dispose() {
     _settingsBloc.close();
+    _followerBloc.close();
+    _profileBloc.close();
+    _resourceBloc.close();
+
     super.dispose();
   }
 }
