@@ -88,7 +88,16 @@
   "websiteHasBackslashT" : "Website must not contain \\t!",
   "backenddeveloper": "Backend developer",
   "search": "Search",
-  "hintTextSearchBarSearchPage": "Search for persons"
-
+  "hintTextSearchBarSearchPage": "Search for persons",
+  "secondsAgo" : " seconds ago",
+  "minuteAgo" : " minute ago",
+  "minutesAgo" : " minutes ago",
+  "hourAgo" : " hour ago",
+  "hoursAgo" : " hours ago",
+  "dayAgo" : " day ago",
+  "daysAgo" : " days ago",
+  "weekAgo" : " week ago",
+  "weeksAgo" : " weeks ago",
+  "dateAt" : "At "
 }
 

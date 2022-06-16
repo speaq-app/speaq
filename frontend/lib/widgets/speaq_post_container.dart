@@ -32,6 +32,7 @@ class PostContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     return Column(
       children: [
         ListTile(
@@ -39,7 +40,7 @@ class PostContainer extends StatelessWidget {
             backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
           ),
           title: _buildPostTitle(),
-          subtitle: _buildContent(),
+          subtitle: _buildContent(appLocale),
         ),
       ],
     );
@@ -80,8 +81,8 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildContent() {
-    final String formattedDate = _formatDate();
+  Widget _buildContent(AppLocalizations appLocale) {
+    final String formattedDate = _formatDate(appLocale);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,45 +114,45 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  String _formatDate() {
+  String _formatDate(AppLocalizations appLocale) {
     final DateTimeRange calculatedDateTime = DateTimeRange(start: creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
-      return calculatedDateTime.duration.inSeconds.toString() + " Sekunden her";
+      return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
     }
     if (calculatedDateTime.duration.inMinutes < 2) {
-      return calculatedDateTime.duration.inMinutes.toString() + " Minute her";
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minuteAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 1) {
-      return calculatedDateTime.duration.inMinutes.toString() + " Minuten her";
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minutesAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 2) {
-      return calculatedDateTime.duration.inHours.toString() + " Stunde her";
+      return calculatedDateTime.duration.inHours.toString() + appLocale.hourAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 1) {
-      return calculatedDateTime.duration.inHours.toString() + " Stunden her";
+      return calculatedDateTime.duration.inHours.toString() + appLocale.hoursAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 2) {
-      return calculatedDateTime.duration.inDays.toString() + " Tag her";
+      return calculatedDateTime.duration.inDays.toString() + appLocale.dayAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 7) {
-      return calculatedDateTime.duration.inDays.toString() + " Tage her";
+      return calculatedDateTime.duration.inDays.toString() + appLocale.daysAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 14) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + " Woche her";
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weekAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 31) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + " Wochen her";
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weeksAgo;
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");
-    return "Am " + formatter.format(creationTime);
+    return appLocale.dateAt + formatter.format(creationTime);
   }
 
   Widget _buildReactionList() {
