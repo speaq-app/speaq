@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:frontend/api/cache/cache_user_service.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/user_service.dart';
@@ -9,6 +6,7 @@ import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
 part 'authentication_event.dart';
+
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -37,32 +35,29 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       print("token BloC: " + resp.token);
       emit(LogInSuccess(userID: resp.userId.toInt(), token: resp.token));
 
-
       print("Login Success !");
-    } on GrpcError catch (err)  {
+    } on GrpcError catch (err) {
       print("Login Failed GRPC ERROR!:" + err.toString());
       print("Login Failed GRPC ERROR!:" + err.runtimeType.toString());
 
       emit(LogInFail(message: "ERROR: ${err.message}"));
-    }
-    catch (err) {
+    } catch (err) {
       print("Login Failed ERROR!:" + err.toString());
       print("Login Failed ERROR!:" + err.runtimeType.toString());
 
       emit(LogInFail(message: err.toString()));
-
     }
   }
+
   void _onSaveToken(SaveToken event, Emitter<AuthenticationState> emit) async {
     emit(TokenSaving());
 
     emit(TokenSaved());
-
   }
+
   void _onVerifyToken(VerifyToken event, Emitter<AuthenticationState> emit) async {
     emit(TokenLoading());
 
     emit(TokenLoaded());
-
   }
 }

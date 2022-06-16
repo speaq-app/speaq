@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
-import 'package:frontend/api/model/user.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:meta/meta.dart';
 
@@ -24,19 +21,15 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
 
   void _onLoadFollowerIDs(LoadFollowerIDs event, Emitter<FollowerState> emit) async {
     emit(FollowerIDsLoading());
-
-    List<int> _followerIDs = await _userService.getFollowerIDs(id: event.userId);
-    List<int> _followingIDs = await _userService.getFollowingIDs(id: event.userId);
-
-    emit(FollowerIDsLoaded(followerIDs: _followerIDs, followingIDs: _followingIDs));
+    List<int> followerIDs = await _userService.getFollowerIDs(id: event.userId);
+    List<int> followingIDs = await _userService.getFollowingIDs(id: event.userId);
+    emit(FollowerIDsLoaded(followerIDs: followerIDs, followingIDs: followingIDs));
   }
 
   void _onLoadFollower(LoadFollower event, Emitter<FollowerState> emit) async {
     emit(FollowerLoading());
-
-    List<FollowUser> _follower = await _userService.getFollower(ids: event.followerIDs);
-    List<FollowUser> _following = await _userService.getFollowing(ids: event.followingIDs);
-
-    emit(FollowerLoaded(follower: _follower, following: _following));
+    List<FollowUser> follower = await _userService.getFollower(ids: event.followerIDs);
+    List<FollowUser> following = await _userService.getFollowing(ids: event.followingIDs);
+    emit(FollowerLoaded(follower: follower, following: following));
   }
 }

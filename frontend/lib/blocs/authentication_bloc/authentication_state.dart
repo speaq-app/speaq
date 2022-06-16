@@ -16,14 +16,12 @@ class LogInSuccess extends AuthenticationState {
   final String token;
 
   LogInSuccess({required this.userID, required this.token});
-
 }
 
 class LogInFail extends AuthenticationState {
-final String message;
+  final String message;
 
   LogInFail({required this.message});
-
 }
 
 class TokenSaving extends AuthenticationState {}
