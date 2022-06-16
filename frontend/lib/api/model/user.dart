@@ -10,8 +10,20 @@ class User extends HiveObject {
   @HiveField(1)
   final Profile profile;
 
+  @HiveField(2)
+  final String password;
+
+  @HiveField(3)
+  final List<int> followerIDs;
+
+  @HiveField(4)
+  final List<int> followingIDs;
+
   User({
     required this.id,
     required this.profile,
+    required this.password,
+    required this.followerIDs,
+    required this.followingIDs,
   });
 }

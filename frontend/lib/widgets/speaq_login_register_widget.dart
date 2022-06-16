@@ -25,9 +25,7 @@ class SpeaqButton extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: () {
-          Navigator.popAndPushNamed(context, "base");
-        },
+        onPressed: () => onPressed(),
         child: Text(loginText));
   }
 }

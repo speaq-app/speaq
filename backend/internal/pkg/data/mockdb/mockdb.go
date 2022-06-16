@@ -2,6 +2,7 @@ package mockdb
 
 import (
 	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"log"
 	"time"
@@ -25,6 +26,11 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+	passHash, err := bcrypt.GenerateFromPassword([]byte("OpenToWork"), 10)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return service{
 		delay: time.Second,
 		resources: map[int64]data.Resource{
@@ -45,15 +51,17 @@ func New() data.Service {
 		users: map[int64]data.User{
 			1: {
 				Profile: data.UserProfile{
-					Name:        "Hendrik Schlehlein",
-					Username:    "schlehlein",
-					Description: "Test Description 1",
-					Website:     "Test Website 1",
-					//ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo", //ID 1
-
+					Name:        "Karl Ess",
+					Username:    "essiggurke",
+					Description: "Leude ihr müsst husteln! Macht erscht mal die Basics!",
+					Website:     "ess.com",
+					//ProfileImageBlurHash: "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo", //ID 1
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
+				Password:     passHash,
+				FollowerIDs:  []int64{2, 3, 5, 6, 7},
+				FollowingIDs: []int64{2, 4, 7},
 			},
 			2: {
 				Profile: data.UserProfile{
@@ -64,16 +72,66 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
+				Password:     passHash,
+				FollowerIDs:  []int64{1, 3},
+				FollowingIDs: []int64{1, 3},
 			},
 			3: {
 				Profile: data.UserProfile{
-					Name:                   "Nosakhare",
+					Name:                   "Nosakhare Omoruyi",
 					Username:               "nomoruyi",
 					Description:            "Test Description 3",
 					Website:                "Test Website 3",
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
+				FollowerIDs:  []int64{1, 2},
+				FollowingIDs: []int64{1, 2},
+				Password:     passHash,
+			},
+			4: {
+				Profile: data.UserProfile{
+					Name:                   "David Löwe",
+					Username:               "dloewe",
+					Description:            "Test Description 4",
+					Website:                "Test Website 4",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
+			},
+			5: {
+				Profile: data.UserProfile{
+					Name:                   "Eric Eisemann",
+					Username:               "eeisemann",
+					Description:            "Test Description 5",
+					Website:                "Test Website 5",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
+			},
+			6: {
+				Profile: data.UserProfile{
+					Name:                   "Sven Gatnar",
+					Username:               "sgatnar",
+					Description:            "Test Description 6",
+					Website:                "Test Website 6",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
+			},
+			7: {
+				Profile: data.UserProfile{
+					Name:                   "Eric Eisemann",
+					Username:               "dloewe",
+					Description:            "Test Description 4",
+					Website:                "Test Website 4",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
 			},
 		},
 		post: map[int64]data.Post{
@@ -109,6 +167,44 @@ func (s service) ResourceByID(id int64) (data.Resource, error) {
 	}
 	r.ID = id
 	return r, nil
+}
+func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
+	time.Sleep(s.delay)
+	u, ok := s.users[userID]
+	if !ok {
+		return nil, errors.New("followers by ID not working")
+	}
+	u.ID = userID
+	return u.FollowerIDs, nil
+}
+func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
+	time.Sleep(s.delay)
+	u, ok := s.users[userID]
+	if !ok {
+		return nil, errors.New("following by ID not working")
+	}
+	u.ID = userID
+	return u.FollowingIDs, nil
+}
+
+func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
+	time.Sleep(s.delay)
+	var ul []data.User
+	for _, u := range userIDs {
+		ul = append(ul, s.users[u])
+	}
+
+	return ul, nil
+}
+
+func (s service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
+	time.Sleep(s.delay)
+	var ul []data.User
+	for _, u := range userIDs {
+		ul = append(ul, s.users[u])
+	}
+
+	return ul, nil
 }
 
 func (s service) UserByID(id int64) (data.User, error) {
@@ -146,6 +242,28 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
+func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
+
+	//passwort hash getten
+	//TODO implement me
+	//Get user by username (for loop). If doesn't exists, ERROR
+	//Compare entered password with user password. If not identical, ERROR
+	//Return User
+	//panic("implement me")
+
+	/*	var password []byte
+		var id int64*/
+
+	for _, u := range s.users {
+		if u.Profile.Username == username {
+			password := u.Password
+
+			return password, u.ID, nil
+		}
+	}
+
+	return nil, 0, errors.New("no user found")
+}
 func (s service) PostByID(id int64) (data.Post, error) {
 	time.Sleep(s.delay)
 	p, ok := s.post[id]
@@ -168,4 +286,5 @@ func (s service) CreatePost(id int64, post data.Post) error {
 	log.Println(c)
 
 	return nil
+
 }
