@@ -12,7 +12,7 @@ import (
 type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
-	posts      map[int64]data.Post
+	posts     map[int64]data.Post
 	delay     time.Duration
 }
 
@@ -97,7 +97,7 @@ func New() data.Service {
 			2: {
 				ID:          2,
 				OwnerID:     1,
-				Date:        time.Now().Add(1 * time.Hour),
+				Date:        time.Now().Add(1 * time.Second),
 				Description: "Mein zweiter Post",
 				ResourceID:  1,
 				LikeIDs: []int64{
@@ -112,7 +112,7 @@ func New() data.Service {
 			3: {
 				ID:          3,
 				OwnerID:     2,
-				Date:        time.Now().Add(5 * time.Hour),
+				Date:        time.Now().Add(5 * time.Second),
 				Description: "Mein dritter Post",
 				ResourceID:  1,
 				LikeIDs: []int64{
@@ -177,7 +177,7 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 
 func (s service) PostsByID(id int64) ([]data.Post, error) {
 	time.Sleep(s.delay)
-	
+
 	postList := []data.Post{}
 
 	for _, dbpost := range s.posts {
@@ -203,7 +203,7 @@ func (s service) CreatePost(ownerID int64, post data.Post) error {
 	var nextID int64 = 1
 
 	for id := range s.posts {
-		if id >= nextID{
+		if id >= nextID {
 			nextID = id + 1
 		}
 	}

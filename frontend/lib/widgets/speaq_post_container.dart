@@ -46,13 +46,27 @@ class PostContainer extends StatelessWidget {
   }
 
   Widget _buildPostTitle() {
-    late DateFormat formatter;
-    if (!DateTime.now().isBefore(creationTime.add(const Duration(days: 1)))) {
-      formatter = DateFormat('H:m');
-    } else if (!DateTime.now().isBefore(creationTime.add(const Duration(days: 365)))) {
-      formatter = DateFormat('MM-dd');
+    //Fix DateFormat completely
+    late String formattedDate;
+    final DateTimeRange calculatedDateTime = DateTimeRange(start: creationTime, end: DateTime.now());
+    if (calculatedDateTime.duration.inMinutes < 1) {
+      String suffix = " Sekunden her";
+      formattedDate = calculatedDateTime.duration.inSeconds.toString() + suffix;
+    } else if (calculatedDateTime.duration.inHours < 1) {
+      String suffix = " Minuten her";
+      formattedDate = calculatedDateTime.duration.inMinutes.toString() + suffix;
+    } else if (calculatedDateTime.duration.inDays < 1) {
+      String suffix = " Stunden her";
+      formattedDate = calculatedDateTime.duration.inHours.toString() + suffix;
+    } else if (calculatedDateTime.duration.inDays < 7) {
+      String suffix = " Tage her";
+      formattedDate = calculatedDateTime.duration.inDays.toString() + suffix;
+    } else if (calculatedDateTime.duration.inDays < 31) {
+      String suffix = " Wochen her";
+      formattedDate = (calculatedDateTime.duration.inDays % 7).toString() + suffix;
     } else {
-      formatter = DateFormat('yyyy-MM');
+      String prefix = "Am ";
+      formattedDate = prefix + calculatedDateTime.duration.inSeconds.toString();
     }
 
     return Column(
@@ -70,23 +84,24 @@ class PostContainer extends StatelessWidget {
                 softWrap: false,
               ),
             ),
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(
-                  "@" + username,
-                  style: const TextStyle(fontSize: 15, color: spqDarkGrey),
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
-                  softWrap: false,
-                ),
-              ),
-            ),
+            // Expanded(
+            //   flex: 3,
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //     child: Text(
+            //       "@" + username,
+            //       style: const TextStyle(fontSize: 15, color: spqDarkGrey),
+            //       maxLines: 1,
+            //       overflow: TextOverflow.clip,
+            //       softWrap: false,
+            //     ),
+            //   ),
+            // ),
             Expanded(
               flex: 2,
               child: Text(
-                formatter.format(creationTime),
+                formattedDate,
+                //formatter.format(creationTime),
                 style: const TextStyle(fontSize: 15, color: spqDarkGrey),
                 maxLines: 1,
                 overflow: TextOverflow.clip,
