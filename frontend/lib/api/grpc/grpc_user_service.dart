@@ -97,4 +97,22 @@ class GRPCUserService implements UserService {
     return _resp.following;
   }
 
+
+  @override
+  Future<LoginResponse> login({required String username, required String password}) async {
+
+    print("username Login: " + username);
+    print("password Login: " + password);
+
+    LoginResponse resp = await _client.login(
+      LoginRequest()
+        ..username = username
+        ..password = password
+    );
+
+    print("username Response: ${resp.userId}");
+    print("password Response: " + resp.token);
+
+    return resp;
+  }
 }

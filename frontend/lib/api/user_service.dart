@@ -1,3 +1,4 @@
+import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/user.dart';
@@ -22,4 +23,6 @@ abstract class UserService {
   Future<List<FollowUser>> getFollowing({
     required List<int> ids,
   });
+
+  Future<LoginResponse> login({required String username, required String password});
 }

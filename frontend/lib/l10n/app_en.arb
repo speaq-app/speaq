@@ -85,6 +85,10 @@
   "websiteHasNoDot" : "Website must contain a dot!",
   "websiteEndsWithSpace" : "Website must not end with a space!",
   "websiteHasBackslashN" : "Website must not contain \\n!",
-  "websiteHasBackslashT" : "Website must not contain \\t!"
+  "websiteHasBackslashT" : "Website must not contain \\t!",
+  "backenddeveloper": "Backend developer",
+  "search": "Search",
+  "hintTextSearchBarSearchPage": "Search for persons"
+
 }
 

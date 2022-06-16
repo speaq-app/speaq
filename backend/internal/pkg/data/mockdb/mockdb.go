@@ -2,6 +2,7 @@ package mockdb
 
 import (
 	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"log"
 	"time"
@@ -12,6 +13,7 @@ import (
 type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
+	post      map[int64]data.Post
 	delay     time.Duration
 }
 
@@ -24,6 +26,11 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+	passHash, err := bcrypt.GenerateFromPassword([]byte("OpenToWork"), 10)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return service{
 		delay: time.Second,
 		resources: map[int64]data.Resource{
@@ -42,7 +49,6 @@ func New() data.Service {
 			3: {},
 		},
 		users: map[int64]data.User{
-
 			1: {
 				Profile: data.UserProfile{
 					Name:        "Karl Ess",
@@ -53,6 +59,7 @@ func New() data.Service {
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
+				Password: passHash,
 				FollowerIDs:  []int64{2, 3},
 				FollowingIDs: []int64{2, 3},
 			},
@@ -65,12 +72,13 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
+				Password: passHash,
 				FollowerIDs:  []int64{1, 3},
 				FollowingIDs: []int64{1, 3},
 			},
 			3: {
 				Profile: data.UserProfile{
-					Name:                   "Nosakhare",
+					Name:                   "Nosakhare Omoruyi",
 					Username:               "nomoruyi",
 					Description:            "Test Description 3",
 					Website:                "Test Website 3",
@@ -79,6 +87,41 @@ func New() data.Service {
 				},
 				FollowerIDs:  []int64{1, 2},
 				FollowingIDs: []int64{1, 2},
+				Password: passHash,
+			},
+			4: {
+				ID: 4,
+				Profile: data.UserProfile{
+					Name:                   "David Löwe",
+					Username:               "dloewe",
+					Description:            "Test Description 4",
+					Website:                "Test Website 4",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
+			},
+		},
+		post: map[int64]data.Post{
+			1: {
+				ID:          1,
+				UserID:      1,
+				Description: "Mein erster Post",
+				Date:        "22/02/2022",
+			},
+
+			2: {
+				ID:          2,
+				UserID:      2,
+				Description: "Mein zweiter Post",
+				Date:        "22/02/2023",
+			},
+
+			3: {
+				ID:          3,
+				UserID:      3,
+				Description: "Mein dritter Post",
+				Date:        "22/02/2024",
 			},
 		},
 	}
@@ -165,4 +208,51 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	}
 
 	return u.Profile, nil
+}
+
+func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
+
+	//passwort hash getten
+	//TODO implement me
+	//Get user by username (for loop). If doesn't exists, ERROR
+	//Compare entered password with user password. If not identical, ERROR
+	//Return User
+	//panic("implement me")
+
+	/*	var password []byte
+		var id int64*/
+
+	for _, u := range s.users {
+		if u.Profile.Username == username {
+			password := u.Password
+
+			return password, u.ID, nil
+		}
+	}
+
+	return nil, 0, errors.New("no user found")
+}
+func (s service) PostByID(id int64) (data.Post, error) {
+	time.Sleep(s.delay)
+	p, ok := s.post[id]
+	if !ok {
+		return p, errors.New("not workin 3")
+	}
+	p.ID = id
+
+	return p, nil
+}
+
+func (s service) CreatePost(id int64, post data.Post) error {
+	time.Sleep(s.delay)
+	c, err := s.PostByID(id)
+	if err != nil {
+		return err
+	}
+	s.post[id] = c
+
+	log.Println(c)
+
+	return nil
+
 }

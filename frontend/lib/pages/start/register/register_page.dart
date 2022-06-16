@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -57,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
               labelTex: appLocale.username,
               onChanged: (value) {},
               icon: Icons.person,
-              borderColor: Border.all(color: Colors.black26),
+              borderColor: Border.all(color: spqLightBlack),
             ),
           ),
           RoundTextField(
@@ -74,14 +75,14 @@ class _RegisterPageState extends State<RegisterPage> {
             controller: _passwordController,
             icon: Icons.lock,
             borderColor: _passwordStrength == 0
-                ? Border.all(color: Colors.black26)
+                ? Border.all(color: spqLightBlack)
                 : _passwordStrength <= 1 / 4
-                    ? Border.all(color: Colors.redAccent)
+                    ? Border.all(color: spqLightRed)
                     : _passwordStrength == 2 / 4
-                        ? Border.all(color: Colors.yellowAccent)
+                        ? Border.all(color: spqLightYellow)
                         : _passwordStrength == 3 / 4
-                            ? Border.all(color: Colors.lightBlue)
-                            : Border.all(color: Colors.lightGreen),
+                            ? Border.all(color: spqSecondaryAqua)
+                            : Border.all(color: spqLightGreen),
             suffixIcon: _buildVisibility(),
             onChanged: (password) => _onPasswordChanged(password),
           ),
@@ -92,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
             isHidden: true,
             icon: Icons.lock,
             controller: _passwordCheckController,
-            borderColor: Border.all(color: Colors.black26),
+            borderColor: Border.all(color: spqLightBlack),
             onChanged: (String value) {},
           ),
         ],
@@ -126,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
             bottom: 5,
           ),
           child: Divider(
-            color: Colors.black54,
+            color: spqBlack,
             thickness: 0.75,
           ),
         ),
@@ -165,11 +166,11 @@ class _RegisterPageState extends State<RegisterPage> {
       child: isHidden
           ? const Icon(
               Icons.visibility,
-              color: Colors.black,
+              color: spqBlack,
             )
           : const Icon(
               Icons.visibility_off,
-              color: Colors.black,
+              color: spqBlack,
             ),
     );
   }
