@@ -31,7 +31,7 @@ class _FollowPageState extends State<FollowPage> {
       id: 1,
       profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
       followerIDs: [2, 3],
-      followingIDs: [2, 3],
+      followingIDs: [2, 3], password: 'OpenToWork',
     );
     _followerBloc.add(LoadFollowerIDs(
       userId: 1,
@@ -55,10 +55,11 @@ class _FollowPageState extends State<FollowPage> {
         child: BlocConsumer<FollowerBloc, FollowerState>(
           bloc: _followerBloc,
           listener: (context, state) async {
-
             if (state is FollowerIDsLoaded) {
               var follower = state.followerIDs;
               print(follower);
+              followerCount = state.followerIDs.length;
+              followingCount = state.followingIDs.length;
 
               _followerBloc.add(LoadFollower(followerIDs: state.followerIDs, followingIDs: state.followingIDs));
             }
@@ -68,8 +69,6 @@ class _FollowPageState extends State<FollowPage> {
               var test = state.followerIDs;
               print(test);
 
-              followerCount = state.followerIDs.length;
-              followingCount = state.followingIDs.length;
 
               return Scaffold(
                 appBar: TabBar(

@@ -17,7 +17,7 @@ class GRPCUserService implements UserService {
   @override
   Future<Profile> getProfile(int id) async {
     GetUserProfileResponse resp = await _client
-        .getUserProfile(GetUserInfoRequest()..userId = Int64(id));
+        .getUserProfile(GetUserProfileRequest()..userId = Int64(id));
     return Profile(
       name: resp.name,
       username: resp.username,
@@ -46,7 +46,7 @@ class GRPCUserService implements UserService {
   @override
   Future<List<int>> getFollowerIDs({required int id}) async {
     GetUserFollowerIDsResponse resp = await _client
-        .getUserFollowerIDs(GetUserInfoRequest()..userId = Int64(id));
+        .getUserFollowerIDs(GetUserProfileRequest()..userId = Int64(id));
     List<int> follower = [];
     for (Int64 i in resp.followerIds) {
       follower.add(i.toInt());
@@ -57,7 +57,7 @@ class GRPCUserService implements UserService {
   @override
   Future<List<int>> getFollowingIDs({required int id}) async {
     GetUserFollowingIDsResponse resp = await _client
-        .getUserFollowingIDs(GetUserInfoRequest()..userId = Int64(id));
+        .getUserFollowingIDs(GetUserProfileRequest()..userId = Int64(id));
     List<int> following = [];
     for (Int64 i in resp.followingIds) {
       following.add(i.toInt());
@@ -68,33 +68,25 @@ class GRPCUserService implements UserService {
 
   @override
   Future<List<FollowUser>> getFollower({required List<int> ids}) async {
-    List<Int64> _int64IDs = [];
+    List<Int64> int64IDs = [];
     for (int i in ids) {
-      _int64IDs.add(Int64(i));
+      int64IDs.add(Int64(i));
     }
 
-    GetUserFollowerResponse _resp = await _client.getUserFollower(GetUserFollowerRequest(followerIds: _int64IDs));
-    List<User> _follower = [];
-    for (FollowUser fu in _resp.follower) {
-      _follower.add(User(id: fu.id.toInt(), profile: Profile(name: fu.name, username: fu.username, website: '', description: '', ), followerIDs: [], followingIDs: []));
-    }
+    GetUserFollowerResponse resp = await _client.getUserFollower(GetUserFollowerRequest(followerIds: int64IDs));
 
-    return _resp.follower;
+    return resp.follower;
   }
   @override
   Future<List<FollowUser>> getFollowing({required List<int> ids}) async {
-    List<Int64> _int64IDs = [];
+    List<Int64> int64IDs = [];
     for (int i in ids) {
-      _int64IDs.add(Int64(i));
+      int64IDs.add(Int64(i));
     }
 
-    GetUserFollowingResponse _resp = await _client.getUserFollowing(GetUserFollowingRequest(followingIds: _int64IDs));
-    List<User> _following = [];
-    for (FollowUser fu in _resp.following) {
-      _following.add(User(id: fu.id.toInt(), profile: Profile(name: fu.name, username: fu.username, website: '', description: '', ), followerIDs: [], followingIDs: []));
-    }
+    GetUserFollowingResponse resp = await _client.getUserFollowing(GetUserFollowingRequest(followingIds: int64IDs));
 
-    return _resp.following;
+    return resp.following;
   }
 
 

@@ -55,6 +55,8 @@ class _LoginPageState extends State<LoginPage> {
                     message: state.message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
+                SnackBar(content: Text(state.message));
+
                 }
               },
               builder: (context, state) {

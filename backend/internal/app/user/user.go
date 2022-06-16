@@ -2,13 +2,10 @@ package user
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/empty"
@@ -58,7 +55,7 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 		ProfileImageResourceId: p.ProfileImageResourceID,
 	}, nil
 }
-func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowerIDsResponse, error) {
+func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowerIDsResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 
 	er, err := s.DataService.FollowerIDsByID(req.UserId)
@@ -72,10 +69,10 @@ func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserInfoRequest)
 	}, nil
 }
 
-func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserInfoRequest) (*GetUserFollowingIDsResponse, error) {
+func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowingIDsResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 
-	ing, err := s.DataService.FollowerIDsByID(req.UserId)
+	ing, err := s.DataService.FollowingIDsByID(req.UserId)
 	if err != nil {
 		return nil, err
 	}

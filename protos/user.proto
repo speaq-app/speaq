@@ -9,14 +9,14 @@ service User {
     rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
     rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
     rpc Login(LoginRequest) returns (LoginResponse);
-    rpc GetUserFollowerIDs(GetUserInfoRequest) returns (GetUserFollowerIDsResponse);
-    rpc GetUserFollowingIDs(GetUserInfoRequest) returns (GetUserFollowingIDsResponse);
+    rpc GetUserFollowerIDs(GetUserProfileRequest) returns (GetUserFollowerIDsResponse);
+    rpc GetUserFollowingIDs(GetUserProfileRequest) returns (GetUserFollowingIDsResponse);
     rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowerResponse);
     rpc GetUserFollowing(GetUserFollowingRequest) returns (GetUserFollowingResponse);
 }
 
 
-message GetUserInfoRequest {
+message GetUserProfileRequest {
   int64 user_id = 1;
 }
 

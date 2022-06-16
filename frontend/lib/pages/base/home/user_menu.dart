@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/api/model/user.dart';
+import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
+import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
@@ -22,10 +25,21 @@ class _UserMenuState extends State<UserMenu> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
   final SettingsBloc _settingsBloc = SettingsBloc();
+  final FollowerBloc _followerBloc = FollowerBloc();
 
-  String follower = "234";
+  //Follower
+   int _followerCount = 0;
+   int _followingCount = 0;
 
-  String following = "690";
+  //App User (beim login holen)
+  final User _user = User(
+    id: 1,
+    profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
+    followerIDs: [2, 3],
+    followingIDs: [2, 3],
+    password: 'OpenToWork',
+  );
+
 
   @override
   void initState() {
@@ -53,7 +67,8 @@ class _UserMenuState extends State<UserMenu> {
                     return _buildHeaderShimmer(context, appLocale, deviceSize);
                   } else if (state is ProfileLoaded) {
                     _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-                    return _buildHeader(context, appLocale, state.profile);
+                    _followerBloc.add(LoadFollowerIDs(userId: _user.id));
+                    return _buildHeader(context, appLocale,deviceSize, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
                   }
@@ -98,7 +113,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Profile profile) {
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale,Size deviceSize, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -137,49 +152,66 @@ class _UserMenuState extends State<UserMenu> {
               profile.username,
               style: const TextStyle(fontSize: 15),
             ),
-            InkWell(
-              onTap: () => Navigator.pushNamed(context, 'follow'),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            BlocConsumer<FollowerBloc, FollowerState>(
+              bloc: _followerBloc,
+              listener: (context, state) {
+                if (state is FollowerIDsLoaded) {
+                  _followerCount = state.followerIDs.length;
+                  _followingCount = state.followingIDs.length;
+                }
+              },
+              builder: (context, state) {
+                if (state is FollowerIDsLoaded) {
+                  return InkWell(
+                    onTap: () => Navigator.pushNamed(context, 'follow'),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          following,
-                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "$_followerCount",
+                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text(
+                                  appLocale.follower,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 2),
-                          child: Text(
-                            appLocale.following,
-                            style: const TextStyle(fontSize: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 2.0),
+                                child: Text(
+                                  "$_followingCount",
+                                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Text(
+                                appLocale.following,
+                                style: const TextStyle(fontSize: 10),
+                              )
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 2.0),
-                          child: Text(
-                            follower,
-                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Text(
-                          appLocale.follower,
-                          style: const TextStyle(fontSize: 10),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                  );
+                } else if (state is FollowerIDsLoading) {
+                  return SpqLoadingWidget(deviceSize.shortestSide * 0.01);
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
           ],
         ),
@@ -194,6 +226,7 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
+            //TODO User übergeben
             Navigator.popAndPushNamed(context, "profile");
           },
         ),

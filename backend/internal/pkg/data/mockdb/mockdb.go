@@ -59,9 +59,9 @@ func New() data.Service {
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay", //ID 2
 					ProfileImageResourceID: 2,
 				},
-				Password: passHash,
-				FollowerIDs:  []int64{2, 3},
-				FollowingIDs: []int64{2, 3},
+				Password:     passHash,
+				FollowerIDs:  []int64{2, 3, 5, 6, 7},
+				FollowingIDs: []int64{2, 4, 7},
 			},
 			2: {
 				Profile: data.UserProfile{
@@ -72,7 +72,7 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
-				Password: passHash,
+				Password:     passHash,
 				FollowerIDs:  []int64{1, 3},
 				FollowingIDs: []int64{1, 3},
 			},
@@ -87,12 +87,44 @@ func New() data.Service {
 				},
 				FollowerIDs:  []int64{1, 2},
 				FollowingIDs: []int64{1, 2},
-				Password: passHash,
+				Password:     passHash,
 			},
 			4: {
-				ID: 4,
 				Profile: data.UserProfile{
 					Name:                   "David Löwe",
+					Username:               "dloewe",
+					Description:            "Test Description 4",
+					Website:                "Test Website 4",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
+			},
+			5: {
+				Profile: data.UserProfile{
+					Name:                   "Eric Eisemann",
+					Username:               "eeisemann",
+					Description:            "Test Description 5",
+					Website:                "Test Website 5",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
+			},
+			6: {
+				Profile: data.UserProfile{
+					Name:                   "Sven Gatnar",
+					Username:               "sgatnar",
+					Description:            "Test Description 6",
+					Website:                "Test Website 6",
+					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
+					ProfileImageResourceID: 2,
+				},
+				Password: passHash,
+			},
+			7: {
+				Profile: data.UserProfile{
+					Name:                   "Eric Eisemann",
 					Username:               "dloewe",
 					Description:            "Test Description 4",
 					Website:                "Test Website 4",
