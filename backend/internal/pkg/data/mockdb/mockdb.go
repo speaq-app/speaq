@@ -81,7 +81,7 @@ func New() data.Service {
 				ID:          1,
 				OwnerID:     1,
 				Date:        time.Now(),
-				Description: "Mein erster Post",
+				Description: "Now",
 				ResourceID:  1,
 				LikeIDs: []int64{
 					1,
@@ -95,13 +95,15 @@ func New() data.Service {
 			},
 
 			2: {
-				ID:          2,
+				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(1 * time.Second),
-				Description: "Mein zweiter Post",
+				Date:        time.Now().Add(time.Minute * -1),
+				Description: "Eine Minute",
 				ResourceID:  1,
 				LikeIDs: []int64{
 					1,
+					2,
+					3,
 				},
 				CommentIDs: []int64{
 					1,
@@ -110,10 +112,10 @@ func New() data.Service {
 			},
 
 			3: {
-				ID:          3,
-				OwnerID:     2,
-				Date:        time.Now().Add(5 * time.Second),
-				Description: "Mein dritter Post",
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -3),
+				Description: "Drei Minuten",
 				ResourceID:  1,
 				LikeIDs: []int64{
 					1,
@@ -123,7 +125,125 @@ func New() data.Service {
 				CommentIDs: []int64{
 					1,
 					2,
+				},
+			},
+
+			4: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -60),
+				Description: "1 Stunde",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
 					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			5: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -180),
+				Description: "Drei Stunden",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			6: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -1440),
+				Description: "Einen Tag",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			7: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -4320),
+				Description: "Drei Tage",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			8: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -10080),
+				Description: "Eine Woche",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			9: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -30240),
+				Description: "Drei Wochen",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			10: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -525600),
+				Description: "Ein Jahr",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
 				},
 			},
 		},

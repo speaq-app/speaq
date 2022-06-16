@@ -46,66 +46,32 @@ class PostContainer extends StatelessWidget {
   }
 
   Widget _buildPostTitle() {
-    //Fix DateFormat completely
-    late String formattedDate;
-    final DateTimeRange calculatedDateTime = DateTimeRange(start: creationTime, end: DateTime.now());
-    if (calculatedDateTime.duration.inMinutes < 1) {
-      String suffix = " Sekunden her";
-      formattedDate = calculatedDateTime.duration.inSeconds.toString() + suffix;
-    } else if (calculatedDateTime.duration.inHours < 1) {
-      String suffix = " Minuten her";
-      formattedDate = calculatedDateTime.duration.inMinutes.toString() + suffix;
-    } else if (calculatedDateTime.duration.inDays < 1) {
-      String suffix = " Stunden her";
-      formattedDate = calculatedDateTime.duration.inHours.toString() + suffix;
-    } else if (calculatedDateTime.duration.inDays < 7) {
-      String suffix = " Tage her";
-      formattedDate = calculatedDateTime.duration.inDays.toString() + suffix;
-    } else if (calculatedDateTime.duration.inDays < 31) {
-      String suffix = " Wochen her";
-      formattedDate = (calculatedDateTime.duration.inDays % 7).toString() + suffix;
-    } else {
-      String prefix = "Am ";
-      formattedDate = prefix + calculatedDateTime.duration.inSeconds.toString();
-    }
-
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              flex: 5,
+              flex: 3,
               child: Text(
                 name,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 maxLines: 1,
                 overflow: TextOverflow.clip,
                 softWrap: false,
               ),
             ),
-            // Expanded(
-            //   flex: 3,
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            //     child: Text(
-            //       "@" + username,
-            //       style: const TextStyle(fontSize: 15, color: spqDarkGrey),
-            //       maxLines: 1,
-            //       overflow: TextOverflow.clip,
-            //       softWrap: false,
-            //     ),
-            //   ),
-            // ),
             Expanded(
               flex: 2,
-              child: Text(
-                formattedDate,
-                //formatter.format(creationTime),
-                style: const TextStyle(fontSize: 15, color: spqDarkGrey),
-                maxLines: 1,
-                overflow: TextOverflow.clip,
-                softWrap: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  "@" + username,
+                  style: const TextStyle(fontSize: 12, color: spqDarkGrey),
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
+                  softWrap: false,
+                ),
               ),
             ),
           ],
@@ -115,40 +81,109 @@ class PostContainer extends StatelessWidget {
   }
 
   Widget _buildContent() {
+    final String formattedDate = _formatDate();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           postMessage,
           overflow: TextOverflow.clip,
-          style: const TextStyle(color: spqBlack, fontSize: 18),
+          style: const TextStyle(color: spqBlack, fontSize: 15),
         ),
         const SizedBox(height: 10),
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: postImage,
         ),
-        //Other Elements
+        //Other Elements like Gif etc.
         const SizedBox(height: 5),
         _buildReactionList(),
+        const SizedBox(height: 10),
+        Text(
+          formattedDate,
+          style: const TextStyle(fontSize: 12, color: spqDarkGrey),
+          maxLines: 1,
+          overflow: TextOverflow.clip,
+          softWrap: false,
+        ),
+        const SizedBox(height: 5),
+        const Divider(height: 2)
       ],
     );
   }
 
+  String _formatDate() {
+    final DateTimeRange calculatedDateTime = DateTimeRange(start: creationTime, end: DateTime.now());
+    if (calculatedDateTime.duration.inMinutes < 1) {
+      return calculatedDateTime.duration.inSeconds.toString() + " Sekunden her";
+    }
+    if (calculatedDateTime.duration.inMinutes < 2) {
+      return calculatedDateTime.duration.inMinutes.toString() + " Minute her";
+    }
+
+    if (calculatedDateTime.duration.inHours < 1) {
+      return calculatedDateTime.duration.inMinutes.toString() + " Minuten her";
+    }
+
+    if (calculatedDateTime.duration.inHours < 2) {
+      return calculatedDateTime.duration.inHours.toString() + " Stunde her";
+    }
+
+    if (calculatedDateTime.duration.inDays < 1) {
+      return calculatedDateTime.duration.inHours.toString() + " Stunden her";
+    }
+
+    if (calculatedDateTime.duration.inDays < 2) {
+      return calculatedDateTime.duration.inDays.toString() + " Tag her";
+    }
+
+    if (calculatedDateTime.duration.inDays < 7) {
+      return calculatedDateTime.duration.inDays.toString() + " Tage her";
+    }
+
+    if (calculatedDateTime.duration.inDays < 14) {
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + " Woche her";
+    }
+
+    if (calculatedDateTime.duration.inDays < 31) {
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + " Wochen her";
+    }
+
+    final DateFormat formatter = DateFormat("d. MMMM y");
+    return "Am " + formatter.format(creationTime);
+  }
+
   Widget _buildReactionList() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    return Column(
       children: [
-        const Icon(Icons.mic, color: spqDarkGrey),
-        Text(numberOfComments.toString()),
-        const SizedBox(width: 30),
-        const Icon(Icons.favorite, color: spqErrorRed),
-        Text(numberOfLikes.toString()),
-        const SizedBox(width: 30),
-        const Icon(Icons.ios_share, color: spqLightGrey),
-        const SizedBox(width: 30),
-        const Icon(Icons.bookmark, color: spqLightGrey)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildIconWithText(
+              const Icon(Icons.mic, color: spqDarkGrey, size: 20),
+              numberOfComments.toString(),
+            ),
+            _buildIconWithText(
+              const Icon(Icons.favorite, color: spqErrorRed, size: 20),
+              numberOfLikes.toString(),
+            ),
+            const Icon(Icons.ios_share, color: spqLightGrey, size: 20),
+            const Icon(Icons.bookmark, color: spqLightGrey, size: 20)
+          ],
+        ),
       ],
+    );
+  }
+
+  Widget _buildIconWithText(Icon icon, String text) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          WidgetSpan(child: icon),
+          TextSpan(text: text),
+        ],
+      ),
     );
   }
 }
