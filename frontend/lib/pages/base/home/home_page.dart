@@ -28,14 +28,6 @@ class _HomePageState extends State<HomePage> {
   final ResourceBloc _resourceBloc = ResourceBloc();
   final PostBloc _postBloc = PostBloc();
 
-/*
-  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
-  final String _name = "Informatics";
-  final String _username = "@hhn";
-  final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
-  final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
-*/
-
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
   //Remove?
@@ -157,37 +149,17 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 if (index < state.postList.length) {
-                  log("Date: " + state.postList.elementAt(index).date.toString());
                   return PostContainer(
                     name: state.postList.elementAt(index).ownerName,
                     username: state.postList.elementAt(index).ownerUsername,
                     creationTime: state.postList.elementAt(index).date,
                     postMessage: state.postList.elementAt(index).description,
+                    resourceID: -1, //Only Text
                     numberOfLikes: state.postList.elementAt(index).numberOfLikes,
                     numberOfComments: state.postList.elementAt(index).numberOfComments,
                   );
                 }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 50),
-                    const Text("Es scheint, als ob es keine neuen Posts mehr gibt!"),
-                    const SizedBox(height: 30),
-                    const Text(
-                      "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!",
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 30),
-                    IconButton(
-                      onPressed: _pullRefresh,
-                      icon: const Icon(
-                        Icons.refresh,
-                        size: 40,
-                      ),
-                    ),
-                    const SizedBox(height: 400),
-                  ],
-                );
+                return _buildFeedFooter();
               },
             ),
           );
@@ -230,6 +202,30 @@ class _HomePageState extends State<HomePage> {
           }
         },
       ),
+    );
+  }
+
+  Widget _buildFeedFooter() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 50),
+        const Text("Es scheint, als ob es keine neuen Posts mehr gibt!"),
+        const SizedBox(height: 30),
+        const Text(
+          "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!",
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 30),
+        IconButton(
+          onPressed: _pullRefresh,
+          icon: const Icon(
+            Icons.refresh,
+            size: 40,
+          ),
+        ),
+        const SizedBox(height: 400),
+      ],
     );
   }
 

@@ -14,7 +14,6 @@ import 'package:frontend/widgets/speaq_text_button.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -455,17 +454,6 @@ class _ProfilePageState extends State<ProfilePage> {
           username: _username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
-          postImage: Image.network(_postImage),
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage2),
           numberOfComments: 0,
           numberOfLikes: 0,
         ),
@@ -484,7 +472,6 @@ class _ProfilePageState extends State<ProfilePage> {
           username: _username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
-          postImage: Image.network(_postImage),
           numberOfComments: 0,
           numberOfLikes: 0,
         ),
@@ -494,7 +481,6 @@ class _ProfilePageState extends State<ProfilePage> {
           username: _username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
-          postImage: Image.network(_postImage2),
           numberOfComments: 0,
           numberOfLikes: 0,
         ),
@@ -504,7 +490,6 @@ class _ProfilePageState extends State<ProfilePage> {
           username: _username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
-          postImage: Image.network(_postImage),
           numberOfComments: 0,
           numberOfLikes: 0,
         ),
@@ -514,7 +499,6 @@ class _ProfilePageState extends State<ProfilePage> {
           username: _username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
-          postImage: Image.network(_postImage2),
           numberOfComments: 0,
           numberOfLikes: 0,
         ),
@@ -524,7 +508,15 @@ class _ProfilePageState extends State<ProfilePage> {
           username: _username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
-          postImage: Image.network(_postImage),
+          numberOfComments: 0,
+          numberOfLikes: 0,
+        ),
+        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
+        PostContainer(
+          name: _name,
+          username: _username,
+          creationTime: DateTime.now(),
+          postMessage: _postMessage,
           numberOfComments: 0,
           numberOfLikes: 0,
         ),

@@ -82,7 +82,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now(),
 				Description: "Now",
-				ResourceID:  1,
+				ResourceID:  -1,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -99,7 +99,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -1),
 				Description: "Eine Minute",
-				ResourceID:  1,
+				ResourceID:  -1,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -116,7 +116,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -3),
 				Description: "Drei Minuten",
-				ResourceID:  1,
+				ResourceID:  -1,
 				LikeIDs: []int64{
 					1,
 					2,

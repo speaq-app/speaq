@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -6,15 +10,14 @@ class PostContainer extends StatelessWidget {
   final String name;
   final String username;
   final DateTime creationTime;
-
   final int numberOfLikes;
   final int numberOfComments;
 
+  final String postType;
   final String postMessage;
-  final Widget postImage;
-  //final Widget postGif;
-  //final Widget postAudio;
-  //final Widget postVideo;
+
+  //As Widget or IDs or Strings?
+  final int resourceID;
 
   const PostContainer({
     Key? key,
@@ -23,26 +26,34 @@ class PostContainer extends StatelessWidget {
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
+    this.postType = "text", //get From Post
+    this.resourceID = -1,   //-1 equals Text Post since no Resource
     this.postMessage = "",
-    this.postImage = const SizedBox(height: 0),
-    //this.postGif = const SizedBox(height: 0),
-    //this.postAudio = const SizedBox(height: 0),
-    //this.postVideo = const SizedBox(height: 0),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
+    final ResourceBloc _resoruceBloc = ResourceBloc();
+
+    if (resourceID >= 0) {
+      _resoruceBloc.add(LoadResource(resourceId: resourceID));
+    }
+
     return Column(
       children: [
         ListTile(
-          leading: const CircleAvatar(
-            backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
-          ),
+          leading: _buildOwnerPicture(), //Get Profile from OwnerID and make BlocPattern as on homepage
           title: _buildPostTitle(),
-          subtitle: _buildContent(appLocale),
+          subtitle: _buildContent(appLocale, _resoruceBloc),
         ),
       ],
+    );
+  }
+
+  Widget _buildOwnerPicture() {
+    return const CircleAvatar(
+      backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
     );
   }
 
@@ -81,7 +92,7 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(AppLocalizations appLocale) {
+  Widget _buildContent(AppLocalizations appLocale, ResourceBloc _resourceBloc) {
     final String formattedDate = _formatDate(appLocale);
 
     return Column(
@@ -93,23 +104,10 @@ class PostContainer extends StatelessWidget {
           style: const TextStyle(color: spqBlack, fontSize: 15),
         ),
         const SizedBox(height: 10),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: postImage,
-        ),
-        //Other Elements like Gif etc.
+        _buildCorrectPostItem(_resourceBloc),
         const SizedBox(height: 5),
         _buildReactionList(),
-        const SizedBox(height: 10),
-        Text(
-          formattedDate,
-          style: const TextStyle(fontSize: 12, color: spqDarkGrey),
-          maxLines: 1,
-          overflow: TextOverflow.clip,
-          softWrap: false,
-        ),
-        const SizedBox(height: 5),
-        const Divider(height: 2)
+        _buildDateAndDivider(formattedDate),
       ],
     );
   }
@@ -155,6 +153,42 @@ class PostContainer extends StatelessWidget {
     return appLocale.dateAt + formatter.format(creationTime);
   }
 
+  Widget _buildCorrectPostItem(ResourceBloc _resourceBloc) {
+    return BlocBuilder<ResourceBloc, ResourceState>(
+      bloc: _resourceBloc,
+      builder: (context, state) {
+        if (state is ResourceLoaded) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: _getCorrectPostTypeWidget(false),
+          );
+        } else {
+          return _getCorrectPostTypeWidget(true);
+        }
+      },
+    );
+  }
+
+  //Get Correct Post-Data
+  Widget _getCorrectPostTypeWidget(bool isShimmer) {
+    switch (postType) {
+      case "image":
+        return isShimmer ? const Text("image shimmer") : const Text("image");
+
+      case "gif":
+        return isShimmer ? const Text("gif shimmer") : const Text("gif");
+
+      case "video":
+        return isShimmer ? const Text("video shimmer") : const Text("video");
+
+      case "audio":
+        return isShimmer ? const Text("audio shimmer") : const Text("audio");
+
+      default:
+        return const SizedBox(height: 0);
+    }
+  }
+
   Widget _buildReactionList() {
     return Column(
       children: [
@@ -173,6 +207,23 @@ class PostContainer extends StatelessWidget {
             const Icon(Icons.bookmark, color: spqLightGrey, size: 20)
           ],
         ),
+      ],
+    );
+  }
+
+  Widget _buildDateAndDivider(String formattedDate) {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Text(
+          formattedDate,
+          style: const TextStyle(fontSize: 12, color: spqDarkGrey),
+          maxLines: 1,
+          overflow: TextOverflow.clip,
+          softWrap: false,
+        ),
+        const SizedBox(height: 5),
+        const Divider(height: 2),
       ],
     );
   }
