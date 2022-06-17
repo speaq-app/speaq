@@ -30,19 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
-  //Remove?
-  var postList = <Widget>[
-    const SizedBox(height: 300),
-    const Text("Error - Pls Refresh"),
-    const SizedBox(height: 300),
-    const Text("Error - Pls Refresh"),
-    const SizedBox(height: 300),
-    const Text("Error - Pls Refresh"),
-    const SizedBox(height: 300),
-    const Text("Error - Pls Refresh"),
-    const SizedBox(height: 300),
-    const Text("Error - Pls Refresh"),
-  ];
+  var postList = <Widget>[];
 
   late ScrollController _scrollController;
   bool showBackToTopButton = false;
@@ -114,7 +102,7 @@ class _HomePageState extends State<HomePage> {
       actionList: [
         IconButton(
           icon: const Icon(Icons.filter_alt_outlined),
-          color: spqPrimaryBlue,
+          color: spqLightGrey,
           iconSize: 25,
           onPressed: () => {},
         )
@@ -143,27 +131,7 @@ class _HomePageState extends State<HomePage> {
       bloc: _postBloc,
       builder: (context, state) {
         if (state is PostsLoaded) {
-          return SingleChildScrollView(
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: state.postList.length + 1,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                if (index < state.postList.length) {
-                  return PostContainer(
-                    name: state.postList.elementAt(index).ownerName,
-                    username: state.postList.elementAt(index).ownerUsername,
-                    creationTime: state.postList.elementAt(index).date,
-                    postMessage: state.postList.elementAt(index).description,
-                    resourceID: -1, //Only Text
-                    numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                    numberOfComments: state.postList.elementAt(index).numberOfComments,
-                  );
-                }
-                return _buildFeedFooter(appLocale);
-              },
-            ),
-          );
+          return _buildPostList(state, appLocale);
         } else if (state is PostsLoading) {
           return _buildPostContainerShimmer();
         } else {
@@ -201,6 +169,30 @@ class _HomePageState extends State<HomePage> {
               backgroundImage: BlurHashImage(profileImageBlurHash),
             );
           }
+        },
+      ),
+    );
+  }
+
+  Widget _buildPostList(PostsLoaded state, AppLocalizations appLocale) {
+    return SingleChildScrollView(
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: state.postList.length + 1,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          if (index < state.postList.length) {
+            return PostContainer(
+              name: state.postList.elementAt(index).ownerName,
+              username: state.postList.elementAt(index).ownerUsername,
+              creationTime: state.postList.elementAt(index).date,
+              postMessage: state.postList.elementAt(index).description,
+              resourceID: -1, //Only Text
+              numberOfLikes: state.postList.elementAt(index).numberOfLikes,
+              numberOfComments: state.postList.elementAt(index).numberOfComments,
+            );
+          }
+          return _buildFeedFooter(appLocale);
         },
       ),
     );

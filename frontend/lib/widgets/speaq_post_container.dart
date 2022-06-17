@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
@@ -27,7 +25,7 @@ class PostContainer extends StatelessWidget {
     required this.numberOfLikes,
     required this.numberOfComments,
     this.postType = "text", //get From Post
-    this.resourceID = -1,   //-1 equals Text Post since no Resource
+    this.resourceID = -1, //-1 equals Text Post since no Resource
     this.postMessage = "",
   }) : super(key: key);
 
