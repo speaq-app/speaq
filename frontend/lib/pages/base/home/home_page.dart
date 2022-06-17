@@ -69,6 +69,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
 
     return RefreshIndicator(
       onRefresh: _pullRefresh,
@@ -84,14 +85,14 @@ class _HomePageState extends State<HomePage> {
             if (state is ProfileLoading) {
               return Scaffold(
                 appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-                body: _buildPostView(),
+                body: _buildPostView(appLocale),
                 floatingActionButton: _buildFloatingActionButton(),
               );
             } else if (state is ProfileLoaded) {
               return Scaffold(
                 appBar: _buildLoadedAppBar(deviceSize, state.profile),
                 drawer: const UserMenu(),
-                body: _buildPostView(),
+                body: _buildPostView(appLocale),
                 floatingActionButton: _buildFloatingActionButton(),
               );
             } else {
@@ -137,7 +138,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPostView() {
+  Widget _buildPostView(AppLocalizations appLocale) {
     return BlocBuilder<PostBloc, PostState>(
       bloc: _postBloc,
       builder: (context, state) {
@@ -159,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                     numberOfComments: state.postList.elementAt(index).numberOfComments,
                   );
                 }
-                return _buildFeedFooter();
+                return _buildFeedFooter(appLocale);
               },
             ),
           );
@@ -205,15 +206,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildFeedFooter() {
+  Widget _buildFeedFooter(AppLocalizations appLocale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 50),
-        const Text("Es scheint, als ob es keine neuen Posts mehr gibt!"),
+        Text(appLocale.noMorePosts),
         const SizedBox(height: 30),
-        const Text(
-          "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!",
+        Text(
+          appLocale.followOthersForMorePosts,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 30),

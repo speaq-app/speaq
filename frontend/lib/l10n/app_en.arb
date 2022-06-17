@@ -89,6 +89,7 @@
   "backenddeveloper": "Backend developer",
   "search": "Search",
   "hintTextSearchBarSearchPage": "Search for persons",
+
   "secondsAgo" : " seconds ago",
   "minuteAgo" : " minute ago",
   "minutesAgo" : " minutes ago",
@@ -98,6 +99,9 @@
   "daysAgo" : " days ago",
   "weekAgo" : " week ago",
   "weeksAgo" : " weeks ago",
-  "dateAt" : "At "
+  "dateAt" : "At ",
+
+  "noMorePosts" : "Seems like there are no more posts!",
+  "followOthersForMorePosts" : "Follow other profiles or\nload the page new and check\nif there are new posts waiting for you!"
 }
 

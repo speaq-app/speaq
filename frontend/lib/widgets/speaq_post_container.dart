@@ -213,6 +213,7 @@ class PostContainer extends StatelessWidget {
 
   Widget _buildDateAndDivider(String formattedDate) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
         Text(
