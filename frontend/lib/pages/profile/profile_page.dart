@@ -450,6 +450,7 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         const SizedBox(height: 10),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),
@@ -459,6 +460,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),
@@ -468,6 +470,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),
@@ -477,6 +480,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),
@@ -486,6 +490,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),
@@ -495,6 +500,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),
@@ -504,6 +510,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),
@@ -513,6 +520,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
+          ownerID: 1,
           name: _name,
           username: _username,
           creationTime: DateTime.now(),

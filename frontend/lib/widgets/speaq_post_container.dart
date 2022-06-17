@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
 class PostContainer extends StatelessWidget {
+  final int ownerID;
   final String name;
   final String username;
   final DateTime creationTime;
@@ -19,6 +24,7 @@ class PostContainer extends StatelessWidget {
 
   const PostContainer({
     Key? key,
+    required this.ownerID,
     required this.name,
     required this.username,
     required this.creationTime,
@@ -32,27 +38,58 @@ class PostContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-    final ResourceBloc _resoruceBloc = ResourceBloc();
+    final ResourceBloc _resourceBlocPost = ResourceBloc();
+    final ResourceBloc _resourceBlocProfile = ResourceBloc();
+    final ProfileBloc _profileBloc = ProfileBloc();
+    _profileBloc.add(LoadProfile(userId: ownerID));
 
     if (resourceID >= 0) {
-      _resoruceBloc.add(LoadResource(resourceId: resourceID));
+      _resourceBlocPost.add(LoadResource(resourceId: resourceID));
     }
 
     return Column(
       children: [
         ListTile(
-          leading: _buildOwnerPicture(), //Get Profile from OwnerID and make BlocPattern as on homepage
+          leading: _buildOwnerPicture(_profileBloc, _resourceBlocProfile), //Get Profile from OwnerID and make BlocPattern as on homepage
           title: _buildPostTitle(),
-          subtitle: _buildContent(appLocale, _resoruceBloc),
+          subtitle: _buildContent(appLocale, _resourceBlocPost),
         ),
       ],
     );
   }
 
-  Widget _buildOwnerPicture() {
-    return const CircleAvatar(
-      backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
+  Widget _buildOwnerPicture(ProfileBloc _profileBloc, ResourceBloc _resourceBlocProfile) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      bloc: _profileBloc,
+      builder: (context, state) {
+        if (state is ProfileLoaded) {
+          Profile profile = state.profile;
+          _resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
+          return BlocBuilder<ResourceBloc, ResourceState>(
+            bloc: _resourceBlocProfile,
+            builder: (context, state) {
+              if (state is ResourceLoaded) {
+                return CircleAvatar(
+                  radius: 24,
+                  backgroundImage: MemoryImage(state.decodedData),
+                );
+              } else {
+                return CircleAvatar(
+                  radius: 24,
+                  backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+                );
+              }
+            },
+          );
+        } else{
+          return const ShimmerProfilePicture(diameter: 10);
+        }
+      },
     );
+
+    // return const CircleAvatar(
+    //   backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
+    // );
   }
 
   Widget _buildPostTitle() {
@@ -90,7 +127,7 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(AppLocalizations appLocale, ResourceBloc _resourceBloc) {
+  Widget _buildContent(AppLocalizations appLocale, ResourceBloc _resourceBlocPost) {
     final String formattedDate = _formatDate(appLocale);
 
     return Column(
@@ -102,7 +139,7 @@ class PostContainer extends StatelessWidget {
           style: const TextStyle(color: spqBlack, fontSize: 15),
         ),
         const SizedBox(height: 10),
-        _buildCorrectPostItem(_resourceBloc),
+        _buildCorrectPostItem(_resourceBlocPost),
         const SizedBox(height: 5),
         _buildReactionList(),
         _buildDateAndDivider(formattedDate),
@@ -151,9 +188,9 @@ class PostContainer extends StatelessWidget {
     return appLocale.dateAt + formatter.format(creationTime);
   }
 
-  Widget _buildCorrectPostItem(ResourceBloc _resourceBloc) {
+  Widget _buildCorrectPostItem(ResourceBloc _resourceBlocPost) {
     return BlocBuilder<ResourceBloc, ResourceState>(
-      bloc: _resourceBloc,
+      bloc: _resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
           return ClipRRect(

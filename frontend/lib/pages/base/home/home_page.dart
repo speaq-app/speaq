@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -183,6 +181,7 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (BuildContext context, int index) {
           if (index < state.postList.length) {
             return PostContainer(
+              ownerID: state.postList.elementAt(index).ownerID,
               name: state.postList.elementAt(index).ownerName,
               username: state.postList.elementAt(index).ownerUsername,
               creationTime: state.postList.elementAt(index).date,
