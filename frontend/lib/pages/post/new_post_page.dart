@@ -69,8 +69,8 @@ class _NewPostPageState extends State<NewPostPage> {
       );
 
   void _createPost() {
-    Post _post = Post(date: dateNow, description: _postController.text, resourceID: 1, id: 1, ownerID: 1);
-    _postBloc.add(CreatePost(ownerId: 1, post: _post));
+    Post _post = Post(date: dateNow, description: _postController.text, resourceID: 1, id: 1, ownerID: 2);
+    _postBloc.add(CreatePost(ownerId: 2, post: _post));
   }
 
   @override
