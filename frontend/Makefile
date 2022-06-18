@@ -3,3 +3,9 @@ dev:
 
 hive: 
 	flutter packages pub run build_runner build
+
+gen:
+	flutter packages pub run build_runner build
+	protoc --proto_path=../protos/ --dart_out=grpc:lib/api/grpc/protos/ \
+		google/protobuf/empty.proto \
+		../protos/*.proto

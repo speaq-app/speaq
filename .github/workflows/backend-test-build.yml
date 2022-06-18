@@ -1,0 +1,54 @@
+name: Backend Test, Build, Release
+
+on:
+  push:
+    branches: [ 'main', 'dev' ]
+  pull_request:
+    branches: [ 'main', 'dev' ]
+
+jobs:
+
+  # Build job runs on every PR into dev and master and pushes to master
+  test:
+    name: Test
+    strategy:
+      matrix:
+        go-version: [ 1.18.x ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Test
+        run: cd backend && go get && make test
+
+  # Build job runs on every PR into dev and master and pushes to master
+  # Depends on test job
+  build-docker:
+    runs-on: ubuntu-latest
+    name: Build
+    needs: [ test ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
+      - name: Build Docker Images
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          file: ./backend/build/package/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          pull: true
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

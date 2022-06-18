@@ -3,7 +3,7 @@
 ## Development Requirements
 
 - Flutter
-- Go
+- Go 
 - Docker
 - Docker Compose
 - Make
