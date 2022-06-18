@@ -27,7 +27,6 @@ message GetUserProfileResponse {
   string website = 4;
   string profile_image_blur_hash = 5;
   int64 profile_image_resource_id = 6;
-
 }
 
 message GetUserFollowerIDsResponse{
