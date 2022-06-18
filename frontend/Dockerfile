@@ -16,6 +16,7 @@ ENV PATH="$PATH:/root/.pub-cache/bin"
 COPY frontend/ /speaq/frontend
 COPY protos/ /speaq/protos
 WORKDIR /speaq
+RUN ls protos/
 
 RUN protoc --proto_path=protos/ --dart_out=grpc:frontend/lib/api/grpc/protos/ \
     google/protobuf/empty.proto \
