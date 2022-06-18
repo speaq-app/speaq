@@ -3,7 +3,7 @@ LABEL stage=intermediate
 COPY backend/ /speaq/backend
 COPY protos/ /speaq/protos
 WORKDIR /speaq
-RUN apt install protobuf-compiler
+RUN apt install -y protobuf-compiler
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28 && \
     go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 RUN protoc --proto_path=protos/ --go_out=backend/internal --go-grpc_out=backend/internal protos/*.proto
