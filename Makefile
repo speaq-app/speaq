@@ -20,3 +20,9 @@ dev:
 
 test:
 	docker-compose -p speaq-test up --renew-anon-volumes --force-recreate --remove-orphans
+
+##################################
+
+gen:
+	cd backend && make gen
+	cd frontend && make gen
