@@ -288,3 +288,63 @@ func (s service) CreatePost(id int64, post data.Post) error {
 	return nil
 
 }
+
+func (s service) CheckIfFollowing(userID int64, followID int64) (bool, error) {
+
+	u, ok := s.users[userID]
+
+	if !ok {
+		return false, errors.New("no User found")
+	}
+
+	for _, f := range u.FollowingIDs {
+		if f == followID {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
+
+	u, ok := s.users[userID]
+
+	if !ok {
+		return false, errors.New("no User found")
+	}
+	c, err := s.CheckIfFollowing(userID, followID)
+
+	if err != nil {
+		return false, err
+	}
+
+	for i, f := range u.FollowingIDs {
+		if f == followID {
+			if c {
+				s := u.FollowingIDs
+				/*
+				   u.FollowingIDs = u.FollowingIDs[:0]
+				*/
+				u.FollowingIDs = nil
+
+				s = remove(s, i)
+
+				u.FollowingIDs = append(u.FollowingIDs, s...)
+
+				return false, nil
+			} else {
+				u.FollowingIDs = append(u.FollowingIDs, f)
+
+				return true, nil
+			}
+		}
+	}
+
+	return false, nil
+}
+
+func remove(s []int64, i int) []int64 {
+	s[i] = s[len(s)-1]
+	return s[:len(s)-1]
+}

@@ -10,6 +10,8 @@ type UserService interface {
 
 	FollowerByIDs(userIDs []int64) ([]User, error)
 	FollowingByIDs(userIDs []int64) ([]User, error)
+
+	CheckIfFollowing(userID int64, followID int64) (bool, error)
 }
 
 type User struct {
