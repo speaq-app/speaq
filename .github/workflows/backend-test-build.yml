@@ -23,11 +23,24 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Test
+      - name: Install protobuf
         run: |
-          apt install protobuf-compiler
-          protoc --proto_path=protos/ --go_out=backend/internal --go-grpc_out=backend/internal protos/*.proto
-          cd backend && go get && make test 
+          git clone https://github.com/protocolbuffers/protobuf.git
+          cd protobuf
+          git submodule update --init --recursive
+          ./autogen.sh
+          ./autogen.sh # run autogen twice, see below
+          ./configure
+          make
+          make check
+          sudo make install
+          sudo ldconfig
+      - name: Build protos
+        run: protoc --proto_path=protos/ --go_out=backend/internal --go-grpc_out=backend/internal protos/*.proto
+      - name: go get
+        run: cd backend && go get
+      - name: Test
+        run: cd backend && make test
 
   # Build job runs on every PR into dev and master and pushes to master
   # Depends on test job
