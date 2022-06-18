@@ -81,7 +81,7 @@ class PostContainer extends StatelessWidget {
               }
             },
           );
-        } else{
+        } else {
           return const ShimmerProfilePicture(diameter: 10);
         }
       },

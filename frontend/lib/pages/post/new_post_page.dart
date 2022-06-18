@@ -35,7 +35,7 @@ class _NewPostPageState extends State<NewPostPage> {
               MediaQuery.of(context).size.shortestSide * 0.15,
             );
           } else if (state is PostSaved) {
-              Navigator.pop(context);
+            Navigator.pop(context);
           }
           return Scaffold(
               appBar: SpqAppBar(

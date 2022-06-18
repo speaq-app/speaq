@@ -30,8 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   var postList = <Widget>[];
 
-  late ScrollController _scrollController;
-  bool showBackToTopButton = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -39,16 +38,6 @@ class _HomePageState extends State<HomePage> {
     _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
     //If no internet connection Load from cache?
     _postBloc.add(LoadPosts(userId: 1));
-    _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {
-          if (_scrollController.offset >= 400) {
-            showBackToTopButton = true;
-          } else {
-            showBackToTopButton = false;
-          }
-        });
-      });
     super.initState();
   }
 
@@ -93,6 +82,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _pullRefresh() async {
     //Change from Hardcoded
     _postBloc.add(LoadPosts(userId: 1));
+    _scrollController.jumpTo(0);
   }
 
   PreferredSizeWidget _buildLoadedAppBar(Size deviceSize, Profile profile) {
@@ -173,27 +163,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPostList(PostsLoaded state, AppLocalizations appLocale) {
-    return SingleChildScrollView(
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: state.postList.length + 1,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          if (index < state.postList.length) {
-            return PostContainer(
-              ownerID: state.postList.elementAt(index).ownerID,
-              name: state.postList.elementAt(index).ownerName,
-              username: state.postList.elementAt(index).ownerUsername,
-              creationTime: state.postList.elementAt(index).date,
-              postMessage: state.postList.elementAt(index).description,
-              resourceID: -1, //Only Text
-              numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-              numberOfComments: state.postList.elementAt(index).numberOfComments,
-            );
-          }
-          return _buildFeedFooter(appLocale);
-        },
-      ),
+    return ListView(
+      controller: _scrollController,
+      children: [
+        ListView.builder(
+          controller: _scrollController,
+          itemCount: state.postList.length + 1,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            if (index < state.postList.length) {
+              return PostContainer(
+                ownerID: state.postList.elementAt(index).ownerID,
+                name: state.postList.elementAt(index).ownerName,
+                username: state.postList.elementAt(index).ownerUsername,
+                creationTime: state.postList.elementAt(index).date,
+                postMessage: state.postList.elementAt(index).description,
+                resourceID: -1, //Only Text
+                numberOfLikes: state.postList.elementAt(index).numberOfLikes,
+                numberOfComments: state.postList.elementAt(index).numberOfComments,
+              );
+            }
+            return _buildFeedFooter(appLocale);
+          },
+        ),
+      ],
     );
   }
 
@@ -223,6 +216,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildPostContainerShimmer() {
     return ListView(
+      controller: _scrollController,
       children: const [
         PostShimmer(),
         PostShimmer(hasImage: true),
