@@ -1,9 +1,14 @@
-FROM golang:1.18 AS builder
+FROM golang:1.18-bullseye AS builder
 LABEL stage=intermediate
-COPY . /backend
-WORKDIR /backend
+COPY backend/ /speaq/backend
+COPY protos/ /speaq/protos
+WORKDIR /speaq
+RUN apt install protobuf-compiler
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28 && \
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+RUN protoc --proto_path=protos/ --go_out=backend/internal --go-grpc_out=backend/internal protos/*.proto
 ENV GO111MODULE=on
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /main .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /main backend/
 
 FROM alpine:latest
 LABEL maintainer="Hendrik Jonas Schlehlein <hendrik.schlehlein@gmail.com>"
