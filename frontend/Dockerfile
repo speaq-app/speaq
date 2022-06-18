@@ -15,7 +15,7 @@ ENV PATH="$PATH:/root/.pub-cache/bin"
 
 COPY frontend/ /speaq/frontend
 COPY protos/ /speaq/protos
-WORKDIR /speaq
+WORKDIR /speaq/frontend
 
 RUN make gen
 RUN flutter build web
