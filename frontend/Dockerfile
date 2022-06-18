@@ -21,6 +21,8 @@ RUN ls protos/
 RUN protoc --proto_path=protos/ --dart_out=grpc:frontend/lib/api/grpc/protos/ \
     google/protobuf/empty.proto \
     protos/*.proto
+
+WORKDIR /speaq/frontend
 RUN flutter packages pub run build_runner build
 RUN flutter build web
 

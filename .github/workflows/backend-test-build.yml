@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install protobuf
         run: | 
@@ -32,7 +32,7 @@ jobs:
         run: cd backend && go get
       - name: Test
         run: cd backend && make test
-        
+
   build-docker:
     runs-on: ubuntu-latest
     name: Build
