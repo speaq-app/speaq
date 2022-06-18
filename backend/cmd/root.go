@@ -9,6 +9,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/speaq-app/speaq/internal/app/post"
 	"github.com/speaq-app/speaq/internal/app/resource"
 	"github.com/speaq-app/speaq/internal/app/settings"
 	"github.com/speaq-app/speaq/internal/app/user"
@@ -84,6 +85,8 @@ var (
 				ImprintURL: cfg.ImprintURL,
 			}
 			settings.RegisterSettingsServer(srv, settingsSrv)
+			postSrv := post.Server{}
+			post.RegisterPostServer(srv, postSrv)
 
 			l, err := net.Listen("tcp", ":8080")
 			if err != nil {
