@@ -15,9 +15,12 @@ ENV PATH="$PATH:/root/.pub-cache/bin"
 
 COPY frontend/ /speaq/frontend
 COPY protos/ /speaq/protos
-WORKDIR /speaq/frontend
+WORKDIR /speaq
 
-RUN make gen
+RUN protoc --proto_path=protos/ --dart_out=grpc:frontend/lib/api/grpc/protos/ \
+    google/protobuf/empty.proto \
+    protos/*.proto
+RUN flutter packages pub run build_runner build
 RUN flutter build web
 
 FROM nginx:1.21.1-alpine
