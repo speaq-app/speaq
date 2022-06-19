@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
+import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class FollowerTile extends StatefulWidget {

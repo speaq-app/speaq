@@ -13,7 +13,7 @@ import (
 type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
-	post      map[int64]data.Post
+	posts     map[int64]data.Post
 	delay     time.Duration
 }
 
@@ -31,8 +31,8 @@ func New() data.Service {
 		log.Fatal(err)
 	}
 
-	return &service{
-		delay: time.Second,
+	return service{
+		delay: time.Second * 3,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),
@@ -141,26 +141,175 @@ func New() data.Service {
 				Password: passHash,
 			},
 		},
-		post: map[int64]data.Post{
+		posts: map[int64]data.Post{
 			1: {
 				ID:          1,
-				UserID:      1,
-				Description: "Mein erster Post",
-				Date:        "22/02/2022",
+				OwnerID:     1,
+				Date:        time.Now(),
+				Description: "Now",
+				ResourceID:  -1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
 			},
 
 			2: {
-				ID:          2,
-				UserID:      2,
-				Description: "Mein zweiter Post",
-				Date:        "22/02/2023",
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -1),
+				Description: "Eine Minute",
+				ResourceID:  -1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
 			},
 
 			3: {
-				ID:          3,
-				UserID:      3,
-				Description: "Mein dritter Post",
-				Date:        "22/02/2024",
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -3),
+				Description: "Drei Minuten",
+				ResourceID:  -1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			4: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -60),
+				Description: "1 Stunde",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			5: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -180),
+				Description: "Drei Stunden",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			6: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -1440),
+				Description: "Einen Tag",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			7: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -4320),
+				Description: "Drei Tage",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			8: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -10080),
+				Description: "Eine Woche",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			9: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -30240),
+				Description: "Drei Wochen",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
+			},
+
+			10: {
+				ID:          1,
+				OwnerID:     1,
+				Date:        time.Now().Add(time.Minute * -525600),
+				Description: "Ein Jahr",
+				ResourceID:  1,
+				LikeIDs: []int64{
+					1,
+					2,
+					3,
+				},
+				CommentIDs: []int64{
+					1,
+					2,
+				},
 			},
 		},
 	}
@@ -249,7 +398,7 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-func (s service) PasswordHashAndIDByUsername(username string) ([]byte, int64, error) {
+func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
 
 	//passwort hash getten
 	//TODO implement me
@@ -272,27 +421,45 @@ func (s service) PasswordHashAndIDByUsername(username string) ([]byte, int64, er
 	return nil, 0, errors.New("no user found")
 }
 
-func (s service) PostByID(id int64) (data.Post, error) {
+func (s service) PostsByID(id int64) ([]data.Post, error) {
 	time.Sleep(s.delay)
-	p, ok := s.post[id]
-	if !ok {
-		return p, errors.New("not workin 3")
-	}
-	p.ID = id
 
-	return p, nil
+	postList := []data.Post{}
+
+	for _, dbpost := range s.posts {
+		owner, err := s.UserByID(dbpost.OwnerID)
+		if err != nil {
+			return nil, err
+		}
+
+		dbpost.OwnerName = owner.Profile.Name
+		dbpost.OwnerUsername = owner.Profile.Username
+
+		log.Printf("Loading Post %v", dbpost)
+
+		postList = append(postList, dbpost)
+	}
+
+	return postList, nil
 }
 
-func (s service) CreatePost(id int64, post data.Post) error {
+func (s service) CreatePost(ownerID int64, post *data.Post) error {
 	time.Sleep(s.delay)
-	c, err := s.PostByID(id)
-	if err != nil {
-		return err
+
+	var nextID int64 = 1
+
+	for id := range s.posts {
+		if id >= nextID {
+			nextID = id + 1
+		}
 	}
-	s.post[id] = c
 
-	log.Println(c)
+	post.ID = nextID
+	post.Date = time.Now()
+	post.OwnerID = ownerID
 
+	s.posts[nextID] = *post
+	log.Printf("Saved Post: %v", post)
 	return nil
 
 }

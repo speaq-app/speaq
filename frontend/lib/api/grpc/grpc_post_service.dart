@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/post.pbgrpc.dart';
 import 'package:frontend/api/model/post.dart';
@@ -15,33 +17,45 @@ class GRPCPostService implements PostService {
       ClientChannel(
         ip,
         port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
   }
 
   @override
-  Future<Post> getPost(int id) async {
-    GetPostResponse response = await _client.getPost(
-      GetPostRequest()..id = Int64(id),
-    );
+  Future<List<Post>> getPosts(int id) async {
+    GetPostsResponse response = await _client.getPosts(GetPostsRequest()..userId = Int64(id));
 
-    return Post(
-      id: id,
-      date: DateTime.parse(response.date),
-      description: response.description,
-      resourceID: response.resourceId.toInt(),
-    );
+    List<Post> postList = <Post>[];
+
+    for (int i = 0; i < response.postList.length; i++) {
+      //DateTime Convertion not correct!
+      log(response.postList.elementAt(i).date.toString());
+      postList.add(
+        Post(
+          id: response.postList.elementAt(i).postId.toInt(),
+          resourceID: response.postList.elementAt(i).resourceId.toInt(),
+          //date: DateTime.parse(response.postList.elementAt(i).date.toString()),
+          date: DateTime.fromMillisecondsSinceEpoch(response.postList.elementAt(i).date.toInt() * 1000, isUtc: true),
+          description: response.postList.elementAt(i).description,
+          ownerID: response.postList.elementAt(i).ownerId.toInt(),
+          numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
+          numberOfComments: response.postList.elementAt(i).numberOfComments.toInt(),
+          ownerName: response.postList.elementAt(i).ownerName,
+          ownerUsername: response.postList.elementAt(i).ownerUsername,
+        ),
+      );
+    }
+
+    return postList;
   }
 
   @override
-  Future<void> createPost({
-    required int id,
-    required Post post,
-  }) async {
-    await _client.createPost(CreatePostRequest()
-      ..userId = Int64(id)
-      ..description = post.description);
+  Future<void> createPost({required int ownerId, required Post post}) async {
+    await _client.createPost(
+      CreatePostRequest()
+        ..ownerId = Int64(ownerId)
+        ..description = post.description,
+    );
   }
 }

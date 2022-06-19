@@ -4,6 +4,8 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/api/grpc/grpc_user_service.dart';
+import 'package:frontend/api/user_service.dart';
 import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
@@ -16,6 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final UserService _userService = GRPCUserService();
   final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
 
   bool isHidden = true;

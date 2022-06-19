@@ -17,6 +17,7 @@ service User {
   rpc FollowUnfollow(FollowUnfollowRequest) returns (FollowUnfollowResponse);
 }
 
+
 message GetUserProfileRequest {
   int64 user_id = 1;
 }

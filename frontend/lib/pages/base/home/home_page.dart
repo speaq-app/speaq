@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/blocs/post_bloc/post_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
@@ -24,103 +25,118 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
-  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
-  final String _name = "Informatics";
-  final String _username = "@hhn";
-  final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
-  final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
+  final PostBloc _postBloc = PostBloc();
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
 
-  late ScrollController _scrollController;
-  bool showBackToTopButton = false;
+  var postList = <Widget>[];
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     //Change from Hardcoded
     _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
-    _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {
-          if (_scrollController.offset >= 400) {
-            showBackToTopButton = true;
-          } else {
-            showBackToTopButton = false;
-          }
-        });
-      });
+    //If no internet connection Load from cache?
+    _postBloc.add(LoadPosts(userId: 1));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
 
-    return SafeArea(
-      child: BlocConsumer<ProfileBloc, ProfileState>(
-        bloc: _profileBloc,
-        listener: (context, state) {
-          if (state is ProfileLoaded) {
-            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-          }
-        },
-        builder: (context, state) {
-          if (state is ProfileLoading) {
-            return Scaffold(
-              appBar: SpqAppBarShimmer(preferredSize: deviceSize),
-              body: _buildPostContainerShimmer(),
-            );
-          } else if (state is ProfileLoaded) {
-            return _buildHomePage(context, deviceSize, state.profile);
-          } else {
-            return const Text("State failed");
-          }
-        },
+    return RefreshIndicator(
+      onRefresh: _pullRefresh,
+      child: SafeArea(
+        child: BlocConsumer<ProfileBloc, ProfileState>(
+          bloc: _profileBloc,
+          listener: (context, state) {
+            if (state is ProfileLoaded) {
+              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+            }
+          },
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return Scaffold(
+                appBar: SpqAppBarShimmer(preferredSize: deviceSize),
+                body: _buildPostView(appLocale),
+                floatingActionButton: _buildFloatingActionButton(),
+              );
+            } else if (state is ProfileLoaded) {
+              return Scaffold(
+                appBar: _buildLoadedAppBar(deviceSize, state.profile),
+                drawer: const UserMenu(),
+                body: _buildPostView(appLocale),
+                floatingActionButton: _buildFloatingActionButton(),
+              );
+            } else {
+              return const Text("Profile State failed");
+            }
+          },
+        ),
       ),
     );
   }
 
-  Scaffold _buildHomePage(BuildContext context, Size deviceSize, Profile profile) {
-    return Scaffold(
-      appBar: SpqAppBar(
-        actionList: [
-          IconButton(
-            icon: const Icon(Icons.filter_alt_outlined),
-            color: spqPrimaryBlue,
-            iconSize: 25,
-            onPressed: () => {},
-          )
-        ],
-        leading: Builder(builder: (context) {
-          return _buildProfileImage(context, profile.profileImageBlurHash);
-        }),
-        title: Center(
-          child: InkWell(
-            onTap: () {
-              _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
-            },
-            child: SvgPicture.asset(
-              spqImage,
-              height: deviceSize.height * 0.055,
-              alignment: Alignment.center,
-            ),
+  Future<void> _pullRefresh() async {
+    //Change from Hardcoded
+    _postBloc.add(LoadPosts(userId: 1));
+    _scrollController.jumpTo(0);
+  }
+
+  PreferredSizeWidget _buildLoadedAppBar(Size deviceSize, Profile profile) {
+    return SpqAppBar(
+      actionList: [
+        IconButton(
+          icon: const Icon(Icons.filter_alt_outlined),
+          color: spqLightGrey,
+          iconSize: 25,
+          onPressed: () => {},
+        )
+      ],
+      leading: Builder(builder: (context) {
+        return _buildProfileImage(context, profile.profileImageBlurHash);
+      }),
+      title: Center(
+        child: InkWell(
+          onTap: () {
+            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+          },
+          child: SvgPicture.asset(
+            spqImage,
+            height: deviceSize.height * 0.055,
+            alignment: Alignment.center,
           ),
         ),
-        preferredSize: deviceSize,
       ),
-      drawer: UserMenu(userID: widget.userID),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: _buildPostContainer(),
-      ),
-      floatingActionButton: SpqFloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, 'new_post'),
-        heroTag: 'post',
-        child: const Icon(
-          Icons.add,
-          size: 35,
-        ),
+      preferredSize: deviceSize,
+    );
+  }
+
+  Widget _buildPostView(AppLocalizations appLocale) {
+    return BlocBuilder<PostBloc, PostState>(
+      bloc: _postBloc,
+      builder: (context, state) {
+        if (state is PostsLoaded) {
+          return _buildPostList(state, appLocale);
+        } else if (state is PostsLoading) {
+          return _buildPostContainerShimmer();
+        } else {
+          return const Text("Post State Failed.");
+        }
+      },
+    );
+  }
+
+  Widget _buildFloatingActionButton() {
+    return SpqFloatingActionButton(
+      onPressed: () => Navigator.pushNamed(context, 'new_post'),
+      heroTag: 'post',
+      child: const Icon(
+        Icons.add,
+        size: 35,
       ),
     );
   }
@@ -147,70 +163,61 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPostContainer() {
-    return Column(
+  Widget _buildPostList(PostsLoaded state, AppLocalizations appLocale) {
+    return ListView(
+      controller: _scrollController,
       children: [
-        const SizedBox(height: 10),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage),
+        ListView.builder(
+          controller: _scrollController,
+          itemCount: state.postList.length + 1,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            if (index < state.postList.length) {
+              return PostContainer(
+                ownerID: state.postList.elementAt(index).ownerID,
+                name: state.postList.elementAt(index).ownerName,
+                username: state.postList.elementAt(index).ownerUsername,
+                creationTime: state.postList.elementAt(index).date,
+                postMessage: state.postList.elementAt(index).description,
+                resourceID: -1, //Only Text
+                numberOfLikes: state.postList.elementAt(index).numberOfLikes,
+                numberOfComments: state.postList.elementAt(index).numberOfComments,
+              );
+            }
+            return _buildFeedFooter(appLocale);
+          },
         ),
-        const Divider(thickness: 1, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage2),
+      ],
+    );
+  }
+
+  Widget _buildFeedFooter(AppLocalizations appLocale) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 50),
+        Text(appLocale.noMorePosts),
+        const SizedBox(height: 30),
+        Text(
+          appLocale.followOthersForMorePosts,
+          textAlign: TextAlign.center,
         ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
+        const SizedBox(height: 30),
+        IconButton(
+          onPressed: _pullRefresh,
+          icon: const Icon(
+            Icons.refresh,
+            size: 40,
+          ),
         ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage),
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage2),
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage),
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage2),
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          name: _name,
-          username: _username,
-          postMessage: _postMessage,
-          postImage: Image.network(_postImage),
-        ),
+        const SizedBox(height: 400),
       ],
     );
   }
 
   Widget _buildPostContainerShimmer() {
     return ListView(
+      controller: _scrollController,
       children: const [
         PostShimmer(),
         PostShimmer(hasImage: true),
@@ -226,6 +233,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _profileBloc.close();
     _resourceBloc.close();
+    _postBloc.close();
     _scrollController.dispose();
     super.dispose();
   }

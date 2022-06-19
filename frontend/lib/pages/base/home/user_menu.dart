@@ -10,6 +10,8 @@ import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
