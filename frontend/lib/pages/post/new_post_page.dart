@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_post_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart' show DateFormat;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -165,8 +163,10 @@ class _NewPostPageState extends State<NewPostPage> {
             Center(
               child: dataIsAudio
                   ? InkWell(
-                      onTap: () => print("test"),
-                      child: SvgPicture.asset(                          "assets/images/logo/speaq_logo_white.svg"),)
+                      onTap: () => print("Data is Audio"),
+                      child: SvgPicture.asset(
+                          "assets/images/logo/speaq_logo_white.svg"),
+                    )
                   : Image.file(
                       _imageFile!,
                       alignment: Alignment.center,
@@ -515,13 +515,11 @@ class _NewPostPageState extends State<NewPostPage> {
             children: [
               IconButton(
                   color: spqPrimaryBlue,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.refresh,
                     color: spqWhite,
                   ),
-                  onPressed: () {
-                    setState(() {});
-                  }),
+                  onPressed: () {}),
               buildAudioButtonFunction(),
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
