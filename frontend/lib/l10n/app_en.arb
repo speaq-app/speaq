@@ -43,6 +43,7 @@
   "displayandsound": "Display and sound",
   "aboutspeaq": "About Speaq",
   "cancel": "Cancel",
+  "done": "Done",
   "accinformation": "Account information",
   "deleteaccount": "Delete account",
   "acclogout": "Account log out",
@@ -67,6 +68,30 @@
   "backenddeveloper": "Backend developer",
   "createdPost": "Speaq has been created.",
   "noRecents": "No recent."
+  "backenddeveloper": "Backend developer",
+  "wrongInput": "Wrong Input: ",
+  "nameIsToLong" : "Name is to long!",
+  "nameIsEmpty" : "Name must not be empty!",
+  "nameEndsWithSpace" : "Name must not end with a space!",
+  "nameHasBackslashN" : "Name must not contain \\n!",
+  "nameHasBackslashT" : "Name must not contain \\t!",
+  "usernameIsToLong" : "Username is to long!",
+  "usernameIsEmpty" : "Username must not be empty!",
+  "usernameEndsWithSpace" : "Username must not end with a space!",
+  "usernameHasBackslashN" : "Username must not contain \\n!",
+  "usernameHasBackslashT" : "Username must not contain \\t!",
+  "descriptionIsToLong" : "Description is to long!",
+  "descriptionEndsWithSpace" : "Description must not end with a space!",
+  "descriptionHasBackslashN": "Description must not contain \\n!",
+  "descriptionHasBackslashT" : "Description must not contain \\t!",
+  "websiteIsToLong" : "Website is to long!",
+  "websiteHasNoDot" : "Website must contain a dot!",
+  "websiteEndsWithSpace" : "Website must not end with a space!",
+  "websiteHasBackslashN" : "Website must not contain \\n!",
+  "websiteHasBackslashT" : "Website must not contain \\t!",
+  "backenddeveloper": "Backend developer",
+  "search": "Search",
+  "hintTextSearchBarSearchPage": "Search for persons"
 
 }
 

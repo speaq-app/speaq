@@ -5,7 +5,6 @@ import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_settings_section.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-
 class AccountSettingsPage extends StatefulWidget {
   const AccountSettingsPage({Key? key}) : super(key: key);
 
@@ -14,7 +13,6 @@ class AccountSettingsPage extends StatefulWidget {
 }
 
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
-
   late AppLocalizations appLocale;
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           title: Text(
             appLocale.account,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
           preferredSize: deviceSize,
         ),
@@ -42,24 +40,16 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   _buildSettingsTile(appLocale.accinformation, "login"),
                   _buildSettingsTile(appLocale.changepassword, "login"),
                   //Account löschen
-                  _buildPopUpWindow(
-                      appLocale.deleteaccount,
-                      appLocale.askdeleteaccount,
-                      appLocale.delete),
+                  _buildPopUpWindow(appLocale.deleteaccount, appLocale.askdeleteaccount, appLocale.delete),
                   //Account abmelden
-                  _buildPopUpWindow(
-                      appLocale.acclogout,
-                      appLocale.asklogoutaccount,
-                      appLocale.logout),
+                  _buildPopUpWindow(appLocale.acclogout, appLocale.asklogoutaccount, appLocale.logout),
                 ],
               ),
             ],
           ),
           //Logo
           Positioned(
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: _buildLogoPictures(deviceSize)),
+            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
           )
@@ -69,31 +59,27 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   }
 
   //Pop-up-Fenster
-  SettingsTile _buildPopUpWindow(
-      String text, String popupMessage, String exitText) {
+  SettingsTile _buildPopUpWindow(String text, String popupMessage, String exitText) {
     return SettingsTile.navigation(
-        trailing: Icon(Icons.adaptive.arrow_forward),
-        title: Text(text, style: const TextStyle(fontSize: 15)),
-        onPressed: (context) => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text(popupMessage),
-                  actions: [
-                    TextButton(
-                        child: Text(exitText),
-                        onPressed: () => Navigator.pop(context)),
-                    TextButton(
-                        child: Text(appLocale.cancel),
-                        onPressed: () => Navigator.pop(context)),
-                  ],
-                )));
+      trailing: Icon(Icons.adaptive.arrow_forward),
+      title: Text(text, style: const TextStyle(fontSize: 15)),
+      onPressed: (context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(popupMessage),
+          actions: [
+            TextButton(child: Text(exitText), onPressed: () => Navigator.pop(context)),
+            TextButton(child: Text(appLocale.cancel), onPressed: () => Navigator.pop(context)),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg",
-          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
+      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
     );
   }
 

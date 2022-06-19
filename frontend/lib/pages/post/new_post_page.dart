@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/api/model/post.dart';
+import 'package:frontend/blocs/post_bloc/post_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_post_text_field.dart';
@@ -26,6 +29,8 @@ class _NewPostPageState extends State<NewPostPage> {
   // Main
   late Size deviceSize;
   late AppLocalizations appLocale;
+  final PostBloc _postBloc = PostBloc();
+  final dateNow = DateTime.now();
   final TextEditingController _postController = TextEditingController();
   bool picAndAudioOffstateVisible = false;
 
@@ -119,122 +124,39 @@ class _NewPostPageState extends State<NewPostPage> {
     deviceSize = MediaQuery.of(context).size;
     appLocale = AppLocalizations.of(context)!;
     return SafeArea(
-      child: Scaffold(
-        appBar: SpqAppBar(
-          preferredSize: deviceSize,
-          actionList: [_buildSendPostButton()],
-        ),
-        body: Column(
-          children: [
-            buildPicAndAudioContainerTop(),
-            Expanded(
-              child: _buildPostTextField(),
-            ),
-            buildCameraAndGalleryVisibleContainer(),
-            buildMainContainer(),
-            buildOffstageEmoji(),
-            buildOffstageAudio(),
-          ],
-        ),
-      ),
-    );
-  }
+      child: BlocConsumer<PostBloc, PostState>(
+          bloc: _postBloc,
+          listener: (context, state) async {
+            null;
+          },
+          builder: (context, state) {
+            if (state is PostSaving) {
+              return SpqLoadingWidget(
+                  MediaQuery.of(context).size.shortestSide * 0.15,
+              );
 
-  //region MAIN CONTAINER
-
-  Visibility buildPicAndAudioContainerTop() {
-    return Visibility(
-      visible: picAndAudioOffstateVisible,
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        width: deviceSize.width,
-        height: deviceSize.height * 0.1,
-        color: spqPrimaryBlue,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Align(
-              alignment: Alignment.center,
-              child: Text(
-                "       ",
-                style: TextStyle(color: spqPrimaryBlue),
+            } else if (state is PostSaved) {
+              Navigator.popAndPushNamed(context, "home");
+            }
+            return Scaffold(
+              appBar: SpqAppBar(
+                preferredSize: deviceSize,
+                actionList: [_buildSendPostButton()],
               ),
-            ),
-            Center(
-              child: dataIsAudio
-                  ? InkWell(
-                      onTap: () => print("Data is Audio"),
-                      child: SvgPicture.asset(
-                          "assets/images/logo/speaq_logo_white.svg"),
-                    )
-                  : Image.file(
-                      _imageFile!,
-                      alignment: Alignment.center,
-                    ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: const Icon(Icons.delete_forever_rounded,
-                    color: spqErrorRed),
-                onPressed: () {
-                  setState(
-                    () {
-                      picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
-                    },
-                  );
-                },
+              body: Column(
+                children: [
+                  buildPicAndAudioContainerTop(),
+                  Expanded(
+                    child: _buildPostTextField(),
+                  ),
+                  buildCameraAndGalleryVisibleContainer(),
+                  buildMainContainer(),
+                  buildOffstageEmoji(),
+                  buildOffstageAudio(),
+                ],
               ),
             )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildMainContainer() {
-    return SizedBox(
-      height: deviceSize.height * 0.08,
-      child: Row(
-        children: [
-          buildMaterial(Icons.emoji_emotions, emojiClick),
-          buildMaterial(Icons.gif_box, null),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: TextFormField(
-                autofocus: true,
-                controller: _postController,
-                style: const TextStyle(fontSize: 20.0, color: spqBlack),
-                decoration: InputDecoration(
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        setState(
-                          () {
-                            switchOffStage("CAMERA");
-                          },
-                        );
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                  hintText: 'Speaq',
-                  contentPadding: const EdgeInsets.only(
-                      left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          buildAudio(),
-        ],
+        },
       ),
     );
   }
@@ -495,10 +417,43 @@ class _NewPostPageState extends State<NewPostPage> {
           borderRadius: const BorderRadius.all(
             Radius.circular(16.0),
           ),
+  Widget _buildSendPostButton() => TextButton(
+        onPressed: _savePost,
+        child: Container(
+          child: const Text("speaq"),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+          decoration: BoxDecoration(
+              border: Border.all(color: spqPrimaryBlue, width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(16.0))),
         ),
       ),
     );
   }
+      );
+
+  void _savePost() {
+    Navigator.pop(context);
+    Post _post = Post(
+        date: dateNow,
+        description: _postController.text,
+        resourceID: 1,
+        id: 1
+    );
+    _postBloc.add(SavePost(userId: 1, post: _post));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _disposeController();
+    _postBloc.close();
+  }
+
+  void _disposeController() {
+    _postController.dispose();
+  }
+}
 
   //endregion
 

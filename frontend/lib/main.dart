@@ -57,7 +57,7 @@ class Speaq extends StatelessWidget {
           initialRoute: 'main',
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: LocaleProvider.allSupportedLocales,
-          locale: Locale('en'),
+          locale: Locale('de'),
           onGenerateRoute: RouteGenerator.generateRoute,
         );
       },
