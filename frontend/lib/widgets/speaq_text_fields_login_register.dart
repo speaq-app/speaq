@@ -42,6 +42,7 @@ class RoundTextField extends StatelessWidget {
         border: borderColor,
       ),
       child: TextField(
+        controller: controller,
         autofillHints: autofill,
         obscureText: isHidden,
         onChanged: onChanged,
