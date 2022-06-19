@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/blocs/register_bloc/register_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,6 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordCheckController =
       TextEditingController();
+
+  final RegisterBloc _registerBloc = RegisterBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +113,20 @@ class _RegisterPageState extends State<RegisterPage> {
             bottom: 30,
             top: 10,
           ),
-          child: SpeaqButton(
-            loginText: appLocale.register,
-            onPressed: () {},
+          child: BlocBuilder<RegisterBloc, RegisterState>(
+            bloc: _registerBloc,
+            builder: (context, state) {
+              if (state is RegisterLoading) {
+                return const SpqLoadingWidget(20);
+              } else if (state is RegisterError) {
+                return const Text("Error");
+              }
+
+              return SpeaqButton(
+                loginText: appLocale.register,
+                onPressed: _onRegister,
+              );
+            },
           ),
         ),
         SpeaqPageForwarding(
@@ -146,6 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     super.dispose();
     _disposeController();
+    _registerBloc.close();
   }
 
   void _disposeController() {
@@ -204,5 +220,15 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     }
     return false;
+  }
+
+  _onRegister() {
+    var username = _nameController.text;
+    var password = _passwordController.text;
+
+    _registerBloc.add(RegisterUser(
+      username: username,
+      password: password,
+    ));
   }
 }
