@@ -190,7 +190,7 @@ class _UserMenuState extends State<UserMenu> {
 
   Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, 'follow'),
+      onTap: () => Navigator.pushNamed(context, 'follow', arguments: _user),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
