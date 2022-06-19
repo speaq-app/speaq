@@ -317,7 +317,7 @@ func (s service) PostsByID(id int64) ([]data.Post, error) {
 	return postList, nil
 }
 
-func (s service) CreatePost(ownerID int64, post data.Post) error {
+func (s service) CreatePost(ownerID int64, post *data.Post) error {
 	time.Sleep(s.delay)
 
 	var nextID int64 = 1
@@ -332,7 +332,7 @@ func (s service) CreatePost(ownerID int64, post data.Post) error {
 	post.Date = time.Now()
 	post.OwnerID = ownerID
 
-	s.posts[nextID] = post
+	s.posts[nextID] = *post
 
 	log.Printf("Saved Post: %v", post)
 	return nil

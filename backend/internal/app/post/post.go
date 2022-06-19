@@ -21,7 +21,7 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 	}
 
 	log.Println(p)
-	err := s.DataService.CreatePost(req.OwnerId, p)
+	err := s.DataService.CreatePost(req.OwnerId, &p)
 
 	if err != nil {
 		return nil, err
