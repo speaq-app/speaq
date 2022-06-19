@@ -16,7 +16,6 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
     on<LoadFollower>(_onLoadFollower);
     on<CheckIfFollowing>(_onCheckIfFollowing);
     on<FollowUnfollow>(_onFollowUnfollow);
-
   }
 
   void _onLoadFollowerIDs(LoadFollowerIDs event, Emitter<FollowerState> emit) async {
@@ -34,9 +33,12 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
   }
 
   void _onFollowUnfollow(FollowUnfollow event, Emitter<FollowerState> emit) async {
+    emit(FollowUnfollowLoading());
     bool isFollowing = await _userService.followUnfollow(userID: event.userID, followerID: event.followerID);
 
-    emit(FollowedUnfollowLoaded(isFollowing: isFollowing));
+    print("exec: _onFollowUnfollow bloc - $isFollowing");
+
+    emit(FollowUnfollowLoaded(isFollowing: isFollowing));
   }
 
   void _onCheckIfFollowing(CheckIfFollowing event, Emitter<FollowerState> emit) async {
@@ -44,5 +46,4 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
 
     emit(CheckIfFollowingLoaded(isFollowing: isFollowing));
   }
-
 }

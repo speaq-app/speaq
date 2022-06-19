@@ -101,6 +101,7 @@ class GRPCUserService implements UserService {
   Future<bool> followUnfollow({required int userID, required int followerID}) async {
     FollowUnfollowResponse resp = await _client.followUnfollow(FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)));
 
+    print("exec: followUnfollow GRPC");
     return resp.isFollowing;
   }
 

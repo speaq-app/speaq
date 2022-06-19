@@ -94,7 +94,7 @@ class ProfilePageState extends State<ProfilePage> {
         ),
         bottomNavigationBar: SpqButtonNavigationBar(
           switchPage: (index) {
-            Navigator.popUntil(context,ModalRoute.withName("base") );
+            Navigator.popUntil(context, ModalRoute.withName("base"));
           },
           selectedIndex: 0,
         ),
@@ -236,7 +236,9 @@ class ProfilePageState extends State<ProfilePage> {
                 if (state is CheckIfFollowingLoaded) {
                   print("JEEEEEEEEEEE 111111111111");
                   _isFollowing.value = state.isFollowing;
-                } else if (state is FollowedUnfollowLoaded) {
+                } else if (state is FollowUnfollowLoaded) {
+                  print("ISFOLLOWING: ${state.isFollowing} l");
+
                   _isFollowing.value = state.isFollowing;
                 }
               },
@@ -245,13 +247,14 @@ class ProfilePageState extends State<ProfilePage> {
                   _isFollowing.value = state.isFollowing;
 
                   print("JEEEEEEEEEEE 22222222222222");
-                  return ValueListenableBuilder(valueListenable: _isFollowing,
+                  return ValueListenableBuilder(
+                    valueListenable: _isFollowing,
                     builder: (context, value, child) {
-                    bool following = value as bool;
+                      bool following = value as bool;
 
                       return SpqTextButton(
                         onPressed: () {
-                          _pageUserFollowerBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
+                          _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
                         },
                         name: following ? appLocale.toUnfollow : appLocale.toFollow,
                         textStyle: TextStyle(color: following ? spqLightRed : spqPrimaryBlue),
@@ -259,26 +262,26 @@ class ProfilePageState extends State<ProfilePage> {
                       );
                     },
                   );
-                } else if (state is FollowedUnfollowLoaded) {
+                }
+                else if (state is FollowUnfollowLoaded) {
                   _isFollowing.value = state.isFollowing;
 
-                  print("ISFOLLOWING: ${state.isFollowing}");
+                  print("ISFOLLOWING: ${state.isFollowing} b");
 
                   return ValueListenableBuilder(
-                    valueListenable: _isFollowing,
+                      valueListenable: _isFollowing,
                       builder: (context, value, child) {
                         bool following = value as bool;
 
                         return SpqTextButton(
-                        onPressed: () {
-                          _pageUserFollowerBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
-                        },
-                        name: following ? appLocale.toUnfollow : appLocale.toFollow,
-                        textStyle: TextStyle(color: following ? spqLightRed : spqPrimaryBlue),
-                        borderColor: following ? spqLightRed : spqPrimaryBlue,
-                      );
-                    }
-                  );
+                          onPressed: () {
+                            _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
+                          },
+                          name: following ? appLocale.toUnfollow : appLocale.toFollow,
+                          textStyle: TextStyle(color: following ? spqLightRed : spqPrimaryBlue),
+                          borderColor: following ? spqLightRed : spqPrimaryBlue,
+                        );
+                      });
                 }
                 return SpqTextButton(
                   onPressed: () => print("ERROR - UNKNOWN STATE"),
@@ -423,7 +426,6 @@ class ProfilePageState extends State<ProfilePage> {
             } else {
               return _buildFollowerInfo(context, appLocale);
             }
-
           },
         ),
       ],
