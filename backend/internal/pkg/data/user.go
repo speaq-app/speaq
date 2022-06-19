@@ -8,7 +8,7 @@ type UserService interface {
 	FollowerIDsByID(userID int64) ([]int64, error)
 	FollowingIDsByID(userID int64) ([]int64, error)
 
-	CheckIfFollowing(userID int64, followerID int64) (bool, error)
+	CheckIfFollowing(userID int64, followerID int64) (bool, int, error)
 	FollowUnfollow(userID int64, followerID int64) (bool, error)
 
 	FollowerByIDs(userIDs []int64) ([]User, error)

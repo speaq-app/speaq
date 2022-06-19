@@ -133,7 +133,7 @@ func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingReque
 }
 
 func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*CheckIfFollowingResponse, error) {
-	f, err := s.DataService.CheckIfFollowing(req.UserId, req.FollowerId)
+	f, _, err := s.DataService.CheckIfFollowing(req.UserId, req.FollowerId)
 
 	if err != nil {
 		return nil, err

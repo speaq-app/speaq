@@ -297,21 +297,21 @@ func (s service) CreatePost(id int64, post data.Post) error {
 
 }
 
-func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, error) {
+func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
 
 	u, ok := s.users[userID]
 
 	if !ok {
-		return false, errors.New("no User found")
+		return false, -1, errors.New("no User found")
 	}
 
-	for _, f := range u.FollowingIDs {
+	for i, f := range u.FollowingIDs {
 		if f == followerID {
-			return true, nil
+			return true, i, nil
 		}
 	}
 
-	return false, nil
+	return false, -1, nil
 }
 
 func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
@@ -321,54 +321,25 @@ func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	if !ok {
 		return false, errors.New("no User found")
 	}
-	c, err := s.CheckIfFollowing(userID, followID)
+	c, i, err := s.CheckIfFollowing(userID, followID)
 
 	if err != nil {
 		return false, err
 	}
 
-	for i, f := range u.FollowingIDs {
-		if f == followID {
-			if c {
-				/*
-				   u.FollowingIDs = u.FollowingIDs[:0]
-				*/
+	if c {
+		u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
 
-				/*				u.FollowingIDs = append(u.FollowingIDs[:1], u.FollowingIDs[2:]...)
+		s.users[userID] = u
 
-								n := remove(u.FollowingIDs, i)
+		return false, nil
+	} else {
+		u.FollowingIDs = append(u.FollowingIDs, followID)
+		s.users[userID] = u
 
-								u.FollowingIDs = nil
-
-								u.FollowingIDs = append(u.FollowingIDs, n...)
-				*/
-				//u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
-
-				//s.users[userID].FollowingIDs = u.FollowingIDs
-				/*
-					s.users[userID].FollowingIDs = append(s.users[userID].FollowingIDs[:0], s.users[userID].FollowingIDs[0:]...)
-				*/
-				u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
-
-				/*				s.users[userID] = u
-
-								return false, nil
-				*/
-			} else {
-				u.FollowingIDs = append(u.FollowingIDs, followID)
-
-				/*				s.users[userID] = u
-
-								return true, nil
-				*/
-			}
-			s.users[userID] = u
-
-			return !c, nil
-		}
+		return true, nil
 	}
 
-	return false, nil
 }
 
 func remove(l []int64, index int) []int64 {
