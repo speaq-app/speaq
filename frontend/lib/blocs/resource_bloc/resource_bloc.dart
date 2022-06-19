@@ -19,21 +19,15 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
     on<SaveResource>(_onSaveResource);
   }
 
-  void _onLoadResource(
-    LoadResource event,
-    Emitter<ResourceState> emit,
-  ) async {
+  void _onLoadResource(LoadResource event, Emitter<ResourceState> emit) async {
     emit(ResourceLoading());
-    await Future.delayed(const Duration(seconds: 1)); //removeable
     var resource = await _resourceService.getResource(event.resourceId);
     var decodedData = base64Decode(resource.data);
+
     emit(ResourceLoaded(resource, decodedData));
   }
 
-  void _onSaveResource(
-    SaveResource event,
-    Emitter<ResourceState> emit,
-  ) async {
+  void _onSaveResource(SaveResource event, Emitter<ResourceState> emit) async {
     emit(ResourceSaving());
     emit(ResourceSaved());
   }

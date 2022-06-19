@@ -88,6 +88,19 @@
   "websiteHasNoDot" : "Website muss einen Punkt haben!",
   "websiteEndsWithSpace" : "Website darf nicht mit Leertaste enden!",
   "websiteHasBackslashN" : "Website darf kein \\n beinhalten!",
-  "websiteHasBackslashT" : "Website darf kein \\t beinhalten!"
+  "websiteHasBackslashT" : "Website darf kein \\t beinhalten!",
 
+  "secondsAgo" : " Sekunden her",
+  "minuteAgo" : " Minute her",
+  "minutesAgo" : " Minuten her",
+  "hourAgo" : " Stunde her",
+  "hoursAgo" : " Stunden her",
+  "dayAgo" : " Tag her",
+  "daysAgo" : " Tage her",
+  "weekAgo" : " Woche her",
+  "weeksAgo" : " Wochen her",
+  "dateAt" : "Am ",
+
+  "noMorePosts" : "Es scheint, als ob es keine Posts mehr gibt!",
+  "followOthersForMorePosts" : "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!"
 }

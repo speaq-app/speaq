@@ -3,35 +3,36 @@ syntax = "proto3";
 option go_package = "app/post";
 
 service Post {
-
     rpc CreatePost(CreatePostRequest) returns(CreatePostResponse);
-    rpc GetPost(GetPostRequest) returns(GetPostResponse);
+    rpc GetPosts(GetPostsRequest) returns(GetPostsResponse);
 }
 
 message CreatePostRequest {
-
-    int64 id = 1;
-    int64 user_id = 2;
-    string description = 3;
-    string date = 4;
+    int64 owner_id = 1;
+    string description = 2;
+    //int64 resource_id = 3;
 }
 
 message CreatePostResponse {
-
-    int64 id = 1;
-    int64 user_id = 2;
-    string description = 3;
-    string date = 4;
+    SinglePost created_post = 1;
 }
 
-message GetPostRequest {
-
-    int64 id = 1;
+message GetPostsRequest {
+    int64 user_id = 1;
 }
 
-message GetPostResponse {
+message GetPostsResponse {
+    repeated SinglePost postList = 1;
+}
 
-    string date = 1;
-    string description = 2;
-    int64 resource_id = 3;
+message SinglePost {
+    int64 post_id = 1;
+    int64 owner_id = 2;
+    int64 date = 3;
+    string description = 4;
+    int64 resource_id = 5;
+    int64 number_of_likes = 6;
+    int64 number_of_comments = 7;
+    string owner_name = 8;
+    string owner_username = 9;
 }
