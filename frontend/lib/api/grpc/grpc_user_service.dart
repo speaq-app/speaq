@@ -106,7 +106,6 @@ class GRPCUserService implements UserService {
     return resp.isFollowing;
   }
 
-
   @override
   Future<LoginResponse> login({required String username, required String password}) async {
     print("username Login: " + username);

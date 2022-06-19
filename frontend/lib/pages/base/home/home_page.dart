@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             } else if (state is ProfileLoaded) {
               return Scaffold(
                 appBar: _buildLoadedAppBar(deviceSize, state.profile),
-                drawer: const UserMenu(),
+                drawer: UserMenu(userID: widget.userID,),
                 body: _buildPostView(appLocale),
                 floatingActionButton: _buildFloatingActionButton(),
               );
