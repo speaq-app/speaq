@@ -146,7 +146,7 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "follow":
-        User? user = args as User;
+        User user = args as User;
         return PageTransition(
             child: FollowPage(
               user: user,
