@@ -18,8 +18,12 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "base":
+        int userID = args as int;
         return PageTransition(
-          child: const BasePage(),
+          child: BasePage(userID: userID),
+          settings: const RouteSettings(
+            name: "base", //HERE is where you name your route for using popUntil
+          ),
           type: PageTransitionType.bottomToTop,
           alignment: Alignment.center,
         );
@@ -42,14 +46,18 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "profile":
+        List<dynamic> profileInfo = args as List<dynamic>;
+
         return PageTransition(
-          child: const ProfilePage(),
+          child: ProfilePage(pageUserID: profileInfo[0], isOwnPage: profileInfo[1], appUserID: profileInfo[2],),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
       case "home":
+        int userID = args as int;
+
         return PageTransition(
-          child: const HomePage(),
+          child: HomePage(userID: userID),
           type: PageTransitionType.bottomToTop,
           duration: const Duration(milliseconds: 400),
           alignment: Alignment.center,
@@ -146,7 +154,7 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "follow":
-        User? user = args as User;
+        User user = args as User;
         return PageTransition(
             child: FollowPage(
               user: user,

@@ -12,7 +12,7 @@ import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.user}) : super(key: key);
 
-  final User? user;
+  final User user;
 
   @override
   State<FollowPage> createState() => _FollowPageState();
@@ -22,6 +22,12 @@ class _FollowPageState extends State<FollowPage> {
   final FollowerBloc _followerBloc = FollowerBloc();
   final ProfileBloc _profileBloc = ProfileBloc();
   late final User? _user;
+
+  late int followerCount = 0;
+  late int followingCount = 0;
+
+  List<FollowUser> follower = [];
+  List<FollowUser> following = [];
 
   @override
   void initState() {
@@ -34,16 +40,8 @@ class _FollowPageState extends State<FollowPage> {
       followingIDs: [2, 3],
       password: 'OpenToWork',
     );
-    _followerBloc.add(LoadFollowerIDs(
-      userId: 1,
-    ));
+    _followerBloc.add(LoadFollowerIDs(userId: widget.user.id));
   }
-
-  int followerCount = 0;
-  int followingCount = 0;
-
-  List<FollowUser> follower = [];
-  List<FollowUser> following = [];
 
   @override
   Widget build(BuildContext context) {
@@ -66,76 +64,7 @@ class _FollowPageState extends State<FollowPage> {
             }
           },
           builder: (context, state) {
-            if (state is FollowerIDsLoading) {
-              return Scaffold(
-                /*appBar: SpqAppBarShimmer(preferredSize: deviceSize),*/
-                body: _buildShimmerList(deviceSize),
-              );
-            } else if (state is FollowerIDsLoaded) {
-              return Scaffold(
-                appBar: TabBar(
-                  indicatorWeight: 1.5,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  unselectedLabelColor: spqLightGrey,
-                  indicatorColor: spqPrimaryBlue,
-                  labelColor: spqPrimaryBlue,
-                  tabs: [
-                    SizedBox(
-                      height: deviceSize.height * 0.05,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          "$followerCount ${appLocale.follower}",
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                        height: deviceSize.height * 0.05,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Text(
-                            "$followingCount ${appLocale.following}",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        )),
-                  ],
-                ),
-                body: _buildShimmerList(deviceSize),
-              );
-            } else if (state is FollowerLoading) {
-              return Scaffold(
-                appBar: TabBar(
-                  indicatorWeight: 1.5,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  unselectedLabelColor: spqLightGrey,
-                  indicatorColor: spqPrimaryBlue,
-                  labelColor: spqPrimaryBlue,
-                  tabs: [
-                    SizedBox(
-                      height: deviceSize.height * 0.05,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          "$followerCount ${appLocale.follower}",
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                        height: deviceSize.height * 0.05,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Text(
-                            "$followingCount ${appLocale.following}",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        )),
-                  ],
-                ),
-                body: _buildShimmerList(deviceSize),
-              );
-            } else if (state is FollowerLoaded) {
+           if (state is FollowerLoaded) {
               followerCount = state.follower.length;
               followingCount = state.following.length;
 
@@ -175,9 +104,41 @@ class _FollowPageState extends State<FollowPage> {
                   children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList(deviceSize, following)],
                 ),
               );
-            } else {
-              return const SizedBox.shrink();
             }
+            else {
+             return Scaffold(
+               appBar: TabBar(
+                 indicatorWeight: 1.5,
+                 indicatorSize: TabBarIndicatorSize.tab,
+                 unselectedLabelColor: spqLightGrey,
+                 indicatorColor: spqPrimaryBlue,
+                 labelColor: spqPrimaryBlue,
+                 tabs: [
+                   SizedBox(
+                     height: deviceSize.height * 0.05,
+                     child: Padding(
+                       padding: const EdgeInsets.symmetric(vertical: 10.0),
+                       child: Text(
+                         "$followerCount ${appLocale.follower}",
+                         style: const TextStyle(fontSize: 20),
+                       ),
+                     ),
+                   ),
+                   SizedBox(
+                       height: deviceSize.height * 0.05,
+                       child: Padding(
+                         padding: const EdgeInsets.symmetric(vertical: 10.0),
+                         child: Text(
+                           "$followingCount ${appLocale.following}",
+                           style: const TextStyle(fontSize: 20),
+                         ),
+                       )),
+                 ],
+               ),
+               body: _buildShimmerList(deviceSize),
+             );
+
+           }
           },
         ),
       ),
@@ -197,10 +158,54 @@ class _FollowPageState extends State<FollowPage> {
       children: [
         SizedBox(
           height: deviceSize.height * 0.75,
-          child: _buildFollowList(followerList),
+          child: _buildFollowList(followerList, false),
         ),
       ],
     );
+  }
+
+  Widget _buildFollowerTab(Size deviceSize, List<FollowUser> followingList) {
+    return Column(
+      children: [
+        SizedBox(
+          height: deviceSize.height * 0.75,
+          child: _buildFollowList(followingList, true),
+        ),
+      ],
+    );
+  }
+
+  ListView _buildFollowList(List<FollowUser> followerList, bool checkFollowing) {
+    return ListView.builder(
+        shrinkWrap: false,
+        itemBuilder: (context, index) {
+          FollowUser currentFollower = followerList[index];
+          //Hier image von Server laden
+          Image availableImage;
+          print(currentFollower.username);
+          /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
+/*
+                        if (contact.image != null && contact.image != '') {
+                          try{
+                            availableImage = Image.network(contact.image!);
+                          }on ArgumentError catch(err){
+                            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+                            print("URI for ${contact.firstname} ${contact.lastname}is invalid");
+                          }
+                        } else {
+                          availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+                        }
+                        */
+
+          availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+
+          return FollowerTile(
+            follower: currentFollower,
+            followerImage: currentFollower.username,
+            userID: widget.user.id,
+          );
+        },
+        itemCount: followerList.length);
   }
 
   @override
@@ -212,44 +217,7 @@ class _FollowPageState extends State<FollowPage> {
   }
 }
 
-Widget _buildFollowerTab(Size deviceSize, List<FollowUser> followingList) {
-  return Column(
-    children: [
-      SizedBox(
-        height: deviceSize.height * 0.75,
-        child: _buildFollowList(followingList),
-      ),
-    ],
-  );
-}
-
-ListView _buildFollowList(List<FollowUser> followerList) {
-  return ListView.builder(
-      shrinkWrap: false,
-      itemBuilder: (context, index) {
-        FollowUser currentFollower = followerList[index];
-        //Hier image von Server laden
-        Image availableImage;
-        print(currentFollower.username);
-        /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
 /*
-                        if (contact.image != null && contact.image != '') {
-                          try{
-                            availableImage = Image.network(contact.image!);
-                          }on ArgumentError catch(err){
-                            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                            print("URI for ${contact.firstname} ${contact.lastname}is invalid");
-                          }
-                        } else {
-                          availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                        }*/
-
-        availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-
-        return FollowerTile(follower: currentFollower, followerImage: currentFollower.username);
-      },
-      itemCount: followerList.length);
-}
 
 class FollowerSearchDelegate extends SearchDelegate {
   FollowerSearchDelegate({required this.followerList});
@@ -291,4 +259,4 @@ class FollowerSearchDelegate extends SearchDelegate {
 
     return _buildFollowList(matchQuery);
   }
-}
+}*/

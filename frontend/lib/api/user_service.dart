@@ -17,12 +17,21 @@ abstract class UserService {
   Future<List<int>> getFollowingIDs({
     required int id,
   });
+
   Future<List<FollowUser>> getFollower({
     required List<int> ids,
   });
   Future<List<FollowUser>> getFollowing({
     required List<int> ids,
   });
+
+  Future<bool> checkIfFollowing({
+    required int userID, required int followerID
+  });
+  Future<bool> followUnfollow({
+    required int userID, required int followerID
+  });
+
 
   Future<LoginResponse> login({required String username, required String password});
 }

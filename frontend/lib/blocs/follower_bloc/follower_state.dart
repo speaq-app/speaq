@@ -22,3 +22,16 @@ class FollowerLoaded extends FollowerState {
 
   FollowerLoaded({required this.follower, required this.following});
 }
+
+class FollowedUnfollowLoaded extends FollowerState {
+  final bool isFollowing;
+
+  FollowedUnfollowLoaded({required this.isFollowing});
+}
+
+class CheckIfFollowingLoaded extends FollowerState {
+  final bool isFollowing;
+
+  CheckIfFollowingLoaded({required this.isFollowing});
+}
+

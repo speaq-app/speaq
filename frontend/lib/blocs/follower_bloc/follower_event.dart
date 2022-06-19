@@ -20,3 +20,18 @@ class LoadFollower extends FollowerEvent {
     required this.followingIDs,
   });
 }
+
+class FollowUnfollow extends FollowerEvent {
+  final int userID;
+  final int followerID;
+
+  FollowUnfollow({required this.userID, required this.followerID});
+}
+
+class CheckIfFollowing extends FollowerEvent {
+  final int userID;
+  final int followerID;
+
+  CheckIfFollowing({required this.userID, required this.followerID});
+}
+

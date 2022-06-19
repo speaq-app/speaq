@@ -12,11 +12,11 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
   final UserService _userService = GRPCUserService();
 
   FollowerBloc() : super(FollowerInitial()) {
-/*
-      on<FollowerEvent>(_onLoadFollower);
-*/
     on<LoadFollowerIDs>(_onLoadFollowerIDs);
     on<LoadFollower>(_onLoadFollower);
+    on<CheckIfFollowing>(_onCheckIfFollowing);
+    on<FollowUnfollow>(_onFollowUnfollow);
+
   }
 
   void _onLoadFollowerIDs(LoadFollowerIDs event, Emitter<FollowerState> emit) async {
@@ -32,4 +32,17 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
     List<FollowUser> following = await _userService.getFollowing(ids: event.followingIDs);
     emit(FollowerLoaded(follower: follower, following: following));
   }
+
+  void _onFollowUnfollow(FollowUnfollow event, Emitter<FollowerState> emit) async {
+    bool isFollowing = await _userService.followUnfollow(userID: event.userID, followerID: event.followerID);
+
+    emit(FollowedUnfollowLoaded(isFollowing: isFollowing));
+  }
+
+  void _onCheckIfFollowing(CheckIfFollowing event, Emitter<FollowerState> emit) async {
+    bool isFollowing = await _userService.checkIfFollowing(userID: event.userID, followerID: event.followerID);
+
+    emit(CheckIfFollowingLoaded(isFollowing: isFollowing));
+  }
+
 }

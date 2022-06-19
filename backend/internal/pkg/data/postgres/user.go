@@ -22,9 +22,13 @@ WHERE id = $1;
 	return u, nil
 }
 func (s Service) FollowerIDsByID(userID int64) ([]int64, error) {
+	panic("implement me")
+
 	return []int64{}, nil
 }
 func (s Service) FollowingIDsByID(userID int64) ([]int64, error) {
+	panic("implement me")
+
 	return []int64{}, nil
 }
 
@@ -38,6 +42,23 @@ func (s Service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
 	//TODO implement me
 	panic("implement me")
 	return []data.User{}, nil
+}
+
+func (s Service) CheckIfFollowing(userID int64, followerID int64) (bool, error) {
+	panic("implement me")
+
+	return false, nil
+}
+
+func (s Service) FollowUnfollow(userID int64, followID int64) (bool, error) {
+	panic("implement me")
+
+	return false, nil
+}
+
+func remove(s []int64, i int) []int64 {
+	s[i] = s[len(s)-1]
+	return s[:len(s)-1]
 }
 
 func (s Service) UpdateUserProfile(id int64, u data.UserProfile) error {
@@ -54,4 +75,11 @@ func (s Service) UpdateUserProfile(id int64, u data.UserProfile) error {
 
 func (s Service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return data.UserProfile{}, nil
+}
+func (s Service) PasswordHashAndIDByUsername(username string) ([]byte, int64, error) {
+
+	//TODO implement me
+	panic("implement me")
+
+	return nil, 0, nil
 }

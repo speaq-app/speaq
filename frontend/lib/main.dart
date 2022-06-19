@@ -88,7 +88,7 @@ class MainApp extends StatelessWidget {
           return const LoginPage();
         } else if (snapshot.hasData) {
           if (snapshot.data!) {
-            return const HomePage();
+            return Text("SHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEESH");
           } else {
             return const LoginPage();
           }

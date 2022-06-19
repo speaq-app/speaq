@@ -41,11 +41,11 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
             padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
             child: SpeaqBottomLogo(deviceSize: deviceSize * 2)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
           decoration: BoxDecoration(
               color: spqPrimaryBlue,
               border: Border.all(color: spqPrimaryBlue),
-              borderRadius: BorderRadius.all(Radius.circular(26))),
+              borderRadius: const BorderRadius.all(Radius.circular(26))),
           child: buildColumnForTeam(deviceSize),
         ),
       ],
@@ -57,17 +57,17 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
       children: [
         Text(appLocale.aboutus,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Text(appLocale.aboutustext,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: spqWhite)),
+              style: const TextStyle(fontSize: 16, color: spqWhite)),
         ),
         Text(appLocale.ourteam,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -75,7 +75,7 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
             decoration: BoxDecoration(
               color: spqWhite,
               border: Border.all(color: spqWhite),
-              borderRadius: BorderRadius.all(Radius.circular(26)),
+              borderRadius: const BorderRadius.all(Radius.circular(26)),
             ),
             width: deviceSize.width,
             child: buildGridView(),
@@ -87,22 +87,22 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
 
   GridView buildGridView() {
     return GridView.count(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: 2,
       children: [
         buildNumber("Sven Gatnar", "assets/images/developer_gatnar.jpg",
             appLocale.frontenddeveloper),
         buildNumber("Nosakhare Omoruyi", "assets/images/developer_omoruyi.jpg",
-            appLocale.backenddeveloper),
+            appLocale.backendDeveloper),
         buildNumber("Daniel Holzwarth", "assets/images/developer_holzwarth.jpg",
-            appLocale.backenddeveloper),
+            appLocale.backendDeveloper),
         buildNumber("David Löwe", "assets/images/developer_loewe.jpg",
             appLocale.frontenddeveloper),
         buildNumber(
             "Hendrik Schlehlein",
             "assets/images/developer_schlehlein.jpg",
-            appLocale.backenddeveloper),
+            appLocale.backendDeveloper),
         buildNumber("Eric Eisemann", "assets/images/developer_eisemann.jpg",
             appLocale.frontenddeveloper),
       ],
@@ -118,17 +118,17 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
 
   Widget buildNumber(String name, String jpgString, String role) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: GridTile(
         header: Text(
           name,
           textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         child: Center(child: buildImage(jpgString)),
         footer: Text(role,
             textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold)),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
       ),
     );
   }

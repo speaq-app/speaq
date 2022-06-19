@@ -26,12 +26,12 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
-	passHash, err := bcrypt.GenerateFromPassword([]byte("OpenToWork"), 10)
+	passHash, err := bcrypt.GenerateFromPassword([]byte("password"), 10)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return service{
+	return &service{
 		delay: time.Second,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
@@ -50,6 +50,7 @@ func New() data.Service {
 		},
 		users: map[int64]data.User{
 			1: {
+				ID: 1,
 				Profile: data.UserProfile{
 					Name:        "Karl Ess",
 					Username:    "essiggurke",
@@ -60,10 +61,11 @@ func New() data.Service {
 					ProfileImageResourceID: 2,
 				},
 				Password:     passHash,
-				FollowerIDs:  []int64{2, 3, 5, 6, 7},
+				FollowerIDs:  []int64{2, 3, 4, 5, 6, 7},
 				FollowingIDs: []int64{2, 4, 7},
 			},
 			2: {
+				ID: 2,
 				Profile: data.UserProfile{
 					Name:                   "Daniel Holzwarth",
 					Username:               "dholzwarth",
@@ -77,6 +79,7 @@ func New() data.Service {
 				FollowingIDs: []int64{1, 3},
 			},
 			3: {
+				ID: 3,
 				Profile: data.UserProfile{
 					Name:                   "Nosakhare Omoruyi",
 					Username:               "nomoruyi",
@@ -85,11 +88,12 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
-				FollowerIDs:  []int64{1, 2},
-				FollowingIDs: []int64{1, 2},
+				FollowerIDs:  []int64{1, 2, 5, 6},
+				FollowingIDs: []int64{1, 2, 4, 7},
 				Password:     passHash,
 			},
 			4: {
+				ID: 4,
 				Profile: data.UserProfile{
 					Name:                   "David Löwe",
 					Username:               "dloewe",
@@ -101,6 +105,7 @@ func New() data.Service {
 				Password: passHash,
 			},
 			5: {
+				ID: 5,
 				Profile: data.UserProfile{
 					Name:                   "Eric Eisemann",
 					Username:               "eeisemann",
@@ -112,6 +117,7 @@ func New() data.Service {
 				Password: passHash,
 			},
 			6: {
+				ID: 6,
 				Profile: data.UserProfile{
 					Name:                   "Sven Gatnar",
 					Username:               "sgatnar",
@@ -123,11 +129,12 @@ func New() data.Service {
 				Password: passHash,
 			},
 			7: {
+				ID: 7,
 				Profile: data.UserProfile{
-					Name:                   "Eric Eisemann",
-					Username:               "dloewe",
-					Description:            "Test Description 4",
-					Website:                "Test Website 4",
+					Name:                   "Hedrick Schlehlein",
+					Username:               "schlehlein",
+					Description:            "Test Description 7",
+					Website:                "Test Website 7",
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
 					ProfileImageResourceID: 2,
 				},
@@ -172,7 +179,7 @@ func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 	time.Sleep(s.delay)
 	u, ok := s.users[userID]
 	if !ok {
-		return nil, errors.New("followers by ID not working")
+		return nil, errors.New("id not found")
 	}
 	u.ID = userID
 	return u.FollowerIDs, nil
@@ -242,7 +249,7 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
+func (s service) PasswordHashAndIDByUsername(username string) ([]byte, int64, error) {
 
 	//passwort hash getten
 	//TODO implement me
@@ -264,6 +271,7 @@ func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) 
 
 	return nil, 0, errors.New("no user found")
 }
+
 func (s service) PostByID(id int64) (data.Post, error) {
 	time.Sleep(s.delay)
 	p, ok := s.post[id]
@@ -289,7 +297,7 @@ func (s service) CreatePost(id int64, post data.Post) error {
 
 }
 
-func (s service) CheckIfFollowing(userID int64, followID int64) (bool, error) {
+func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, error) {
 
 	u, ok := s.users[userID]
 
@@ -298,7 +306,7 @@ func (s service) CheckIfFollowing(userID int64, followID int64) (bool, error) {
 	}
 
 	for _, f := range u.FollowingIDs {
-		if f == followID {
+		if f == followerID {
 			return true, nil
 		}
 	}
@@ -306,7 +314,7 @@ func (s service) CheckIfFollowing(userID int64, followID int64) (bool, error) {
 	return false, nil
 }
 
-func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
+func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 
 	u, ok := s.users[userID]
 
@@ -322,29 +330,49 @@ func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	for i, f := range u.FollowingIDs {
 		if f == followID {
 			if c {
-				s := u.FollowingIDs
 				/*
 				   u.FollowingIDs = u.FollowingIDs[:0]
 				*/
-				u.FollowingIDs = nil
 
-				s = remove(s, i)
+				/*				u.FollowingIDs = append(u.FollowingIDs[:1], u.FollowingIDs[2:]...)
 
-				u.FollowingIDs = append(u.FollowingIDs, s...)
+								n := remove(u.FollowingIDs, i)
 
-				return false, nil
+								u.FollowingIDs = nil
+
+								u.FollowingIDs = append(u.FollowingIDs, n...)
+				*/
+				//u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
+
+				//s.users[userID].FollowingIDs = u.FollowingIDs
+				/*
+					s.users[userID].FollowingIDs = append(s.users[userID].FollowingIDs[:0], s.users[userID].FollowingIDs[0:]...)
+				*/
+				u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
+
+				/*				s.users[userID] = u
+
+								return false, nil
+				*/
 			} else {
-				u.FollowingIDs = append(u.FollowingIDs, f)
+				u.FollowingIDs = append(u.FollowingIDs, followID)
 
-				return true, nil
+				/*				s.users[userID] = u
+
+								return true, nil
+				*/
 			}
+			s.users[userID] = u
+
+			return !c, nil
 		}
 	}
 
 	return false, nil
 }
 
-func remove(s []int64, i int) []int64 {
-	s[i] = s[len(s)-1]
-	return s[:len(s)-1]
+func remove(l []int64, index int) []int64 {
+	ret := make([]int64, 0)
+	ret = append(ret, l[:index]...)
+	return append(ret, l[index+1:]...)
 }

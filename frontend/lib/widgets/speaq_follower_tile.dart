@@ -1,72 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
+import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 
-
-class FollowerTile extends StatelessWidget {
+class FollowerTile extends StatefulWidget {
   final String followerImage;
   final FollowUser follower;
+  final int userID;
+  final bool checkFollowing;
 
-  const FollowerTile({
-    Key? key,
-    required this.follower,
-    required this.followerImage,
-  }) : super(key: key);
+  const FollowerTile({Key? key, required this.follower, required this.followerImage, this.checkFollowing = false, required this.userID}) : super(key: key);
+
+  @override
+  State<FollowerTile> createState() => _FollowerTileState();
+}
+
+class _FollowerTileState extends State<FollowerTile> {
+  final FollowerBloc _followerBloc = FollowerBloc();
+  bool isFollowing = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.checkFollowing) {
+      // followerBloc.add(Chec)
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
+
     return ListTile(
-      onTap: () => Navigator.pushNamed(context, "contact_details",
-          arguments: {"user": follower}),
-/*
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ContactDetailsPage(contact: contact, contactImage: contactImage))),
-*/
-      leading: Hero(
-          tag: followerImage,
-          child:
-              CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07)),
+      onTap: () => Navigator.pushNamed(context, "profile", arguments: [widget.follower.id.toInt(), false, widget.userID]),
+      leading: Hero(tag: widget.followerImage, child: CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07)),
       title: Text(
-        "${follower.name}",
-        style: const TextStyle(
-            fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
+        widget.follower.name,
+        style: const TextStyle(fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
       ),
       subtitle: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(follower.username,
-              style: const TextStyle(fontSize: 16.0, color: spqLightGrey)),
+          Text(widget.follower.username, style: const TextStyle(fontSize: 16.0, color: spqLightGrey)),
         ],
       ),
       isThreeLine: false,
-      trailing: ElevatedButton(
-        onPressed: () {
-          print("unfollow ${follower.username}");
+/*      trailing: BlocConsumer<FollowerBloc, FollowerState>(
+        bloc: _followerBloc,
+        listener: (context, state) {
+          if (state is FollowedUnfollowLoaded) {
+            isFollowing = state.isFollowing;
+          }
         },
-        child: const Text(
-          "Unfollow",
-          style: TextStyle(color: Colors.blue),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              side: BorderSide(
-                color: Colors.blue,
-              )),
-        ),
-      ),
+        builder: (context, state) {
+          return ElevatedButton(
+            onPressed: () {
+              _followerBloc.add(FollowUnfollow(userID: widget.userID, followerID: widget.follower.id.toInt()));
+            },
+            style: ElevatedButton.styleFrom(
+              primary: spqWhite,
+              shape: RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                side: BorderSide(
+                  color: isFollowing ? spqLightRed : spqPrimaryBlue,
+                ),
+              ),
+            ),
+            child: Text(
+              isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+              style: TextStyle(color: isFollowing ? spqLightRed : spqPrimaryBlue),
+            ),
+          );
+        },
+      ),*/
     );
   }
-}
-
-class Follower {
-  Follower(
-      {required this.username,
-      required this.firstname,
-      required this.lastname});
-
-  final String username;
-  final String firstname;
-  final String lastname;
 }

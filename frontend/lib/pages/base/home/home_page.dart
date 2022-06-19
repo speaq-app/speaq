@@ -14,7 +14,8 @@ import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final int userID;
+  const HomePage({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
         ),
         preferredSize: deviceSize,
       ),
-      drawer: const UserMenu(),
+      drawer: UserMenu(userID: widget.userID),
       body: SingleChildScrollView(
         controller: _scrollController,
         child: _buildPostContainer(),

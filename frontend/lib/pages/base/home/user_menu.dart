@@ -13,7 +13,9 @@ import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
-  const UserMenu({Key? key}) : super(key: key);
+  final int userID;
+
+  const UserMenu({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<UserMenu> createState() => _UserMenuState();
@@ -26,24 +28,19 @@ class _UserMenuState extends State<UserMenu> {
   final FollowerBloc _followerBloc = FollowerBloc();
 
   //Follower
-  int _followerCount = 0;
-  int _followingCount = 0;
+  List<int> _followerIDs = [];
+  List<int> _followingIDs = [];
 
   //App User (beim login holen)
-  final User _user = User(
-    id: 1,
-    profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
-    followerIDs: [2, 3],
-    followingIDs: [2, 3],
-    password: 'OpenToWork',
-  );
+  late Profile _profile;
+  late User _user;
 
   @override
   void initState() {
     _profileBloc.add(LoadProfile(
       userId: 1,
     ));
-    
+
     super.initState();
   }
 
@@ -58,14 +55,19 @@ class _UserMenuState extends State<UserMenu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              BlocBuilder<ProfileBloc, ProfileState>(
+              BlocConsumer<ProfileBloc, ProfileState>(
                 bloc: _profileBloc,
+                listener: (context, state) {
+                  if(state is ProfileLoaded) {
+                    _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+                    _followerBloc.add(LoadFollowerIDs(userId: widget.userID));
+                    _profile = state.profile;
+                  }
+                },
                 builder: (context, state) {
                   if (state is ProfileLoading) {
                     return _buildHeaderShimmer(context, appLocale, deviceSize);
                   } else if (state is ProfileLoaded) {
-                    _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-                    _followerBloc.add(LoadFollowerIDs(userId: _user.id));
                     return _buildHeader(context, appLocale, deviceSize, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
@@ -154,8 +156,8 @@ class _UserMenuState extends State<UserMenu> {
               bloc: _followerBloc,
               listener: (context, state) {
                 if (state is FollowerIDsLoaded) {
-                  _followerCount = state.followerIDs.length;
-                  _followingCount = state.followingIDs.length;
+                  _followerIDs = state.followerIDs;
+                  _followingIDs = state.followingIDs;
                 }
               },
               builder: (context, state) {
@@ -190,7 +192,14 @@ class _UserMenuState extends State<UserMenu> {
 
   Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, 'follow'),
+      onTap: () => Navigator.pushNamed(context, 'follow',
+          arguments: User(
+            id: widget.userID,
+            profile: _profile,
+            password: '',
+            followerIDs: _followerIDs,
+            followingIDs: _followingIDs,
+          )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -199,7 +208,7 @@ class _UserMenuState extends State<UserMenu> {
             child: Row(
               children: [
                 Text(
-                  "$_followerCount",
+                  "${_followerIDs.length}",
                   style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                 ),
                 Padding(
@@ -219,7 +228,7 @@ class _UserMenuState extends State<UserMenu> {
                 Padding(
                   padding: const EdgeInsets.only(right: 2.0),
                   child: Text(
-                    "$_followingCount",
+                    "${_followingIDs.length}",
                     style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -243,7 +252,7 @@ class _UserMenuState extends State<UserMenu> {
           title: Text(appLocale.profile),
           onTap: () {
             //TODO User übergeben
-            Navigator.popAndPushNamed(context, "profile");
+            Navigator.popAndPushNamed(context, "profile", arguments: [widget.userID, true, widget.userID]);
           },
         ),
         ListTile(
