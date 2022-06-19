@@ -329,16 +329,13 @@ func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 
 	if c {
 		u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
-
-		s.users[userID] = u
-
-		return false, nil
 	} else {
 		u.FollowingIDs = append(u.FollowingIDs, followID)
-		s.users[userID] = u
-
-		return true, nil
 	}
+
+	s.users[userID] = u
+
+	return !c, nil
 
 }
 
