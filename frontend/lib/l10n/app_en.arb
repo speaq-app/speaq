@@ -67,8 +67,7 @@
   "frontenddeveloper": "Frontend developer",
   "backenddeveloper": "Backend developer",
   "createdPost": "Speaq has been created.",
-  "noRecents": "No recent."
-  "backenddeveloper": "Backend developer",
+  "noRecents": "No recent.",
   "wrongInput": "Wrong Input: ",
   "nameIsToLong" : "Name is to long!",
   "nameIsEmpty" : "Name must not be empty!",
@@ -89,9 +88,21 @@
   "websiteEndsWithSpace" : "Website must not end with a space!",
   "websiteHasBackslashN" : "Website must not contain \\n!",
   "websiteHasBackslashT" : "Website must not contain \\t!",
-  "backenddeveloper": "Backend developer",
+  "backendDeveloper": "Backend developer",
   "search": "Search",
-  "hintTextSearchBarSearchPage": "Search for persons"
+  "hintTextSearchBarSearchPage": "Search for persons",
+  "secondsAgo" : " seconds ago",
+  "minuteAgo" : " minute ago",
+  "minutesAgo" : " minutes ago",
+  "hourAgo" : " hour ago",
+  "hoursAgo" : " hours ago",
+  "dayAgo" : " day ago",
+  "daysAgo" : " days ago",
+  "weekAgo" : " week ago",
+  "weeksAgo" : " weeks ago",
+  "dateAt" : "At ",
+  "noMorePosts" : "Seems like there are no more posts!",
+  "followOthersForMorePosts" : "Follow other profiles or\nload the page new and check\nif there are new posts waiting for you!"
 
 }
 

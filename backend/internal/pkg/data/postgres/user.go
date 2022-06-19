@@ -21,6 +21,24 @@ WHERE id = $1;
 
 	return u, nil
 }
+func (s Service) FollowerIDsByID(userID int64) ([]int64, error) {
+	return []int64{}, nil
+}
+func (s Service) FollowingIDsByID(userID int64) ([]int64, error) {
+	return []int64{}, nil
+}
+
+func (s Service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
+	//TODO implement me
+	panic("implement me")
+	return []data.User{}, nil
+}
+
+func (s Service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
+	//TODO implement me
+	panic("implement me")
+	return []data.User{}, nil
+}
 
 func (s Service) UpdateUserProfile(id int64, u data.UserProfile) error {
 

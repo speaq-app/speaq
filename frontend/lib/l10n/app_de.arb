@@ -67,11 +67,10 @@
   "frontenddeveloper": "Frontend-Entwickler",
   "backenddeveloper": "Backend-Entwickler",
   "createdPost": "Speaq wurde erstellt.",
-  "noRecents": "Bisher keine Emojis verwendet."
-  "backenddeveloper": "Backend-Entwickler",
+  "noRecents": "Bisher keine Emojis verwendet.",
+  "backendDeveloper": "Backend-Entwickler",
   "search": "Suche",
   "hintTextSearchBarSearchPage": "Nach Personen suchen",
-  "backenddeveloper": "Backend-Entwickler",
   "wrongInput": "Falsche Eingabe: ",
   "nameIsToLong" : "Name ist zu lang!",
   "nameIsEmpty" : "Name darf nicht leer sein!",
@@ -91,6 +90,18 @@
   "websiteHasNoDot" : "Website muss einen Punkt haben!",
   "websiteEndsWithSpace" : "Website darf nicht mit Leertaste enden!",
   "websiteHasBackslashN" : "Website darf kein \\n beinhalten!",
-  "websiteHasBackslashT" : "Website darf kein \\t beinhalten!"
+  "websiteHasBackslashT" : "Website darf kein \\t beinhalten!",
+  "secondsAgo" : " Sekunden her",
+  "minuteAgo" : " Minute her",
+  "minutesAgo" : " Minuten her",
+  "hourAgo" : " Stunde her",
+  "hoursAgo" : " Stunden her",
+  "dayAgo" : " Tag her",
+  "daysAgo" : " Tage her",
+  "weekAgo" : " Woche her",
+  "weeksAgo" : " Wochen her",
+  "dateAt" : "Am ",
+  "noMorePosts" : "Es scheint, als ob es keine Posts mehr gibt!",
+  "followOthersForMorePosts" : "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!"
 
 }

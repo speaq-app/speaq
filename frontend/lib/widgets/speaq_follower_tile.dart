@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 
 class FollowerTile extends StatelessWidget {
   final String followerImage;
-  final Follower follower;
+  final FollowUser follower;
 
   const FollowerTile({
     Key? key,
@@ -25,7 +26,7 @@ class FollowerTile extends StatelessWidget {
           child:
               CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07)),
       title: Text(
-        "${follower.firstname} ${follower.lastname}",
+        "${follower.name}",
         style: const TextStyle(
             fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
       ),
