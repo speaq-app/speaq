@@ -495,9 +495,3 @@ func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	return !c, nil
 
 }
-
-func remove(l []int64, index int) []int64 {
-	ret := make([]int64, 0)
-	ret = append(ret, l[:index]...)
-	return append(ret, l[index+1:]...)
-}

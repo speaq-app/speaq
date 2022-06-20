@@ -10,8 +10,9 @@ class FollowerTile extends StatefulWidget {
   final FollowUser follower;
   final int userID;
   final bool checkFollowing;
+  final Function() onPop;
 
-  const FollowerTile({Key? key, required this.follower, required this.followerImage, this.checkFollowing = false, required this.userID}) : super(key: key);
+  const FollowerTile({Key? key, required this.follower, required this.followerImage, this.checkFollowing = false, required this.userID, required this.onPop}) : super(key: key);
 
   @override
   State<FollowerTile> createState() => _FollowerTileState();
@@ -35,7 +36,7 @@ class _FollowerTileState extends State<FollowerTile> {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
 
     return ListTile(
-      onTap: () => Navigator.pushNamed(context, "profile", arguments: [widget.follower.id.toInt(), false, widget.userID]),
+      onTap: () => Navigator.pushNamed(context, "profile", arguments: [widget.follower.id.toInt(), false, widget.userID]).then((value) => widget.onPop),
       leading: Hero(tag: widget.followerImage, child: CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07)),
       title: Text(
         widget.follower.name,

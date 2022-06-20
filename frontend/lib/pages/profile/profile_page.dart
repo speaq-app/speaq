@@ -53,7 +53,7 @@ class ProfilePageState extends State<ProfilePage> {
   final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
 
-  final ValueNotifier<bool> _isFollowing = ValueNotifier(false);
+  bool _isFollowing = false;
 
 /*
     final User _user = User(
@@ -235,53 +235,41 @@ class ProfilePageState extends State<ProfilePage> {
               listener: (context, state) {
                 if (state is CheckIfFollowingLoaded) {
                   print("JEEEEEEEEEEE 111111111111");
-                  _isFollowing.value = state.isFollowing;
+                  _isFollowing = state.isFollowing;
                 } else if (state is FollowUnfollowLoaded) {
                   print("ISFOLLOWING: ${state.isFollowing} l");
 
-                  _isFollowing.value = state.isFollowing;
+                  _isFollowing = state.isFollowing;
                 }
               },
               builder: (context, state) {
                 if (state is CheckIfFollowingLoaded) {
-                  _isFollowing.value = state.isFollowing;
+                  //_isFollowing = state.isFollowing;
 
                   print("JEEEEEEEEEEE 22222222222222");
-                  return ValueListenableBuilder(
-                    valueListenable: _isFollowing,
-                    builder: (context, value, child) {
-                      bool following = value as bool;
-
-                      return SpqTextButton(
-                        onPressed: () {
-                          _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
-                        },
-                        name: following ? appLocale.toUnfollow : appLocale.toFollow,
-                        textStyle: TextStyle(color: following ? spqLightRed : spqPrimaryBlue),
-                        borderColor: following ? spqLightRed : spqPrimaryBlue,
-                      );
+                  return SpqTextButton(
+                    onPressed: () {
+                      _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
                     },
+                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
+
                 }
                 else if (state is FollowUnfollowLoaded) {
-                  _isFollowing.value = state.isFollowing;
+                  //_isFollowing = state.isFollowing;
 
-                  print("ISFOLLOWING: ${state.isFollowing} b");
+                  print("JEEEEEEEEEEE 22222222222222");
+                  return SpqTextButton(
+                    onPressed: () {
+                      _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
+                    },
+                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
+                  );
 
-                  return ValueListenableBuilder(
-                      valueListenable: _isFollowing,
-                      builder: (context, value, child) {
-                        bool following = value as bool;
-
-                        return SpqTextButton(
-                          onPressed: () {
-                            _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
-                          },
-                          name: following ? appLocale.toUnfollow : appLocale.toFollow,
-                          textStyle: TextStyle(color: following ? spqLightRed : spqPrimaryBlue),
-                          borderColor: following ? spqLightRed : spqPrimaryBlue,
-                        );
-                      });
                 }
                 return SpqTextButton(
                   onPressed: () => print("ERROR - UNKNOWN STATE"),

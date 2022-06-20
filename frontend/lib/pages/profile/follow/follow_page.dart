@@ -51,95 +51,100 @@ class _FollowPageState extends State<FollowPage> {
     return DefaultTabController(
       length: 2,
       child: SafeArea(
-        child: BlocConsumer<FollowerBloc, FollowerState>(
-          bloc: _followerBloc,
-          listener: (context, state) async {
-            if (state is FollowerIDsLoaded) {
-              var follower = state.followerIDs;
-              print(follower);
-              followerCount = state.followerIDs.length;
-              followingCount = state.followingIDs.length;
+        child: Scaffold(
+          appBar: SpqAppBar(
+            preferredSize: deviceSize,
+          ),
+          body: BlocConsumer<FollowerBloc, FollowerState>(
+            bloc: _followerBloc,
+            listener: (context, state) async {
+              if (state is FollowerIDsLoaded) {
+                var follower = state.followerIDs;
+                print(follower);
+                followerCount = state.followerIDs.length;
+                followingCount = state.followingIDs.length;
 
-              _followerBloc.add(LoadFollower(followerIDs: state.followerIDs, followingIDs: state.followingIDs));
-            }
-          },
-          builder: (context, state) {
-           if (state is FollowerLoaded) {
-              followerCount = state.follower.length;
-              followingCount = state.following.length;
+                _followerBloc.add(LoadFollower(followerIDs: state.followerIDs, followingIDs: state.followingIDs));
+              }
+            },
+            builder: (context, state) {
+             if (state is FollowerLoaded) {
+                followerCount = state.follower.length;
+                followingCount = state.following.length;
 
-              follower = state.follower;
-              following = state.following;
+                follower = state.follower;
+                following = state.following;
 
-              return Scaffold(
-                appBar: TabBar(
-                  indicatorWeight: 1.5,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  unselectedLabelColor: spqLightGrey,
-                  indicatorColor: spqPrimaryBlue,
-                  labelColor: spqPrimaryBlue,
-                  tabs: [
-                    SizedBox(
-                      height: deviceSize.height * 0.05,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          "$followerCount ${appLocale.follower}",
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
+                return Scaffold(
+                  appBar: TabBar(
+                    indicatorWeight: 1.5,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    unselectedLabelColor: spqLightGrey,
+                    indicatorColor: spqPrimaryBlue,
+                    labelColor: spqPrimaryBlue,
+                    tabs: [
+                      SizedBox(
                         height: deviceSize.height * 0.05,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            "$followingCount ${appLocale.following}",
+                            "$followerCount ${appLocale.follower}",
                             style: const TextStyle(fontSize: 20),
                           ),
-                        )),
-                  ],
-                ),
-                body: TabBarView(
-                  children: [_buildFollowerTab(deviceSize, follower), _buildFollowingList(deviceSize, following)],
-                ),
-              );
-            }
-            else {
-             return Scaffold(
-               appBar: TabBar(
-                 indicatorWeight: 1.5,
-                 indicatorSize: TabBarIndicatorSize.tab,
-                 unselectedLabelColor: spqLightGrey,
-                 indicatorColor: spqPrimaryBlue,
-                 labelColor: spqPrimaryBlue,
-                 tabs: [
-                   SizedBox(
-                     height: deviceSize.height * 0.05,
-                     child: Padding(
-                       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                       child: Text(
-                         "$followerCount ${appLocale.follower}",
-                         style: const TextStyle(fontSize: 20),
-                       ),
-                     ),
-                   ),
-                   SizedBox(
+                        ),
+                      ),
+                      SizedBox(
+                          height: deviceSize.height * 0.05,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              "$followingCount ${appLocale.following}",
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          )),
+                    ],
+                  ),
+                  body: TabBarView(
+                    children: [_buildFollowerList(deviceSize, follower), _buildFollowingList(deviceSize, following)],
+                  ),
+                );
+              }
+              else {
+               return Scaffold(
+                 appBar: TabBar(
+                   indicatorWeight: 1.5,
+                   indicatorSize: TabBarIndicatorSize.tab,
+                   unselectedLabelColor: spqLightGrey,
+                   indicatorColor: spqPrimaryBlue,
+                   labelColor: spqPrimaryBlue,
+                   tabs: [
+                     SizedBox(
                        height: deviceSize.height * 0.05,
                        child: Padding(
                          padding: const EdgeInsets.symmetric(vertical: 10.0),
                          child: Text(
-                           "$followingCount ${appLocale.following}",
+                           "$followerCount ${appLocale.follower}",
                            style: const TextStyle(fontSize: 20),
                          ),
-                       )),
-                 ],
-               ),
-               body: _buildShimmerList(deviceSize),
-             );
+                       ),
+                     ),
+                     SizedBox(
+                         height: deviceSize.height * 0.05,
+                         child: Padding(
+                           padding: const EdgeInsets.symmetric(vertical: 10.0),
+                           child: Text(
+                             "$followingCount ${appLocale.following}",
+                             style: const TextStyle(fontSize: 20),
+                           ),
+                         )),
+                   ],
+                 ),
+                 body: _buildShimmerList(deviceSize),
+               );
 
-           }
-          },
+             }
+            },
+          ),
         ),
       ),
     );
@@ -148,7 +153,7 @@ class _FollowPageState extends State<FollowPage> {
   SingleChildScrollView _buildShimmerList(Size deviceSize) {
     return SingleChildScrollView(
       child: Column(
-        children: [for (int i = 0; i <= 10; i++) Padding(padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0), child: ShimmerCube(width: double.infinity, height: deviceSize.height * 0.025))],
+        children: [for (int i = 0; i <= 10; i++) Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), child: ShimmerCube(width: double.infinity, height: deviceSize.height * 0.024))],
       ),
     );
   }
@@ -158,54 +163,64 @@ class _FollowPageState extends State<FollowPage> {
       children: [
         SizedBox(
           height: deviceSize.height * 0.75,
-          child: _buildFollowList(followerList, false),
+          child: _buildTiles(followerList, false),
         ),
       ],
     );
   }
 
-  Widget _buildFollowerTab(Size deviceSize, List<FollowUser> followingList) {
+  Widget _buildFollowerList(Size deviceSize, List<FollowUser> followingList) {
     return Column(
       children: [
         SizedBox(
           height: deviceSize.height * 0.75,
-          child: _buildFollowList(followingList, true),
+          child: _buildTiles(followingList, true),
         ),
       ],
     );
   }
 
-  ListView _buildFollowList(List<FollowUser> followerList, bool checkFollowing) {
-    return ListView.builder(
-        shrinkWrap: false,
-        itemBuilder: (context, index) {
-          FollowUser currentFollower = followerList[index];
-          //Hier image von Server laden
-          Image availableImage;
-          print(currentFollower.username);
-          /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
+  Future<void> refresh() async
+  {
+    _followerBloc.add(LoadFollowerIDs(userId: widget.user.id));
+  }
+
+  Widget _buildTiles(List<FollowUser> followerList, bool checkFollowing) {
+    return RefreshIndicator(
+      onRefresh: refresh,
+      child: ListView.builder(
+          shrinkWrap: false,
+          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+          itemBuilder: (context, index) {
+            FollowUser currentFollower = followerList[index];
+            //Hier image von Server laden
+            Image availableImage;
+            print(currentFollower.username);
+            /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
 /*
-                        if (contact.image != null && contact.image != '') {
-                          try{
-                            availableImage = Image.network(contact.image!);
-                          }on ArgumentError catch(err){
+                          if (contact.image != null && contact.image != '') {
+                            try{
+                              availableImage = Image.network(contact.image!);
+                            }on ArgumentError catch(err){
+                              availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+                              print("URI for ${contact.firstname} ${contact.lastname}is invalid");
+                            }
+                          } else {
                             availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                            print("URI for ${contact.firstname} ${contact.lastname}is invalid");
                           }
-                        } else {
-                          availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                        }
-                        */
+                          */
 
-          availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
 
-          return FollowerTile(
-            follower: currentFollower,
-            followerImage: currentFollower.username,
-            userID: widget.user.id,
-          );
-        },
-        itemCount: followerList.length);
+            return FollowerTile(
+              follower: currentFollower,
+              followerImage: currentFollower.username,
+              userID: widget.user.id,
+              onPop: refresh,
+            );
+          },
+          itemCount: followerList.length),
+    );
   }
 
   @override
