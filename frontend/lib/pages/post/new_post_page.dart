@@ -70,6 +70,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+
   void switchOffStage(String offstage, {bool? mainVisible}) {
     switch (offstage) {
       case "MAIN":
