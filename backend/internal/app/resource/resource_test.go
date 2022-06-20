@@ -1,4 +1,4 @@
-//go:generate mockgen -destination=resource_mock_test.go -package=resource_test github.com/speaq-app/speaq/internal/pkg/data Service
+//go:generate mockgen -destination=resource_mock_test.go -package=resource_test github.com/speaq-app/speaq/internal/pkg/data ResourceService
 package resource_test
 
 import (
@@ -41,10 +41,10 @@ func TestGetResource(t *testing.T) {
 
 	for _, tc := range tt {
 		t.Run(tc.name, func(t *testing.T) {
-			s := NewMockService(ctrl)
+			s := NewMockResourceService(ctrl)
 			s.EXPECT().ResourceByID(tc.resourceID).Times(1).Return(tc.resource, tc.err)
 			srv := resource.Server{
-				DataService: s,
+				ResourceService: s,
 			}
 
 			ctx, cancel := context.WithCancel(context.Background())

@@ -8,13 +8,13 @@ import (
 )
 
 type Server struct {
-	DataService data.Service
+	ResourceService data.ResourceService
 	UnimplementedResourceServer
 }
 
 func (s Server) GetResource(ctx context.Context, req *GetResourceRequest) (*GetResourceResponse, error) {
 	log.Println(req.Id)
-	r, err := s.DataService.ResourceByID(req.Id)
+	r, err := s.ResourceService.ResourceByID(req.Id)
 	if err != nil {
 		return nil, err
 	}

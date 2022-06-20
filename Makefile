@@ -1,8 +1,5 @@
 .PHONY: protos
 
-clean:
-	git clean -df
-
 protos:
 	docker build --force-rm -t protoc:dev -f Dockerfile.protoc .
 	docker run --rm --name protoc \

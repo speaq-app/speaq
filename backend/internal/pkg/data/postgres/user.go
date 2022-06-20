@@ -55,3 +55,7 @@ func (s Service) UpdateUserProfile(id int64, u data.UserProfile) error {
 func (s Service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return data.UserProfile{}, nil
 }
+
+func (s Service) CreateUser(username string, passwordHash []byte) (data.User, error) {
+	return data.User{}, nil
+}

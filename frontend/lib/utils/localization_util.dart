@@ -41,7 +41,6 @@ class LocaleProvider extends ChangeNotifier {
   void clearLocale() {
     _locale = null;
     notifyListeners();
-
   }
 */
 }
