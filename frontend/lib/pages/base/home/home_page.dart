@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
-      onPressed: () => Navigator.pushNamed(context, 'new_post'),
+      onPressed: () => Navigator.pushNamed(context, 'new_post', arguments: 1), //TODO "Echte User-ID übergeben"
       heroTag: 'post',
       child: const Icon(
         Icons.add,

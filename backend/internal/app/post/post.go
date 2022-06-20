@@ -20,6 +20,7 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 		Description: req.Description,
 	}
 
+	log.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + p.Description)
 	log.Println(p)
 	err := s.DataService.CreatePost(req.OwnerId, &p)
 

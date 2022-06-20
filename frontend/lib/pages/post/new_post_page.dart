@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/model/post.dart';
 import 'package:frontend/blocs/post_bloc/post_bloc.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_post_text_field.dart';
@@ -19,7 +20,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
 class NewPostPage extends StatefulWidget {
-  const NewPostPage({Key? key}) : super(key: key);
+  const NewPostPage({Key? key, required this.userID}) : super(key: key);
+  final int userID;
 
   @override
   State<NewPostPage> createState() => _NewPostPageState();
@@ -29,6 +31,7 @@ class _NewPostPageState extends State<NewPostPage> {
   // Main
   late Size deviceSize;
   late AppLocalizations appLocale;
+  final ResourceBloc _resourceBloc = ResourceBloc();
   final PostBloc _postBloc = PostBloc();
   final dateNow = DateTime.now();
   final TextEditingController _postController = TextEditingController();
@@ -69,7 +72,6 @@ class _NewPostPageState extends State<NewPostPage> {
       },
     );
   }
-
 
   void switchOffStage(String offstage, {bool? mainVisible}) {
     switch (offstage) {
@@ -127,34 +129,36 @@ class _NewPostPageState extends State<NewPostPage> {
       child: BlocConsumer<PostBloc, PostState>(
         bloc: _postBloc,
         listener: (context, state) async {
-          null;
+          if (state is PostSaved) {
+            Navigator.pop(context);
+          }
         },
         builder: (context, state) {
+          //TODO "Post Adden wenn Resource geposted wurde"
           if (state is PostSaving) {
             return SpqLoadingWidget(
               MediaQuery.of(context).size.shortestSide * 0.15,
             );
-          } else if (state is PostSaved) {
-            Navigator.pop(context);
+          } else {
+            return Scaffold(
+              appBar: SpqAppBar(
+                preferredSize: deviceSize,
+                actionList: [_buildSendPostButton()],
+              ),
+              body: Column(
+                children: [
+                  buildPicAndAudioContainerTop(),
+                  Expanded(
+                    child: _buildPostTextField(),
+                  ),
+                  buildCameraAndGalleryVisibleContainer(),
+                  buildMainContainer(),
+                  buildOffstageEmoji(),
+                  buildOffstageAudio(),
+                ],
+              ),
+            );
           }
-          return Scaffold(
-            appBar: SpqAppBar(
-              preferredSize: deviceSize,
-              actionList: [_buildSendPostButton()],
-            ),
-            body: Column(
-              children: [
-                buildPicAndAudioContainerTop(),
-                Expanded(
-                  child: _buildPostTextField(),
-                ),
-                buildCameraAndGalleryVisibleContainer(),
-                buildMainContainer(),
-                buildOffstageEmoji(),
-                buildOffstageAudio(),
-              ],
-            ),
-          );
         },
       ),
     );
@@ -487,24 +491,8 @@ class _NewPostPageState extends State<NewPostPage> {
     return TextButton(
       onPressed: () {
         picAndAudioOffstateVisible = false;
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            Future.delayed(
-              Duration(seconds: 3),
-              () {
-                Navigator.popAndPushNamed(context, "home");
-              },
-            );
-            return const Center(
-              child: SizedBox(
-                height: 72,
-                width: 72,
-                child: CircularProgressIndicator(strokeWidth: 8),
-              ),
-            );
-          },
-        );
+        _sendResource();
+        _createPost();
       },
       child: Container(
         child: const Text("Speaq"),
@@ -520,14 +508,20 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+  void _sendResource() {
+    //TODO "Resource Upload in Bloc intigrieren"
+    //_resourceBloc.add(SaveResource());
+
+  }
+
   void _createPost() {
     Post _post = Post(
         date: dateNow,
         description: _postController.text,
         resourceID: 1,
         id: 1,
-        ownerID: 2);
-    _postBloc.add(CreatePost(ownerId: 2, post: _post));
+        ownerID: widget.userID);
+    _postBloc.add(CreatePost(ownerId: widget.userID, post: _post));
   }
 
   //endregion
