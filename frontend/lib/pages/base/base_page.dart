@@ -44,34 +44,49 @@ class _BasePageState extends State<BasePage> {
 
   late final List<Widget> _pages;
   late List<String> pageTitles;
-  int _selectedIndex = 0;
+  final ValueNotifier _selectedIndexNotifier = ValueNotifier<int>(0);
   final PageController _pageController = PageController();
 
   void _switchPage(int index) {
-    setState(() {
-      _selectedIndex = index;
-      _pageController.animateToPage(_selectedIndex, duration: const Duration(milliseconds: 200), curve: Curves.linear);
-    });
+
+      _selectedIndexNotifier.value = index;
+      _pageController.animateToPage(_selectedIndexNotifier.value, duration: const Duration(milliseconds: 200), curve: Curves.linear);
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: spqBackgroundGrey,
-      child: SafeArea(
-        child: Scaffold(
-          body: PageView(
-            children: _pages,
-            onPageChanged: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            controller: _pageController,
-          ),
-          bottomNavigationBar: SpqButtonNavigationBar(
-            switchPage: _switchPage,
-            selectedIndex: _selectedIndex,
+    return WillPopScope(
+      onWillPop: () async{
+        if (_selectedIndexNotifier.value != 0){
+         _switchPage(0);
+        }
+
+        return false;
+      },
+
+      child: Container(
+        color: spqBackgroundGrey,
+        child: SafeArea(
+          child: Scaffold(
+            body: PageView(
+              onPageChanged: (index) {
+
+                  _selectedIndexNotifier.value = index;
+
+              },
+              controller: _pageController,
+              children: _pages,
+            ),
+            bottomNavigationBar: ValueListenableBuilder(
+                valueListenable: _selectedIndexNotifier,
+                builder: (context, value, widget) {
+                return SpqButtonNavigationBar(
+                  switchPage: _switchPage,
+                  selectedIndex: value as int,
+                );
+              }
+            ),
           ),
         ),
       ),

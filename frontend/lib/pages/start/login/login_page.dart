@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (state is LogInSuccess) {
                   print("Login Success");
                   Navigator.pushNamed(context, "base", arguments: {
-                    "userId": state.userID,
+                    "userID": state.userID,
                     "token": state.token
                   });
                 } else if (state is LogInFail) {

@@ -18,9 +18,9 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "base":
-        int userID = args as int;
+        Map<String, dynamic> map = args as Map<String, dynamic>;
         return PageTransition(
-          child: BasePage(userID: userID),
+          child: BasePage(userID: map["userID"]),
           settings: const RouteSettings(
             name: "base", //HERE is where you name your route for using popUntil
           ),

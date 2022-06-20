@@ -37,15 +37,10 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
     return ListView(
       shrinkWrap: true,
       children: [
-        Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-            child: SpeaqBottomLogo(deviceSize: deviceSize * 2)),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24), child: SpeaqBottomLogo(deviceSize: deviceSize * 2)),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
-          decoration: BoxDecoration(
-              color: spqPrimaryBlue,
-              border: Border.all(color: spqPrimaryBlue),
-              borderRadius: const BorderRadius.all(Radius.circular(26))),
+          decoration: BoxDecoration(color: spqPrimaryBlue, border: Border.all(color: spqPrimaryBlue), borderRadius: const BorderRadius.all(Radius.circular(26))),
           child: buildColumnForTeam(deviceSize),
         ),
       ],
@@ -55,20 +50,12 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
   Column buildColumnForTeam(Size deviceSize) {
     return Column(
       children: [
-        Text(appLocale.aboutus,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
+        Text(appLocale.aboutus, textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text(appLocale.aboutustext,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: spqWhite)),
+          child: Text(appLocale.aboutustext, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, color: spqWhite)),
         ),
-        Text(appLocale.ourteam,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
+        Text(appLocale.ourteam, textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Container(
@@ -91,20 +78,12 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
       shrinkWrap: true,
       crossAxisCount: 2,
       children: [
-        buildNumber("Sven Gatnar", "assets/images/developer_gatnar.jpg",
-            appLocale.frontendDeveloper),
-        buildNumber("Nosakhare Omoruyi", "assets/images/developer_omoruyi.jpg",
-            appLocale.backendDeveloper),
-        buildNumber("Daniel Holzwarth", "assets/images/developer_holzwarth.jpg",
-            appLocale.backendDeveloper),
-        buildNumber("David Löwe", "assets/images/developer_loewe.jpg",
-            appLocale.frontendDeveloper),
-        buildNumber(
-            "Hendrik Schlehlein",
-            "assets/images/developer_schlehlein.jpg",
-            appLocale.backendDeveloper),
-        buildNumber("Eric Eisemann", "assets/images/developer_eisemann.jpg",
-            appLocale.frontendDeveloper),
+        buildNumber("Sven Gatnar", "assets/images/developer_gatnar.jpg", appLocale.frontendDeveloper),
+        buildNumber("Nosakhare Omoruyi", "assets/images/developer_omoruyi.jpg", appLocale.backendDeveloper),
+        buildNumber("Daniel Holzwarth", "assets/images/developer_holzwarth.jpg", appLocale.backendDeveloper),
+        buildNumber("David Löwe", "assets/images/developer_loewe.jpg", appLocale.frontendDeveloper),
+        buildNumber("Hendrik Schlehlein", "assets/images/developer_schlehlein.jpg", appLocale.backendDeveloper),
+        buildNumber("Eric Eisemann", "assets/images/developer_eisemann.jpg", appLocale.frontendDeveloper),
       ],
     );
   }
@@ -126,9 +105,7 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         child: Center(child: buildImage(jpgString)),
-        footer: Text(role,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
+        footer: Text(role, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold)),
       ),
     );
   }

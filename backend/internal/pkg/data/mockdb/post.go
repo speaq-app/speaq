@@ -10,7 +10,7 @@ import (
 func (s service) PostsByID(id int64) ([]data.Post, error) {
 	time.Sleep(s.delay)
 
-	postList := []data.Post{}
+	var postList []data.Post
 
 	for _, dbpost := range s.posts {
 		owner, err := s.UserByID(dbpost.OwnerID)
