@@ -56,7 +56,6 @@ class _NewPostPageState extends State<NewPostPage> {
   bool audioKeyboardVisible = false;
   bool isRecorderReady = false;
   bool isRecording = false;
-  String _recorderTxt = '00:00:00';
 
   //region GENERAL
   void keyboardInput() {
@@ -218,7 +217,7 @@ class _NewPostPageState extends State<NewPostPage> {
       child: Row(
         children: [
           buildMaterial(Icons.emoji_emotions, emojiClick),
-          buildMaterial(Icons.gif_box, null),
+          //buildMaterial(Icons.gif_box, null),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -543,13 +542,6 @@ class _NewPostPageState extends State<NewPostPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                  color: spqPrimaryBlue,
-                  icon: const Icon(
-                    Icons.refresh,
-                    color: spqWhite,
-                  ),
-                  onPressed: () {}),
               buildAudioButtonFunction(),
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
@@ -596,7 +588,7 @@ class _NewPostPageState extends State<NewPostPage> {
           setState(
             () {
               dataIsAudio = false;
-              picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
+              picAndAudioOffstateVisible = false;
             },
           );
         }
