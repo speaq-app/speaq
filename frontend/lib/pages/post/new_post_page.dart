@@ -374,7 +374,7 @@ class _NewPostPageState extends State<NewPostPage> {
           await getImage(false);
           setState(
             () {
-              _imageFile = File(im!.path);
+              _imageFile = File(im.path);
               dataIsAudio = false;
               picAndAudioOffstateVisible = true;
               if (checkImageVisible) {
@@ -417,7 +417,7 @@ class _NewPostPageState extends State<NewPostPage> {
         onTap: () async {
           await getImage(true);
           setState(() {
-            _imageFile = File(im!.path);
+            _imageFile = File(im.path);
             dataIsAudio = false;
             picAndAudioOffstateVisible = true;
             if (checkImageVisible) {
@@ -627,7 +627,7 @@ class _NewPostPageState extends State<NewPostPage> {
     if (!isRecorderReady) return;
     //await recorder.startRecorder(toFile: 'audio');
     print('recording....');
-    await recorder!.startRecorder(
+    await recorder.startRecorder(
       toFile: '$fileName',
       //codec: Codec.aacMP4,
     );
