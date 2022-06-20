@@ -55,6 +55,7 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 		ProfileImageResourceId: p.ProfileImageResourceID,
 	}, nil
 }
+
 func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowerIDsResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.UserId)
 

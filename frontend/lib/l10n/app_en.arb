@@ -64,7 +64,7 @@
   "aboutus": "About us",
   "ourteam": "Our team",
   "aboutustext": "You want to share your opinions, thoughts and news with the world - with all your feelings and rhetoric - in a very personal way? \nMany customers want a more personal form of online communication that is not yet offered today. And this is where Speaq comes in! With Speaq, we offer an innovative communication platform that makes a change from familiar platforms like Twitter and Facebook.",
-  "frontenddeveloper": "Frontend developer",
+  "frontendDeveloper": "Frontend developer",
   "backendDeveloper": "Backend developer",
   "wrongInput": "Wrong Input: ",
   "nameIsToLong" : "Name is to long!",
@@ -103,6 +103,7 @@
   "dateAt" : "At ",
 
   "noMorePosts" : "Seems like there are no more posts!",
-  "followOthersForMorePosts" : "Follow other profiles or\nload the page new and check\nif there are new posts waiting for you!"
-}
+  "followOthersForMorePosts" : "Follow other profiles or\nload the page new and check\nif there are new posts waiting for you!",
 
+  "errorUsernameAlreadyTaken": "Username already taken."
+}

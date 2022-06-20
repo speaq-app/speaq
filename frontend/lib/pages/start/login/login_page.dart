@@ -46,10 +46,11 @@ class _LoginPageState extends State<LoginPage> {
               listener: (context, state) {
                 if (state is LogInSuccess) {
                   print("Login Success");
-                  //Token muss verarbeitet werden
-                  Navigator.pushNamed(context, "base", arguments:  state.userID);
-                }
-                else if (state is LogInFail) {
+                  Navigator.pushNamed(context, "base", arguments: {
+                    "userId": state.userID,
+                    "token": state.token
+                  });
+                } else if (state is LogInFail) {
                   Flushbar(
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
@@ -60,8 +61,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               builder: (context, state) {
                 if (state is TryLoggingIn) {
-                  return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
-
+                  return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
                 } else if (state is LogInFail) {
                   return ListView(
                     children: <Widget>[
@@ -174,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
           hintText: appLocale.registerText,
           text: appLocale.register,
           press: () {
-            print("2. sikugfzuishgdfuis");
+            Navigator.pushNamed(context, "register");
           },
         ),
         const Padding(
@@ -201,7 +201,9 @@ class _LoginPageState extends State<LoginPage> {
     print("username UI: " + _usernameController.text);
     print("password UI: " + _passwordController.text);
 
-    _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
+    _authenticationBloc.add(LoggingIn(
+        username: _usernameController.text,
+        password: _passwordController.text));
 
     //LoginResponse loginResponse = await _userService.login(username: _usernameController.text, password: _passwordController.text);
 

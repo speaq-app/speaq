@@ -9,11 +9,13 @@ import (
 	"path"
 	"strings"
 
+	"github.com/speaq-app/speaq/internal/app/auth"
 	"github.com/speaq-app/speaq/internal/app/post"
 	"github.com/speaq-app/speaq/internal/app/resource"
 	"github.com/speaq-app/speaq/internal/app/settings"
 	"github.com/speaq-app/speaq/internal/app/user"
 	"github.com/speaq-app/speaq/internal/pkg/data/mockdb"
+	"github.com/speaq-app/speaq/internal/pkg/encryption"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
@@ -71,10 +73,13 @@ var (
 			// }
 
 			db := mockdb.New()
+			encryptionService := encryption.BcryptService{
+				Cost: 10,
+			}
 
 			srv := grpc.NewServer()
 			resourceSrv := resource.Server{
-				DataService: db,
+				ResourceService: db,
 			}
 			resource.RegisterResourceServer(srv, resourceSrv)
 			userSrv := user.Server{
@@ -89,6 +94,11 @@ var (
 				DataService: db,
 			}
 			post.RegisterPostServer(srv, postSrv)
+			authSrv := auth.Server{
+				UserService:       db,
+				EncryptionService: encryptionService,
+			}
+			auth.RegisterAuthServer(srv, authSrv)
 
 			l, err := net.Listen("tcp", ":8080")
 			if err != nil {

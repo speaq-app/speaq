@@ -83,3 +83,7 @@ func (s Service) PasswordHashAndIDByUsername(username string) ([]byte, int64, er
 
 	return nil, 0, nil
 }
+
+func (s Service) CreateUser(username string, passwordHash []byte) (data.User, error) {
+	return data.User{}, nil
+}

@@ -1,8 +1,14 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/blocs/register_bloc/register_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_connection_interface.dart';
+import 'package:protobuf/protobuf.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -20,16 +26,19 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordCheckController =
       TextEditingController();
 
+  final RegisterBloc _registerBloc = RegisterBloc();
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
+    var deviceSize = MediaQuery.of(context).size;
 
     return Drawer(
       child: SafeArea(
         child: ListView(
           children: <Widget>[
             buildTop(context, appLocale),
-            buildBottom(context, appLocale),
+            buildBottom(context, appLocale, deviceSize),
           ],
         ),
       ),
@@ -101,7 +110,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget buildBottom(BuildContext context, AppLocalizations appLocale) {
+  Widget buildBottom(
+      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Column(
       children: <Widget>[
         Padding(
@@ -109,16 +119,40 @@ class _RegisterPageState extends State<RegisterPage> {
             bottom: 30,
             top: 10,
           ),
-          child: SpeaqButton(
-            loginText: appLocale.register,
-            onPressed: () {},
+          child: BlocConsumer<RegisterBloc, RegisterState>(
+            bloc: _registerBloc,
+            listener: (context, state) {
+              if (state is RegisterError) {
+                switch (state.code) {
+                  case StatusCode.alreadyExists:
+                    Flushbar(
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      message: appLocale.errorUsernameAlreadyTaken,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                }
+              } else if (state is RegisterSuccess) {
+                Navigator.pop(context);
+              }
+            },
+            builder: (context, state) {
+              if (state is RegisterLoading) {
+                return const CircularProgressIndicator();
+              }
+
+              return SpeaqButton(
+                loginText: appLocale.register,
+                onPressed: _onRegister,
+              );
+            },
           ),
         ),
         SpeaqPageForwarding(
           hintText: appLocale.askExistingAccount,
           text: appLocale.login,
           press: () {
-            Navigator.popAndPushNamed(context, "login");
+            Navigator.pop(context);
           },
         ),
         const Padding(
@@ -146,6 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     super.dispose();
     _disposeController();
+    _registerBloc.close();
   }
 
   void _disposeController() {
@@ -204,5 +239,15 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     }
     return false;
+  }
+
+  _onRegister() {
+    var username = _nameController.text;
+    var password = _passwordController.text;
+
+    _registerBloc.add(RegisterUser(
+      username: username,
+      password: password,
+    ));
   }
 }

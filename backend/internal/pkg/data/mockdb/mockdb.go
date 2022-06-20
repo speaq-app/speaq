@@ -7,6 +7,8 @@ import (
 	"log"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
@@ -31,7 +33,7 @@ func New() data.Service {
 		log.Fatal(err)
 	}
 
-	return service{
+	return &service{
 		delay: time.Second * 1,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
