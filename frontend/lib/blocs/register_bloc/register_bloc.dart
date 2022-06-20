@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/grpc_auth_service.dart';
+import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
 part 'register_event.dart';
@@ -17,11 +19,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   void _onRegisterUser(RegisterUser event, Emitter<RegisterState> emit) async {
     emit(RegisterLoading());
-    await Future.delayed(const Duration(seconds: 1));
     try {
       await _authService.registerUser(event.username, event.password);
-    } on Exception {
-      emit(RegisterError());
+    } on GrpcError catch (e) {
+      
+      emit(RegisterError(e.code));
       return;
     }
     emit(RegisterSuccess());

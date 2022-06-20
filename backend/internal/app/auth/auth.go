@@ -6,6 +6,8 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
 	"github.com/speaq-app/speaq/internal/pkg/encryption"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Server struct {
@@ -22,7 +24,7 @@ func (s Server) Register(ctx context.Context, req *RegisterRequest) (*empty.Empt
 
 	_, err = s.UserService.CreateUser(req.Username, hash)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.AlreadyExists, err.Error())
 	}
 
 	return &empty.Empty{}, nil
