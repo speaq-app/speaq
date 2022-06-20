@@ -13,7 +13,7 @@ class GRPCAuthService implements AuthService {
 
   @override
   Future<void> registerUser(String username, String password) async {
-    _client.register(RegisterRequest(
+    await _client.register(RegisterRequest(
       username: username,
       password: password,
     ));

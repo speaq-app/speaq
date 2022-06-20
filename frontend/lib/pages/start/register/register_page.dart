@@ -5,6 +5,9 @@ import 'package:frontend/blocs/register_bloc/register_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_connection_interface.dart';
+import 'package:protobuf/protobuf.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -27,13 +30,14 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
+    var deviceSize = MediaQuery.of(context).size;
 
     return Drawer(
       child: SafeArea(
         child: ListView(
           children: <Widget>[
             buildTop(context, appLocale),
-            buildBottom(context, appLocale),
+            buildBottom(context, appLocale, deviceSize),
           ],
         ),
       ),
@@ -105,7 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget buildBottom(BuildContext context, AppLocalizations appLocale) {
+  Widget buildBottom(
+      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Column(
       children: <Widget>[
         Padding(
@@ -113,13 +118,23 @@ class _RegisterPageState extends State<RegisterPage> {
             bottom: 30,
             top: 10,
           ),
-          child: BlocBuilder<RegisterBloc, RegisterState>(
+          child: BlocConsumer<RegisterBloc, RegisterState>(
             bloc: _registerBloc,
+            listener: (context, state) {
+              if (state is RegisterError) {
+                switch (state.code) {
+                  case StatusCode.alreadyExists:
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(appLocale.errorUsernameAlreadyTaken),
+                      ),
+                    );
+                }
+              }
+            },
             builder: (context, state) {
               if (state is RegisterLoading) {
-                return const SpqLoadingWidget(20);
-              } else if (state is RegisterError) {
-                return const Text("Error");
+                return const CircularProgressIndicator();
               }
 
               return SpeaqButton(
