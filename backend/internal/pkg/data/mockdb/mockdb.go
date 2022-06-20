@@ -32,7 +32,7 @@ func New() data.Service {
 	}
 
 	return service{
-		delay: time.Second * 3,
+		delay: time.Second * 1,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),
@@ -398,17 +398,7 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-func (s service) PasswordHashByUsername(username string) ([]byte, int64, error) {
-
-	//passwort hash getten
-	//TODO implement me
-	//Get user by username (for loop). If doesn't exists, ERROR
-	//Compare entered password with user password. If not identical, ERROR
-	//Return User
-	//panic("implement me")
-
-	/*	var password []byte
-		var id int64*/
+func (s service) PasswordHashAndIDByUsername(username string) ([]byte, int64, error) {
 
 	for _, u := range s.users {
 		if u.Profile.Username == username {
@@ -481,7 +471,7 @@ func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, er
 	return false, -1, nil
 }
 
-func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
+func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 
 	u, ok := s.users[userID]
 
