@@ -255,9 +255,7 @@ class ProfilePageState extends State<ProfilePage> {
                     textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
                     borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
-
-                }
-                else if (state is FollowUnfollowLoaded) {
+                } else if (state is FollowUnfollowLoaded) {
                   //_isFollowing = state.isFollowing;
 
                   print("JEEEEEEEEEEE 22222222222222");
@@ -269,7 +267,6 @@ class ProfilePageState extends State<ProfilePage> {
                     textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
                     borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
-
                 }
                 return SpqTextButton(
                   onPressed: () => print("ERROR - UNKNOWN STATE"),

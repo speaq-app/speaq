@@ -48,32 +48,27 @@ class _BasePageState extends State<BasePage> {
   final PageController _pageController = PageController();
 
   void _switchPage(int index) {
-
-      _selectedIndexNotifier.value = index;
-      _pageController.animateToPage(_selectedIndexNotifier.value, duration: const Duration(milliseconds: 200), curve: Curves.linear);
-
+    _selectedIndexNotifier.value = index;
+    _pageController.animateToPage(_selectedIndexNotifier.value, duration: const Duration(milliseconds: 200), curve: Curves.linear);
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-        if (_selectedIndexNotifier.value != 0){
-         _switchPage(0);
+      onWillPop: () async {
+        if (_selectedIndexNotifier.value != 0) {
+          _switchPage(0);
         }
 
         return false;
       },
-
       child: Container(
         color: spqBackgroundGrey,
         child: SafeArea(
           child: Scaffold(
             body: PageView(
               onPageChanged: (index) {
-
-                  _selectedIndexNotifier.value = index;
-
+                _selectedIndexNotifier.value = index;
               },
               controller: _pageController,
               children: _pages,
@@ -81,12 +76,11 @@ class _BasePageState extends State<BasePage> {
             bottomNavigationBar: ValueListenableBuilder(
                 valueListenable: _selectedIndexNotifier,
                 builder: (context, value, widget) {
-                return SpqButtonNavigationBar(
-                  switchPage: _switchPage,
-                  selectedIndex: value as int,
-                );
-              }
-            ),
+                  return SpqButtonNavigationBar(
+                    switchPage: _switchPage,
+                    selectedIndex: value as int,
+                  );
+                }),
           ),
         ),
       ),

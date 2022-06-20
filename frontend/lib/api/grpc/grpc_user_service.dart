@@ -1,8 +1,7 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
-import 'package:frontend/api/model/user.dart';
-import 'package:frontend/api/user_service.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/api/user_service.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCUserService implements UserService {
@@ -16,9 +15,7 @@ class GRPCUserService implements UserService {
 
   @override
   Future<Profile> getProfile(int id) async {
-    GetUserProfileResponse resp = await _client
-        .getUserProfile(GetUserProfileRequest()
-      ..userId = Int64(id));
+    GetUserProfileResponse resp = await _client.getUserProfile(GetUserProfileRequest()..userId = Int64(id));
     return Profile(
       name: resp.name,
       username: resp.username,
@@ -56,16 +53,13 @@ class GRPCUserService implements UserService {
 
   @override
   Future<List<int>> getFollowingIDs({required int id}) async {
-    GetUserFollowingIDsResponse resp = await _client
-        .getUserFollowingIDs(GetUserProfileRequest()
-      ..userId = Int64(id));
+    GetUserFollowingIDsResponse resp = await _client.getUserFollowingIDs(GetUserProfileRequest()..userId = Int64(id));
     List<int> following = [];
     for (Int64 i in resp.followingIds) {
       following.add(i.toInt());
     }
     return following;
   }
-
 
   @override
   Future<List<FollowUser>> getFollower({required List<int> ids}) async {
@@ -111,11 +105,9 @@ class GRPCUserService implements UserService {
     print("username Login: " + username);
     print("password Login: " + password);
 
-    LoginResponse resp = await _client.login(
-        LoginRequest()
-          ..username = username
-          ..password = password
-    );
+    LoginResponse resp = await _client.login(LoginRequest()
+      ..username = username
+      ..password = password);
 
     print("username Response: ${resp.userId}");
     print("password Response: " + resp.token);
