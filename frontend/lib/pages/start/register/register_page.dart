@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -124,12 +125,15 @@ class _RegisterPageState extends State<RegisterPage> {
               if (state is RegisterError) {
                 switch (state.code) {
                   case StatusCode.alreadyExists:
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(appLocale.errorUsernameAlreadyTaken),
-                      ),
-                    );
+                    Flushbar(
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      message: appLocale.errorUsernameAlreadyTaken,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
                 }
+              } else if (state is RegisterSuccess) {
+                Navigator.pop(context);
               }
             },
             builder: (context, state) {
@@ -148,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
           hintText: appLocale.askExistingAccount,
           text: appLocale.login,
           press: () {
-            Navigator.popAndPushNamed(context, "login");
+            Navigator.pop(context);
           },
         ),
         const Padding(
