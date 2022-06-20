@@ -44,10 +44,10 @@ func (s Service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
 	return []data.User{}, nil
 }
 
-func (s Service) CheckIfFollowing(userID int64, followerID int64) (bool, error) {
+func (s Service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
 	panic("implement me")
 
-	return false, nil
+	return false, 0, nil
 }
 
 func (s Service) FollowUnfollow(userID int64, followID int64) (bool, error) {
