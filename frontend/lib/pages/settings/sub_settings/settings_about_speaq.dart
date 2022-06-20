@@ -92,19 +92,19 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
       crossAxisCount: 2,
       children: [
         buildNumber("Sven Gatnar", "assets/images/developer_gatnar.jpg",
-            appLocale.frontenddeveloper),
+            appLocale.frontendDeveloper),
         buildNumber("Nosakhare Omoruyi", "assets/images/developer_omoruyi.jpg",
-            appLocale.backenddeveloper),
+            appLocale.backendDeveloper),
         buildNumber("Daniel Holzwarth", "assets/images/developer_holzwarth.jpg",
-            appLocale.backenddeveloper),
+            appLocale.backendDeveloper),
         buildNumber("David Löwe", "assets/images/developer_loewe.jpg",
-            appLocale.frontenddeveloper),
+            appLocale.frontendDeveloper),
         buildNumber(
             "Hendrik Schlehlein",
             "assets/images/developer_schlehlein.jpg",
-            appLocale.backenddeveloper),
+            appLocale.backendDeveloper),
         buildNumber("Eric Eisemann", "assets/images/developer_eisemann.jpg",
-            appLocale.frontenddeveloper),
+            appLocale.frontendDeveloper),
       ],
     );
   }

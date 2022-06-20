@@ -7,6 +7,7 @@ type UserService interface {
 	PasswordHashByUsername(username string) ([]byte, int64, error)
 	FollowerIDsByID(userID int64) ([]int64, error)
 	FollowingIDsByID(userID int64) ([]int64, error)
+	CreateUser(username string, passwordHash []byte) (User, error)
 
 	FollowerByIDs(userIDs []int64) ([]User, error)
 	FollowingByIDs(userIDs []int64) ([]User, error)
