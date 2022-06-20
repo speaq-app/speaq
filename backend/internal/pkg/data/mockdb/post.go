@@ -48,5 +48,4 @@ func (s service) CreatePost(ownerID int64, post *data.Post) error {
 
 	log.Printf("Saved Post: %v", post)
 	return nil
-
 }
