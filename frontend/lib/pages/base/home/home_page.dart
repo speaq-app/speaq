@@ -9,7 +9,6 @@ import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
-import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/spq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
@@ -169,7 +168,6 @@ class _HomePageState extends State<HomePage> {
     return ListView(
       controller: _scrollController,
       children: [
-        const SpqAudioPostContainer(),
         ListView.builder(
           controller: _scrollController,
           itemCount: state.postList.length + 1,

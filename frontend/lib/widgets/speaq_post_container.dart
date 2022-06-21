@@ -5,6 +5,7 @@ import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +31,7 @@ class PostContainer extends StatelessWidget {
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
-    this.postType = "text", //get From Post
+    this.postType = "audio", //get From Post
     this.resourceID = -1, //-1 equals Text Post since no Resource
     this.postMessage = "",
   }) : super(key: key);
@@ -217,7 +218,7 @@ class PostContainer extends StatelessWidget {
         return isShimmer ? const Text("video shimmer") : const Text("video");
 
       case "audio":
-        return isShimmer ? const Text("audio shimmer") : const Text("audio");
+        return isShimmer ? const SpqAudioPostContainer() : const Text("audio");
 
       default:
         return const SizedBox(height: 0);

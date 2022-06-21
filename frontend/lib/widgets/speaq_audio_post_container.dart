@@ -52,44 +52,51 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Slider(
-          min: 0,
-          max: duration.inSeconds.toDouble(),
-          value: position.inSeconds.toDouble(),
-          onChanged: (value) async {
-            final position = Duration(seconds: value.toInt());
-            await audioPlayer.seek(position);
-            await audioPlayer.resume();
-          },
+        Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              child: IconButton(
+                icon: Icon(
+                  isPlaying ? Icons.pause : Icons.play_arrow,
+                ),
+                iconSize: 25,
+                onPressed: () async {
+                  if (isPlaying) {
+                    await audioPlayer.pause();
+                  } else {
+                    await audioPlayer.resume();
+                  }
+                },
+              ),
+            ),
+            Slider(
+              min: 0,
+              max: duration.inSeconds.toDouble(),
+              value: position.inSeconds.toDouble(),
+              onChanged: (value) async {
+                final position = Duration(seconds: value.toInt());
+                await audioPlayer.seek(position);
+                await audioPlayer.resume();
+              },
+            ),
+          ],
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 60),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 formatTime(position),
               ),
-              Text(
-                formatTime(duration - position),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 35),
+                child: Text(
+                  formatTime(duration - position),
+                ),
               ),
             ],
-          ),
-        ),
-        CircleAvatar(
-          radius: 35,
-          child: IconButton(
-            icon: Icon(
-              isPlaying ? Icons.pause : Icons.play_arrow,
-            ),
-            iconSize: 50,
-            onPressed: () async {
-              if (isPlaying) {
-                await audioPlayer.pause();
-              } else {
-                await audioPlayer.resume();
-              }
-            },
           ),
         ),
       ],
