@@ -26,13 +26,13 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
-	passHash, err := bcrypt.GenerateFromPassword([]byte("OpenToWork"), 10)
+	passHash, err := bcrypt.GenerateFromPassword([]byte("password"), 10)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	return &service{
-		delay: time.Second * 3,
+		delay: time.Second * 1,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),
@@ -50,6 +50,7 @@ func New() data.Service {
 		},
 		users: map[int64]data.User{
 			1: {
+				ID: 1,
 				Profile: data.UserProfile{
 					Name:        "Karl Ess",
 					Username:    "essiggurke",
@@ -60,10 +61,11 @@ func New() data.Service {
 					ProfileImageResourceID: 2,
 				},
 				Password:     passHash,
-				FollowerIDs:  []int64{2, 3, 5, 6, 7},
+				FollowerIDs:  []int64{2, 3, 4, 5, 6, 7},
 				FollowingIDs: []int64{2, 4, 7},
 			},
 			2: {
+				ID: 2,
 				Profile: data.UserProfile{
 					Name:                   "Daniel Holzwarth",
 					Username:               "dholzwarth",
@@ -77,6 +79,7 @@ func New() data.Service {
 				FollowingIDs: []int64{1, 3},
 			},
 			3: {
+				ID: 3,
 				Profile: data.UserProfile{
 					Name:                   "Nosakhare Omoruyi",
 					Username:               "nomoruyi",
@@ -85,11 +88,12 @@ func New() data.Service {
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
 					ProfileImageResourceID: 1,
 				},
-				FollowerIDs:  []int64{1, 2},
-				FollowingIDs: []int64{1, 2},
+				FollowerIDs:  []int64{1, 2, 5, 6},
+				FollowingIDs: []int64{1, 2, 4, 7},
 				Password:     passHash,
 			},
 			4: {
+				ID: 4,
 				Profile: data.UserProfile{
 					Name:                   "David Löwe",
 					Username:               "dloewe",
@@ -101,6 +105,7 @@ func New() data.Service {
 				Password: passHash,
 			},
 			5: {
+				ID: 5,
 				Profile: data.UserProfile{
 					Name:                   "Eric Eisemann",
 					Username:               "eeisemann",
@@ -112,6 +117,7 @@ func New() data.Service {
 				Password: passHash,
 			},
 			6: {
+				ID: 6,
 				Profile: data.UserProfile{
 					Name:                   "Sven Gatnar",
 					Username:               "sgatnar",
@@ -123,11 +129,12 @@ func New() data.Service {
 				Password: passHash,
 			},
 			7: {
+				ID: 7,
 				Profile: data.UserProfile{
-					Name:                   "Eric Eisemann",
-					Username:               "dloewe",
-					Description:            "Test Description 4",
-					Website:                "Test Website 4",
+					Name:                   "Hedrick Schlehlein",
+					Username:               "schlehlein",
+					Description:            "Test Description 7",
+					Website:                "Test Website 7",
 					ProfileImageBlurHash:   "U.N0^|WB~qjZ_3ofM|ae%MayWBayM{fkWBay",
 					ProfileImageResourceID: 2,
 				},

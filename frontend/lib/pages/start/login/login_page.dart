@@ -1,5 +1,4 @@
 import 'package:another_flushbar/flushbar.dart';
-
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,10 +45,7 @@ class _LoginPageState extends State<LoginPage> {
               listener: (context, state) {
                 if (state is LogInSuccess) {
                   print("Login Success");
-                  Navigator.pushNamed(context, "base", arguments: {
-                    "userId": state.userID,
-                    "token": state.token
-                  });
+                  Navigator.pushNamed(context, "base", arguments: {"userID": state.userID, "token": state.token});
                 } else if (state is LogInFail) {
                   Flushbar(
                     backgroundColor: spqPrimaryBlue,
@@ -57,22 +53,12 @@ class _LoginPageState extends State<LoginPage> {
                     message: state.message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
-                  SnackBar(content: Text(state.message));
                 }
               },
               builder: (context, state) {
                 if (state is TryLoggingIn) {
-                  return SpqLoadingWidget(
-                      MediaQuery.of(context).size.shortestSide * 0.15);
+                  return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
                 } else if (state is LogInFail) {
-/*
-                  Flushbar(
-                    backgroundColor: spqPrimaryBlue,
-                    messageColor: spqWhite,
-                    message: state.message,
-                    duration: const Duration(seconds: 5),
-                  ).show(context);
-*/
                   return ListView(
                     children: <Widget>[
                       buildTop(context, appLocale),
@@ -211,9 +197,7 @@ class _LoginPageState extends State<LoginPage> {
     print("username UI: " + _usernameController.text);
     print("password UI: " + _passwordController.text);
 
-    _authenticationBloc.add(LoggingIn(
-        username: _usernameController.text,
-        password: _passwordController.text));
+    _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
 
     //LoginResponse loginResponse = await _userService.login(username: _usernameController.text, password: _passwordController.text);
 

@@ -142,3 +142,58 @@ func (s service) CreateUser(username string, passwordHash []byte) (data.User, er
 	s.users[userID] = user
 	return user, nil
 }
+
+func (s service) PasswordHashAndIDByUsername(username string) ([]byte, int64, error) {
+
+	for _, u := range s.users {
+		if u.Profile.Username == username {
+			password := u.Password
+
+			return password, u.ID, nil
+		}
+	}
+
+	return nil, 0, errors.New("no user found")
+}
+
+func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
+
+	u, ok := s.users[userID]
+
+	if !ok {
+		return false, -1, errors.New("no User found")
+	}
+
+	for i, f := range u.FollowingIDs {
+		if f == followerID {
+			return true, i, nil
+		}
+	}
+
+	return false, -1, nil
+}
+
+func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
+
+	u, ok := s.users[userID]
+
+	if !ok {
+		return false, errors.New("no User found")
+	}
+	c, i, err := s.CheckIfFollowing(userID, followID)
+
+	if err != nil {
+		return false, err
+	}
+
+	if c {
+		u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
+	} else {
+		u.FollowingIDs = append(u.FollowingIDs, followID)
+	}
+
+	s.users[userID] = u
+
+	return !c, nil
+
+}

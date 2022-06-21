@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 
-class SpqTextbutton extends StatelessWidget {
+class SpqTextButton extends StatelessWidget {
   final void Function() onPressed;
   final String name;
-  final TextStyle style;
-  const SpqTextbutton({
+  final TextStyle textStyle;
+  final Color borderColor;
+  final Color buttonPrimary;
+
+  const SpqTextButton({
     Key? key,
-    required this.onPressed, required this.name, required this.style,
+    required this.onPressed,
+    required this.name,
+    required this.textStyle,
+    this.borderColor = spqPrimaryBlue,
+    this.buttonPrimary = spqWhite,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child:  Text(
-        name,
-        style: style,
-      ),
       style: ElevatedButton.styleFrom(
-        primary: spqWhite,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+        primary: buttonPrimary,
+        shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             side: BorderSide(
-              color: spqPrimaryBlue,
+              color: borderColor,
             )),
+      ),
+      child: Text(
+        name,
+        style: textStyle,
       ),
     );
   }

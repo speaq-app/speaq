@@ -1,14 +1,12 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/blocs/register_bloc/register_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:grpc/grpc.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import 'package:protobuf/protobuf.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -23,8 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordCheckController =
-      TextEditingController();
+  final TextEditingController _passwordCheckController = TextEditingController();
 
   final RegisterBloc _registerBloc = RegisterBloc();
 
@@ -110,8 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget buildBottom(
-      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
+  Widget buildBottom(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Column(
       children: <Widget>[
         Padding(

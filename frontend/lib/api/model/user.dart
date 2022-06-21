@@ -1,5 +1,6 @@
 import 'package:frontend/api/model/profile.dart';
 import 'package:hive/hive.dart';
+
 part 'user.g.dart';
 
 @HiveType(typeId: 0)

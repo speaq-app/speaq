@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-
 import 'package:settings_ui/settings_ui.dart';
 
 class PrivacySafetySettingsPage extends StatefulWidget {
   const PrivacySafetySettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<PrivacySafetySettingsPage> createState() =>
-      _PrivacySafetySettingsPageState();
+  State<PrivacySafetySettingsPage> createState() => _PrivacySafetySettingsPageState();
 }
 
 class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
@@ -40,8 +38,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                 tiles: [
                   //Privates Konto SwitchTile
                   SettingsTile.switchTile(
-                    title:
-                        Text(appLocale.privateAccount, style: TextStyle(fontSize: 15)),
+                    title: Text(appLocale.privateAccount, style: TextStyle(fontSize: 15)),
                     initialValue: valuePrivateSwitch,
                     onToggle: (value) {
                       setState(() {
@@ -50,18 +47,13 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                     },
                   ),
                   //Suchverlauf löschen
-                  _buildPopUpWindow(
-                      appLocale.deletesearchhistory,
-                      appLocale.askdeletesearchhistory,
-                      appLocale.delete),
+                  _buildPopUpWindow(appLocale.deletesearchhistory, appLocale.askdeletesearchhistory, appLocale.delete),
                 ],
               ),
             ],
           ),
           Positioned(
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
           )
@@ -71,8 +63,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
   }
 
   //Pop-up-Fenster
-  SettingsTile _buildPopUpWindow(
-      String text, String popupMessage, String exitText) {
+  SettingsTile _buildPopUpWindow(String text, String popupMessage, String exitText) {
     return SettingsTile.navigation(
         trailing: Icon(Icons.adaptive.arrow_forward),
         title: Text(text, style: const TextStyle(fontSize: 15)),
@@ -81,12 +72,8 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
             builder: (context) => AlertDialog(
                   title: Text(popupMessage),
                   actions: [
-                    TextButton(
-                        child: Text(exitText),
-                        onPressed: () => Navigator.pop(context)),
-                    TextButton(
-                        child: Text(appLocale.cancel),
-                        onPressed: () => Navigator.pop(context)),
+                    TextButton(child: Text(exitText), onPressed: () => Navigator.pop(context)),
+                    TextButton(child: Text(appLocale.cancel), onPressed: () => Navigator.pop(context)),
                   ],
                 )));
   }
