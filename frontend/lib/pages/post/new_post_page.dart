@@ -29,6 +29,8 @@ class NewPostPage extends StatefulWidget {
 }
 
 class _NewPostPageState extends State<NewPostPage> {
+  FlutterSoundPlayer player = FlutterSoundPlayer();
+
   // Main
   late Size deviceSize;
   late AppLocalizations appLocale;
@@ -113,6 +115,7 @@ class _NewPostPageState extends State<NewPostPage> {
   @override
   void initState() {
     super.initState();
+    player.openPlayer();
 
     // Initialize Recorder for Audio
     initRecorder();
@@ -184,7 +187,13 @@ class _NewPostPageState extends State<NewPostPage> {
                         icon: Icon(Icons.play_arrow),
                         color: spqWhite,
                         onPressed: () {
-                          print("sg");
+                          if (player.isPlaying) {
+                            player.stopPlayer();
+                          }
+
+                          player.startPlayer(
+                            fromURI: '$fileName',
+                          );
                         },
                       )
                     : null),
@@ -192,7 +201,8 @@ class _NewPostPageState extends State<NewPostPage> {
               child: dataIsAudio
                   ? InkWell(
                       onTap: () => print("Data is Audio"),
-                      child: SvgPicture.asset("assets/images/logo/speaq_logo_white.svg"),
+                      child: SvgPicture.asset(
+                          "assets/images/logo/speaq_logo_white.svg"),
                     )
                   : Image.file(
                       _imageFile!,
@@ -202,7 +212,8 @@ class _NewPostPageState extends State<NewPostPage> {
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
-                icon: const Icon(Icons.delete_forever_rounded, color: spqErrorRed),
+                icon: const Icon(Icons.delete_forever_rounded,
+                    color: spqErrorRed),
                 onPressed: () {
                   setState(
                     () {
@@ -250,7 +261,8 @@ class _NewPostPageState extends State<NewPostPage> {
                     ),
                   ),
                   hintText: 'Speaq',
-                  contentPadding: const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+                  contentPadding: const EdgeInsets.only(
+                      left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50.0),
                   ),
@@ -340,7 +352,8 @@ class _NewPostPageState extends State<NewPostPage> {
   onEmojiSelected(Emoji emoji) {
     _postController
       ..text += emoji.emoji
-      ..selection = TextSelection.fromPosition(TextPosition(offset: _postController.text.length));
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: _postController.text.length));
   }
 
   _onBackspacePressed() {
@@ -391,12 +404,14 @@ class _NewPostPageState extends State<NewPostPage> {
           );
         },
         child: Container(
-          decoration: BoxDecoration(color: spqLightGrey, borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(
+              color: spqLightGrey, borderRadius: BorderRadius.circular(5)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: SizedBox.fromSize(
               size: Size.fromRadius(32), // Image radius
-              child: Image.asset('assets/images/gallery.png', fit: BoxFit.cover),
+              child:
+                  Image.asset('assets/images/gallery.png', fit: BoxFit.cover),
             ),
           ),
         ),
@@ -439,7 +454,9 @@ class _NewPostPageState extends State<NewPostPage> {
             borderRadius: BorderRadius.circular(5),
             child: SizedBox.fromSize(
               size: Size.fromRadius(32), // Image radius
-              child: const Image(image: AssetImage('assets/images/camera.png'), fit: BoxFit.cover),
+              child: const Image(
+                  image: AssetImage('assets/images/camera.png'),
+                  fit: BoxFit.cover),
             ),
           ),
         ),
@@ -510,7 +527,12 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   void _createPost() {
-    Post _post = Post(date: dateNow, description: _postController.text, resourceID: 1, id: 1, ownerID: widget.userID);
+    Post _post = Post(
+        date: dateNow,
+        description: _postController.text,
+        resourceID: 1,
+        id: 1,
+        ownerID: widget.userID);
     _postBloc.add(CreatePost(ownerId: widget.userID, post: _post));
   }
 
@@ -536,8 +558,10 @@ class _NewPostPageState extends State<NewPostPage> {
                       : Duration.zero;
 
                   String twoDigits(int n) => n.toString().padLeft(2, "0");
-                  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-                  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+                  String twoDigitMinutes =
+                      twoDigits(duration.inMinutes.remainder(60));
+                  String twoDigitSeconds =
+                      twoDigits(duration.inSeconds.remainder(60));
 
                   return Text(
                     '$twoDigitMinutes:$twoDigitSeconds',
@@ -555,7 +579,8 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget buildAudioButtonFunction() {
     return ElevatedButton(
       child: Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 32),
-      style: ElevatedButton.styleFrom(fixedSize: Size(132, 132), shape: CircleBorder()),
+      style: ElevatedButton.styleFrom(
+          fixedSize: Size(132, 132), shape: CircleBorder()),
       onPressed: () async {
         if (recorder.isRecording) {
           await stop();
@@ -620,6 +645,8 @@ class _NewPostPageState extends State<NewPostPage> {
 
   @override
   void dispose() {
+    player.stopPlayer();
+    player.closePlayer();
     recorder.closeRecorder();
     _postController.dispose();
 
