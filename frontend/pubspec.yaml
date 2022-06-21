@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-# Dependencies for l10n
+  # Dependencies for l10n
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
