@@ -23,11 +23,7 @@ class FollowerLoaded extends FollowerState {
   FollowerLoaded({required this.follower, required this.following});
 }
 
-class FollowUnfollowLoading extends FollowerState {
-
-
-  FollowUnfollowLoading();
-}
+class FollowUnfollowLoading extends FollowerState {}
 
 class FollowUnfollowLoaded extends FollowerState {
   final bool isFollowing;
