@@ -61,16 +61,16 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget _buildSendPostButton() => TextButton(
         onPressed: _createPost,
         child: Container(
-          child: const Text("speaq"),
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
           decoration: BoxDecoration(border: Border.all(color: spqPrimaryBlue, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(16.0))),
+          child: const Text("speaq"),
         ),
       );
 
   void _createPost() {
-    Post _post = Post(date: dateNow, description: _postController.text, resourceID: 1, id: 1, ownerID: 2);
-    _postBloc.add(CreatePost(ownerId: 2, post: _post));
+    Post post = Post(date: dateNow, description: _postController.text, resourceID: 1, id: 1, ownerID: 2, ownerName: "Test Owner Name", mimeType: "image", ownerUsername: "@testOwnerName");
+    _postBloc.add(CreatePost(ownerId: 2, post: post));
   }
 
   @override

@@ -46,7 +46,11 @@ func New() data.Service {
 				MIMEType: "image/png",
 				Size:     1111111,
 			},
-			3: {},
+			3: {ID: 3,
+				Data:     string(bc),
+				Name:     "testGifPokemon",
+				MIMEType: "image/png",
+				Size:     1111111},
 		},
 		users: map[int64]data.User{
 			1: {
@@ -157,6 +161,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "gif",
 			},
 
 			2: {
@@ -174,6 +179,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "gif",
 			},
 
 			3: {
@@ -191,6 +197,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "text",
 			},
 
 			4: {
@@ -208,6 +215,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "text",
 			},
 
 			5: {
@@ -225,6 +233,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			6: {
@@ -242,6 +251,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			7: {
@@ -259,6 +269,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			8: {
@@ -276,6 +287,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "audio",
 			},
 
 			9: {
@@ -293,6 +305,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "audio",
 			},
 
 			10: {
@@ -310,6 +323,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "text",
 			},
 		},
 	}

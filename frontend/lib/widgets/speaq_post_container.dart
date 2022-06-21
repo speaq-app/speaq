@@ -16,7 +16,7 @@ class PostContainer extends StatelessWidget {
   final int numberOfLikes;
   final int numberOfComments;
 
-  final String postType;
+  final String mimeType;
   final String postMessage;
 
   //As Widget or IDs or Strings?
@@ -30,7 +30,7 @@ class PostContainer extends StatelessWidget {
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
-    this.postType = "text", //get From Post
+    required this.mimeType, //get From Post
     this.resourceID = -1, //-1 equals Text Post since no Resource
     this.postMessage = "",
   }) : super(key: key);
@@ -86,10 +86,6 @@ class PostContainer extends StatelessWidget {
         }
       },
     );
-
-    // return const CircleAvatar(
-    //   backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
-    // );
   }
 
   Widget _buildPostTitle() {
@@ -204,20 +200,24 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  //Get Correct Post-Data
-  Widget _getCorrectPostTypeWidget(bool isShimmer) {
-    switch (postType) {
+  Widget _getCorrectPostTypeWidget(bool isLoading) {
+    const String testImageResource = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
+    const String testGifResource = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
+    // final String testVideo = "";
+    //const String testAudio = "";
+
+    switch (mimeType) {
       case "image":
-        return isShimmer ? const Text("image shimmer") : const Text("image");
+        return isLoading ? Image.network(testImageResource) : Image.network(testImageResource);
 
       case "gif":
-        return isShimmer ? const Text("gif shimmer") : const Text("gif");
+        return isLoading ? Image.network(testGifResource) : Image.network(testGifResource);
 
-      case "video":
-        return isShimmer ? const Text("video shimmer") : const Text("video");
+      // case "video":
+      //   return isLoading ? const Text("video loading") : const Text("video");
 
       case "audio":
-        return isShimmer ? const Text("audio shimmer") : const Text("audio");
+        return isLoading ? const Text("audio loading") : const Text("audio");
 
       default:
         return const SizedBox(height: 0);

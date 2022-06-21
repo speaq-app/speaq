@@ -36,6 +36,7 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 			ResourceId:       p.ResourceID,
 			NumberOfLikes:    int64(len(p.LikeIDs)),
 			NumberOfComments: int64(len(p.CommentIDs)),
+			MimeType:         p.MimeType,
 		},
 	}, nil
 }
@@ -61,6 +62,7 @@ func (s Server) GetPosts(ctx context.Context, req *GetPostsRequest) (*GetPostsRe
 			NumberOfComments: int64(len(post.CommentIDs)),
 			OwnerName:        post.OwnerName,
 			OwnerUsername:    post.OwnerUsername,
+			MimeType:         post.MimeType,
 		})
 	}
 
