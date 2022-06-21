@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/api/cache/cache_user_service.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/model/user.dart';

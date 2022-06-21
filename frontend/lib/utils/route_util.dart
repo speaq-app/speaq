@@ -3,7 +3,6 @@ import 'package:frontend/api/model/user.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/pages/settings/sub_settings/settings_about_speaq.dart';
-
 import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
@@ -161,9 +160,7 @@ class RouteGenerator {
   static _errorRoute() {
     return MaterialPageRoute(
       builder: (context) {
-        return Scaffold(
-            appBar: AppBar(title: const Text("ERROR")),
-            body: const Center(child: Text("ERROR")));
+        return Scaffold(appBar: AppBar(title: const Text("ERROR")), body: const Center(child: Text("ERROR")));
       },
     );
   }

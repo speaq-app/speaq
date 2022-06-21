@@ -177,13 +177,17 @@ class _NewPostPageState extends State<NewPostPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Align(
-              alignment: Alignment.center,
-              child: Text(
-                "       ",
-                style: TextStyle(color: spqPrimaryBlue),
-              ),
-            ),
+            Align(
+                alignment: Alignment.center,
+                child: dataIsAudio
+                    ? IconButton(
+                        icon: Icon(Icons.play_arrow),
+                        color: spqWhite,
+                        onPressed: () {
+                          print("sg");
+                        },
+                      )
+                    : null),
             Center(
               child: dataIsAudio
                   ? InkWell(
@@ -527,7 +531,9 @@ class _NewPostPageState extends State<NewPostPage> {
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
                 builder: (context, snapshot) {
-                  final duration = snapshot.hasData ? snapshot.data!.duration : Duration.zero;
+                  final duration = snapshot.hasData
+                      ? snapshot.data!.duration
+                      : Duration.zero;
 
                   String twoDigits(int n) => n.toString().padLeft(2, "0");
                   String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
