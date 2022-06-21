@@ -10,7 +10,8 @@ service Post {
 message CreatePostRequest {
     int64 owner_id = 1;
     string description = 2;
-    //int64 resource_id = 3;
+    string resource_data = 3;
+    string resource_mime_type = 4;
 }
 
 message CreatePostResponse {

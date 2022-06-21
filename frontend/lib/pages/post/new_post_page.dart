@@ -1,20 +1,19 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/api/model/post.dart';
 import 'package:frontend/blocs/post_bloc/post_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/widgets/speaq_post_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
@@ -32,11 +31,8 @@ class _NewPostPageState extends State<NewPostPage> {
   FlutterSoundPlayer player = FlutterSoundPlayer();
 
   // Main
-  late Size deviceSize;
-  late AppLocalizations appLocale;
   final ResourceBloc _resourceBloc = ResourceBloc();
   final PostBloc _postBloc = PostBloc();
-  final dateNow = DateTime.now();
   final TextEditingController _postController = TextEditingController();
   bool picAndAudioOffstateVisible = false;
 
@@ -57,11 +53,12 @@ class _NewPostPageState extends State<NewPostPage> {
 
   // Audio
   late final recorder = FlutterSoundRecorder();
-  String fileName = 'recordedAudio.aac';
-  late String path;
   bool audioKeyboardVisible = false;
   bool isRecorderReady = false;
   bool isRecording = false;
+  bool _hasMicrophoneAccess = true;
+  final _audio = <int>[];
+  StreamSubscription? _mRecordingDataSubscription;
 
   //region GENERAL
   void keyboardInput() {
@@ -124,10 +121,27 @@ class _NewPostPageState extends State<NewPostPage> {
     keyboardInput();
   }
 
+  Future initRecorder() async {
+    var status = await Permission.microphone.request();
+    _hasMicrophoneAccess = status == PermissionStatus.granted;
+
+    if (!_hasMicrophoneAccess) {
+      throw 'Microphone permission not granted';
+    }
+
+    await recorder.openRecorder();
+    isRecorderReady = true;
+
+    recorder.setSubscriptionDuration(
+      const Duration(milliseconds: 500),
+    );
+    await initializeDateFormatting();
+  }
+
   @override
   Widget build(BuildContext context) {
-    deviceSize = MediaQuery.of(context).size;
-    appLocale = AppLocalizations.of(context)!;
+    Size deviceSize = MediaQuery.of(context).size;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     return SafeArea(
       child: BlocConsumer<PostBloc, PostState>(
         bloc: _postBloc,
@@ -137,7 +151,6 @@ class _NewPostPageState extends State<NewPostPage> {
           }
         },
         builder: (context, state) {
-          //TODO "Post Adden wenn Resource geposted wurde"
           if (state is PostSaving) {
             return SpqLoadingWidget(
               MediaQuery.of(context).size.shortestSide * 0.15,
@@ -146,18 +159,18 @@ class _NewPostPageState extends State<NewPostPage> {
             return Scaffold(
               appBar: SpqAppBar(
                 preferredSize: deviceSize,
-                actionList: [_buildSendPostButton()],
+                actionList: [
+                  _buildSendPostButton(),
+                ],
               ),
               body: Column(
                 children: [
-                  buildPicAndAudioContainerTop(),
                   Expanded(
-                    child: _buildPostTextField(),
+                    child: _buildAttachmentPreview(),
                   ),
-                  buildCameraAndGalleryVisibleContainer(),
-                  buildMainContainer(),
-                  buildOffstageEmoji(),
-                  buildOffstageAudio(),
+                  _buildInputRow(),
+                  _buildEmojiKeyboard(appLocale),
+                  _buildAudioKeyboard(deviceSize),
                 ],
               ),
             );
@@ -167,16 +180,11 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  //region MAIN CONTAINER
-
-  Visibility buildPicAndAudioContainerTop() {
+  Widget _buildAttachmentPreview() {
     return Visibility(
       visible: picAndAudioOffstateVisible,
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        width: deviceSize.width,
-        height: deviceSize.height * 0.1,
-        color: spqPrimaryBlue,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -192,22 +200,26 @@ class _NewPostPageState extends State<NewPostPage> {
                           }
 
                           player.startPlayer(
-                            fromURI: '$fileName',
+                            fromDataBuffer: Uint8List.fromList(_audio),
+                            codec: Codec.pcm16,
                           );
                         },
                       )
                     : null),
-            Center(
-              child: dataIsAudio
-                  ? InkWell(
-                      onTap: () => print("Data is Audio"),
-                      child: SvgPicture.asset(
-                          "assets/images/logo/speaq_logo_white.svg"),
-                    )
-                  : Image.file(
-                      _imageFile!,
-                      alignment: Alignment.center,
-                    ),
+            Expanded(
+              child: Center(
+                child: dataIsAudio
+                    ? InkWell(
+                        onTap: () => print("Data is Audio"),
+                        child: SvgPicture.asset(
+                            "assets/images/logo/speaq_logo_white.svg"),
+                      )
+                    : Image.file(
+                        _imageFile!,
+                        alignment: Alignment.center,
+                        fit: BoxFit.fitWidth,
+                      ),
+              ),
             ),
             Align(
               alignment: Alignment.centerRight,
@@ -229,131 +241,143 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Widget buildMainContainer() {
-    return SizedBox(
-      height: deviceSize.height * 0.08,
-      child: Row(
-        children: [
-          buildMaterial(Icons.emoji_emotions, emojiClick),
-          //buildMaterial(Icons.gif_box, null),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: TextFormField(
-                autofocus: true,
-                controller: _postController,
-                style: const TextStyle(fontSize: 20.0, color: spqBlack),
-                decoration: InputDecoration(
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        setState(
-                          () {
-                            switchOffStage("CAMERA");
-                          },
-                        );
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        size: 24,
-                      ),
+  Widget _buildInputRow() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SpeedDial(
+            childrenButtonSize: const Size(64, 64),
+            spaceBetweenChildren: 4,
+            buttonSize: const Size(34, 34),
+            childPadding: const EdgeInsets.only(left: 18),
+            children: [
+              SpeedDialChild(
+                  child: const Icon(Icons.camera_alt, color: spqBlack),
+                  onTap: () async {
+                    await getImage(true);
+                    setState(() {
+                      _imageFile = File(im.path);
+                      dataIsAudio = false;
+                      picAndAudioOffstateVisible = true;
+                      if (checkImageVisible) {
+                        checkImageVisible = !checkImageVisible;
+                      } else {
+                        checkImageVisible = true;
+                      }
+                    });
+                  }),
+              SpeedDialChild(
+                child: const Icon(Icons.image, color: spqBlack),
+                onTap: () async {
+                  await getImage(false);
+                  setState(
+                    () {
+                      _imageFile = File(im.path);
+                      dataIsAudio = false;
+                      picAndAudioOffstateVisible = true;
+                      if (checkImageVisible) {
+                        checkImageVisible = !checkImageVisible;
+                      } else {
+                        checkImageVisible = true;
+                      }
+                    },
+                  );
+                },
+              ),
+            ],
+            child: const Icon(
+              Icons.add,
+              size: 42,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: TextFormField(
+              autofocus: true,
+              controller: _postController,
+              minLines: 1,
+              maxLines: 5,
+              keyboardType: TextInputType.multiline,
+              style: const TextStyle(fontSize: 18.0, color: spqBlack),
+              decoration: InputDecoration(
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 1),
+                  child: IconButton(
+                    onPressed: _onEmojiClick,
+                    icon: const Icon(
+                      Icons.emoji_emotions_outlined,
+                      size: 30,
+                      color: spqBlack,
                     ),
                   ),
-                  hintText: 'Speaq',
-                  contentPadding: const EdgeInsets.only(
-                      left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
+                ),
+                hintText: 'Speaq',
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
               ),
             ),
           ),
-          buildAudio(),
-        ],
-      ),
-    );
-  }
-
-  Visibility buildCameraAndGalleryVisibleContainer() {
-    return Visibility(
-      child: Container(
-        height: deviceSize.height * 0.1,
-        color: spqLightGrey,
-        width: deviceSize.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildContainerCamera(),
-            Container(width: 6, color: spqWhite),
-            buildContainerGallery(),
-          ],
         ),
-      ),
-      visible: cameraOffstateVisible,
+        _buildAudioRecordButton(),
+      ],
     );
   }
-
-  Material buildMaterial(IconData icon, void Function()? onPressed) {
-    return Material(
-      child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(
-          icon,
-          color: spqBlack,
-        ),
-      ),
-    );
-  }
-
-  //endregion
 
   //region EMOJI
-  Offstage buildOffstageEmoji() {
+  Offstage _buildEmojiKeyboard(AppLocalizations appLocale) {
     return Offstage(
       offstage: !emojiKeyboardOffstateVisible,
       child: SizedBox(
         height: 280,
         child: EmojiPicker(
-            onEmojiSelected: (Category category, Emoji emoji) {
-              onEmojiSelected(emoji);
-            },
-            onBackspacePressed: _onBackspacePressed,
-            config: Config(
-                columns: 7,
-                emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
-                verticalSpacing: 0,
-                horizontalSpacing: 0,
-                initCategory: Category.RECENT,
-                bgColor: const Color(0xFFF2F2F2),
-                indicatorColor: spqPrimaryBlue,
-                iconColor: spqLightGrey,
-                iconColorSelected: spqPrimaryBlue,
-                progressIndicatorColor: spqPrimaryBlue,
-                backspaceColor: spqPrimaryBlue,
-                skinToneDialogBgColor: spqWhite,
-                skinToneIndicatorColor: spqLightGrey,
-                enableSkinTones: true,
-                showRecentsTab: true,
-                recentsLimit: 28,
-                noRecents: Text(
-                  appLocale.noRecents,
-                  style: TextStyle(fontSize: 20, color: spqBlack),
-                  textAlign: TextAlign.center,
-                ),
-                tabIndicatorAnimDuration: kTabScrollDuration,
-                categoryIcons: const CategoryIcons(),
-                buttonMode: ButtonMode.MATERIAL)),
+          onEmojiSelected: (Category category, Emoji emoji) {
+            _onEmojiSelected(emoji);
+          },
+          onBackspacePressed: _onBackspacePressed,
+          config: Config(
+            columns: 7,
+            emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+            verticalSpacing: 0,
+            horizontalSpacing: 0,
+            initCategory: Category.RECENT,
+            bgColor: const Color(0xFFF2F2F2),
+            indicatorColor: spqPrimaryBlue,
+            iconColor: spqLightGrey,
+            iconColorSelected: spqPrimaryBlue,
+            progressIndicatorColor: spqPrimaryBlue,
+            backspaceColor: spqPrimaryBlue,
+            skinToneDialogBgColor: spqWhite,
+            skinToneIndicatorColor: spqLightGrey,
+            enableSkinTones: true,
+            showRecentsTab: true,
+            recentsLimit: 28,
+            noRecents: Text(
+              appLocale.noRecents,
+              style: const TextStyle(fontSize: 20, color: spqBlack),
+              textAlign: TextAlign.center,
+            ),
+            tabIndicatorAnimDuration: kTabScrollDuration,
+            categoryIcons: const CategoryIcons(),
+            buttonMode: ButtonMode.MATERIAL,
+          ),
+        ),
       ),
     );
   }
 
-  onEmojiSelected(Emoji emoji) {
+  _onEmojiSelected(Emoji emoji) {
     _postController
       ..text += emoji.emoji
       ..selection = TextSelection.fromPosition(
-          TextPosition(offset: _postController.text.length));
+        TextPosition(offset: _postController.text.length),
+      );
   }
 
   _onBackspacePressed() {
@@ -369,7 +393,7 @@ class _NewPostPageState extends State<NewPostPage> {
       );
   }
 
-  void emojiClick() {
+  _onEmojiClick() {
     if (mainKeyboardVisible) {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     }
@@ -383,41 +407,6 @@ class _NewPostPageState extends State<NewPostPage> {
   //endregion
 
   //region CAMERA/GALLERY AND FUNCTIONALITIES
-  Padding buildContainerGallery() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () async {
-          await getImage(false);
-          setState(
-            () {
-              _imageFile = File(im.path);
-              dataIsAudio = false;
-              picAndAudioOffstateVisible = true;
-              if (checkImageVisible) {
-                checkImageVisible = !checkImageVisible;
-              } else {
-                checkImageVisible = true;
-              }
-              audioKeyboardVisible = true;
-            },
-          );
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              color: spqLightGrey, borderRadius: BorderRadius.circular(5)),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: SizedBox.fromSize(
-              size: Size.fromRadius(32), // Image radius
-              child:
-                  Image.asset('assets/images/gallery.png', fit: BoxFit.cover),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Future getImage(bool isCamera) async {
     if (isCamera) {
@@ -427,53 +416,21 @@ class _NewPostPageState extends State<NewPostPage> {
     }
   }
 
-  buildContainerCamera() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () async {
-          await getImage(true);
-          setState(() {
-            _imageFile = File(im.path);
-            dataIsAudio = false;
-            picAndAudioOffstateVisible = true;
-            if (checkImageVisible) {
-              checkImageVisible = !checkImageVisible;
-            } else {
-              checkImageVisible = true;
-            }
-            audioKeyboardVisible = true;
-          });
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: spqLightGrey,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: SizedBox.fromSize(
-              size: Size.fromRadius(32), // Image radius
-              child: const Image(
-                  image: AssetImage('assets/images/camera.png'),
-                  fit: BoxFit.cover),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   //endregion*/
 
   //region BUILD ALL BUTTONS IN KEYBOARD
 
-  Padding buildAudio() {
+  Widget _buildAudioRecordButton() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: IconButton(
-        icon: Icon(Icons.multitrack_audio),
+        icon: Icon((_hasMicrophoneAccess) ? Icons.mic : Icons.mic_off),
+        iconSize: 32,
         onPressed: () {
+          if (!_hasMicrophoneAccess) {
+            return;
+          }
+
           if (mainKeyboardVisible) {
             SystemChannels.textInput.invokeMethod('TextInput.hide');
           }
@@ -488,34 +445,39 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Widget _buildPostTextField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SpqPostTextField(
-        height: double.infinity,
-        maxLines: 30,
-        controller: _postController,
-        hintText: appLocale.newPost,
-      ),
-    );
-  }
-
   Widget _buildSendPostButton() {
     return TextButton(
       onPressed: () {
         picAndAudioOffstateVisible = false;
         _sendResource();
-        _createPost();
+        _sendPost();
       },
       child: Container(
-        child: const Text("Speaq"),
         margin: const EdgeInsets.symmetric(horizontal: 4.0),
-        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
         decoration: BoxDecoration(
           border: Border.all(color: spqPrimaryBlue, width: 1.0),
           borderRadius: const BorderRadius.all(
-            Radius.circular(16.0),
+            Radius.circular(8.0),
           ),
+          color: spqPrimaryBlue,
+        ),
+        child: Row(
+          children: const [
+            Text(
+              "Speaq",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: spqWhite,
+              ),
+            ),
+            SizedBox(width: 6),
+            Icon(
+              Icons.send,
+              size: 16,
+              color: spqWhite,
+            ),
+          ],
         ),
       ),
     );
@@ -526,20 +488,12 @@ class _NewPostPageState extends State<NewPostPage> {
     //_resourceBloc.add(SaveResource());
   }
 
-  void _createPost() {
-    Post _post = Post(
-        date: dateNow,
-        description: _postController.text,
-        resourceID: 1,
-        id: 1,
-        ownerID: widget.userID);
-    _postBloc.add(CreatePost(ownerId: widget.userID, post: _post));
-  }
+  void _sendPost() {}
 
   //endregion
 
   //region AUDIO
-  Offstage buildOffstageAudio() {
+  Widget _buildAudioKeyboard(Size deviceSize) {
     return Offstage(
       offstage: !audioKeyboardVisible,
       child: SizedBox(
@@ -565,7 +519,10 @@ class _NewPostPageState extends State<NewPostPage> {
 
                   return Text(
                     '$twoDigitMinutes:$twoDigitSeconds',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   );
                 },
               ),
@@ -578,9 +535,10 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Widget buildAudioButtonFunction() {
     return ElevatedButton(
-      child: Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 32),
       style: ElevatedButton.styleFrom(
-          fixedSize: Size(132, 132), shape: CircleBorder()),
+        fixedSize: const Size(132, 132),
+        shape: const CircleBorder(),
+      ),
       onPressed: () async {
         if (recorder.isRecording) {
           await stop();
@@ -600,36 +558,27 @@ class _NewPostPageState extends State<NewPostPage> {
           );
         }
       },
+      child: Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 32),
     );
-  }
-
-  Future initRecorder() async {
-    final status = await Permission.microphone.request();
-
-    if (status != PermissionStatus.granted) {
-      throw 'Microphone permission not granted';
-    }
-
-    await recorder.openRecorder();
-    isRecorderReady = true;
-
-    final directory = await getApplicationDocumentsDirectory();
-    path = directory.path;
-
-    recorder.setSubscriptionDuration(
-      const Duration(milliseconds: 500),
-    );
-    await initializeDateFormatting();
   }
 
   Future record() async {
     if (!isRecorderReady) return;
-    //await recorder.startRecorder(toFile: 'audio');
-    print('recording....');
+    _audio.clear();
+    var recordingDataController = StreamController<Food>();
+    _mRecordingDataSubscription =
+        recordingDataController.stream.listen((buffer) {
+      if (buffer is FoodData) {
+        _audio.addAll(buffer.data!);
+      }
+    });
+
     await recorder.startRecorder(
-      toFile: '$fileName',
-      //codec: Codec.aacMP4,
+      toStream: recordingDataController.sink,
+      codec: Codec.pcm16,
     );
+
+    setState(() {});
   }
 
   Future stop() async {
@@ -644,15 +593,19 @@ class _NewPostPageState extends State<NewPostPage> {
   //endregion
 
   @override
-  void dispose() {
+  void dispose() async {
+    super.dispose();
     player.stopPlayer();
     player.closePlayer();
     recorder.closeRecorder();
     _postController.dispose();
+    if (_mRecordingDataSubscription != null) {
+      await _mRecordingDataSubscription!.cancel();
+      _mRecordingDataSubscription = null;
+    }
 
     _postBloc.close();
 
     isRecorderReady = false;
-    super.dispose();
   }
 }

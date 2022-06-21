@@ -17,14 +17,16 @@ class GRPCPostService implements PostService {
       ClientChannel(
         ip,
         port: port,
-        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options:
+            const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
   }
 
   @override
   Future<List<Post>> getPosts(int id) async {
-    GetPostsResponse response = await _client.getPosts(GetPostsRequest()..userId = Int64(id));
+    GetPostsResponse response =
+        await _client.getPosts(GetPostsRequest()..userId = Int64(id));
 
     List<Post> postList = <Post>[];
 
@@ -36,11 +38,14 @@ class GRPCPostService implements PostService {
           id: response.postList.elementAt(i).postId.toInt(),
           resourceID: response.postList.elementAt(i).resourceId.toInt(),
           //date: DateTime.parse(response.postList.elementAt(i).date.toString()),
-          date: DateTime.fromMillisecondsSinceEpoch(response.postList.elementAt(i).date.toInt() * 1000, isUtc: true),
+          date: DateTime.fromMillisecondsSinceEpoch(
+              response.postList.elementAt(i).date.toInt() * 1000,
+              isUtc: true),
           description: response.postList.elementAt(i).description,
           ownerID: response.postList.elementAt(i).ownerId.toInt(),
           numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
-          numberOfComments: response.postList.elementAt(i).numberOfComments.toInt(),
+          numberOfComments:
+              response.postList.elementAt(i).numberOfComments.toInt(),
           ownerName: response.postList.elementAt(i).ownerName,
           ownerUsername: response.postList.elementAt(i).ownerUsername,
         ),
@@ -51,11 +56,17 @@ class GRPCPostService implements PostService {
   }
 
   @override
-  Future<void> createPost({required int ownerId, required Post post}) async {
+  Future<void> createPost({
+    required String description,
+    String? resourceData,
+    String? resourceMimeType,
+  }) async {
     await _client.createPost(
       CreatePostRequest()
-        ..ownerId = Int64(ownerId)
-        ..description = post.description,
+        ..ownerId = Int64(1)
+        ..description = description
+        ..resourceData = (resourceData != null) ? resourceData : ""
+        ..resourceMimeType = (resourceMimeType != null) ? resourceMimeType : "",
     );
   }
 }

@@ -36,13 +36,11 @@ func New() data.Service {
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),
-				Name:     "testImage",
 				MIMEType: "image/jpeg",
 				Size:     83935,
 			},
 			2: {ID: 2,
 				Data:     string(bc),
-				Name:     "testImageKarl",
 				MIMEType: "image/png",
 				Size:     1111111,
 			},
