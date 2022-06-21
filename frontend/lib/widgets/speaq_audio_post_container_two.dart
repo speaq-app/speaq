@@ -1,54 +1,34 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
-class SpqAudioPostContainer extends StatefulWidget {
-  final String audioUrl;
+class SpqAudioPostContainerTwo extends StatefulWidget {
+  final Uint8List audioUrl;
 
-  const SpqAudioPostContainer({
+  const SpqAudioPostContainerTwo({
     required this.audioUrl,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SpqAudioPostContainer> createState() => _SpqAudioPostContainerState();
+  State<SpqAudioPostContainerTwo> createState() => _SpqAudioPostContainerTwoState();
 }
 
-class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
-  bool isPlaying = false;
+class _SpqAudioPostContainerTwoState extends State<SpqAudioPostContainerTwo> {
+  FlutterSoundPlayer player = FlutterSoundPlayer();
 
   Duration duration = Duration.zero;
 
   Duration position = Duration.zero;
 
-  Future setAudio() async {
-    audioPlayer.setReleaseMode(ReleaseMode.STOP);
-    final player = AudioCache(prefix: 'assets/audio/');
-    final url = await player.load('audio.mp3');
-    audioPlayer.setUrl(url.path, isLocal: true);
-  }
-
-  final AudioPlayer audioPlayer = AudioPlayer();
-
   @override
   void initState() {
-    //Change from Hardcoded
-    setAudio();
-    audioPlayer.onPlayerStateChanged.listen((state) {
-      setState(() {
-        isPlaying = state == PlayerState.PLAYING;
-      });
-    });
-    audioPlayer.onDurationChanged.listen((newDuration) {
-      setState(() {
-        duration = newDuration;
-      });
-    });
-    audioPlayer.onAudioPositionChanged.listen((newPosition) {
-      setState(() {
-        position = newPosition;
-      });
-    });
     super.initState();
+
+    //Set States
+
+    player.openPlayer();
   }
 
   @override
@@ -61,14 +41,16 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
               radius: 20,
               child: IconButton(
                 icon: Icon(
-                  isPlaying ? Icons.pause : Icons.play_arrow,
+                  player.isPlaying ? Icons.pause : Icons.play_arrow,
                 ),
                 iconSize: 25,
                 onPressed: () async {
-                  if (isPlaying) {
-                    await audioPlayer.pause();
+                  if (player.isPlaying) {
+                    await player.pausePlayer();
+                  } else if (player.isPaused) {
+                    await player.resumePlayer();
                   } else {
-                    await audioPlayer.resume();
+                    await player.startPlayer(fromDataBuffer: widget.audioUrl, codec: Codec.mp3);
                   }
                 },
               ),
@@ -79,8 +61,8 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
               value: position.inSeconds.toDouble(),
               onChanged: (value) async {
                 final position = Duration(seconds: value.toInt());
-                await audioPlayer.seek(position);
-                await audioPlayer.resume();
+                await player.seekToPlayer(position);
+                await player.resumePlayer();
               },
             ),
           ],

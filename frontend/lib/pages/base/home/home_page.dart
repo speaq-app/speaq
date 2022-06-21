@@ -55,8 +55,7 @@ class _HomePageState extends State<HomePage> {
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(
-                  resourceId: state.profile.profileImageResourceId));
+              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
             }
           },
           builder: (context, state) {
@@ -106,8 +105,7 @@ class _HomePageState extends State<HomePage> {
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0,
-                duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -184,7 +182,8 @@ class _HomePageState extends State<HomePage> {
                 username: state.postList.elementAt(index).ownerUsername,
                 creationTime: state.postList.elementAt(index).date,
                 postMessage: state.postList.elementAt(index).description,
-                resourceID: -1, //change
+                // resourceID: -1, //change
+                resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
                 numberOfComments: state.postList.elementAt(index).numberOfComments,
                 mimeType: state.postList.elementAt(index).mimeType,

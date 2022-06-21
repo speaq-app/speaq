@@ -26,6 +26,10 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+	be,err := ioutil.ReadFile("testAudio.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	passHash, err := bcrypt.GenerateFromPassword([]byte("password"), 10)
 	if err != nil {
 		log.Fatal(err)
@@ -52,7 +56,7 @@ func New() data.Service {
 				MIMEType: "gif",
 				Size:     1111111},
 			4: {ID: 4,
-				Data:     string(bc),
+				Data:     string(be),
 				Name:     "testAudio",
 				MIMEType: "audio",
 				Size:     1111111},
@@ -156,7 +160,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now(),
 				Description: "Now",
-				ResourceID:  3,
+				ResourceID:  2,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -166,7 +170,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "gif",
+				MimeType: "image",
 			},
 
 			2: {
@@ -174,7 +178,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -1),
 				Description: "Eine Minute",
-				ResourceID:  3,
+				ResourceID:  1,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -184,7 +188,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "gif",
+				MimeType: "image",
 			},
 
 			3: {

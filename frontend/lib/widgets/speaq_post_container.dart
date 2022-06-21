@@ -5,7 +5,7 @@ import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/speaq_audio_post_container.dart';
+import 'package:frontend/widgets/speaq_audio_post_container_two.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +31,7 @@ class PostContainer extends StatelessWidget {
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
-    required this.mimeType, //get From Post
+    required this.mimeType,
     this.resourceID = -1, //-1 equals Text Post since no Resource
     this.postMessage = "",
   }) : super(key: key);
@@ -190,39 +190,25 @@ class PostContainer extends StatelessWidget {
       bloc: _resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: _getCorrectPostTypeWidget(false),
-          );
+          switch (mimeType) {
+            case "image":
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image(image: MemoryImage(state.decodedData)),
+              );
+
+            //Not working
+            case "audio":
+              return SpqAudioPostContainerTwo(audioUrl: state.decodedData);
+
+            default:
+              return const Text("Type ot implemented");
+          }
         } else {
-          return _getCorrectPostTypeWidget(true);
+          return const SizedBox(height: 0);
         }
       },
     );
-  }
-
-  Widget _getCorrectPostTypeWidget(bool isLoading) {
-    const String testImageResource = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
-    const String testGifResource = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
-    // final String testVideo = "";
-    //const String testAudio = "";
-
-    switch (mimeType) {
-      case "image":
-        return isLoading ? Image.network(testImageResource) : Image.network(testImageResource);
-
-      case "gif":
-        return isLoading ? Image.network(testGifResource) : Image.network(testGifResource);
-
-      // case "video":
-      //   return isLoading ? const Text("video loading") : const Text("video");
-
-      case "audio":
-        return isLoading ? const Text("audio loading") : const Text("audio");
-
-      default:
-        return const SizedBox(height: 0);
-    }
   }
 
   Widget _buildReactionList() {

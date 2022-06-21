@@ -57,6 +57,7 @@ dependencies:
 
   #Audio-Player
   audioplayers: ^0.20.1
+  flutter_sound: ^9.2.1
 
   # API
   protobuf: ^2.0.1
