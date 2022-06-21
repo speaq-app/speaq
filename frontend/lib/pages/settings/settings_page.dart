@@ -42,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      "@eric",
+                      "@karless",
                       style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -86,6 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  /// Returns a [SettingsTile] an Element for the Listview.
   SettingsTile _buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),

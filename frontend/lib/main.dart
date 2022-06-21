@@ -65,7 +65,7 @@ class Speaq extends StatelessWidget {
           initialRoute: 'main',
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: LocaleProvider.allSupportedLocales,
-          locale: Locale('de'),
+          locale: const Locale('de'),
           onGenerateRoute: RouteGenerator.generateRoute,
         );
       },
@@ -82,7 +82,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return FutureBuilder<bool>(
-      future: verifyToken("Token aus Cache laden!!!!!!!!"),
+      future: verifyToken("Token aus Cache laden!"),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const LoginPage();

@@ -7,7 +7,8 @@ class PrivacySafetySettingsPage extends StatefulWidget {
   const PrivacySafetySettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<PrivacySafetySettingsPage> createState() => _PrivacySafetySettingsPageState();
+  State<PrivacySafetySettingsPage> createState() =>
+      _PrivacySafetySettingsPageState();
 }
 
 class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {

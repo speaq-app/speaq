@@ -1,7 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/services.dart';
-//Quelle https://stackoverflow.com/questions/59427590/flutter-multiline-with-max-lines
+// Source https://stackoverflow.com/questions/59427590/flutter-multiline-with-max-lines
 
 class MaxLinesTextInputFormatter extends TextInputFormatter {
   MaxLinesTextInputFormatter(this.maxLines) : assert(maxLines == -1 || maxLines > 0);

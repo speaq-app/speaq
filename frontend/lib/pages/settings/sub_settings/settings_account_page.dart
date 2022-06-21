@@ -13,11 +13,10 @@ class AccountSettingsPage extends StatefulWidget {
 }
 
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
-  late AppLocalizations appLocale;
 
   @override
   Widget build(BuildContext context) {
-    appLocale = AppLocalizations.of(context)!;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -80,7 +79,9 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
+      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg",
+          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3
+      ),
     );
   }
 

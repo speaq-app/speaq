@@ -7,7 +7,8 @@ class ContentPrefSettingsPage extends StatefulWidget {
   const ContentPrefSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<ContentPrefSettingsPage> createState() => _ContentPrefSettingsPageState();
+  State<ContentPrefSettingsPage> createState() =>
+      _ContentPrefSettingsPageState();
 }
 
 class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
@@ -51,6 +52,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
     );
   }
 
+  /// Creates and returns one element for [SettingsList].
   SettingsTile _buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),

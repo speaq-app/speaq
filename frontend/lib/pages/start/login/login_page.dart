@@ -29,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
-
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);

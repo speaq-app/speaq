@@ -168,6 +168,7 @@ class RouteGenerator {
     }
   }
 
+  /// If e.g. a wrong route has been selected, an error occurs in the [AppBar].
   static _errorRoute() {
     return MaterialPageRoute(
       builder: (context) {

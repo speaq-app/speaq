@@ -19,7 +19,7 @@ class PostContainer extends StatelessWidget {
   final String postType;
   final String postMessage;
 
-  //As Widget or IDs or Strings?
+  // As Widget or IDs or Strings?
   final int resourceID;
 
   const PostContainer({
@@ -30,8 +30,8 @@ class PostContainer extends StatelessWidget {
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
-    this.postType = "text", //get From Post
-    this.resourceID = -1, //-1 equals Text Post since no Resource
+    this.postType = "text", // Get from Post.
+    this.resourceID = -1, // -1 equals Text Post since no Resource.
     this.postMessage = "",
   }) : super(key: key);
 
@@ -50,7 +50,8 @@ class PostContainer extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          leading: _buildOwnerPicture(_profileBloc, _resourceBlocProfile), //Get Profile from OwnerID and make BlocPattern as on homepage
+          // Get Profile from OwnerID and make BlocPattern as on homepage.
+          leading: _buildOwnerPicture(_profileBloc, _resourceBlocProfile),
           title: _buildPostTitle(),
           subtitle: _buildContent(appLocale, _resourceBlocPost),
         ),
@@ -58,15 +59,15 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildOwnerPicture(ProfileBloc _profileBloc, ResourceBloc _resourceBlocProfile) {
+  Widget _buildOwnerPicture(ProfileBloc profileBloc, ResourceBloc resourceBlocProfile) {
     return BlocBuilder<ProfileBloc, ProfileState>(
-      bloc: _profileBloc,
+      bloc: profileBloc,
       builder: (context, state) {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
-          _resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
+          resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
           return BlocBuilder<ResourceBloc, ResourceState>(
-            bloc: _resourceBlocProfile,
+            bloc: resourceBlocProfile,
             builder: (context, state) {
               if (state is ResourceLoaded) {
                 return CircleAvatar(
@@ -127,7 +128,7 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(AppLocalizations appLocale, ResourceBloc _resourceBlocPost) {
+  Widget _buildContent(AppLocalizations appLocale, ResourceBloc resourceBlocPost) {
     final String formattedDate = _formatDate(appLocale);
 
     return Column(
@@ -139,7 +140,7 @@ class PostContainer extends StatelessWidget {
           style: const TextStyle(color: spqBlack, fontSize: 15),
         ),
         const SizedBox(height: 10),
-        _buildCorrectPostItem(_resourceBlocPost),
+        _buildCorrectPostItem(resourceBlocPost),
         const SizedBox(height: 5),
         _buildReactionList(),
         _buildDateAndDivider(formattedDate),
@@ -188,9 +189,9 @@ class PostContainer extends StatelessWidget {
     return appLocale.dateAt + formatter.format(creationTime);
   }
 
-  Widget _buildCorrectPostItem(ResourceBloc _resourceBlocPost) {
+  Widget _buildCorrectPostItem(ResourceBloc resourceBlocPost) {
     return BlocBuilder<ResourceBloc, ResourceState>(
-      bloc: _resourceBlocPost,
+      bloc: resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
           return ClipRRect(
@@ -204,7 +205,7 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  //Get Correct Post-Data
+  // Get Correct Post-Data.
   Widget _getCorrectPostTypeWidget(bool isShimmer) {
     switch (postType) {
       case "image":

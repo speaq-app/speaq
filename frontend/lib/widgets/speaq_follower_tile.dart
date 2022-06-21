@@ -12,7 +12,14 @@ class FollowerTile extends StatefulWidget {
   final bool checkFollowing;
   final Function() onPop;
 
-  const FollowerTile({Key? key, required this.follower, required this.followerImage, this.checkFollowing = false, required this.userID, required this.onPop}) : super(key: key);
+  const FollowerTile(
+      {Key? key,
+      required this.follower,
+      required this.followerImage,
+      this.checkFollowing = false,
+      required this.userID,
+      required this.onPop})
+      : super(key: key);
 
   @override
   State<FollowerTile> createState() => _FollowerTileState();
@@ -26,27 +33,30 @@ class _FollowerTileState extends State<FollowerTile> {
   void initState() {
     super.initState();
 
-    if (widget.checkFollowing) {
-      // followerBloc.add(Chec)
-    }
+    if (widget.checkFollowing) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations appLocale = AppLocalizations.of(context)!;
-
     return ListTile(
-      onTap: () => Navigator.pushNamed(context, "profile", arguments: [widget.follower.id.toInt(), false, widget.userID]).then((value) => widget.onPop),
-      leading: Hero(tag: widget.followerImage, child: CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07)),
+      onTap: () => Navigator.pushNamed(context, "profile",
+              arguments: [widget.follower.id.toInt(), false, widget.userID])
+          .then((value) => widget.onPop),
+      leading: Hero(
+          tag: widget.followerImage,
+          child:
+              CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07)),
       title: Text(
         widget.follower.name,
-        style: const TextStyle(fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
+        style: const TextStyle(
+            fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
       ),
       subtitle: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.follower.username, style: const TextStyle(fontSize: 16.0, color: spqLightGrey)),
+          Text(widget.follower.username,
+              style: const TextStyle(fontSize: 16.0, color: spqLightGrey)),
         ],
       ),
       isThreeLine: false,

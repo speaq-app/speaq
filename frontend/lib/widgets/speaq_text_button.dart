@@ -24,10 +24,11 @@ class SpqTextButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: buttonPrimary,
         shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            side: BorderSide(
-              color: borderColor,
-            )),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          side: BorderSide(
+            color: borderColor,
+          ),
+        ),
       ),
       child: Text(
         name,
