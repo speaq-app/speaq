@@ -9,6 +9,7 @@ import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
+import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
 import 'package:frontend/widgets/spq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
@@ -53,7 +54,8 @@ class _HomePageState extends State<HomePage> {
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+              _resourceBloc.add(LoadResource(
+                  resourceId: state.profile.profileImageResourceId));
             }
           },
           builder: (context, state) {
@@ -101,7 +103,8 @@ class _HomePageState extends State<HomePage> {
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0,
+                duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -166,6 +169,7 @@ class _HomePageState extends State<HomePage> {
     return ListView(
       controller: _scrollController,
       children: [
+        const SpqAudioPostContainer(),
         ListView.builder(
           controller: _scrollController,
           itemCount: state.postList.length + 1,
@@ -178,9 +182,11 @@ class _HomePageState extends State<HomePage> {
                 username: state.postList.elementAt(index).ownerUsername,
                 creationTime: state.postList.elementAt(index).date,
                 postMessage: state.postList.elementAt(index).description,
-                resourceID: -1, //Only Text
+                resourceID: -1,
+                //Only Text
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                numberOfComments: state.postList.elementAt(index).numberOfComments,
+                numberOfComments:
+                    state.postList.elementAt(index).numberOfComments,
               );
             }
             return _buildFeedFooter(appLocale);
