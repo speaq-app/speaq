@@ -38,35 +38,35 @@ class PostContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-    final ResourceBloc _resourceBlocPost = ResourceBloc();
-    final ResourceBloc _resourceBlocProfile = ResourceBloc();
-    final ProfileBloc _profileBloc = ProfileBloc();
-    _profileBloc.add(LoadProfile(userId: ownerID));
+    final ResourceBloc resourceBlocPost = ResourceBloc();
+    final ResourceBloc resourceBlocProfile = ResourceBloc();
+    final ProfileBloc profileBloc = ProfileBloc();
+    profileBloc.add(LoadProfile(userId: ownerID));
 
     if (resourceID >= 0) {
-      _resourceBlocPost.add(LoadResource(resourceId: resourceID));
+      resourceBlocPost.add(LoadResource(resourceId: resourceID));
     }
 
     return Column(
       children: [
         ListTile(
-          leading: _buildOwnerPicture(_profileBloc, _resourceBlocProfile), //Get Profile from OwnerID and make BlocPattern as on homepage
+          leading: _buildOwnerPicture(profileBloc, resourceBlocProfile), //Get Profile from OwnerID and make BlocPattern as on homepage
           title: _buildPostTitle(),
-          subtitle: _buildContent(appLocale, _resourceBlocPost),
+          subtitle: _buildContent(appLocale, resourceBlocPost),
         ),
       ],
     );
   }
 
-  Widget _buildOwnerPicture(ProfileBloc _profileBloc, ResourceBloc _resourceBlocProfile) {
+  Widget _buildOwnerPicture(ProfileBloc profileBloc, ResourceBloc resourceBlocProfile) {
     return BlocBuilder<ProfileBloc, ProfileState>(
-      bloc: _profileBloc,
+      bloc: profileBloc,
       builder: (context, state) {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
-          _resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
+          resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
           return BlocBuilder<ResourceBloc, ResourceState>(
-            bloc: _resourceBlocProfile,
+            bloc: resourceBlocProfile,
             builder: (context, state) {
               if (state is ResourceLoaded) {
                 return CircleAvatar(
@@ -127,7 +127,7 @@ class PostContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(AppLocalizations appLocale, ResourceBloc _resourceBlocPost) {
+  Widget _buildContent(AppLocalizations appLocale, ResourceBloc resourceBlocPost) {
     final String formattedDate = _formatDate(appLocale);
 
     return Column(
@@ -139,7 +139,7 @@ class PostContainer extends StatelessWidget {
           style: const TextStyle(color: spqBlack, fontSize: 15),
         ),
         const SizedBox(height: 10),
-        _buildCorrectPostItem(_resourceBlocPost),
+        _buildCorrectPostItem(resourceBlocPost),
         const SizedBox(height: 5),
         _buildReactionList(),
         _buildDateAndDivider(formattedDate),
@@ -188,9 +188,9 @@ class PostContainer extends StatelessWidget {
     return appLocale.dateAt + formatter.format(creationTime);
   }
 
-  Widget _buildCorrectPostItem(ResourceBloc _resourceBlocPost) {
+  Widget _buildCorrectPostItem(ResourceBloc resourceBlocPost) {
     return BlocBuilder<ResourceBloc, ResourceState>(
-      bloc: _resourceBlocPost,
+      bloc: resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
           return ClipRRect(

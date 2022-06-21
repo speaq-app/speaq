@@ -23,9 +23,9 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.privacyandsafety,
+            appLocale.privacyAndSafety,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Stack(children: [
@@ -38,7 +38,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                 tiles: [
                   //Privates Konto SwitchTile
                   SettingsTile.switchTile(
-                    title: Text(appLocale.privateAccount, style: TextStyle(fontSize: 15)),
+                    title: Text(appLocale.privateAccount, style: const TextStyle(fontSize: 15)),
                     initialValue: valuePrivateSwitch,
                     onToggle: (value) {
                       setState(() {
@@ -47,15 +47,15 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                     },
                   ),
                   //Suchverlauf löschen
-                  _buildPopUpWindow(appLocale.deletesearchhistory, appLocale.askdeletesearchhistory, appLocale.delete),
+                  _buildPopUpWindow(appLocale.deleteSearchHistory, appLocale.askDeleteSearchHistory, appLocale.delete),
                 ],
               ),
             ],
           ),
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
           )
         ]),
       ),

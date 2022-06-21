@@ -22,7 +22,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.contentpreferences,
+            appLocale.contentPreferences,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),
@@ -42,9 +42,9 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
             ],
           ),
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
           )
         ]),
       ),

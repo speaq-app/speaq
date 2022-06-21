@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class SpqTextButton extends StatelessWidget {
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String name;
   final TextStyle textStyle;
   final Color borderColor;

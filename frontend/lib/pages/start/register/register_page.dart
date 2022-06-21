@@ -61,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
               autofill: const [AutofillHints.name],
               hintText: appLocale.username,
               controller: _nameController,
-              labelTex: appLocale.username,
+              labelText: appLocale.username,
               onChanged: (value) {},
               icon: Icons.person,
               borderColor: Border.all(color: spqLightBlack),
@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
           RoundTextField(
             autofill: const [AutofillHints.newPassword],
             hintText: appLocale.password,
-            labelTex: _passwordStrength == 0
+            labelText: _passwordStrength == 0
                 ? appLocale.password
                 : _passwordStrength <= 2 / 4
                     ? appLocale.passwordMin
@@ -95,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
           RoundTextField(
             autofill: const [AutofillHints.password],
             hintText: appLocale.passwordCheck,
-            labelTex: appLocale.passwordCheck,
+            labelText: appLocale.passwordCheck,
             isHidden: true,
             icon: Icons.lock,
             controller: _passwordCheckController,
@@ -127,6 +127,24 @@ class _RegisterPageState extends State<RegisterPage> {
                       message: appLocale.errorUsernameAlreadyTaken,
                       duration: const Duration(seconds: 5),
                     ).show(context);
+                    break;
+                  case 1101:
+                    Flushbar(
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      message: appLocale.errorUsernameAlreadyTaken,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                    break;
+                  case 1103:
+                    Flushbar(
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      message: appLocale.errorUsernameAlreadyTaken,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                    break;
+
                 }
               } else if (state is RegisterSuccess) {
                 Navigator.pop(context);

@@ -37,9 +37,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     //Change from Hardcoded
-    _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
+    _profileBloc.add(LoadProfile(userId: widget.userID, fromCache: false));
     //If no internet connection Load from cache?
-    _postBloc.add(LoadPosts(userId: 1));
+    _postBloc.add(LoadPosts(userId: widget.userID));
     super.initState();
   }
 
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _pullRefresh() async {
     //Change from Hardcoded
-    _postBloc.add(LoadPosts(userId: 1));
+    _postBloc.add(LoadPosts(userId: widget.userID));
     _scrollController.jumpTo(0);
   }
 

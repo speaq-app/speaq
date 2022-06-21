@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:frontend/api/auth_service.dart';
+import 'package:frontend/api/grpc/grpc_auth_service.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
+import 'package:frontend/api/grpc/protos/auth.pbgrpc.dart';
 import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:grpc/grpc.dart';
@@ -10,7 +13,7 @@ part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserService _userService = GRPCUserService();
+  final AuthService _authService = GRPCAuthService();
 
   AuthenticationBloc() : super(AuthenticationInitial()) {
     on<LoggingIn>(_onLogin);
@@ -20,28 +23,18 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   void _onLogin(LoggingIn event, Emitter<AuthenticationState> emit) async {
     emit(TryLoggingIn());
-    LoginResponse resp;
 
+    LoginResponse resp;
     try {
       //REAL LOGIN
-      //resp = await _userService.login(username: event.username, password: event.password);
+      //resp = await _authService.loginUser(username: event.username, password: event.password);
 
-      resp = await _userService.login(username: "essiggurke", password: "password");
-
+      //INSTANT LOGIN
+      resp = await _authService.loginUser(username: "nomoruyi", password: "password");
 
       emit(LogInSuccess(userID: resp.userId.toInt(), token: resp.token));
-
-      print("Login Success !");
-    } on GrpcError catch (err) {
-      print("Login Failed GRPC ERROR!:$err");
-      print("Login Failed GRPC ERROR!:${err.runtimeType}");
-
-      emit(LogInFail(message: "ERROR: ${err.message}"));
-    } catch (err) {
-      print("Login Failed ERROR!:$err");
-      print("Login Failed ERROR!:${err.runtimeType}");
-
-      emit(LogInFail(message: err.toString()));
+    } on GrpcError catch (e) {
+      emit(LoginError(e.code));
     }
   }
 

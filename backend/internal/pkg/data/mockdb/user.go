@@ -195,5 +195,4 @@ func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	s.users[userID] = u
 
 	return !c, nil
-
 }

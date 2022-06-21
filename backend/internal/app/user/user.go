@@ -2,15 +2,10 @@ package user
 
 import (
 	"context"
-	"errors"
-	"github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
-	"log"
-	"time"
-
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"log"
 )
 
 type Server struct {
@@ -98,9 +93,11 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest
 	for _, u := range us {
 
 		fu = append(fu, &FollowUser{
-			Id:       u.ID,
-			Name:     u.Profile.Name,
-			Username: u.Profile.Username,
+			Id:                     u.ID,
+			Name:                   u.Profile.Name,
+			Username:               u.Profile.Username,
+			ProfileImageBlurHash:   u.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: u.Profile.ProfileImageResourceID,
 		})
 	}
 
@@ -155,55 +152,6 @@ func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) 
 	return &FollowUnfollowResponse{
 		IsFollowing: f,
 	}, nil
-}
-
-func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
-	hash, id, err := s.DataService.PasswordHashAndIDByUsername(req.Username)
-	if err != nil {
-		return nil, err
-	}
-
-	passwordValid := CheckPasswordHash(hash, req.Password)
-	if !passwordValid {
-		return nil, errors.New("wrong password")
-	}
-
-	/*	if err := bcrypt.CompareHashAndPassword(hash, []byte(req.Password)); err != nil {
-			return nil, errors.New("wrong password")
-		}
-	*/
-	token, err := GenerateJWT(req.Username, "User")
-	if err != nil {
-		return nil, err
-	}
-
-	return &LoginResponse{
-		UserId: id,
-		Token:  token,
-	}, nil
-}
-
-func CheckPasswordHash(hash []byte, password string) bool {
-	err := bcrypt.CompareHashAndPassword(hash, []byte(password))
-	return err == nil
-}
-
-func GenerateJWT(username, role string) (string, error) {
-	mySigningKey := []byte("Sheeesh")
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-
-	claims["authorized"] = true
-	claims["username"] = username
-	claims["role"] = role
-	claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
-
-	tokenString, err := token.SignedString(mySigningKey)
-
-	if err != nil {
-		return "", errors.New("token couldn't be generated")
-	}
-	return tokenString, nil
 }
 
 /*func verifyToken(token string) (string, error) {

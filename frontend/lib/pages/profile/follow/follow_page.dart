@@ -5,6 +5,7 @@ import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
@@ -21,25 +22,23 @@ class FollowPage extends StatefulWidget {
 class _FollowPageState extends State<FollowPage> {
   final FollowerBloc _followerBloc = FollowerBloc();
   final ProfileBloc _profileBloc = ProfileBloc();
-  late final User? _user;
+  final ResourceBloc _resourceBloc = ResourceBloc();
 
-  late int followerCount = 0;
-  late int followingCount = 0;
 
-  List<FollowUser> follower = [];
-  List<FollowUser> following = [];
+  int _followerCount = 0;
+  int _followingCount = 0;
+
+  List<FollowUser> _follower = [];
+  List<FollowUser> _following = [];
 
   @override
   void initState() {
     super.initState();
-    //_user=widget.user;
-    _user = User(
-      id: 1,
-      profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
-      followerIDs: [2, 3],
-      followingIDs: [2, 3],
-      password: 'OpenToWork',
-    );
+
+    _followerBloc.add(LoadFollowerIDs(userId: widget.user.id));
+  }
+
+  Future<void> refresh() async {
     _followerBloc.add(LoadFollowerIDs(userId: widget.user.id));
   }
 
@@ -59,22 +58,17 @@ class _FollowPageState extends State<FollowPage> {
             bloc: _followerBloc,
             listener: (context, state) async {
               if (state is FollowerIDsLoaded) {
-                var follower = state.followerIDs;
-                print(follower);
-                followerCount = state.followerIDs.length;
-                followingCount = state.followingIDs.length;
+                _followerCount = state.followerIDs.length;
+                _followingCount = state.followingIDs.length;
 
                 _followerBloc.add(LoadFollower(followerIDs: state.followerIDs, followingIDs: state.followingIDs));
+              }else if(state is FollowerLoaded) {
+                _follower = state.follower;
+                _following = state.following;
               }
             },
             builder: (context, state) {
               if (state is FollowerLoaded) {
-                followerCount = state.follower.length;
-                followingCount = state.following.length;
-
-                follower = state.follower;
-                following = state.following;
-
                 return Scaffold(
                   appBar: TabBar(
                     indicatorWeight: 1.5,
@@ -88,7 +82,7 @@ class _FollowPageState extends State<FollowPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            "$followerCount ${appLocale.follower}",
+                            "$_followerCount ${appLocale.follower}",
                             style: const TextStyle(fontSize: 20),
                           ),
                         ),
@@ -98,14 +92,14 @@ class _FollowPageState extends State<FollowPage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Text(
-                              "$followingCount ${appLocale.following}",
+                              "$_followingCount ${appLocale.following}",
                               style: const TextStyle(fontSize: 20),
                             ),
                           )),
                     ],
                   ),
                   body: TabBarView(
-                    children: [_buildFollowerList(deviceSize, follower), _buildFollowingList(deviceSize, following)],
+                    children: [_buildFollowerList(deviceSize, _follower), _buildFollowingList(deviceSize, _following)],
                   ),
                 );
               } else {
@@ -122,7 +116,7 @@ class _FollowPageState extends State<FollowPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            "$followerCount ${appLocale.follower}",
+                            "$_followerCount ${appLocale.follower}",
                             style: const TextStyle(fontSize: 20),
                           ),
                         ),
@@ -132,7 +126,7 @@ class _FollowPageState extends State<FollowPage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Text(
-                              "$followingCount ${appLocale.following}",
+                              "$_followingCount ${appLocale.following}",
                               style: const TextStyle(fontSize: 20),
                             ),
                           )),
@@ -156,67 +150,45 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  Widget _buildFollowingList(Size deviceSize, List<FollowUser> followerList) {
+  Widget _buildFollowerList(Size deviceSize, List<FollowUser> followerList) {
     return Column(
       children: [
         SizedBox(
           height: deviceSize.height * 0.75,
-          child: _buildTiles(followerList, false),
+          child: _buildFollowList(deviceSize, followerList),
         ),
       ],
     );
   }
 
-  Widget _buildFollowerList(Size deviceSize, List<FollowUser> followingList) {
+  Widget _buildFollowingList(Size deviceSize, List<FollowUser> followingList) {
     return Column(
       children: [
         SizedBox(
           height: deviceSize.height * 0.75,
-          child: _buildTiles(followingList, true),
+          child: _buildFollowList(deviceSize, followingList),
         ),
       ],
     );
   }
 
-  Future<void> refresh() async {
-    _followerBloc.add(LoadFollowerIDs(userId: widget.user.id));
-  }
-
-  Widget _buildTiles(List<FollowUser> followerList, bool checkFollowing) {
+  Widget _buildFollowList(Size deviceSize, List<FollowUser> followUserList) {
     return RefreshIndicator(
       onRefresh: refresh,
       child: ListView.builder(
           shrinkWrap: false,
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           itemBuilder: (context, index) {
-            FollowUser currentFollower = followerList[index];
-            //Hier image von Server laden
-            Image availableImage;
-            print(currentFollower.username);
-            /*Try catch funktioniert noch nicht, wenn ich überprüfen will, ob eine URL gültig ist. Daher auskommentiert*/
-/*
-                          if (contact.image != null && contact.image != '') {
-                            try{
-                              availableImage = Image.network(contact.image!);
-                            }on ArgumentError catch(err){
-                              availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                              print("URI for ${contact.firstname} ${contact.lastname}is invalid");
-                            }
-                          } else {
-                            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
-                          }
-                          */
-
-            availableImage = Image.asset('resources/images/no_profile_picture.jpg');
+            FollowUser currentFollower = followUserList[index];
+            print("${currentFollower.profileImageBlurHash} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             return FollowerTile(
               follower: currentFollower,
-              followerImage: currentFollower.username,
               userID: widget.user.id,
               onPop: refresh,
             );
           },
-          itemCount: followerList.length),
+          itemCount: followUserList.length),
     );
   }
 

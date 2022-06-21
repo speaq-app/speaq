@@ -24,7 +24,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
           title: Text(
             appLocale.notifications,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Stack(children: [
@@ -36,18 +36,18 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                 ),
                 tiles: [
                   //Privates Konto SwitchTile
-                  buildSettingsSwitchTile(appLocale.notdisturb),
+                  buildSettingsSwitchTile(appLocale.doNotDisturb),
                   //Methode für SettingsTile
-                  _buildSettingsTile(appLocale.receivenotifications, "login"),
+                  _buildSettingsTile(appLocale.receiveNotifications, "login"),
                   _buildSettingsTile(appLocale.notificationSound, "login"),
                 ],
               ),
             ],
           ),
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
           )
         ]),
       ),

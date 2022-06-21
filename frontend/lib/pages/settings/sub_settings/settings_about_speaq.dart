@@ -22,7 +22,7 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
       child: Scaffold(
         appBar: SpqAppBar(
           title: Text(
-            appLocale.aboutspeaq,
+            appLocale.aboutSpeaq,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),
@@ -50,12 +50,12 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
   Column buildColumnForTeam(Size deviceSize) {
     return Column(
       children: [
-        Text(appLocale.aboutus, textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
+        Text(appLocale.aboutUs, textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text(appLocale.aboutustext, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, color: spqWhite)),
+          child: Text(appLocale.aboutUsText, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, color: spqWhite)),
         ),
-        Text(appLocale.ourteam, textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
+        Text(appLocale.ourTeam, textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Container(

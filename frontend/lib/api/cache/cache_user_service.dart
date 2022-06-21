@@ -55,12 +55,6 @@ class CacheUserService implements UserService {
   }
 
   @override
-  Future<LoginResponse> login({required String username, required String password}) {
-    // TODO: implement login-cache
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<int>> getFollowerIDs({required int id}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();

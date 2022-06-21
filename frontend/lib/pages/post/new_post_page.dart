@@ -61,10 +61,10 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget _buildSendPostButton() => TextButton(
         onPressed: _createPost,
         child: Container(
-          child: const Text("speaq"),
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
           decoration: BoxDecoration(border: Border.all(color: spqPrimaryBlue, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(16.0))),
+          child: const Text("speaq"),
         ),
       );
 

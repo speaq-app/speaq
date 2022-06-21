@@ -22,7 +22,7 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.displayandsound,
+            appLocale.displayAndSound,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
@@ -36,7 +36,7 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
                 ),
                 tiles: [
                   //Darkmode SwitchTile
-                  buildSettingsSwitchTile(appLocale.darkmode),
+                  buildSettingsSwitchTile(appLocale.darkMode),
                 ],
               ),
             ],

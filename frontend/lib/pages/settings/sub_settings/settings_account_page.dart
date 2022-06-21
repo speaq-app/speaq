@@ -38,21 +38,21 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  _buildSettingsTile(appLocale.accinformation, "login"),
-                  _buildSettingsTile(appLocale.changepassword, "login"),
+                  _buildSettingsTile(appLocale.accountInformation, "login"),
+                  _buildSettingsTile(appLocale.changePassword, "login"),
                   //Account löschen
-                  _buildPopUpWindow(appLocale.deleteaccount, appLocale.askdeleteaccount, appLocale.delete),
+                  _buildPopUpWindow(appLocale.deleteAccount, appLocale.askDeleteAccount, appLocale.delete),
                   //Account abmelden
-                  _buildPopUpWindow(appLocale.acclogout, appLocale.asklogoutaccount, appLocale.logout),
+                  _buildPopUpWindow(appLocale.accountLogout, appLocale.askLogoutAccount, appLocale.logout),
                 ],
               ),
             ],
           ),
           //Logo
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
           )
         ]),
       ),

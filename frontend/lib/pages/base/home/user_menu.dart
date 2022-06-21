@@ -33,12 +33,11 @@ class _UserMenuState extends State<UserMenu> {
 
   //App User (beim login holen)
   late Profile _profile;
-  late User _user;
 
   @override
   void initState() {
     _profileBloc.add(LoadProfile(
-      userId: 1,
+      userId: (widget.userID),
     ));
 
     super.initState();
@@ -251,7 +250,6 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            //TODO User übergeben
             Navigator.popAndPushNamed(context, "profile", arguments: [widget.userID, true, widget.userID]);
           },
         ),
@@ -274,7 +272,7 @@ class _UserMenuState extends State<UserMenu> {
           thickness: 0.75,
         ),
         ListTile(
-          title: Text(appLocale.settingsandprivacy),
+          title: Text(appLocale.settingsAndPrivacy),
           onTap: () {
             Navigator.popAndPushNamed(context, "settings");
           },

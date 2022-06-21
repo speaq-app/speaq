@@ -1,5 +1,9 @@
 package data
 
+import (
+	"time"
+)
+
 type UserService interface {
 	UserByID(id int64) (User, error)
 	UpdateUserProfile(userID int64, profile UserProfile) error
@@ -23,6 +27,7 @@ type User struct {
 	//Settings    UserSettings
 	FollowerIDs  []int64
 	FollowingIDs []int64
+	CreatedAt    time.Time
 }
 
 type UserProfile struct {

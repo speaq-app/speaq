@@ -22,19 +22,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
 
-  late String hcImageURL = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
-
-  int maxLengthName = 30;
-  int maxLengthUsername = 20;
-  int maxLengthDescription = 120;
-  int maxLengthWebsite = 20;
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
-
-  late AppLocalizations appLocale;
 
   @override
   void initState() {
@@ -47,7 +38,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    appLocale = AppLocalizations.of(context)!;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -135,7 +126,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildNameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthName,
+      maxLength: maxNameLength,
       controller: _nameController,
       label: appLocale.name,
       icon: const Icon(Icons.person_outline),
@@ -144,7 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildUsernameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthUsername,
+      maxLength: maxUsernameLength,
       controller: _usernameController,
       label: appLocale.username,
       icon: const Icon(Icons.alternate_email_rounded),
@@ -153,7 +144,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildDescriptionTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthDescription,
+      maxLength: maxDescriptionLength,
       controller: _descriptionController,
       label: appLocale.description,
       maxLines: 12,
@@ -164,7 +155,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildWebsiteTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthWebsite,
+      maxLength: maxWebsiteLength,
       controller: _websiteController,
       label: appLocale.website,
       icon: const Icon(Icons.link),
@@ -193,7 +184,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthName,
+        maxLength: maxNameLength,
         controller: _nameController,
         label: appLocale.name,
         icon: const Icon(Icons.person_outline),
@@ -207,7 +198,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthUsername,
+        maxLength: maxUsernameLength,
         controller: _usernameController,
         label: appLocale.username,
         icon: const Icon(Icons.alternate_email_rounded),
@@ -221,7 +212,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthDescription,
+        maxLength: maxDescriptionLength,
         controller: _descriptionController,
         label: appLocale.description,
         maxLines: 12,
@@ -237,7 +228,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthWebsite,
+        maxLength: maxWebsiteLength,
         controller: _websiteController,
         label: appLocale.website,
         icon: const Icon(Icons.link),
@@ -393,24 +384,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   String _checkIfInputIsValid(Profile profile, AppLocalizations appLocale) {
-    if (profile.name.length > maxLengthName) return appLocale.nameIsToLong;
+    if (profile.name.length > maxNameLength) return appLocale.nameIsToLong;
     if (profile.name.isEmpty) return appLocale.nameIsEmpty;
     if (profile.name.endsWith(" ")) return appLocale.nameEndsWithSpace;
     // if (profile.name.contains("\\n")) return appLocale.nameHasBackslashN;
     // if (profile.name.contains("\\t")) return appLocale.nameHasBackslashT;
 
-    if (profile.username.length > maxLengthUsername) return appLocale.usernameIsToLong;
+    if (profile.username.length > maxUsernameLength) return appLocale.usernameIsToLong;
     if (profile.username.isEmpty) return appLocale.usernameIsEmpty;
     if (profile.username.endsWith(" ")) return appLocale.usernameEndsWithSpace;
     // if (profile.username.contains("\\n")) return appLocale.usernameHasBackslashN;
     // if (profile.username.contains("\\t")) return appLocale.usernameHasBackslashT;
 
-    if (profile.description.length > maxLengthDescription) return appLocale.descriptionIsToLong;
+    if (profile.description.length > maxDescriptionLength) return appLocale.descriptionIsToLong;
     if (profile.description.endsWith(" ")) return appLocale.descriptionEndsWithSpace;
     // if (profile.description.contains("\n")) return appLocale.descriptionHasBackslashN;
     // if (profile.description.contains("\\t")) return appLocale.descriptionHasBackslashT;
 
-    if (profile.website.length > maxLengthWebsite) return appLocale.websiteIsToLong;
+    if (profile.website.length > maxWebsiteLength) return appLocale.websiteIsToLong;
     if (!profile.website.contains(".")) return appLocale.websiteHasNoDot;
     if (profile.website.endsWith(" ")) return appLocale.websiteEndsWithSpace;
     // if (profile.website.contains("\\n")) return appLocale.websiteHasBackslashN;
@@ -422,6 +413,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void dispose() {
     super.dispose();
+
     _disposeController();
     _profileBloc.close();
     _resourceBloc.close();

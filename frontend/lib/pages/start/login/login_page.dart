@@ -3,11 +3,10 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/user_service.dart';
 import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:grpc/grpc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,7 +16,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final UserService _userService = GRPCUserService();
   final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
 
   bool isHidden = true;
@@ -44,13 +42,26 @@ class _LoginPageState extends State<LoginPage> {
               bloc: _authenticationBloc,
               listener: (context, state) {
                 if (state is LogInSuccess) {
-                  print("Login Success");
                   Navigator.pushNamed(context, "base", arguments: {"userID": state.userID, "token": state.token});
-                } else if (state is LogInFail) {
+                } else if (state is LoginError) {
+                  String message;
+                  switch (state.code) {
+                    case StatusCode.unauthenticated:
+                      message = appLocale.wrongPassword;
+                      break;
+                    case StatusCode.notFound:
+                      message = appLocale.userNotFound;
+                      break;
+                    case StatusCode.unknown:
+                      message = appLocale.wrongPassword;
+                      break;
+                    default:
+                      message = appLocale.unknownError;
+                  }
                   Flushbar(
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
-                    message: state.message,
+                    message: message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
                 }
@@ -58,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context, state) {
                 if (state is TryLoggingIn) {
                   return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
-                } else if (state is LogInFail) {
+                } else if (state is LoginError) {
                   return ListView(
                     children: <Widget>[
                       buildTop(context, appLocale),
@@ -81,24 +92,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-/*
-  @override
-  Widget build(BuildContext context) {
-    AppLocalizations appLocale = AppLocalizations.of(context)!;
-
-    return Drawer(
-      child: SafeArea(
-        child: ListView(
-          children: <Widget>[
-            buildTop(context, appLocale),
-            buildBottom(context, appLocale),
-          ],
-        ),
-      ),
-    );
-  }
-*/
-
   Widget buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
@@ -120,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
               hintText: appLocale.username,
               onChanged: (value) {},
               controller: _usernameController,
-              labelTex: appLocale.username,
+              labelText: appLocale.username,
               borderColor: Border.all(color: spqLightBlack),
             ),
           ),
@@ -129,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
             icon: Icons.lock,
             hintText: appLocale.password,
             isHidden: isHidden,
-            labelTex: appLocale.password,
+            labelText: appLocale.password,
             controller: _passwordController,
             suffixIcon: _buildVisibility(),
             onChanged: (String value) {},
