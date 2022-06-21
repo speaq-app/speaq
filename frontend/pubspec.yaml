@@ -55,6 +55,9 @@ dependencies:
   page_transition: ^2.0.5
   url_launcher: ^6.1.0
 
+  #Audio-Player
+  audioplayers: ^0.20.1
+
   # API
   protobuf: ^2.0.1
   fixnum: ^1.0.0
@@ -109,6 +112,7 @@ flutter:
     - assets/i18n/de.json
     - assets/i18n/en.json
     - assets/images/
+    - assets/audio/
 
 
   # The following line ensures that the Material Icons font is
