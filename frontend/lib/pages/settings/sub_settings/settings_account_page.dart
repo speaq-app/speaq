@@ -14,6 +14,7 @@ class AccountSettingsPage extends StatefulWidget {
 
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
   late AppLocalizations appLocale;
+
   @override
   Widget build(BuildContext context) {
     appLocale = AppLocalizations.of(context)!;

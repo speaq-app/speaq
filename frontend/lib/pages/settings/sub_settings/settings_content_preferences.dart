@@ -3,13 +3,11 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-
 class ContentPrefSettingsPage extends StatefulWidget {
   const ContentPrefSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<ContentPrefSettingsPage> createState() =>
-      _ContentPrefSettingsPageState();
+  State<ContentPrefSettingsPage> createState() => _ContentPrefSettingsPageState();
 }
 
 class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
@@ -44,9 +42,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
             ],
           ),
           Positioned(
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
           )
@@ -63,5 +59,3 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
     );
   }
 }
-
-

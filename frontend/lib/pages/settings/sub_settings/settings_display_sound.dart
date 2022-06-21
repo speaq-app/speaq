@@ -3,14 +3,11 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-
-
 class DisplaySoundSettingsPage extends StatefulWidget {
   const DisplaySoundSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<DisplaySoundSettingsPage> createState() =>
-      _DisplaySoundSettingsPageState();
+  State<DisplaySoundSettingsPage> createState() => _DisplaySoundSettingsPageState();
 }
 
 class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
@@ -45,9 +42,7 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
             ],
           ),
           Positioned(
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
           )

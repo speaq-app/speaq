@@ -68,7 +68,7 @@ class _FollowPageState extends State<FollowPage> {
               }
             },
             builder: (context, state) {
-             if (state is FollowerLoaded) {
+              if (state is FollowerLoaded) {
                 followerCount = state.follower.length;
                 followingCount = state.following.length;
 
@@ -108,41 +108,39 @@ class _FollowPageState extends State<FollowPage> {
                     children: [_buildFollowerList(deviceSize, follower), _buildFollowingList(deviceSize, following)],
                   ),
                 );
+              } else {
+                return Scaffold(
+                  appBar: TabBar(
+                    indicatorWeight: 1.5,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    unselectedLabelColor: spqLightGrey,
+                    indicatorColor: spqPrimaryBlue,
+                    labelColor: spqPrimaryBlue,
+                    tabs: [
+                      SizedBox(
+                        height: deviceSize.height * 0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            "$followerCount ${appLocale.follower}",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                          height: deviceSize.height * 0.05,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              "$followingCount ${appLocale.following}",
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          )),
+                    ],
+                  ),
+                  body: _buildShimmerList(deviceSize),
+                );
               }
-              else {
-               return Scaffold(
-                 appBar: TabBar(
-                   indicatorWeight: 1.5,
-                   indicatorSize: TabBarIndicatorSize.tab,
-                   unselectedLabelColor: spqLightGrey,
-                   indicatorColor: spqPrimaryBlue,
-                   labelColor: spqPrimaryBlue,
-                   tabs: [
-                     SizedBox(
-                       height: deviceSize.height * 0.05,
-                       child: Padding(
-                         padding: const EdgeInsets.symmetric(vertical: 10.0),
-                         child: Text(
-                           "$followerCount ${appLocale.follower}",
-                           style: const TextStyle(fontSize: 20),
-                         ),
-                       ),
-                     ),
-                     SizedBox(
-                         height: deviceSize.height * 0.05,
-                         child: Padding(
-                           padding: const EdgeInsets.symmetric(vertical: 10.0),
-                           child: Text(
-                             "$followingCount ${appLocale.following}",
-                             style: const TextStyle(fontSize: 20),
-                           ),
-                         )),
-                   ],
-                 ),
-                 body: _buildShimmerList(deviceSize),
-               );
-
-             }
             },
           ),
         ),
@@ -180,8 +178,7 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  Future<void> refresh() async
-  {
+  Future<void> refresh() async {
     _followerBloc.add(LoadFollowerIDs(userId: widget.user.id));
   }
 

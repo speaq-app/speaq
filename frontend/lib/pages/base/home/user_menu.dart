@@ -10,8 +10,6 @@ import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
@@ -60,7 +58,7 @@ class _UserMenuState extends State<UserMenu> {
               BlocConsumer<ProfileBloc, ProfileState>(
                 bloc: _profileBloc,
                 listener: (context, state) {
-                  if(state is ProfileLoaded) {
+                  if (state is ProfileLoaded) {
                     _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
                     _followerBloc.add(LoadFollowerIDs(userId: widget.userID));
                     _profile = state.profile;
