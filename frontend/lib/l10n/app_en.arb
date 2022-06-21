@@ -88,6 +88,8 @@
   "websiteHasBackslashT" : "Website must not contain \\t!",
   "search": "Search",
   "hintTextSearchBarSearchPage": "Search for persons",
+  "toFollow": "Follow",
+  "toUnfollow": "Unfollow",
 
   "secondsAgo" : " seconds ago",
   "minuteAgo" : " minute ago",

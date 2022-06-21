@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
@@ -175,8 +175,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return ListView(
       children: [
         const Center(
-          child: ShimmerProfilePicture(diameter: 36.5,)
-        ),
+            child: ShimmerProfilePicture(
+          diameter: 36.5,
+        )),
         const SizedBox(height: 40),
         _buildNameTextFieldShimmer(appLocale),
         _buildUsernameTextFieldShimmer(appLocale),

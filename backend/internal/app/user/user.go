@@ -84,7 +84,6 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 	}, nil
 }
 
-//region needs to be implemented
 func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*GetUserFollowerResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.FollowerIds)
 
@@ -134,10 +133,32 @@ func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingReque
 	}, nil
 }
 
-//endregion
+func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*CheckIfFollowingResponse, error) {
+	f, _, err := s.DataService.CheckIfFollowing(req.UserId, req.FollowerId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &CheckIfFollowingResponse{
+		IsFollowing: f,
+	}, nil
+}
+
+func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*FollowUnfollowResponse, error) {
+	f, err := s.DataService.FollowUnfollow(req.UserId, req.FollowerId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &FollowUnfollowResponse{
+		IsFollowing: f,
+	}, nil
+}
 
 func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
-	hash, id, err := s.DataService.PasswordHashByUsername(req.Username)
+	hash, id, err := s.DataService.PasswordHashAndIDByUsername(req.Username)
 	if err != nil {
 		return nil, err
 	}
