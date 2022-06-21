@@ -25,49 +25,56 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
           title: Text(
             appLocale.notifications,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
-        body: Stack(children: [
-          SettingsList(
-            sections: [
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(25.0),
+        body: Stack(
+          children: [
+            SettingsList(
+              sections: [
+                SpqSettingsSection(
+                  title: const Padding(
+                    padding: EdgeInsets.all(25.0),
+                  ),
+                  tiles: [
+                    // Private account SwitchTile.
+                    buildSettingsSwitchTile(appLocale.notdisturb),
+                    // Method for SettingsTile.
+                    _buildSettingsTile(appLocale.receivenotifications, "login"),
+                    _buildSettingsTile(appLocale.notificationSound, "login"),
+                  ],
                 ),
-                tiles: [
-                  //Privates Konto SwitchTile
-                  buildSettingsSwitchTile(appLocale.notdisturb),
-                  //Methode für SettingsTile
-                  _buildSettingsTile(appLocale.receivenotifications, "login"),
-                  _buildSettingsTile(appLocale.notificationSound, "login"),
-                ],
-              ),
-            ],
-          ),
-          Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
-            bottom: 20,
-            height: deviceSize.height * 0.1,
-          )
-        ]),
+              ],
+            ),
+            Positioned(
+              bottom: 20,
+              height: deviceSize.height * 0.1,
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  //Erstelle SettingsTile
+  /// Create and returns [SettingsTile] that will added to [SpqSettingsSection].
   SettingsTile buildSettingsSwitchTile(String text) {
     return SettingsTile.switchTile(
       title: Text(text, style: const TextStyle(fontSize: 15)),
       initialValue: valuePrivateSwitch,
       onToggle: (value) {
-        setState(() {
-          valuePrivateSwitch = value;
-        });
+        setState(
+          () {
+            valuePrivateSwitch = value;
+          },
+        );
       },
     );
   }
 
+  /// Creates an returns one element for [SettingsTile].
   SettingsTile _buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),

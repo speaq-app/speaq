@@ -23,7 +23,6 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
-
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
@@ -31,7 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
           title: Text(
             appLocale.settingsandprivacy,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Stack(
@@ -55,10 +54,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SpqSettingsSection(
                   title: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       appLocale.general,
-                      style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                   tiles: [
@@ -69,9 +68,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             Positioned(
-              child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
               bottom: 20,
               height: deviceSize.height * 0.1,
+              child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
             )
           ],
         ),
@@ -79,6 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  /// Returns a [SizedBox] for one logoPicture.
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,

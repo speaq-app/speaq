@@ -29,37 +29,44 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           ),
           preferredSize: deviceSize,
         ),
-        body: Stack(children: [
-          SettingsList(
-            sections: [
-              SpqSettingsSection(
-                tiles: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _buildSettingsTile(appLocale.accinformation, "login"),
-                  _buildSettingsTile(appLocale.changepassword, "login"),
-                  //Account löschen
-                  _buildPopUpWindow(appLocale.deleteaccount, appLocale.askdeleteaccount, appLocale.delete),
-                  //Account abmelden
-                  _buildPopUpWindow(appLocale.acclogout, appLocale.asklogoutaccount, appLocale.logout),
-                ],
+        body: Stack(
+          children: [
+            SettingsList(
+              sections: [
+                SpqSettingsSection(
+                  tiles: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _buildSettingsTile(appLocale.accinformation, "login"),
+                    _buildSettingsTile(appLocale.changepassword, "login"),
+                    // Account delete.
+                    _buildPopUpWindow(appLocale.deleteaccount,
+                        appLocale.askdeleteaccount, appLocale.delete, appLocale),
+                    // Account log out.
+                    _buildPopUpWindow(appLocale.acclogout,
+                        appLocale.asklogoutaccount, appLocale.logout, appLocale),
+                  ],
+                ),
+              ],
+            ),
+            // Logo.
+            Positioned(
+              bottom: 20,
+              height: deviceSize.height * 0.1,
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _buildLogoPictures(deviceSize)
               ),
-            ],
-          ),
-          //Logo
-          Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
-            bottom: 20,
-            height: deviceSize.height * 0.1,
-          )
-        ]),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  //Pop-up-Fenster
-  SettingsTile _buildPopUpWindow(String text, String popupMessage, String exitText) {
+  /// Creates and returns elements for [SettingsTile].
+  SettingsTile _buildPopUpWindow(String text, String popupMessage, String exitText, AppLocalizations appLocale) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),
       title: Text(text, style: const TextStyle(fontSize: 15)),
@@ -68,14 +75,20 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         builder: (context) => AlertDialog(
           title: Text(popupMessage),
           actions: [
-            TextButton(child: Text(exitText), onPressed: () => Navigator.pop(context)),
-            TextButton(child: Text(appLocale.cancel), onPressed: () => Navigator.pop(context)),
+            TextButton(
+                child: Text(exitText), onPressed: () => Navigator.pop(context)
+            ),
+            TextButton(
+              child: Text(appLocale.cancel),
+              onPressed: () => Navigator.pop(context),
+            ),
           ],
         ),
       ),
     );
   }
 
+  /// Returns a [SizedBox] for one logoPicture.
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
@@ -85,6 +98,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     );
   }
 
+  /// Returns a [SettingsTile] for the title with an icon/ text.
   SettingsTile _buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),

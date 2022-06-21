@@ -25,41 +25,48 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
           title: Text(
             appLocale.displayandsound,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
-        body: Stack(children: [
-          SettingsList(
-            sections: [
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(25.0),
+        body: Stack(
+          children: [
+            SettingsList(
+              sections: [
+                SpqSettingsSection(
+                  title: const Padding(
+                    padding: EdgeInsets.all(25.0),
+                  ),
+                  tiles: [
+                    // DarkMode SwitchTile.
+                    buildSettingsSwitchTile(appLocale.darkmode),
+                  ],
                 ),
-                tiles: [
-                  //Darkmode SwitchTile
-                  buildSettingsSwitchTile(appLocale.darkmode),
-                ],
-              ),
-            ],
-          ),
-          Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
-            bottom: 20,
-            height: deviceSize.height * 0.1,
-          )
-        ]),
+              ],
+            ),
+            Positioned(
+              bottom: 20,
+              height: deviceSize.height * 0.1,
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            )
+          ],
+        ),
       ),
     );
   }
 
+  /// Creates and returns a [SettingsTile] that will be added to [SpqSettingsSection].
   SettingsTile buildSettingsSwitchTile(String text) {
     return SettingsTile.switchTile(
       title: Text(text, style: const TextStyle(fontSize: 15)),
       initialValue: valuePrivateSwitch,
       onToggle: (value) {
-        setState(() {
-          valuePrivateSwitch = value;
-        });
+        setState(
+          () {
+            valuePrivateSwitch = value;
+          },
+        );
       },
     );
   }

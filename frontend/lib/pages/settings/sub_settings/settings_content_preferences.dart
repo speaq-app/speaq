@@ -28,26 +28,33 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
             style: const TextStyle(fontSize: 16),
           ),
         ),
-        body: Stack(children: [
-          SettingsList(
-            sections: [
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(25.0),
+        body: Stack(
+          children: [
+            SettingsList(
+              sections: [
+                SpqSettingsSection(
+                  title: const Padding(
+                    padding: EdgeInsets.all(25.0),
+                  ),
+                  tiles: [
+                    // Language selection.
+                    _buildSettingsTile(appLocale.language, "login"
+                    ),
+                  ],
                 ),
-                tiles: [
-                  //Sprachauswahl
-                  _buildSettingsTile(appLocale.language, "login"),
-                ],
+              ],
+            ),
+            // Speaq logo.
+            Positioned(
+              bottom: 20,
+              height: deviceSize.height * 0.1,
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SpeaqBottomLogo(deviceSize: deviceSize)
               ),
-            ],
-          ),
-          Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
-            bottom: 20,
-            height: deviceSize.height * 0.1,
-          )
-        ]),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -57,7 +64,8 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),
       title: Text(text, style: const TextStyle(fontSize: 15)),
-      onPressed: (context) => Navigator.pushNamed(context, route),
+      onPressed: (context) => Navigator.pushNamed(context, route
+      ),
     );
   }
 }

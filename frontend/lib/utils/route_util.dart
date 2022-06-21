@@ -6,6 +6,8 @@ import 'package:frontend/pages/settings/sub_settings/settings_about_speaq.dart';
 import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
+
+  ///Creates different Routes.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
 
@@ -16,7 +18,9 @@ class RouteGenerator {
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "base":
+
+        // Base.
+        case "base":
         Map<String, dynamic> map = args as Map<String, dynamic>;
         return PageTransition(
           child: BasePage(userID: map["userID"]),
@@ -26,27 +30,34 @@ class RouteGenerator {
           type: PageTransitionType.bottomToTop,
           alignment: Alignment.center,
         );
-      case "login":
+
+        // Login.
+        case "login":
         return PageTransition(
           child: const LoginPage(),
           type: PageTransitionType.topToBottom,
           alignment: Alignment.center,
         );
-      case "register":
+
+        // Register.
+        case "register":
         return PageTransition(
           child: const RegisterPage(),
           type: PageTransitionType.rightToLeftWithFade,
           alignment: Alignment.center,
         );
-      case "settings":
+
+        // Settings.
+        case "settings":
         return PageTransition(
           child: const SettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "profile":
-        List<dynamic> profileInfo = args as List<dynamic>;
 
+        // Profile.
+        case "profile":
+        List<dynamic> profileInfo = args as List<dynamic>;
         return PageTransition(
           child: ProfilePage(
             pageUserID: profileInfo[0],
@@ -56,113 +67,118 @@ class RouteGenerator {
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "home":
-        int userID = args as int;
 
+        // Home.
+        case "home":
+        int userID = args as int;
         return PageTransition(
           child: HomePage(userID: userID),
           type: PageTransitionType.bottomToTop,
           duration: const Duration(milliseconds: 400),
           alignment: Alignment.center,
         );
-      case "messages":
+        case "messages":
         return PageTransition(
           child: const MessagesPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "notifications":
+        case "notifications":
         return PageTransition(
           child: const NotificationsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "search":
+        case "search":
         return PageTransition(
           child: const SearchPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      //Settings
-      case "settingsPrivacy":
+
+        // Settings.
+        case "settingsPrivacy":
         return PageTransition(
           child: const SettingsAndPrivacyPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settAccount":
+        case "settAccount":
         return PageTransition(
           child: const AccountSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settPrivSafety":
+        case "settPrivSafety":
         return PageTransition(
           child: const PrivacySafetySettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settNotific":
+        case "settNotific":
         return PageTransition(
           child: const NotificationsSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settContentPref":
+        case "settContentPref":
         return PageTransition(
           child: const ContentPrefSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settDispSound":
+        case "settDispSound":
         return PageTransition(
           child: const DisplaySoundSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settAboutSpeaq":
+        case "settAboutSpeaq":
         return PageTransition(
           child: const AboutSpeaqSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "bookmarks":
+
+        // UserMenu.
+        case "bookmarks":
         return PageTransition(
           child: const BookmarksPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "impressum":
+        case "impressum":
         return PageTransition(
           child: const ImpressumPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "new_post":
+        case "new_post":
         return PageTransition(
           child: const NewPostPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "qr_code":
+        case "qr_code":
         return PageTransition(
           child: const QrCodePage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "edit_profile":
+        case "edit_profile":
         return PageTransition(
           child: const EditProfilePage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "follow":
+        case "follow":
         User user = args as User;
         return PageTransition(
             child: FollowPage(
               user: user,
             ),
-            type: PageTransitionType.fade);
+            type: PageTransitionType.fade
+        );
       default:
         return _errorRoute();
     }
