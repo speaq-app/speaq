@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/grpc/protos/user.pb.dart';
-import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
-import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
@@ -22,7 +20,6 @@ class FollowPage extends StatefulWidget {
 class _FollowPageState extends State<FollowPage> {
   final FollowerBloc _followerBloc = FollowerBloc();
   final ProfileBloc _profileBloc = ProfileBloc();
-  final ResourceBloc _resourceBloc = ResourceBloc();
 
 
   int _followerCount = 0;
@@ -180,7 +177,6 @@ class _FollowPageState extends State<FollowPage> {
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           itemBuilder: (context, index) {
             FollowUser currentFollower = followUserList[index];
-            print("${currentFollower.profileImageBlurHash} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             return FollowerTile(
               follower: currentFollower,

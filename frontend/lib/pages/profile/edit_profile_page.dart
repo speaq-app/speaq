@@ -356,14 +356,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveProfile(AppLocalizations appLocale) {
-    Profile _profile = Profile(
+    Profile profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,
       description: _descriptionController.text,
       website: _websiteController.text,
     );
 
-    String errorString = _checkIfInputIsValid(_profile, appLocale);
+    String errorString = _checkIfInputIsValid(profile, appLocale);
     if (errorString.isNotEmpty) {
       final snackBar = SnackBar(
           content: Text(
@@ -378,7 +378,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _profileBloc.add(
       SaveProfile(
         userId: 1,
-        profile: _profile,
+        profile: profile,
       ),
     );
   }

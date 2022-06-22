@@ -1,10 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/grpc_auth_service.dart';
-import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/grpc/protos/auth.pbgrpc.dart';
-import 'package:frontend/api/grpc/protos/user.pb.dart';
-import 'package:frontend/api/user_service.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 

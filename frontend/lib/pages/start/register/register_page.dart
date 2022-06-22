@@ -1,7 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/blocs/register_bloc/register_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
@@ -224,23 +223,23 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  _onPasswordChanged(String password) {
+  _onPasswordChanged(String newPassword) {
     RegExp passValid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
-    String _password = password;
-    if (_password.isEmpty) {
+    String password = newPassword;
+    if (password.isEmpty) {
       setState(() {
         _passwordStrength = 0;
       });
-    } else if (_password.length < 6) {
+    } else if (password.length < 6) {
       setState(() {
         _passwordStrength = 1 / 4;
       });
-    } else if (_password.length < 8) {
+    } else if (password.length < 8) {
       setState(() {
         _passwordStrength = 2 / 4;
       });
     } else {
-      if (passValid.hasMatch(_password)) {
+      if (passValid.hasMatch(password)) {
         setState(() {
           _passwordStrength = 4 / 4;
         });

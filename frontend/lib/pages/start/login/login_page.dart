@@ -125,12 +125,13 @@ class _LoginPageState extends State<LoginPage> {
             labelText: appLocale.password,
             controller: _passwordController,
             suffixIcon: _buildVisibility(),
-            onChanged: (String value) {},
+            onChanged: (value) {},
             borderColor: Border.all(color: spqLightBlack),
           ),
           GestureDetector(
             onTap: () {
-              print("Forgot password");
+              //TODO - Implement forgot password
+              //print("Forgot password");
             },
             child: Text(
               appLocale.forgotPassword,
@@ -156,7 +157,9 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: SpeaqButton(
             loginText: appLocale.login,
-            onPressed: () => tryLogin(),
+            onPressed: () {
+              _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
+            },
           ),
         ),
         SpeaqPageForwarding(
@@ -173,6 +176,8 @@ class _LoginPageState extends State<LoginPage> {
             thickness: 0.75,
           ),
         ),
+//TODO - Guest Login
+/*
         SpeaqPageForwarding(
           hintText: appLocale.guestText,
           text: appLocale.guest,
@@ -181,25 +186,9 @@ class _LoginPageState extends State<LoginPage> {
             //Navigator.popAndPushNamed(context, "base");
           },
         ),
+*/
       ],
     );
-  }
-
-  Future<void> tryLogin() async {
-    print("3. sdjklhfujkhsjklgfhsjklrhgjsh");
-    print("username UI: " + _usernameController.text);
-    print("password UI: " + _passwordController.text);
-
-    _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
-
-    //LoginResponse loginResponse = await _userService.login(username: _usernameController.text, password: _passwordController.text);
-
-/*    if (loginResponse.token != null && loginResponse.token.isNotEmpty) {
-      print(loginResponse.token);
-      Navigator.popAndPushNamed(context, "base");
-    } else {
-      print("UFF!");
-    }*/
   }
 
   @override

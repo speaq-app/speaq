@@ -104,8 +104,8 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
           textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        child: Center(child: buildImage(jpgString)),
         footer: Text(role, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold)),
+        child: Center(child: buildImage(jpgString)),
       ),
     );
   }

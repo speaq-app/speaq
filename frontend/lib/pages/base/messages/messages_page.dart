@@ -121,9 +121,9 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
-  filterSearchResults(String text) {
+  filterSearchResults(String? text) {
     List<DummyUser> filterList = <DummyUser>[];
-    if (text != null) {
+    if (text != null && text.isNotEmpty) {
       setState(() {
         filterList.addAll(_allUserList.where((user) => user.name.toString().contains(text)).toList());
         _foundUsersList = filterList;

@@ -113,7 +113,7 @@ class PostContainer extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
-                  "@" + username,
+                  "@$username",
                   style: const TextStyle(fontSize: 12, color: spqDarkGrey),
                   maxLines: 1,
                   overflow: TextOverflow.clip,

@@ -11,7 +11,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<DummyUser> _allUserList = [
+  final List<DummyUser> _allUserList = [
     DummyUser("https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg", "Sven Gatnar", "Ich bin so ein geiler Typ", "12:20"),
     DummyUser("https://hotdogworld.de/media/image/dd/5f/5f/HZ_TK_500ml_USD_1280x1280.jpg", "Halois Ainz", "Ich kenne jeden Automaten den es gibt", "12:33"),
     DummyUser("http://staffmobility.eu/sites/default/files/isewtweetbg.jpg", "Hendrik Schlehlein", "Daily-Meetings verlaufen nicht so gut", "01.01.2020"),
@@ -43,11 +43,11 @@ class _SearchPageState extends State<SearchPage> {
         appBar: SpqAppBar(
           title: Column(
             children: [
-              Text(appLocale.search, style: TextStyle(fontSize: 20)),
+              Text(appLocale.search, style: const TextStyle(fontSize: 20)),
               generateSearchBar(deviceSize),
             ],
           ),
-          preferredSize: Size.fromHeight(1600),
+          preferredSize: const Size.fromHeight(1600),
           centerTitle: true,
         ),
         body: Column(
@@ -99,11 +99,10 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  filterSearchResults(String text) {
+  filterSearchResults(String? text) {
     List<DummyUser> filterList = <DummyUser>[];
-    if (text != null) {
-      setState(
-        () {
+    if (text != null && text.isNotEmpty) {
+      setState(() {
           filterList.addAll(_allUserList.where((user) => user.name.toString().contains(text)).toList());
           _foundUsersList = filterList;
         },
