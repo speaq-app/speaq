@@ -78,8 +78,10 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "search":
+        int userID = args as int;
+
         return PageTransition(
-          child: const SearchPage(),
+          child: SearchPage(userID: userID),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );

@@ -6,11 +6,11 @@ import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 
 class FollowerTile extends StatelessWidget {
-  final FollowUser follower;
+  final CondensedUser follower;
   final int userID;
-  final Function() onPop;
+  final Function()? onPop;
 
-  const FollowerTile({Key? key, required this.follower, required this.userID, required this.onPop}) : super(key: key);
+  const FollowerTile({Key? key, required this.follower, required this.userID, this.onPop}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

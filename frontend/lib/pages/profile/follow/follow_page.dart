@@ -25,8 +25,8 @@ class _FollowPageState extends State<FollowPage> {
   int _followerCount = 0;
   int _followingCount = 0;
 
-  List<FollowUser> _follower = [];
-  List<FollowUser> _following = [];
+  List<CondensedUser> _follower = [];
+  List<CondensedUser> _following = [];
 
   @override
   void initState() {
@@ -147,7 +147,7 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  Widget _buildFollowerList(Size deviceSize, List<FollowUser> followerList) {
+  Widget _buildFollowerList(Size deviceSize, List<CondensedUser> followerList) {
     return Column(
       children: [
         SizedBox(
@@ -158,7 +158,7 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  Widget _buildFollowingList(Size deviceSize, List<FollowUser> followingList) {
+  Widget _buildFollowingList(Size deviceSize, List<CondensedUser> followingList) {
     return Column(
       children: [
         SizedBox(
@@ -169,14 +169,14 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  Widget _buildFollowList(Size deviceSize, List<FollowUser> followUserList) {
+  Widget _buildFollowList(Size deviceSize, List<CondensedUser> followUserList) {
     return RefreshIndicator(
       onRefresh: refresh,
       child: ListView.builder(
           shrinkWrap: false,
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           itemBuilder: (context, index) {
-            FollowUser currentFollower = followUserList[index];
+            CondensedUser currentFollower = followUserList[index];
 
             return FollowerTile(
               follower: currentFollower,

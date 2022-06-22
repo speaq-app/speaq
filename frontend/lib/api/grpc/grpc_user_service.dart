@@ -62,40 +62,47 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<List<FollowUser>> getFollower({required List<int> ids}) async {
+  Future<List<CondensedUser>> getFollower({required List<int> ids}) async {
     List<Int64> int64IDs = [];
     for (int i in ids) {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowerResponse resp = await _client.getUserFollower(GetUserFollowerRequest(followerIds: int64IDs));
+    CondensedUserListResponse resp = await _client.getUserFollower(GetUserFollowerRequest(followerIds: int64IDs));
 
-    return resp.follower;
+    return resp.users;
   }
 
   @override
-  Future<List<FollowUser>> getFollowing({required List<int> ids}) async {
+  Future<List<CondensedUser>> getFollowing({required List<int> ids}) async {
     List<Int64> int64IDs = [];
     for (int i in ids) {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowingResponse resp = await _client.getUserFollowing(GetUserFollowingRequest(followingIds: int64IDs));
+    CondensedUserListResponse resp = await _client.getUserFollowing(GetUserFollowingRequest(followingIds: int64IDs));
 
-    return resp.following;
+    return resp.users;
   }
 
   @override
   Future<bool> checkIfFollowing({required int userID, required int followerID}) async {
-    CheckIfFollowingResponse resp = await _client.checkIfFollowing(CheckIfFollowingRequest(userId: Int64(userID), followerId: Int64(followerID)));
+    IsFollowingResponse resp = await _client.checkIfFollowing(CheckIfFollowingRequest(userId: Int64(userID), followerId: Int64(followerID)));
 
     return resp.isFollowing;
   }
 
   @override
   Future<bool> followUnfollow({required int userID, required int followerID}) async {
-    FollowUnfollowResponse resp = await _client.followUnfollow(FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)));
+    IsFollowingResponse resp = await _client.followUnfollow(FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)));
 
     return resp.isFollowing;
+  }
+
+  @override
+  Future<List<CondensedUser>> userByUsername({required String searchTerm}) async {
+    CondensedUserListResponse resp = await _client.usersByUsername(SearchUserRequest(term: searchTerm));
+
+    return resp.users;
   }
 }

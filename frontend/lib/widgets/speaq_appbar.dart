@@ -28,7 +28,7 @@ class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
     return SizedBox(
       height: preferredSize.height * 0.075,
       child: AppBar(
-        automaticallyImplyLeading: isAutomaticallyImplyLeading,
+        automaticallyImplyLeading: false,
         leadingWidth: leadingWidth,
         centerTitle: centerTitle,
         toolbarHeight: preferredSize.height * 0.075,

@@ -30,8 +30,8 @@ class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
   void _onLoadFollower(LoadFollower event, Emitter<FollowerState> emit) async {
     emit(FollowerLoading());
 
-    List<FollowUser> follower = await _userService.getFollower(ids: event.followerIDs);
-    List<FollowUser> following = await _userService.getFollowing(ids: event.followingIDs);
+    List<CondensedUser> follower = await _userService.getFollower(ids: event.followerIDs);
+    List<CondensedUser> following = await _userService.getFollowing(ids: event.followingIDs);
 
     emit(FollowerLoaded(follower: follower, following: following));
   }

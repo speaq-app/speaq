@@ -18,6 +18,8 @@ type UserService interface {
 
 	FollowerByIDs(userIDs []int64) ([]User, error)
 	FollowingByIDs(userIDs []int64) ([]User, error)
+
+	UsersByUsername(term string) ([]User, error)
 }
 
 type User struct {

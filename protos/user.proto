@@ -9,10 +9,19 @@ service User {
   rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
   rpc GetUserFollowerIDs(GetUserProfileRequest) returns (GetUserFollowerIDsResponse);
   rpc GetUserFollowingIDs(GetUserProfileRequest) returns (GetUserFollowingIDsResponse);
-  rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowerResponse);
-  rpc GetUserFollowing(GetUserFollowingRequest) returns (GetUserFollowingResponse);
-  rpc CheckIfFollowing(CheckIfFollowingRequest) returns (CheckIfFollowingResponse);
-  rpc FollowUnfollow(FollowUnfollowRequest) returns (FollowUnfollowResponse);
+  rpc GetUserFollower(GetUserFollowerRequest) returns (CondensedUserListResponse);
+  rpc GetUserFollowing(GetUserFollowingRequest) returns (CondensedUserListResponse);
+  rpc CheckIfFollowing(CheckIfFollowingRequest) returns (IsFollowingResponse);
+  rpc FollowUnfollow(FollowUnfollowRequest) returns (IsFollowingResponse);
+  rpc UsersByUsername(SearchUserRequest) returns (CondensedUserListResponse);
+}
+
+message CondensedUser{
+  int64 id = 1;
+  string name = 2;
+  string username = 3;
+  string profile_image_blur_hash = 4;
+  int64 profile_image_resource_id = 5;
 }
 
 message GetUserProfileRequest {
@@ -49,33 +58,21 @@ message CheckIfFollowingRequest{
   int64 follower_id = 2;
 }
 
-message CheckIfFollowingResponse{
-  bool isFollowing = 1;
-}
-
 message FollowUnfollowRequest{
   int64 user_id = 1;
   int64 follower_id = 2;
 }
 
-message FollowUnfollowResponse{
+message IsFollowingResponse{
   bool isFollowing = 1;
 }
 
-message FollowUser{
-  int64 id = 1;
-  string name = 2;
-  string username = 3;
-  string profile_image_blur_hash = 4;
-  int64 profile_image_resource_id = 5;
+message SearchUserRequest{
+  string term = 1;
 }
 
-message GetUserFollowerResponse{
-  repeated FollowUser follower = 1;
-}
-
-message GetUserFollowingResponse{
-  repeated FollowUser following = 1;
+message CondensedUserListResponse{
+  repeated CondensedUser users = 1;
 }
 
 message UpdateUserProfileRequest {
@@ -85,3 +82,4 @@ message UpdateUserProfileRequest {
   string description = 4;
   string website = 5;
 }
+
