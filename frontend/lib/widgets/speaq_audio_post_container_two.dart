@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -18,17 +19,25 @@ class SpqAudioPostContainerTwo extends StatefulWidget {
 class _SpqAudioPostContainerTwoState extends State<SpqAudioPostContainerTwo> {
   FlutterSoundPlayer player = FlutterSoundPlayer();
 
-  Duration duration = Duration.zero;
+  Duration duration = Duration(seconds: 20);
 
   Duration position = Duration.zero;
 
   @override
   void initState() {
     super.initState();
+    initPlayer();
+  }
 
-    //Set States
+  Future<void> initPlayer() async {
+    await player.openPlayer();
 
-    player.openPlayer();
+    player.onProgress!.listen((event) {
+      setState(() {
+        position = event.position;
+        duration = duration + Duration(seconds: 1);
+      });
+    });
   }
 
   @override
@@ -47,10 +56,18 @@ class _SpqAudioPostContainerTwoState extends State<SpqAudioPostContainerTwo> {
                 onPressed: () async {
                   if (player.isPlaying) {
                     await player.pausePlayer();
+                    setState(() {});
                   } else if (player.isPaused) {
                     await player.resumePlayer();
+                    setState(() {});
                   } else {
-                    await player.startPlayer(fromDataBuffer: widget.audioUrl, codec: Codec.mp3);
+                    await player.startPlayer(
+                        fromDataBuffer: widget.audioUrl,
+                        codec: Codec.mp3,
+                        whenFinished: () {
+                          setState(() {});
+                        });
+                    setState(() {});
                   }
                 },
               ),
@@ -59,10 +76,11 @@ class _SpqAudioPostContainerTwoState extends State<SpqAudioPostContainerTwo> {
               min: 0,
               max: duration.inSeconds.toDouble(),
               value: position.inSeconds.toDouble(),
-              onChanged: (value) async {
-                final position = Duration(seconds: value.toInt());
-                await player.seekToPlayer(position);
-                await player.resumePlayer();
+              onChanged: (double value) {
+                setState(() {
+                  position = Duration(seconds: value.toInt());
+                  player.updateProgress(position: position.inSeconds);
+                });
               },
             ),
           ],
@@ -95,5 +113,13 @@ class _SpqAudioPostContainerTwoState extends State<SpqAudioPostContainerTwo> {
     final seconds = twoDigits(duration.inSeconds.remainder(60));
 
     return [if (duration.inHours < 0) hours, minutes, seconds].join(":");
+  }
+
+  @override
+  void dispose() {
+    player.stopPlayer();
+    player.closePlayer();
+
+    super.dispose();
   }
 }
