@@ -91,7 +91,8 @@
   "websiteEndsWithSpace" : "Website darf nicht mit Leertaste enden!",
   "websiteHasBackslashN" : "Website darf kein \\n beinhalten!",
   "websiteHasBackslashT" : "Website darf kein \\t beinhalten!",
-
+  "toFollow": "Folgen",
+  "toUnfollow": "Entfolgen",
   "secondsAgo" : " Sekunden her",
   "minuteAgo" : " Minute her",
   "minutesAgo" : " Minuten her",

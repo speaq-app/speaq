@@ -19,34 +19,31 @@ import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final int pageUserID;
+  final bool isOwnPage;
+  final int? appUserID;
+
+  const ProfilePage({Key? key, required this.pageUserID, this.isOwnPage = false, this.appUserID}) : super(key: key);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ProfilePageState createState() => ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class ProfilePageState extends State<ProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
-  final FollowerBloc _followerBloc = FollowerBloc();
+  final FollowerBloc _pageUserFollowerBloc = FollowerBloc();
+  final FollowerBloc _followUnfollowBloc = FollowerBloc();
 
   //Background picture
   final String _backgroundImage = "https://cdn0.scrvt.com/5b9bbd140a15e188780a6244ebe572d4/772147c289ad227c/ca6d6d455211/v/1abab81df2ad/C_Sont_001_300dpi.jpg";
 
-  //Hardcoded for posts - delete later
-  final String _name = "testname";
-  final String _username = "testUsername";
-  final User _user = User(
-    id: 1,
-    profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
-    followerIDs: [2, 3],
-    followingIDs: [2, 3],
-    password: 'OpenToWork',
-  );
-
   //Follower
-  int _followerCount = 0;
-  int _followingCount = 0;
+  List<int> _followerIDs = [];
+  List<int> _followingIDs = [];
+
+  //App User (beim login holen)
+  late Profile _profile;
 
   //User-Data
   final String _joined = "Joined August 2022";
@@ -56,11 +53,24 @@ class _ProfilePageState extends State<ProfilePage> {
   final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
 
-  bool isFollow = false;
+  bool _isFollowing = false;
 
+/*
+    final User _user = User(
+    id: 1,
+    profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
+    followerIDs: [2, 3],
+    followingIDs: [2, 3],
+    password: 'OpenToWork',
+  );
+*/
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(userId: 1));
+    _profileBloc.add(LoadProfile(userId: widget.pageUserID));
+    if (!widget.isOwnPage) {
+      _followUnfollowBloc.add(CheckIfFollowing(userID: widget.appUserID!, followerID: widget.pageUserID));
+    }
+
     super.initState();
   }
 
@@ -84,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         bottomNavigationBar: SpqButtonNavigationBar(
           switchPage: (index) {
-            Navigator.pushNamed(context, "base");
+            Navigator.popUntil(context, ModalRoute.withName("base"));
           },
           selectedIndex: 0,
         ),
@@ -114,7 +124,8 @@ class _ProfilePageState extends State<ProfilePage> {
         listener: (context, state) {
           if (state is ProfileLoaded) {
             _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-            _followerBloc.add(LoadFollowerIDs(userId: _user.id));
+            _pageUserFollowerBloc.add(LoadFollowerIDs(userId: widget.pageUserID));
+            _profile = state.profile;
           }
         },
         builder: (context, state) {
@@ -213,11 +224,57 @@ class _ProfilePageState extends State<ProfilePage> {
       width: deviceSize.width * 0.33,
       height: deviceSize.height * 0.05,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SpqTextbutton(
-        onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
-        name: appLocale.editProfile,
-        style: const TextStyle(color: spqPrimaryBlue),
-      ),
+      child: widget.isOwnPage
+          ? SpqTextButton(
+              onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
+              name: appLocale.editProfile,
+              textStyle: const TextStyle(color: spqPrimaryBlue),
+            )
+          : BlocConsumer<FollowerBloc, FollowerState>(
+              bloc: _followUnfollowBloc,
+              listener: (context, state) {
+                if (state is CheckIfFollowingLoaded) {
+                  print("JEEEEEEEEEEE 111111111111");
+                  _isFollowing = state.isFollowing;
+                } else if (state is FollowUnfollowLoaded) {
+                  print("ISFOLLOWING: ${state.isFollowing} l");
+
+                  _isFollowing = state.isFollowing;
+                }
+              },
+              builder: (context, state) {
+                if (state is CheckIfFollowingLoaded) {
+                  //_isFollowing = state.isFollowing;
+
+                  print("JEEEEEEEEEEE 22222222222222");
+                  return SpqTextButton(
+                    onPressed: () {
+                      _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
+                    },
+                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
+                  );
+                } else if (state is FollowUnfollowLoaded) {
+                  //_isFollowing = state.isFollowing;
+
+                  print("JEEEEEEEEEEE 22222222222222");
+                  return SpqTextButton(
+                    onPressed: () {
+                      _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
+                    },
+                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
+                  );
+                }
+                return SpqTextButton(
+                  onPressed: () => print("ERROR - UNKNOWN STATE"),
+                  name: "ERROR",
+                  textStyle: const TextStyle(color: spqPrimaryBlue),
+                );
+              },
+            ),
     );
   }
 
@@ -264,7 +321,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _username,
+          _profile.name,
           style: const TextStyle(color: spqBlack),
         ),
         centerTitle: true,
@@ -341,20 +398,18 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         BlocConsumer<FollowerBloc, FollowerState>(
-          bloc: _followerBloc,
+          bloc: _pageUserFollowerBloc,
           listener: (context, state) {
             if (state is FollowerIDsLoaded) {
-              _followerCount = state.followerIDs.length;
-              _followingCount = state.followingIDs.length;
+              _followerIDs = state.followerIDs;
+              _followingIDs = state.followingIDs;
             }
           },
           builder: (context, state) {
             if (state is FollowerIDsLoading) {
               return _buildShimmerFollowerInfo(deviceSize);
-            } else if (state is FollowerIDsLoaded) {
-              return _buildFollowerInfo(context, appLocale);
             } else {
-              return SizedBox.shrink();
+              return _buildFollowerInfo(context, appLocale);
             }
           },
         ),
@@ -369,43 +424,49 @@ class _ProfilePageState extends State<ProfilePage> {
         bottom: deviceSize.width * 0.005,
         left: deviceSize.width * 0.0037,
       ),
-      child:  ShimmerCube(
+      child: ShimmerCube(
         width: deviceSize.width * 0.2,
         height: 8,
       ),
     );
   }
 
-
   InkWell _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
-              onTap: () => Navigator.pushNamed(context, 'follow', arguments: _user),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text(
-                      "$_followerCount ${appLocale.follower}",
-                      style: const TextStyle(
-                        color: spqBlack,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 25),
-                  Text(
-                    "$_followingCount ${appLocale.following}",
-                    style: const TextStyle(
-                      color: spqBlack,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
+      onTap: () => Navigator.pushNamed(context, 'follow',
+          arguments: User(
+            id: widget.pageUserID,
+            profile: _profile,
+            password: '',
+            followerIDs: _followerIDs,
+            followingIDs: _followingIDs,
+          )),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              "${_followerIDs.length} ${appLocale.follower}",
+              style: const TextStyle(
+                color: spqBlack,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
-            );
+            ),
+          ),
+          const SizedBox(width: 25),
+          Text(
+            "${_followingIDs.length} ${appLocale.following}",
+            style: const TextStyle(
+              color: spqBlack,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildProfileInformationShimmer(Size deviceSize) {
@@ -501,8 +562,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const SizedBox(height: 10),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -511,8 +572,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -521,8 +582,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -531,8 +592,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -541,8 +602,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -551,8 +612,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -561,8 +622,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -571,8 +632,8 @@ class _ProfilePageState extends State<ProfilePage> {
         const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
         PostContainer(
           ownerID: 1,
-          name: _name,
-          username: _username,
+          name: _profile.name,
+          username: _profile.username,
           creationTime: DateTime.now(),
           postMessage: _postMessage,
           numberOfComments: 0,
@@ -599,7 +660,8 @@ class _ProfilePageState extends State<ProfilePage> {
   void dispose() {
     _profileBloc.close();
     _resourceBloc.close();
-    _followerBloc.close();
+    _pageUserFollowerBloc.close();
+    _followUnfollowBloc.close();
 
     super.dispose();
   }

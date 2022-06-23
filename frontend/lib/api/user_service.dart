@@ -1,7 +1,6 @@
 import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/model/profile.dart';
-import 'package:frontend/api/model/user.dart';
 
 abstract class UserService {
   Future<Profile> getProfile(int id);
@@ -14,15 +13,22 @@ abstract class UserService {
   Future<List<int>> getFollowerIDs({
     required int id,
   });
+
   Future<List<int>> getFollowingIDs({
     required int id,
   });
+
   Future<List<FollowUser>> getFollower({
     required List<int> ids,
   });
+
   Future<List<FollowUser>> getFollowing({
     required List<int> ids,
   });
+
+  Future<bool> checkIfFollowing({required int userID, required int followerID});
+
+  Future<bool> followUnfollow({required int userID, required int followerID});
 
   Future<LoginResponse> login({required String username, required String password});
 }

@@ -85,11 +85,7 @@ class MainApp extends StatelessWidget {
         if (snapshot.hasError) {
           return const LoginPage();
         } else if (snapshot.hasData) {
-          if (snapshot.data!) {
-            return const HomePage();
-          } else {
             return const LoginPage();
-          }
         } else {
           return SpqLoadingWidget(
               MediaQuery.of(context).size.shortestSide * 0.15);

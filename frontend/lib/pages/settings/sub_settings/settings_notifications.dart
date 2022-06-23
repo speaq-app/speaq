@@ -3,13 +3,11 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-
 class NotificationsSettingsPage extends StatefulWidget {
   const NotificationsSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<NotificationsSettingsPage> createState() =>
-      _NotificationsSettingsPageState();
+  State<NotificationsSettingsPage> createState() => _NotificationsSettingsPageState();
 }
 
 class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
@@ -47,9 +45,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
             ],
           ),
           Positioned(
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
           )

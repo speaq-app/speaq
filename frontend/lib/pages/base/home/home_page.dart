@@ -15,7 +15,9 @@ import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final int userID;
+
+  const HomePage({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -66,7 +68,9 @@ class _HomePageState extends State<HomePage> {
             } else if (state is ProfileLoaded) {
               return Scaffold(
                 appBar: _buildLoadedAppBar(deviceSize, state.profile),
-                drawer: const UserMenu(),
+                drawer: UserMenu(
+                  userID: widget.userID,
+                ),
                 body: _buildPostView(appLocale),
                 floatingActionButton: _buildFloatingActionButton(),
               );
@@ -178,7 +182,8 @@ class _HomePageState extends State<HomePage> {
                 username: state.postList.elementAt(index).ownerUsername,
                 creationTime: state.postList.elementAt(index).date,
                 postMessage: state.postList.elementAt(index).description,
-                resourceID: -1, //Only Text
+                resourceID: -1,
+                //Only Text
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
                 numberOfComments: state.postList.elementAt(index).numberOfComments,
               );
