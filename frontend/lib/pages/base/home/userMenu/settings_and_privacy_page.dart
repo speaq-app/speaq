@@ -7,6 +7,7 @@ class SettingsAndPrivacyPage extends StatefulWidget {
   State<SettingsAndPrivacyPage> createState() => _SettingsAndPrivacyPageState();
 }
 
+/// Creates and returns elements for [Container] for the build widget.
 class _SettingsAndPrivacyPageState extends State<SettingsAndPrivacyPage> {
   @override
   Widget build(BuildContext context) {

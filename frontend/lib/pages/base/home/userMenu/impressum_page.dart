@@ -7,6 +7,7 @@ class ImpressumPage extends StatefulWidget {
   State<ImpressumPage> createState() => _ImpressumPageState();
 }
 
+/// Creates and returns elements for [Container] for the build widget.
 class _ImpressumPageState extends State<ImpressumPage> {
   @override
   Widget build(BuildContext context) {

@@ -27,14 +27,15 @@ class _UserMenuState extends State<UserMenu> {
   final SettingsBloc _settingsBloc = SettingsBloc();
   final FollowerBloc _followerBloc = FollowerBloc();
 
-  //Follower
+  // Follower.
   List<int> _followerIDs = [];
   List<int> _followingIDs = [];
 
-  //App User (beim login holen)
+  // App User (get at login).
   late Profile _profile;
   late User _user;
 
+  ///
   @override
   void initState() {
     _profileBloc.add(LoadProfile(
@@ -44,11 +45,11 @@ class _UserMenuState extends State<UserMenu> {
     super.initState();
   }
 
+  ///
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
-
     return Drawer(
       child: SafeArea(
         child: SingleChildScrollView(
@@ -82,6 +83,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  ///
   Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
@@ -113,6 +115,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  ///
   Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Size deviceSize, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
@@ -176,6 +179,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  ///
   Widget _buildShimmerFollowerInfo(Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
@@ -190,6 +194,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  ///
   Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
       onTap: () => Navigator.pushNamed(context, 'follow',
@@ -215,7 +220,8 @@ class _UserMenuState extends State<UserMenu> {
                   padding: const EdgeInsets.only(left: 2),
                   child: Text(
                     appLocale.follower,
-                    style: const TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 10
+                    ),
                   ),
                 ),
               ],
@@ -229,7 +235,8 @@ class _UserMenuState extends State<UserMenu> {
                   padding: const EdgeInsets.only(right: 2.0),
                   child: Text(
                     "${_followingIDs.length}",
-                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
                 Text(
@@ -244,6 +251,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  ///
   Widget _buildMenu(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: [
@@ -252,7 +260,8 @@ class _UserMenuState extends State<UserMenu> {
           title: Text(appLocale.profile),
           onTap: () {
             //TODO User übergeben
-            Navigator.popAndPushNamed(context, "profile", arguments: [widget.userID, true, widget.userID]);
+            Navigator.popAndPushNamed(context, "profile", arguments: [widget.userID, true, widget.userID]
+            );
           },
         ),
         ListTile(
@@ -276,28 +285,32 @@ class _UserMenuState extends State<UserMenu> {
         ListTile(
           title: Text(appLocale.settingsandprivacy),
           onTap: () {
-            Navigator.popAndPushNamed(context, "settings");
+            Navigator.popAndPushNamed(context, "settings"
+            );
           },
         ),
         BlocConsumer<SettingsBloc, SettingsState>(
           bloc: _settingsBloc,
           listener: (context, state) async {
             if (state is ImprintURLLoaded) {
-              await launchUrl(state.imprintURL);
+              await launchUrl(state.imprintURL
+              );
             }
           },
           builder: (context, state) {
             if (state is LoadingImprintURL) {
               return ListTile(
                 title: Text(appLocale.imprint),
-                trailing: const CircularProgressIndicator(),
+                trailing: const CircularProgressIndicator(
+                ),
               );
             }
 
             return ListTile(
               title: Text(appLocale.imprint),
               onTap: () {
-                _settingsBloc.add(LoadImprintURL());
+                _settingsBloc.add(LoadImprintURL()
+                );
               },
             );
           },
@@ -306,13 +319,13 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  ///
   @override
   void dispose() {
     _settingsBloc.close();
     _followerBloc.close();
     _profileBloc.close();
     _resourceBloc.close();
-
     super.dispose();
   }
 }

@@ -9,6 +9,7 @@ class BookmarksPage extends StatefulWidget {
   State<BookmarksPage> createState() => _BookmarksPageState();
 }
 
+/// Creates and returns elements for [SafeArea] for the build widget.
 class _BookmarksPageState extends State<BookmarksPage> {
   @override
   Widget build(BuildContext context) {

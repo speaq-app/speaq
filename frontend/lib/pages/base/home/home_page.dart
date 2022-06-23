@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
-    //If no internet connection Load from cache?
+    // If no internet connection Load from cache?
     _postBloc.add(LoadPosts(userId: 1));
     super.initState();
   }
@@ -54,7 +54,8 @@ class _HomePageState extends State<HomePage> {
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+              _resourceBloc.add(LoadResource(
+                  resourceId: state.profile.profileImageResourceId));
             }
           },
           builder: (context, state) {
@@ -82,12 +83,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  ///
   Future<void> _pullRefresh() async {
-    //Change from Hardcoded
     _postBloc.add(LoadPosts(userId: 1));
     _scrollController.jumpTo(0);
   }
 
+  ///
   PreferredSizeWidget _buildLoadedAppBar(Size deviceSize, Profile profile) {
     return SpqAppBar(
       actionList: [
@@ -98,13 +100,16 @@ class _HomePageState extends State<HomePage> {
           onPressed: () => {},
         )
       ],
-      leading: Builder(builder: (context) {
-        return _buildProfileImage(context, profile.profileImageBlurHash);
-      }),
+      leading: Builder(
+        builder: (context) {
+          return _buildProfileImage(context, profile.profileImageBlurHash);
+        },
+      ),
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0,
+                duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -117,6 +122,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Returns a [BlockBuilder] for different post states.
   Widget _buildPostView(AppLocalizations appLocale) {
     return BlocBuilder<PostBloc, PostState>(
       bloc: _postBloc,
@@ -132,6 +138,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Returns a [SpqFloatingActionButton] for posting a new post.
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
       onPressed: () => Navigator.pushNamed(context, 'new_post'),
@@ -143,6 +150,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  ///
   Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
     return IconButton(
       onPressed: () => Scaffold.of(context).openDrawer(),
@@ -165,6 +173,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Returns a [ListView] for a list of posts.
   Widget _buildPostList(PostsLoaded state, AppLocalizations appLocale) {
     return ListView(
       controller: _scrollController,
@@ -182,9 +191,10 @@ class _HomePageState extends State<HomePage> {
                 creationTime: state.postList.elementAt(index).date,
                 postMessage: state.postList.elementAt(index).description,
                 resourceID: -1,
-                //Only Text
+                // Only Text.
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                numberOfComments: state.postList.elementAt(index).numberOfComments,
+                numberOfComments:
+                    state.postList.elementAt(index).numberOfComments,
               );
             }
             return _buildFeedFooter(appLocale);
@@ -194,6 +204,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Creates amd returns a [Colum] to build a FeedFooter
   Widget _buildFeedFooter(AppLocalizations appLocale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -218,6 +229,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Returns a [ListView] for different PostShimmer effects.
   Widget _buildPostContainerShimmer() {
     return ListView(
       controller: _scrollController,
@@ -232,6 +244,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Close all Blocs ond dispose.
   @override
   void dispose() {
     _profileBloc.close();

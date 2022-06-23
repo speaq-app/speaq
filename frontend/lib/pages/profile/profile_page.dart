@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -35,20 +34,20 @@ class ProfilePageState extends State<ProfilePage> {
   final FollowerBloc _pageUserFollowerBloc = FollowerBloc();
   final FollowerBloc _followUnfollowBloc = FollowerBloc();
 
-  //Background picture
+  // Background picture.
   final String _backgroundImage = "https://cdn0.scrvt.com/5b9bbd140a15e188780a6244ebe572d4/772147c289ad227c/ca6d6d455211/v/1abab81df2ad/C_Sont_001_300dpi.jpg";
 
-  //Follower
+  // Follower.
   List<int> _followerIDs = [];
   List<int> _followingIDs = [];
 
-  //App User (beim login holen)
+  // App User (get at login).
   late Profile _profile;
 
-  //User-Data
+  // User-Data.
   final String _joined = "Joined August 2022";
 
-  //Posts
+  // Posts.
   final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
   final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
   final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
@@ -134,7 +133,8 @@ class ProfilePageState extends State<ProfilePage> {
           } else if (state is ProfileLoading) {
             return _buildProfilePageShimmer(deviceSize, appLocale);
           } else {
-            return const Text("State failed");
+            return const Text("State failed"
+            );
           }
         },
       ),
@@ -213,7 +213,8 @@ class ProfilePageState extends State<ProfilePage> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 1),
-          child: _buildTabsShimmer(deviceSize),
+          child: _buildTabsShimmer(deviceSize
+          ),
         ),
       ],
     );
@@ -237,8 +238,8 @@ class ProfilePageState extends State<ProfilePage> {
                   print("JEEEEEEEEEEE 111111111111");
                   _isFollowing = state.isFollowing;
                 } else if (state is FollowUnfollowLoaded) {
-                  print("ISFOLLOWING: ${state.isFollowing} l");
-
+                  print("ISFOLLOWING: ${state.isFollowing} l"
+                  );
                   _isFollowing = state.isFollowing;
                 }
               },
