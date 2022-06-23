@@ -6,9 +6,19 @@ import "google/protobuf/empty.proto";
 
 service Auth {
     rpc Register(RegisterRequest) returns (google.protobuf.Empty);
+    rpc Login(LoginRequest) returns (LoginResponse);
 }
 
 message RegisterRequest {
     string username = 1;
     string password = 2;
+}
+
+message LoginRequest{
+    string username = 1;
+    string password = 2;
+}
+  
+message LoginResponse{
+    string token = 1;
 }

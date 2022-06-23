@@ -12,12 +12,16 @@ func (s Service) ResourceByID(id int64) (data.Resource, error) {
 
 	var r data.Resource
 	if err := s.QueryRow(ctx, `
-SELECT resource_data, resource_name, mime_type, size
+SELECT resource_data, mime_type, size
 FROM resources
 WHERE id = $1;
-`, id).Scan(&r.Data, &r.Name, &r.MIMEType, &r.Size); err != nil {
+`, id).Scan(&r.Data, &r.MIMEType, &r.Size); err != nil {
 		return r, err
 	}
 
 	return r, nil
+}
+
+func (s Service) CreateResource(bb []byte, mimeType string) (data.Resource, error) {
+	panic("implement me")
 }

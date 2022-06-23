@@ -1,23 +1,140 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/api/model/post.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/blocs/post_bloc/post_bloc.dart';
+import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NewPostPage extends StatefulWidget {
-  const NewPostPage({Key? key}) : super(key: key);
+  const NewPostPage({Key? key, required this.userID}) : super(key: key);
+  final int userID;
 
   @override
   State<NewPostPage> createState() => _NewPostPageState();
 }
 
 class _NewPostPageState extends State<NewPostPage> {
-  final PostBloc _postBloc = PostBloc();
-  final dateNow = DateTime.now();
-  final TextEditingController _postController = TextEditingController();
+  FlutterSoundPlayer player = FlutterSoundPlayer();
 
-  bool emojiShowing = false;
+  // Main
+  final PostBloc _postBloc = PostBloc();
+  final TextEditingController _postController = TextEditingController();
+  bool picAndAudioOffstateVisible = false;
+
+  // Keyboard
+  bool mainKeyboardVisible = true;
+  bool cameraOffstateVisible = false;
+
+  // Emoji
+  bool emojiKeyboardOffstateVisible = false;
+
+  // Camera/Gallery
+  bool checkImageVisible = false;
+  String pathImageFile = "";
+  late File? _imageFile = File(pathImageFile);
+  late PickedFile im;
+
+  bool dataIsAudio = false;
+
+  // Audio
+  late final recorder = FlutterSoundRecorder();
+  bool audioKeyboardVisible = false;
+  bool isRecorderReady = false;
+  bool isRecording = false;
+  bool _hasMicrophoneAccess = true;
+  final _audio = <int>[];
+  StreamSubscription? _mRecordingDataSubscription;
+
+  //region GENERAL
+  void keyboardInput() {
+    KeyboardVisibility.onChange.listen(
+      (bool keyboardShowing) {
+        setState(
+          () {
+            switchOffStage("MAIN", mainVisible: keyboardShowing);
+          },
+        );
+      },
+    );
+  }
+
+  void switchOffStage(String offstage, {bool? mainVisible}) {
+    switch (offstage) {
+      case "MAIN":
+        if (mainVisible! == true) {
+          audioKeyboardVisible = false;
+          emojiKeyboardOffstateVisible = false;
+        }
+        mainKeyboardVisible = mainVisible;
+        break;
+
+      case "AUDIO":
+        mainKeyboardVisible = false;
+        audioKeyboardVisible = !audioKeyboardVisible;
+        emojiKeyboardOffstateVisible = false;
+        break;
+
+      case "EMOJI":
+        mainKeyboardVisible = false;
+        emojiKeyboardOffstateVisible = !emojiKeyboardOffstateVisible;
+        audioKeyboardVisible = false;
+        break;
+
+      case "CAMERA":
+        cameraOffstateVisible = !cameraOffstateVisible;
+        break;
+
+      case "BACK":
+        mainKeyboardVisible = false;
+        cameraOffstateVisible = false;
+        audioKeyboardVisible = false;
+        emojiKeyboardOffstateVisible = false;
+        break;
+    }
+  }
+  //endregion
+
+  @override
+  void initState() {
+    super.initState();
+    player.openPlayer();
+
+    // Initialize Recorder for Audio
+    initRecorder();
+
+    // KEYBOARD VISIBILITY
+    keyboardInput();
+  }
+
+  Future initRecorder() async {
+    var status = await Permission.microphone.request();
+    _hasMicrophoneAccess = status == PermissionStatus.granted;
+
+    if (!_hasMicrophoneAccess) {
+      throw 'Microphone permission not granted';
+    }
+
+    await recorder.openRecorder();
+    isRecorderReady = true;
+
+    recorder.setSubscriptionDuration(
+      const Duration(milliseconds: 500),
+    );
+    await initializeDateFormatting();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,157 +144,466 @@ class _NewPostPageState extends State<NewPostPage> {
       child: BlocConsumer<PostBloc, PostState>(
         bloc: _postBloc,
         listener: (context, state) async {
-          null;
+          if (state is PostSaved) {
+            Navigator.pop(context);
+          }
         },
         builder: (context, state) {
           if (state is PostSaving) {
             return SpqLoadingWidget(
               MediaQuery.of(context).size.shortestSide * 0.15,
             );
-          } else if (state is PostSaved) {
-            Navigator.pop(context);
-          }
-          return Scaffold(
+          } else {
+            return Scaffold(
               appBar: SpqAppBar(
                 preferredSize: deviceSize,
-                actionList: [_buildSendPostButton()],
+                actionList: [
+                  _buildSendPostButton(),
+                ],
               ),
-              body: _buildPostTextField(appLocale));
+              body: Column(
+                children: [
+                  Expanded(
+                    child: _buildAttachmentPreview(),
+                  ),
+                  _buildInputRow(),
+                  _buildEmojiKeyboard(appLocale),
+                  _buildAudioKeyboard(deviceSize),
+                ],
+              ),
+            );
+          }
         },
       ),
     );
   }
 
-  Widget _buildPostTextField(AppLocalizations appLocale) => Padding(
+  Widget _buildAttachmentPreview() {
+    return Visibility(
+      visible: picAndAudioOffstateVisible,
+      child: Container(
         padding: const EdgeInsets.all(8.0),
-        child: SpqPostTextField(
-          height: double.infinity,
-          minLines: 30,
-          controller: _postController,
-          hintText: appLocale.newPost,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Align(
+                alignment: Alignment.center,
+                child: dataIsAudio
+                    ? IconButton(
+                        icon: Icon(Icons.play_arrow),
+                        color: spqWhite,
+                        onPressed: () {
+                          if (player.isPlaying) {
+                            player.stopPlayer();
+                          }
+
+                          player.startPlayer(
+                            fromDataBuffer: Uint8List.fromList(_audio),
+                            codec: Codec.pcm16,
+                          );
+                        },
+                      )
+                    : null),
+            Expanded(
+              child: Center(
+                child: dataIsAudio
+                    ? InkWell(
+                        onTap: () => print("Data is Audio"),
+                        child: SvgPicture.asset(
+                            "assets/images/logo/speaq_logo_white.svg"),
+                      )
+                    : Image.file(
+                        _imageFile!,
+                        alignment: Alignment.center,
+                        fit: BoxFit.fitWidth,
+                      ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: const Icon(Icons.delete_forever_rounded,
+                    color: spqErrorRed),
+                onPressed: () {
+                  setState(
+                    () {
+                      picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
+                    },
+                  );
+                },
+              ),
+            )
+          ],
         ),
-      );
-
-  Widget _buildSendPostButton() => TextButton(
-        onPressed: _createPost,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-          decoration: BoxDecoration(border: Border.all(color: spqPrimaryBlue, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(16.0))),
-          child: const Text("speaq"),
-        ),
-      );
-
-  void _createPost() {
-    Post post = Post(date: dateNow, description: _postController.text, resourceID: -1, id: 1, ownerID: 2, ownerName: "Test Owner Name", mimeType: "text", ownerUsername: "@testOwnerName");
-    _postBloc.add(CreatePost(ownerId: 2, post: post));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _disposeController();
-    _postBloc.close();
-  }
-
-  void _disposeController() {
-    _postController.dispose();
-  }
-}
-
-class SpqPostTextField extends StatelessWidget {
-  const SpqPostTextField({
-    Key? key,
-    required this.controller,
-    this.obscureText = false,
-    this.isPassword = false,
-    required this.hintText,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.onTap,
-    this.validator,
-    this.keyboardType,
-    this.minLines,
-    this.maxLines,
-    this.width,
-    this.height = 56,
-    this.contentPadding = const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-    this.enabled = true,
-  }) : super(key: key);
-
-  final TextEditingController? controller;
-  final bool obscureText;
-  final bool isPassword;
-  final String hintText;
-  final Widget? prefixIcon;
-  final Widget? suffixIcon;
-  final void Function()? onTap;
-  final TextInputType? keyboardType;
-  final String? Function(String?)? validator;
-  final int? minLines;
-  final int? maxLines;
-  final double? width;
-  final double? height;
-  final EdgeInsets? contentPadding;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: TextFormField(
-        textAlign: TextAlign.start,
-        textAlignVertical: TextAlignVertical.center,
-        minLines: minLines,
-        maxLines: maxLines,
-        obscureText: obscureText,
-        readOnly: isPassword,
-        keyboardType: keyboardType,
-        enableSuggestions: !isPassword,
-        autocorrect: !isPassword,
-        controller: controller,
-        validator: (value) => validator!(value),
-        style: const TextStyle(color: spqBlack, fontSize: 16),
-        enabled: enabled,
-        decoration: InputDecoration(
-          isDense: true,
-          label: Container(
-            margin: const EdgeInsets.only(bottom: 12.0),
-            child: Text(hintText, style: const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100)),
-          ),
-          contentPadding: contentPadding,
-          labelStyle: const TextStyle(color: spqLightGrey, fontWeight: FontWeight.w100),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          floatingLabelAlignment: FloatingLabelAlignment.start,
-          alignLabelWithHint: true,
-          prefixIcon: prefixIcon != null
-              ? Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: prefixIcon,
-                )
-              : null,
-          suffixIcon: suffixIcon,
-          fillColor: spqWhite,
-          filled: true,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: spqPrimaryBlue, width: 1.0),
-          ),
-          hintStyle: const TextStyle(color: spqLightGrey, fontSize: 16, fontWeight: FontWeight.w100),
-          //hintText: hintText,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: spqWhite, width: 1.0),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: spqWhite, width: 1.0),
-          ),
-          border: const OutlineInputBorder(),
-        ),
-        onTap: onTap,
       ),
     );
+  }
+
+  Widget _buildInputRow() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SpeedDial(
+            childrenButtonSize: const Size(64, 64),
+            spaceBetweenChildren: 4,
+            buttonSize: const Size(34, 34),
+            childPadding: const EdgeInsets.only(left: 18),
+            children: [
+              SpeedDialChild(
+                  child: const Icon(Icons.camera_alt, color: spqBlack),
+                  onTap: () async {
+                    await getImage(true);
+                    setState(() {
+                      _imageFile = File(im.path);
+                      dataIsAudio = false;
+                      picAndAudioOffstateVisible = true;
+                      if (checkImageVisible) {
+                        checkImageVisible = !checkImageVisible;
+                      } else {
+                        checkImageVisible = true;
+                      }
+                    });
+                  }),
+              SpeedDialChild(
+                child: const Icon(Icons.image, color: spqBlack),
+                onTap: () async {
+                  await getImage(false);
+                  setState(
+                    () {
+                      _imageFile = File(im.path);
+                      dataIsAudio = false;
+                      picAndAudioOffstateVisible = true;
+                      if (checkImageVisible) {
+                        checkImageVisible = !checkImageVisible;
+                      } else {
+                        checkImageVisible = true;
+                      }
+                    },
+                  );
+                },
+              ),
+            ],
+            child: const Icon(
+              Icons.add,
+              size: 42,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: TextFormField(
+              autofocus: true,
+              controller: _postController,
+              minLines: 1,
+              maxLines: 5,
+              keyboardType: TextInputType.multiline,
+              style: const TextStyle(fontSize: 18.0, color: spqBlack),
+              decoration: InputDecoration(
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 1),
+                  child: IconButton(
+                    onPressed: _onEmojiClick,
+                    icon: const Icon(
+                      Icons.emoji_emotions_outlined,
+                      size: 30,
+                      color: spqBlack,
+                    ),
+                  ),
+                ),
+                hintText: 'Speaq',
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+              ),
+            ),
+          ),
+        ),
+        _buildAudioRecordButton(),
+      ],
+    );
+  }
+  
+  //region EMOJI
+  Offstage _buildEmojiKeyboard(AppLocalizations appLocale) {
+    return Offstage(
+      offstage: !emojiKeyboardOffstateVisible,
+      child: SizedBox(
+        height: 280,
+        child: EmojiPicker(
+          onEmojiSelected: (Category category, Emoji emoji) {
+            _onEmojiSelected(emoji);
+          },
+          onBackspacePressed: _onBackspacePressed,
+          config: Config(
+            columns: 7,
+            emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+            verticalSpacing: 0,
+            horizontalSpacing: 0,
+            initCategory: Category.RECENT,
+            bgColor: const Color(0xFFF2F2F2),
+            indicatorColor: spqPrimaryBlue,
+            iconColor: spqLightGrey,
+            iconColorSelected: spqPrimaryBlue,
+            progressIndicatorColor: spqPrimaryBlue,
+            backspaceColor: spqPrimaryBlue,
+            skinToneDialogBgColor: spqWhite,
+            skinToneIndicatorColor: spqLightGrey,
+            enableSkinTones: true,
+            showRecentsTab: true,
+            recentsLimit: 28,
+            noRecents: Text(
+              appLocale.noRecents,
+              style: const TextStyle(fontSize: 20, color: spqBlack),
+              textAlign: TextAlign.center,
+            ),
+            tabIndicatorAnimDuration: kTabScrollDuration,
+            categoryIcons: const CategoryIcons(),
+            buttonMode: ButtonMode.MATERIAL,
+          ),
+        ),
+      ),
+    );
+  }
+
+  _onEmojiSelected(Emoji emoji) {
+    _postController
+      ..text += emoji.emoji
+      ..selection = TextSelection.fromPosition(
+        TextPosition(offset: _postController.text.length),
+      );
+  }
+  
+  _onBackspacePressed() {
+    setState(
+      () {
+        switchOffStage("BACK");
+      },
+    );
+    _postController
+      ..text = _postController.text.characters.skipLast(1).toString()
+      ..selection = TextSelection.fromPosition(
+        TextPosition(offset: _postController.text.length),
+      );
+  }
+
+  _onEmojiClick() {
+    if (mainKeyboardVisible) {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
+    setState(
+      () {
+        switchOffStage("EMOJI");
+      },
+    );
+  }
+
+  //endregion
+
+  //region CAMERA/GALLERY AND FUNCTIONALITIES
+
+  Future getImage(bool isCamera) async {
+    if (isCamera) {
+      im = (await ImagePicker.platform.pickImage(source: ImageSource.camera))!;
+    } else {
+      im = (await ImagePicker.platform.pickImage(source: ImageSource.gallery))!;
+    }
+  }
+
+  //endregion*/
+
+  //region BUILD ALL BUTTONS IN KEYBOARD
+
+  Widget _buildAudioRecordButton() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: IconButton(
+        icon: Icon((_hasMicrophoneAccess) ? Icons.mic : Icons.mic_off),
+        iconSize: 32,
+        onPressed: () {
+          if (!_hasMicrophoneAccess) {
+            return;
+          }
+
+          if (mainKeyboardVisible) {
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+          }
+          setState(
+            () {
+              print("Button");
+              switchOffStage("AUDIO");
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSendPostButton() {
+    return TextButton(
+      onPressed: () {
+        picAndAudioOffstateVisible = false;
+        _createPost();
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: spqPrimaryBlue, width: 1.0),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+          color: spqPrimaryBlue,
+        ),
+        child: Row(
+          children: const [
+            Text(
+              "Speaq",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: spqWhite,
+              ),
+            ),
+            SizedBox(width: 6),
+            Icon(
+              Icons.send,
+              size: 16,
+              color: spqWhite,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _createPost() {
+    _postBloc.add(CreatePost(
+      description: _postController.text,
+      resourceData: Uint8List.fromList(_audio),
+      resourceMimeType: "audio/pcm",
+    ));
+  }
+
+  //endregion
+
+  //region AUDIO
+  Widget _buildAudioKeyboard(Size deviceSize) {
+    return Offstage(
+      offstage: !audioKeyboardVisible,
+      child: SizedBox(
+        height: deviceSize.height * 0.333,
+        width: deviceSize.width * 0.25,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildAudioButtonFunction(),
+              StreamBuilder<RecordingDisposition>(
+                stream: recorder.onProgress,
+                builder: (context, snapshot) {
+                  final duration = snapshot.hasData
+                      ? snapshot.data!.duration
+                      : Duration.zero;
+
+                  String twoDigits(int n) => n.toString().padLeft(2, "0");
+                  String twoDigitMinutes =
+                      twoDigits(duration.inMinutes.remainder(60));
+                  String twoDigitSeconds =
+                      twoDigits(duration.inSeconds.remainder(60));
+
+                  return Text(
+                    '$twoDigitMinutes:$twoDigitSeconds',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildAudioButtonFunction() {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        fixedSize: const Size(132, 132),
+        shape: const CircleBorder(),
+      ),
+      onPressed: () async {
+        if (recorder.isRecording) {
+          await stop();
+          setState(
+            () {
+              dataIsAudio = true;
+              picAndAudioOffstateVisible = true;
+            },
+          );
+        } else {
+          await record();
+          setState(
+            () {
+              dataIsAudio = false;
+              picAndAudioOffstateVisible = false;
+            },
+          );
+        }
+      },
+      child: Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 32),
+    );
+  }
+
+  Future record() async {
+    if (!isRecorderReady) return;
+    _audio.clear();
+    var recordingDataController = StreamController<Food>();
+    _mRecordingDataSubscription =
+        recordingDataController.stream.listen((buffer) {
+      if (buffer is FoodData) {
+        _audio.addAll(buffer.data!);
+      }
+    });
+
+    await recorder.startRecorder(
+      toStream: recordingDataController.sink,
+      codec: Codec.pcm16,
+    );
+
+    setState(() {});
+  }
+
+  Future stop() async {
+    if (!isRecorderReady) return;
+    isRecording = !isRecording;
+    final path = await recorder.stopRecorder();
+    final audiopath = File(path!);
+
+    print('Recorded audio: $audiopath');
+  }
+
+  //endregion
+
+  @override
+  void dispose() async {
+    super.dispose();
+    player.stopPlayer();
+    player.closePlayer();
+    recorder.closeRecorder();
+    _postController.dispose();
+    if (_mRecordingDataSubscription != null) {
+      await _mRecordingDataSubscription!.cancel();
+      _mRecordingDataSubscription = null;
+    }
+
+    _postBloc.close();
+
+    isRecorderReady = false;
   }
 }

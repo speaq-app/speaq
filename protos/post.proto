@@ -9,7 +9,9 @@ service Post {
 
 message CreatePostRequest {
     int64 owner_id = 1;
-    SinglePost post = 2;
+    string description = 2;
+    string resource_data = 3;
+    string resource_mime_type = 4;
 }
 
 message CreatePostResponse {

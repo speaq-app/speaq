@@ -36,18 +36,16 @@ func New() data.Service {
 	}
 
 	return &service{
-		delay: time.Second * 1,
+		delay: time.Second * 0,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),
-				Name:     "testImage",
-				MIMEType: "jpeg",
+				MIMEType: "image/jpeg",
 				Size:     83935,
 			},
 			2: {ID: 2,
 				Data:     string(bc),
-				Name:     "testImageKarl",
-				MIMEType: "png",
+				MIMEType: "image/png",
 				Size:     1111111,
 			},
 			3: {ID: 3,

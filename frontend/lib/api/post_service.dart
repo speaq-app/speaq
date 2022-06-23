@@ -4,7 +4,8 @@ abstract class PostService {
   Future<List<Post>> getPosts(int id);
 
   Future<void> createPost({
-    required int ownerId,
-    required Post post,
+    required String description,
+    String resourceDataInBase64 = "",
+    String resourceMimeType = "",
   });
 }

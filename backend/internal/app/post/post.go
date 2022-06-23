@@ -2,6 +2,7 @@ package post
 
 import (
 	"context"
+	"encoding/base64"
 	"log"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
@@ -15,19 +16,25 @@ type Server struct {
 func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
 	log.Printf("Post of User with ID %d should be created.", req.OwnerId)
 
-	p := data.Post{
-		ID:            req.Post.PostId,
-		OwnerID:       req.OwnerId,
-		Description:   req.Post.Description,
-		MimeType:      req.Post.MimeType,
-		ResourceID:    req.Post.ResourceId,
-		OwnerName:     req.Post.OwnerName,
-		OwnerUsername: req.Post.OwnerUsername,
+	bb, err := base64.URLEncoding.DecodeString(req.ResourceData)
+	if err != nil {
+		return nil, err
 	}
 
-	log.Println(p)
-	err := s.DataService.CreatePost(req.OwnerId, &p)
+	r, err := s.DataService.CreateResource(bb, req.ResourceMimeType)
+	if err != nil {
+		return nil, err
+	}
 
+	p := data.Post{
+		OwnerID:     req.OwnerId,
+		Description: req.Description,
+		ResourceID:  r.ID,
+	}
+
+	log.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + p.Description)
+	log.Println(p)
+	err = s.DataService.CreatePost(req.OwnerId, &p)
 	if err != nil {
 		return nil, err
 	}

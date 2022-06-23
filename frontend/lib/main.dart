@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/api/cache/cache_user_service.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/grpc/protos/user.pb.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/model/user.dart';
@@ -13,7 +12,6 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'widgets/all_widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

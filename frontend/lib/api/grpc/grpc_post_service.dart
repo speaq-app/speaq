@@ -17,14 +17,16 @@ class GRPCPostService implements PostService {
       ClientChannel(
         ip,
         port: port,
-        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options:
+            const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
   }
 
   @override
   Future<List<Post>> getPosts(int id) async {
-    GetPostsResponse response = await _client.getPosts(GetPostsRequest()..userId = Int64(id));
+    GetPostsResponse response =
+        await _client.getPosts(GetPostsRequest()..userId = Int64(id));
 
     List<Post> postList = <Post>[];
 
@@ -34,11 +36,14 @@ class GRPCPostService implements PostService {
         Post(
           id: response.postList.elementAt(i).postId.toInt(),
           resourceID: response.postList.elementAt(i).resourceId.toInt(),
-          date: DateTime.fromMillisecondsSinceEpoch(response.postList.elementAt(i).date.toInt() * 1000, isUtc: true),
+          date: DateTime.fromMillisecondsSinceEpoch(
+              response.postList.elementAt(i).date.toInt() * 1000,
+              isUtc: true),
           description: response.postList.elementAt(i).description,
           ownerID: response.postList.elementAt(i).ownerId.toInt(),
           numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
-          numberOfComments: response.postList.elementAt(i).numberOfComments.toInt(),
+          numberOfComments:
+              response.postList.elementAt(i).numberOfComments.toInt(),
           ownerName: response.postList.elementAt(i).ownerName,
           ownerUsername: response.postList.elementAt(i).ownerUsername,
           mimeType: response.postList.elementAt(i).mimeType,
@@ -50,22 +55,15 @@ class GRPCPostService implements PostService {
   }
 
   @override
-  Future<void> createPost({required int ownerId, required Post post}) async {
-    log("mime: " + post.mimeType);
-
-    await _client.createPost(
-      CreatePostRequest()
-        ..ownerId = Int64(ownerId)
-        ..post = SinglePost(
-          postId: Int64(post.id),
-          ownerId: Int64(post.ownerID),
-          date: null,
-          description: post.description,
-          resourceId: Int64(post.resourceID),
-          ownerName: post.ownerName,
-          ownerUsername: post.ownerUsername,
-          mimeType: post.mimeType,
-        ),
-    );
+  Future<void> createPost({
+    required String description,
+    String resourceDataInBase64 = "",
+    String resourceMimeType = "",
+  }) async {
+    await _client.createPost(CreatePostRequest()
+      ..ownerId = Int64(1)
+      ..description = description
+      ..resourceData = resourceDataInBase64
+      ..resourceMimeType = resourceMimeType);
   }
 }
