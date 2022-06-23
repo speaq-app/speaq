@@ -22,6 +22,6 @@ WHERE id = $1;
 	return r, nil
 }
 
-func (s Service) CreateResource(bb []byte, mimeType string) (data.Resource, error) {
+func (s Service) CreateResource(bb string, mimeType string) (data.Resource, error) {
 	panic("implement me")
 }

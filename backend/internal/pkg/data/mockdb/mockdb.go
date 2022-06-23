@@ -26,7 +26,7 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
-	be,err := ioutil.ReadFile("testAudio.txt")
+	be, err := ioutil.ReadFile("testAudio.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,12 +50,10 @@ func New() data.Service {
 			},
 			3: {ID: 3,
 				Data:     string(bc),
-				Name:     "testGifPokemon",
 				MIMEType: "gif",
 				Size:     1111111},
 			4: {ID: 4,
 				Data:     string(be),
-				Name:     "testAudio",
 				MIMEType: "audio",
 				Size:     1111111},
 		},
@@ -156,7 +154,7 @@ func New() data.Service {
 			1: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now(),
+				CreatedAt:   time.Now(),
 				Description: "Now",
 				ResourceID:  2,
 				LikeIDs: []int64{
@@ -168,13 +166,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "image",
+				ResourceMimeType: "image",
 			},
 
 			2: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -1),
+				CreatedAt:   time.Now().Add(time.Minute * -1),
 				Description: "Eine Minute",
 				ResourceID:  1,
 				LikeIDs: []int64{
@@ -186,13 +184,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "image",
+				ResourceMimeType: "image",
 			},
 
 			3: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -3),
+				CreatedAt:   time.Now().Add(time.Minute * -3),
 				Description: "Drei Minuten",
 				ResourceID:  -1,
 				LikeIDs: []int64{
@@ -204,13 +202,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "text",
+				ResourceMimeType: "text",
 			},
 
 			4: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -60),
+				CreatedAt:   time.Now().Add(time.Minute * -60),
 				Description: "1 Stunde",
 				ResourceID:  -1,
 				LikeIDs: []int64{
@@ -222,13 +220,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "text",
+				ResourceMimeType: "text",
 			},
 
 			5: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -180),
+				CreatedAt:   time.Now().Add(time.Minute * -180),
 				Description: "Drei Stunden",
 				ResourceID:  1,
 				LikeIDs: []int64{
@@ -240,13 +238,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "image",
+				ResourceMimeType: "image",
 			},
 
 			6: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -1440),
+				CreatedAt:   time.Now().Add(time.Minute * -1440),
 				Description: "Einen Tag",
 				ResourceID:  1,
 				LikeIDs: []int64{
@@ -258,13 +256,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "image",
+				ResourceMimeType: "image",
 			},
 
 			7: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -4320),
+				CreatedAt:   time.Now().Add(time.Minute * -4320),
 				Description: "Drei Tage",
 				ResourceID:  1,
 				LikeIDs: []int64{
@@ -276,13 +274,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "image",
+				ResourceMimeType: "image",
 			},
 
 			8: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -10080),
+				CreatedAt:   time.Now().Add(time.Minute * -10080),
 				Description: "Eine Woche",
 				ResourceID:  4,
 				LikeIDs: []int64{
@@ -294,13 +292,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "audio",
+				ResourceMimeType: "audio",
 			},
 
 			9: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -30240),
+				CreatedAt:   time.Now().Add(time.Minute * -30240),
 				Description: "Drei Wochen",
 				ResourceID:  4,
 				LikeIDs: []int64{
@@ -312,13 +310,13 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "audio",
+				ResourceMimeType: "audio",
 			},
 
 			10: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -525600),
+				CreatedAt:   time.Now().Add(time.Minute * -525600),
 				Description: "Ein Jahr",
 				ResourceID:  -1,
 				LikeIDs: []int64{
@@ -330,7 +328,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-				MimeType: "text",
+				ResourceMimeType: "text",
 			},
 		},
 	}

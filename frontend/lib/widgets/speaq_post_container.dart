@@ -9,10 +9,8 @@ import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
-class PostContainer extends StatelessWidget {
+class PostContainer extends StatefulWidget {
   final int ownerID;
-  final String name;
-  final String username;
   final DateTime creationTime;
   final int numberOfLikes;
   final int numberOfComments;
@@ -25,8 +23,6 @@ class PostContainer extends StatelessWidget {
   const PostContainer({
     Key? key,
     required this.ownerID,
-    required this.name,
-    required this.username,
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
@@ -36,35 +32,49 @@ class PostContainer extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<PostContainer> createState() => _PostContainerState();
+}
+
+class _PostContainerState extends State<PostContainer> {
+  final ProfileBloc _profileBloc = ProfileBloc();
+  final ResourceBloc _resourceBlocPost = ResourceBloc();
+  final ResourceBloc _resourceBlocProfile = ResourceBloc();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _profileBloc.add(LoadProfile(userId: widget.ownerID));
+  }
+
+  @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-    final ResourceBloc _resourceBlocPost = ResourceBloc();
-    final ResourceBloc _resourceBlocProfile = ResourceBloc();
-    final ProfileBloc _profileBloc = ProfileBloc();
-    _profileBloc.add(LoadProfile(userId: ownerID));
 
-    if (resourceID >= 0) {
-      _resourceBlocPost.add(LoadResource(resourceId: resourceID));
+    if (widget.resourceID >= 0) {
+      _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
     }
 
     return Column(
       children: [
         ListTile(
-          leading: _buildOwnerPicture(_profileBloc, _resourceBlocProfile), //Get Profile from OwnerID and make BlocPattern as on homepage
+          leading:
+              _buildOwnerPicture(), //Get Profile from OwnerID and make BlocPattern as on homepage
           title: _buildPostTitle(),
-          subtitle: _buildContent(appLocale, _resourceBlocPost),
+          subtitle: _buildContent(appLocale),
         ),
       ],
     );
   }
 
-  Widget _buildOwnerPicture(ProfileBloc _profileBloc, ResourceBloc _resourceBlocProfile) {
+  Widget _buildOwnerPicture() {
     return BlocBuilder<ProfileBloc, ProfileState>(
       bloc: _profileBloc,
       builder: (context, state) {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
-          _resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
+          _resourceBlocProfile
+              .add(LoadResource(resourceId: profile.profileImageResourceId));
           return BlocBuilder<ResourceBloc, ResourceState>(
             bloc: _resourceBlocProfile,
             builder: (context, state) {
@@ -89,16 +99,22 @@ class PostContainer extends StatelessWidget {
   }
 
   Widget _buildPostTitle() {
-    return Column(
-      children: [
-        Row(
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      bloc: _profileBloc,
+      builder: (context, state) {
+        if (state is! ProfileLoaded) {
+          return const CircularProgressIndicator();
+        }
+
+        return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
               flex: 3,
               child: Text(
-                name,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                state.profile.name,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 maxLines: 1,
                 overflow: TextOverflow.clip,
                 softWrap: false,
@@ -109,7 +125,7 @@ class PostContainer extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
-                  "@" + username,
+                  "@${state.profile.username}",
                   style: const TextStyle(fontSize: 12, color: spqDarkGrey),
                   maxLines: 1,
                   overflow: TextOverflow.clip,
@@ -118,24 +134,24 @@ class PostContainer extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget _buildContent(AppLocalizations appLocale, ResourceBloc _resourceBlocPost) {
+  Widget _buildContent(AppLocalizations appLocale) {
     final String formattedDate = _formatDate(appLocale);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          postMessage,
+          widget.postMessage,
           overflow: TextOverflow.clip,
           style: const TextStyle(color: spqBlack, fontSize: 15),
         ),
         const SizedBox(height: 10),
-        _buildCorrectPostItem(_resourceBlocPost),
+        _buildCorrectPostItem(),
         const SizedBox(height: 5),
         _buildReactionList(),
         _buildDateAndDivider(formattedDate),
@@ -144,16 +160,20 @@ class PostContainer extends StatelessWidget {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime = DateTimeRange(start: creationTime, end: DateTime.now());
+    final DateTimeRange calculatedDateTime =
+        DateTimeRange(start: widget.creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
-      return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
+      return calculatedDateTime.duration.inSeconds.toString() +
+          appLocale.secondsAgo;
     }
     if (calculatedDateTime.duration.inMinutes < 2) {
-      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minuteAgo;
+      return calculatedDateTime.duration.inMinutes.toString() +
+          appLocale.minuteAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 1) {
-      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minutesAgo;
+      return calculatedDateTime.duration.inMinutes.toString() +
+          appLocale.minutesAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 2) {
@@ -161,7 +181,8 @@ class PostContainer extends StatelessWidget {
     }
 
     if (calculatedDateTime.duration.inDays < 1) {
-      return calculatedDateTime.duration.inHours.toString() + appLocale.hoursAgo;
+      return calculatedDateTime.duration.inHours.toString() +
+          appLocale.hoursAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 2) {
@@ -173,23 +194,25 @@ class PostContainer extends StatelessWidget {
     }
 
     if (calculatedDateTime.duration.inDays < 14) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weekAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
+          appLocale.weekAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 31) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weeksAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
+          appLocale.weeksAgo;
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");
-    return appLocale.dateAt + formatter.format(creationTime);
+    return appLocale.dateAt + formatter.format(widget.creationTime);
   }
 
-  Widget _buildCorrectPostItem(ResourceBloc _resourceBlocPost) {
+  Widget _buildCorrectPostItem() {
     return BlocBuilder<ResourceBloc, ResourceState>(
       bloc: _resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
-          switch (mimeType) {
+          switch (widget.mimeType) {
             case "image":
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8),
@@ -218,11 +241,11 @@ class PostContainer extends StatelessWidget {
           children: [
             _buildIconWithText(
               const Icon(Icons.mic, color: spqDarkGrey, size: 20),
-              numberOfComments.toString(),
+              widget.numberOfComments.toString(),
             ),
             _buildIconWithText(
               const Icon(Icons.favorite, color: spqErrorRed, size: 20),
-              numberOfLikes.toString(),
+              widget.numberOfLikes.toString(),
             ),
             const Icon(Icons.ios_share, color: spqLightGrey, size: 20),
             const Icon(Icons.bookmark, color: spqLightGrey, size: 20)
@@ -259,5 +282,13 @@ class PostContainer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _profileBloc.close();
+    _resourceBlocPost.close();
+    _resourceBlocProfile.close();
   }
 }

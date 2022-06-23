@@ -63,7 +63,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
     nobodyGonnaKnow.openPlayer();
     maxDuration = await nobodyGonnaKnow.startPlayer(
         fromDataBuffer: widget.audioUrl,
-        codec: Codec.mp3,
+        codec: Codec.pcm16,
         whenFinished: () {
           setState(() {});
         });
@@ -88,7 +88,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
   void startPlayer(FlutterSoundPlayer? player) async {
     maxDuration = await player!.startPlayer(
         fromDataBuffer: widget.audioUrl,
-        codec: Codec.mp3,
+        codec: Codec.pcm16,
         whenFinished: () {
           setState(() {});
         });

@@ -12,7 +12,5 @@ message GetResourceRequest {
 
 message GetResourceResponse {
     string data = 1;
-    string name = 2;
     string mime_type = 3;
-    int64 size = 4;
 }

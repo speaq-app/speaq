@@ -59,8 +59,7 @@ func TestGetResource(t *testing.T) {
 			}
 
 			if resp.Data != tc.resource.Data ||
-				resp.MimeType != tc.resource.MIMEType ||
-				resp.Size != tc.resource.Size {
+				resp.MimeType != tc.resource.MIMEType {
 				t.Fail()
 			}
 		})

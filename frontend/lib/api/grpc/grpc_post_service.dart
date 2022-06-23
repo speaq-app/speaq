@@ -31,8 +31,8 @@ class GRPCPostService implements PostService {
   @override
   Future<List<Post>> getPosts(int id) async {
     var token = await TokenUtils.getToken();
-    GetPostsResponse response = await _client.getPosts(
-      GetPostsRequest()..userId = Int64(id),
+    GetPostFeedResponse response = await _client.getPostFeed(
+      GetPostFeedRequest(),
       options: _callOptions,
     );
 
@@ -52,9 +52,7 @@ class GRPCPostService implements PostService {
           numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
           numberOfComments:
               response.postList.elementAt(i).numberOfComments.toInt(),
-          ownerName: response.postList.elementAt(i).ownerName,
-          ownerUsername: response.postList.elementAt(i).ownerUsername,
-          mimeType: response.postList.elementAt(i).mimeType,
+          mimeType: response.postList.elementAt(i).resourceMimeType,
         ),
       );
     }

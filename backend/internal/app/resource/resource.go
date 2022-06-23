@@ -22,6 +22,5 @@ func (s Server) GetResource(ctx context.Context, req *GetResourceRequest) (*GetR
 	return &GetResourceResponse{
 		Data:     r.Data,
 		MimeType: r.MIMEType,
-		Size:     r.Size,
 	}, nil
 }

@@ -30,14 +30,13 @@ class GRPCResourceService implements ResourceService {
   Future<Resource> getResource(int id) async {
     GetResourceResponse resp = await _client.getResource(
       GetResourceRequest()..id = Int64(id),
+      options: _callOptions,
     );
 
     return Resource(
       id: id,
       data: resp.data,
-      name: resp.name,
       mimeType: resp.mimeType,
-      size: resp.size.toInt(),
     );
   }
 }

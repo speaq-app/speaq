@@ -27,7 +27,10 @@ class GRPCSettingsService implements SettingsService {
 
   @override
   Future<Uri> getImprintURL() async {
-    GetImprintResponse resp = await _client.getImprintURL(Empty());
+    GetImprintResponse resp = await _client.getImprintURL(
+      Empty(),
+      options: _callOptions,
+    );
     return Uri.parse(resp.url);
   }
 }

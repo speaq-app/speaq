@@ -79,7 +79,6 @@ message GetUserFollowingResponse{
 }
 
 message UpdateUserProfileRequest {
-  int64  user_id = 1;
   string name = 2;
   string username = 3;
   string description = 4;

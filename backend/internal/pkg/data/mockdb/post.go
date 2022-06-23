@@ -1,51 +1,46 @@
 package mockdb
 
 import (
-	"log"
 	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
-func (s service) PostsByID(id int64) ([]data.Post, error) {
+func (s service) PostFeedForUserID(userID int64) ([]data.Post, error) {
 	time.Sleep(s.delay)
 
-	var postList []data.Post
-
-	for _, dbpost := range s.posts {
-		owner, err := s.UserByID(dbpost.OwnerID)
-		if err != nil {
-			return nil, err
-		}
-
-		dbpost.OwnerName = owner.Profile.Name
-		dbpost.OwnerUsername = owner.Profile.Username
-
-		log.Printf("Loading Post %v", dbpost)
-
-		postList = append(postList, dbpost)
+	var posts []data.Post
+	for _, post := range s.posts {
+		posts = append(posts, post)
 	}
-
-	return postList, nil
+	return posts, nil
 }
 
-func (s service) CreatePost(ownerID int64, post *data.Post) error {
-	time.Sleep(s.delay)
-
+func (s service) nextPostID() int64 {
 	var nextID int64 = 1
-
 	for id := range s.posts {
 		if id >= nextID {
 			nextID = id + 1
 		}
 	}
+	return nextID
+}
 
-	post.ID = nextID
-	post.Date = time.Now()
-	post.OwnerID = ownerID
+func (s service) CreatePost(ownerID int64, description string, resiourceID int64, resourceMIMEType string) (data.Post, error) {
+	time.Sleep(s.delay)
 
-	s.posts[nextID] = *post
+	postID := s.nextPostID()
+	post := data.Post{
+		ID:               postID,
+		OwnerID:          ownerID,
+		CreatedAt:        time.Now(),
+		Description:      description,
+		ResourceID:       resiourceID,
+		ResourceMimeType: resourceMIMEType,
+		LikeIDs:          []int64{},
+		CommentIDs:       []int64{},
+	}
+	s.posts[postID] = post
 
-	log.Printf("Saved Post: %v", post)
-	return nil
+	return post, nil
 }

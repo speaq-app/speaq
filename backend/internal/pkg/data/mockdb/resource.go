@@ -1,7 +1,6 @@
 package mockdb
 
 import (
-	"encoding/base64"
 	"errors"
 	"time"
 
@@ -28,14 +27,14 @@ func (s service) nextResourceID() int64 {
 	return nextID
 }
 
-func (s service) CreateResource(bb []byte, mimeType string) (data.Resource, error) {
+func (s service) CreateResource(dataa string, mimeType string) (data.Resource, error) {
 	time.Sleep(s.delay)
 	resourceID := s.nextResourceID()
 	resource := data.Resource{
 		ID:       resourceID,
-		Data:     base64.RawStdEncoding.EncodeToString(bb),
+		Data:     dataa,
 		MIMEType: mimeType,
-		Size:     int64(len(bb)),
+		Size:     int64(len(dataa)),
 	}
 
 	s.resources[resourceID] = resource
