@@ -100,9 +100,8 @@
   "weekAgo" : " Woche her",
   "weeksAgo" : " Wochen her",
   "dateAt" : "Am ",
-
   "noMorePosts" : "Es scheint, als ob es keine Posts mehr gibt!",
   "followOthersForMorePosts" : "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!",
-
   "errorUsernameAlreadyTaken": "Username already taken."
+
 }

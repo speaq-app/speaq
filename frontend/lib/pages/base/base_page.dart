@@ -13,14 +13,14 @@ class BasePage extends StatefulWidget {
 }
 
 class _BasePageState extends State<BasePage> {
-  /*Singleton, für die Überprüfung der Internetverbindung zuständig ist*/
   late ConnectionUtilSingleton connectionStatus;
   bool hasInternetConnection = true;
+  late final List<Widget> _pages;
+  late List<String> pageTitles;
+  final ValueNotifier _selectedIndexNotifier = ValueNotifier<int>(0);
+  final PageController _pageController = PageController();
 
-  /*Alle Seiten, direkt nach dem Login aufgerufen werden können
-  * und in der BottomNavigationBar vertreten sind*/
-
-  /*Die Variable wird initialisiert und hört dem Stream, welcher updates über die Internetverbindung gibt, zu*/
+  /// Checks the status and updates of the connection to the internet and initialize main pages.
   @override
   initState() {
     connectionStatus = ConnectionUtilSingleton.getInstance();
@@ -28,28 +28,31 @@ class _BasePageState extends State<BasePage> {
 
     super.initState();
 
-    _pages = [HomePage(userID: widget.userID), const SearchPage(), const NotificationsPage(), const MessagesPage()];
+    _pages = [
+      HomePage(userID: widget.userID),
+      const SearchPage(),
+      const NotificationsPage(),
+      const MessagesPage()
+    ];
   }
 
-  /*Methode setzt die boolean Variable, welche angibt, ob eine aktive Verbindung zum Internet besteht
-  * und ruft bei keine Internetverbindung einen Alert-Dialog auf*/
+  /// Sets [hasConnection] true, if there is a internet connection, otherwise a alert dailog pops up.
   void _connectionChanged(dynamic hasConnection) {
-    setState(() {
-      hasInternetConnection = hasConnection;
-      if (!hasInternetConnection) {
-        ConnectionUtilSingleton.noConnectionDialog(context);
-      }
-    });
+    setState(
+      () {
+        hasInternetConnection = hasConnection;
+        if (!hasInternetConnection) {
+          ConnectionUtilSingleton.noConnectionDialog(context);
+        }
+      },
+    );
   }
 
-  late final List<Widget> _pages;
-  late List<String> pageTitles;
-  final ValueNotifier _selectedIndexNotifier = ValueNotifier<int>(0);
-  final PageController _pageController = PageController();
-
+  /// Makes the created pages swipeable.
   void _switchPage(int index) {
     _selectedIndexNotifier.value = index;
-    _pageController.animateToPage(_selectedIndexNotifier.value, duration: const Duration(milliseconds: 200), curve: Curves.linear);
+    _pageController.animateToPage(_selectedIndexNotifier.value,
+        duration: const Duration(milliseconds: 200), curve: Curves.linear);
   }
 
   @override
@@ -59,7 +62,6 @@ class _BasePageState extends State<BasePage> {
         if (_selectedIndexNotifier.value != 0) {
           _switchPage(0);
         }
-
         return false;
       },
       child: Container(
@@ -73,14 +75,16 @@ class _BasePageState extends State<BasePage> {
               controller: _pageController,
               children: _pages,
             ),
+            // Custom buttom navigation bar for the pages.
             bottomNavigationBar: ValueListenableBuilder(
-                valueListenable: _selectedIndexNotifier,
-                builder: (context, value, widget) {
-                  return SpqButtonNavigationBar(
-                    switchPage: _switchPage,
-                    selectedIndex: value as int,
-                  );
-                }),
+              valueListenable: _selectedIndexNotifier,
+              builder: (context, value, widget) {
+                return SpqButtonNavigationBar(
+                  switchPage: _switchPage,
+                  selectedIndex: value as int,
+                );
+              },
+            ),
           ),
         ),
       ),

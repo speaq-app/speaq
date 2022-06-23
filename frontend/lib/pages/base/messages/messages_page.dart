@@ -13,6 +13,7 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage> {
   String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
+  // Initialize a list of messages.
   final List<User> _allUserList = [
     User("https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg", "Sven Gatnar", "Ich bin so ein geiler Typ", "12:20"),
     User("https://hotdogworld.de/media/image/dd/5f/5f/HZ_TK_500ml_USD_1280x1280.jpg", "Halois Ainz", "Ich kenne jeden Automaten den es gibt", "12:33"),
@@ -33,11 +34,9 @@ class _MessagesPageState extends State<MessagesPage> {
     super.initState();
   }
 
-  late AppLocalizations appLocale;
-
   @override
   Widget build(BuildContext context) {
-    appLocale = AppLocalizations.of(context)!;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -63,11 +62,12 @@ class _MessagesPageState extends State<MessagesPage> {
         ),
         body: Column(
           children: <Widget>[
-            generateSearchBar(deviceSize),
+            generateSearchBar(deviceSize, appLocale),
             Expanded(
               child: ListView.builder(
                 itemCount: _foundUsersList.length,
                 itemBuilder: (context, index) {
+                  // Returns elements of the users and add them to a [ListTile].
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(_foundUsersList[index].profilePic),
@@ -87,7 +87,7 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
-  SizedBox generateSearchBar(Size deviceSize) {
+  SizedBox generateSearchBar(Size deviceSize, AppLocalizations appLocale) {
     return SizedBox(
       height: deviceSize.height * 0.08,
       width: deviceSize.width,
@@ -121,6 +121,7 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
+  /// Checking if input [text] is equal to the [name] of the user in [_allUserList] and returns a [_foundUsersList].
   filterSearchResults(String text) {
     List<User> filterList = <User>[];
     if (text != null) {

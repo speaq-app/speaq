@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    //Change from Hardcoded
     _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
     //If no internet connection Load from cache?
     _postBloc.add(LoadPosts(userId: 1));
