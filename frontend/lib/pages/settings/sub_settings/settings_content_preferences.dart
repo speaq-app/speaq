@@ -36,7 +36,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
                 ),
                 tiles: [
                   //Sprachauswahl
-                  _buildSettingsTile(appLocale.language, "login"),
+                  SpqNavigationSettingsTile(text: appLocale.language),
                 ],
               ),
             ],
@@ -51,11 +51,4 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
     );
   }
 
-  SettingsTile _buildSettingsTile(String text, String route) {
-    return SettingsTile.navigation(
-      trailing: Icon(Icons.adaptive.arrow_forward),
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      onPressed: (context) => Navigator.pushNamed(context, route),
-    );
-  }
 }

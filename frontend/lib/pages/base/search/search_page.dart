@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/blocs/search_bloc/search_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/widgets/sdfsdfsd.dart';
-
-import '../../../api/grpc/protos/user.pbgrpc.dart';
+import 'package:frontend/widgets/speaq_search_bar_widget.dart';
 
 class SearchPage extends StatefulWidget {
   final int userID;
@@ -19,10 +18,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
 
   final SearchBloc _searchBloc = SearchBloc();
-
   List<CondensedUser> foundUsers = [];
-
-
 
   @override
   void initState() {
@@ -38,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         appBar: SpqAppBar(
           leading: null,
+          automaticallyImplyLeading: false,
           title: SpqSearchBar(searchBloc: _searchBloc, hintText: appLocale.hintTextSearchBarSearchPage),
           preferredSize: deviceSize,
           centerTitle: true,

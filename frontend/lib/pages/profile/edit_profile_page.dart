@@ -277,7 +277,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       centerTitle: true,
       preferredSize: deviceSize,
       leading: null,
-      isAutomaticallyImplyLeading: false,
+      automaticallyImplyLeading: false,
     );
   }
 

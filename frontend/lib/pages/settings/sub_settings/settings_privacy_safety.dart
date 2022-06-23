@@ -37,17 +37,14 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                 ),
                 tiles: [
                   //Privates Konto SwitchTile
-                  SettingsTile.switchTile(
-                    title: Text(appLocale.privateAccount, style: const TextStyle(fontSize: 15)),
-                    initialValue: valuePrivateSwitch,
-                    onToggle: (value) {
-                      setState(() {
-                        valuePrivateSwitch = value;
-                      });
-                    },
-                  ),
+                  SpqSwitchSettingsTile(tileText: appLocale.privateAccount, value: valuePrivateSwitch),
                   //Suchverlauf löschen
-                  _buildPopUpWindow(appLocale.deleteSearchHistory, appLocale.askDeleteSearchHistory, appLocale.delete),
+                  SpqPopUpSettingsTile(
+                    tileText: appLocale.deleteSearchHistory,
+                    actionButtonText: appLocale.delete,
+                    popupMessage: appLocale.askDeleteSearchHistory,
+                    actionButtonColor: spqErrorRed,
+                  ),
                 ],
               ),
             ],
@@ -60,21 +57,5 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
         ]),
       ),
     );
-  }
-
-  //Pop-up-Fenster
-  SettingsTile _buildPopUpWindow(String text, String popupMessage, String exitText) {
-    return SettingsTile.navigation(
-        trailing: Icon(Icons.adaptive.arrow_forward),
-        title: Text(text, style: const TextStyle(fontSize: 15)),
-        onPressed: (context) => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text(popupMessage),
-                  actions: [
-                    TextButton(child: Text(exitText), onPressed: () => Navigator.pop(context)),
-                    TextButton(child: Text(appLocale.cancel), onPressed: () => Navigator.pop(context)),
-                  ],
-                )));
   }
 }

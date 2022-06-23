@@ -63,7 +63,7 @@ func (s service) UsersByUsername(term string) ([]data.User, error) {
 	var u []data.User
 
 	for _, user := range s.users {
-		if strings.Contains(user.Profile.Username, term) || strings.Contains(user.Profile.Name, term) {
+		if strings.Contains(strings.ToLower(user.Profile.Username), strings.ToLower(term)) || strings.Contains(strings.ToLower(user.Profile.Name), strings.ToLower(term)) {
 			u = append(u, user)
 		}
 	}

@@ -36,10 +36,10 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                 ),
                 tiles: [
                   //Privates Konto SwitchTile
-                  buildSettingsSwitchTile(appLocale.doNotDisturb),
+                  SpqSwitchSettingsTile(tileText: appLocale.doNotDisturb, value: valuePrivateSwitch),
                   //Methode für SettingsTile
-                  _buildSettingsTile(appLocale.receiveNotifications, "login"),
-                  _buildSettingsTile(appLocale.notificationSound, "login"),
+                  SpqNavigationSettingsTile(text: appLocale.receiveNotifications),
+                  SpqNavigationSettingsTile(text: appLocale.notificationSound),
                 ],
               ),
             ],
@@ -55,23 +55,4 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   }
 
   //Erstelle SettingsTile
-  SettingsTile buildSettingsSwitchTile(String text) {
-    return SettingsTile.switchTile(
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      initialValue: valuePrivateSwitch,
-      onToggle: (value) {
-        setState(() {
-          valuePrivateSwitch = value;
-        });
-      },
-    );
-  }
-
-  SettingsTile _buildSettingsTile(String text, String route) {
-    return SettingsTile.navigation(
-      trailing: Icon(Icons.adaptive.arrow_forward),
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      onPressed: (context) => Navigator.pushNamed(context, route),
-    );
-  }
 }

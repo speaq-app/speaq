@@ -11,6 +11,7 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class UserMenu extends StatefulWidget {
   final int userID;

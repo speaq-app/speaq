@@ -8,11 +8,11 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
-import 'package:frontend/widgets/speaq_post_container.dart';
-import 'package:frontend/widgets/spq_fab.dart';
+import 'package:frontend/widgets/speaq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
+import 'package:frontend/widgets/all_widgets.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class HomePage extends StatefulWidget {
   final int userID;

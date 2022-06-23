@@ -36,7 +36,7 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
                 ),
                 tiles: [
                   //Darkmode SwitchTile
-                  buildSettingsSwitchTile(appLocale.darkMode),
+                  SpqSwitchSettingsTile(tileText: appLocale.darkMode, value: valuePrivateSwitch),
                 ],
               ),
             ],
@@ -48,18 +48,6 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
           )
         ]),
       ),
-    );
-  }
-
-  SettingsTile buildSettingsSwitchTile(String text) {
-    return SettingsTile.switchTile(
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      initialValue: valuePrivateSwitch,
-      onToggle: (value) {
-        setState(() {
-          valuePrivateSwitch = value;
-        });
-      },
     );
   }
 }
