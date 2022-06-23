@@ -182,7 +182,6 @@ class _HomePageState extends State<HomePage> {
                 username: state.postList.elementAt(index).ownerUsername,
                 creationTime: state.postList.elementAt(index).date,
                 postMessage: state.postList.elementAt(index).description,
-                // resourceID: -1, //change
                 resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
                 numberOfComments: state.postList.elementAt(index).numberOfComments,

@@ -16,8 +16,13 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 	log.Printf("Post of User with ID %d should be created.", req.OwnerId)
 
 	p := data.Post{
-		OwnerID:     req.OwnerId,
-		Description: req.Description,
+		ID:            req.Post.PostId,
+		OwnerID:       req.OwnerId,
+		Description:   req.Post.Description,
+		MimeType:      req.Post.MimeType,
+		ResourceID:    req.Post.ResourceId,
+		OwnerName:     req.Post.OwnerName,
+		OwnerUsername: req.Post.OwnerUsername,
 	}
 
 	log.Println(p)

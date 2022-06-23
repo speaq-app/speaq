@@ -20,7 +20,6 @@ class PostContainer extends StatelessWidget {
   final String mimeType;
   final String postMessage;
 
-  //As Widget or IDs or Strings?
   final int resourceID;
 
   const PostContainer({

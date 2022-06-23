@@ -69,7 +69,7 @@ class _NewPostPageState extends State<NewPostPage> {
       );
 
   void _createPost() {
-    Post post = Post(date: dateNow, description: _postController.text, resourceID: 1, id: 1, ownerID: 2, ownerName: "Test Owner Name", mimeType: "image", ownerUsername: "@testOwnerName");
+    Post post = Post(date: dateNow, description: _postController.text, resourceID: -1, id: 1, ownerID: 2, ownerName: "Test Owner Name", mimeType: "text", ownerUsername: "@testOwnerName");
     _postBloc.add(CreatePost(ownerId: 2, post: post));
   }
 

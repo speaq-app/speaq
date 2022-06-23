@@ -51,10 +51,21 @@ class GRPCPostService implements PostService {
 
   @override
   Future<void> createPost({required int ownerId, required Post post}) async {
+    log("mime: " + post.mimeType);
+
     await _client.createPost(
       CreatePostRequest()
         ..ownerId = Int64(ownerId)
-        ..description = post.description,
+        ..post = SinglePost(
+          postId: Int64(post.id),
+          ownerId: Int64(post.ownerID),
+          date: null,
+          description: post.description,
+          resourceId: Int64(post.resourceID),
+          ownerName: post.ownerName,
+          ownerUsername: post.ownerUsername,
+          mimeType: post.mimeType,
+        ),
     );
   }
 }
