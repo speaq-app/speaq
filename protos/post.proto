@@ -36,4 +36,5 @@ message SinglePost {
     int64 number_of_comments = 7;
     string owner_name = 8;
     string owner_username = 9;
+    string mime_type = 10;
 }

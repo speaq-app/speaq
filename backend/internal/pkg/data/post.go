@@ -17,4 +17,5 @@ type Post struct {
 	CommentIDs    []int64
 	OwnerName     string
 	OwnerUsername string
+	MimeType      string
 }

@@ -39,13 +39,11 @@ class GRPCPostService implements PostService {
     List<Post> postList = <Post>[];
 
     for (int i = 0; i < response.postList.length; i++) {
-      //DateTime Convertion not correct!
       log(response.postList.elementAt(i).date.toString());
       postList.add(
         Post(
           id: response.postList.elementAt(i).postId.toInt(),
           resourceID: response.postList.elementAt(i).resourceId.toInt(),
-          //date: DateTime.parse(response.postList.elementAt(i).date.toString()),
           date: DateTime.fromMillisecondsSinceEpoch(
               response.postList.elementAt(i).date.toInt() * 1000,
               isUtc: true),
@@ -56,6 +54,7 @@ class GRPCPostService implements PostService {
               response.postList.elementAt(i).numberOfComments.toInt(),
           ownerName: response.postList.elementAt(i).ownerName,
           ownerUsername: response.postList.elementAt(i).ownerUsername,
+          mimeType: response.postList.elementAt(i).mimeType,
         ),
       );
     }
