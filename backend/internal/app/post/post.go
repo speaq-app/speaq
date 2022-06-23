@@ -16,7 +16,7 @@ type Server struct {
 func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
 	log.Printf("Post of User with ID %d should be created.", req.OwnerId)
 
-	bb, err := base64.RawStdEncoding.DecodeString(req.ResourceData)
+	bb, err := base64.URLEncoding.DecodeString(req.ResourceData)
 	if err != nil {
 		return nil, err
 	}

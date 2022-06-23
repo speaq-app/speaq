@@ -58,15 +58,13 @@ class GRPCPostService implements PostService {
   @override
   Future<void> createPost({
     required String description,
-    String? resourceData,
-    String? resourceMimeType,
+    String resourceDataInBase64 = "",
+    String resourceMimeType = "",
   }) async {
-    await _client.createPost(
-      CreatePostRequest()
-        ..ownerId = Int64(1)
-        ..description = description
-        ..resourceData = (resourceData != null) ? resourceData : ""
-        ..resourceMimeType = (resourceMimeType != null) ? resourceMimeType : "",
-    );
+    await _client.createPost(CreatePostRequest()
+      ..ownerId = Int64(1)
+      ..description = description
+      ..resourceData = resourceDataInBase64
+      ..resourceMimeType = resourceMimeType);
   }
 }

@@ -5,7 +5,7 @@ abstract class PostService {
 
   Future<void> createPost({
     required String description,
-    String? resourceData,
-    String? resourceMimeType,
+    String resourceDataInBase64 = "",
+    String resourceMimeType = "",
   });
 }

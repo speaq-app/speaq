@@ -16,7 +16,6 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NewPostPage extends StatefulWidget {
@@ -31,7 +30,6 @@ class _NewPostPageState extends State<NewPostPage> {
   FlutterSoundPlayer player = FlutterSoundPlayer();
 
   // Main
-  final ResourceBloc _resourceBloc = ResourceBloc();
   final PostBloc _postBloc = PostBloc();
   final TextEditingController _postController = TextEditingController();
   bool picAndAudioOffstateVisible = false;
@@ -449,8 +447,7 @@ class _NewPostPageState extends State<NewPostPage> {
     return TextButton(
       onPressed: () {
         picAndAudioOffstateVisible = false;
-        _sendResource();
-        _sendPost();
+        _createPost();
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -483,12 +480,13 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  void _sendResource() {
-    //TODO "Resource Upload in Bloc intigrieren"
-    //_resourceBloc.add(SaveResource());
+  void _createPost() {
+    _postBloc.add(CreatePost(
+      description: _postController.text,
+      resourceData: Uint8List.fromList(_audio),
+      resourceMimeType: "audio/pcm",
+    ));
   }
-
-  void _sendPost() {}
 
   //endregion
 

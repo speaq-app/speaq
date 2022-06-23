@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/api/grpc/grpc_post_service.dart';
@@ -17,7 +21,14 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   void _onCreatePost(CreatePost event, Emitter<PostState> emit) async {
     emit(PostSaving());
-    await _postService.createPost(ownerId: event.ownerId, post: event.post);
+
+    await _postService.createPost(
+      description: event.description,
+      resourceDataInBase64:
+          (event.resourceData != null) ? base64Encode(event.resourceData!) : "",
+      resourceMimeType:
+          (event.resourceMimeType != null) ? event.resourceMimeType! : "",
+    );
 
     emit(PostSaved());
   }
