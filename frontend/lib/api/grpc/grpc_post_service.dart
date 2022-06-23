@@ -4,10 +4,12 @@ import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/post.pbgrpc.dart';
 import 'package:frontend/api/model/post.dart';
 import 'package:frontend/api/post_service.dart';
+import 'package:frontend/utils/token_utils.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCPostService implements PostService {
   late PostClient _client;
+  late CallOptions _callOptions;
 
   GRPCPostService(
     String ip, {
@@ -21,12 +23,18 @@ class GRPCPostService implements PostService {
             const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
+
+    var token = TokenUtils.getToken();
+    _callOptions = CallOptions(metadata: {"authorization": "bearer $token"});
   }
 
   @override
   Future<List<Post>> getPosts(int id) async {
-    GetPostsResponse response =
-        await _client.getPosts(GetPostsRequest()..userId = Int64(id));
+    var token = await TokenUtils.getToken();
+    GetPostsResponse response = await _client.getPosts(
+      GetPostsRequest()..userId = Int64(id),
+      options: _callOptions,
+    );
 
     List<Post> postList = <Post>[];
 
@@ -61,10 +69,12 @@ class GRPCPostService implements PostService {
     String resourceDataInBase64 = "",
     String resourceMimeType = "",
   }) async {
-    await _client.createPost(CreatePostRequest()
-      ..ownerId = Int64(1)
-      ..description = description
-      ..resourceData = resourceDataInBase64
-      ..resourceMimeType = resourceMimeType);
+    await _client.createPost(
+      CreatePostRequest()
+        ..description = description
+        ..resourceData = resourceDataInBase64
+        ..resourceMimeType = resourceMimeType,
+      options: _callOptions,
+    );
   }
 }

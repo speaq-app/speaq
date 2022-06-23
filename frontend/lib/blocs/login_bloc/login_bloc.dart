@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/grpc_auth_service.dart';
+import 'package:frontend/utils/token_utils.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 import 'package:meta/meta.dart';
 
@@ -8,7 +10,7 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthService _authService = GRPCAuthService();
+  final AuthService _authService = GRPCAuthService("10.0.2.2", port: 8080);
 
   LoginBloc() : super(LoginInitial()) {
     on<Login>(_onLogin);
@@ -21,10 +23,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         username: event.username,
         password: event.password,
       );
-      //TODO: Save token
+      await TokenUtils.setToken(token);
       emit(LoginSuccess(token: token));
-    } on GrpcError catch (err) {
-      print(err.message);
+    } on GrpcError catch (_) {
       emit(LoginError());
     }
   }
