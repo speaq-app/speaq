@@ -26,6 +26,10 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+	be,err := ioutil.ReadFile("testAudio.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	passHash, err := bcrypt.GenerateFromPassword([]byte("password"), 10)
 	if err != nil {
 		log.Fatal(err)
@@ -44,7 +48,16 @@ func New() data.Service {
 				MIMEType: "image/png",
 				Size:     1111111,
 			},
-			3: {},
+			3: {ID: 3,
+				Data:     string(bc),
+				Name:     "testGifPokemon",
+				MIMEType: "gif",
+				Size:     1111111},
+			4: {ID: 4,
+				Data:     string(be),
+				Name:     "testAudio",
+				MIMEType: "audio",
+				Size:     1111111},
 		},
 		users: map[int64]data.User{
 			1: {
@@ -145,7 +158,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now(),
 				Description: "Now",
-				ResourceID:  -1,
+				ResourceID:  2,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -155,6 +168,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			2: {
@@ -162,7 +176,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -1),
 				Description: "Eine Minute",
-				ResourceID:  -1,
+				ResourceID:  1,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -172,6 +186,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			3: {
@@ -189,6 +204,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "text",
 			},
 
 			4: {
@@ -196,7 +212,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -60),
 				Description: "1 Stunde",
-				ResourceID:  1,
+				ResourceID:  -1,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -206,6 +222,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "text",
 			},
 
 			5: {
@@ -223,6 +240,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			6: {
@@ -240,6 +258,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			7: {
@@ -257,6 +276,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "image",
 			},
 
 			8: {
@@ -264,7 +284,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -10080),
 				Description: "Eine Woche",
-				ResourceID:  1,
+				ResourceID:  4,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -274,6 +294,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "audio",
 			},
 
 			9: {
@@ -281,7 +302,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -30240),
 				Description: "Drei Wochen",
-				ResourceID:  1,
+				ResourceID:  4,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -291,6 +312,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "audio",
 			},
 
 			10: {
@@ -298,7 +320,7 @@ func New() data.Service {
 				OwnerID:     1,
 				Date:        time.Now().Add(time.Minute * -525600),
 				Description: "Ein Jahr",
-				ResourceID:  1,
+				ResourceID:  -1,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -308,6 +330,7 @@ func New() data.Service {
 					1,
 					2,
 				},
+				MimeType: "text",
 			},
 		},
 	}

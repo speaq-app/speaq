@@ -327,7 +327,7 @@ class _NewPostPageState extends State<NewPostPage> {
       ],
     );
   }
-
+  
   //region EMOJI
   Offstage _buildEmojiKeyboard(AppLocalizations appLocale) {
     return Offstage(
@@ -377,7 +377,7 @@ class _NewPostPageState extends State<NewPostPage> {
         TextPosition(offset: _postController.text.length),
       );
   }
-
+  
   _onBackspacePressed() {
     setState(
       () {

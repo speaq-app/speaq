@@ -60,6 +60,10 @@ dependencies:
   permission_handler: ^9.2.0
   path_provider: ^2.0.11
 
+  #Audio-Player
+  audioplayers: ^0.20.1
+  flutter_sound: ^9.2.1
+
   # API
   protobuf: ^2.0.1
   fixnum: ^1.0.0
@@ -114,8 +118,6 @@ flutter:
     - assets/i18n/de.json
     - assets/i18n/en.json
     - assets/images/
-    - assets/images/camera.png
-    - assets/images/gallery.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

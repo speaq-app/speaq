@@ -5,6 +5,7 @@ import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
@@ -16,10 +17,9 @@ class PostContainer extends StatelessWidget {
   final int numberOfLikes;
   final int numberOfComments;
 
-  final String postType;
+  final String mimeType;
   final String postMessage;
 
-  //As Widget or IDs or Strings?
   final int resourceID;
 
   const PostContainer({
@@ -30,7 +30,7 @@ class PostContainer extends StatelessWidget {
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
-    this.postType = "text", //get From Post
+    required this.mimeType,
     this.resourceID = -1, //-1 equals Text Post since no Resource
     this.postMessage = "",
   }) : super(key: key);
@@ -86,10 +86,6 @@ class PostContainer extends StatelessWidget {
         }
       },
     );
-
-    // return const CircleAvatar(
-    //   backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
-    // );
   }
 
   Widget _buildPostTitle() {
@@ -193,35 +189,25 @@ class PostContainer extends StatelessWidget {
       bloc: _resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: _getCorrectPostTypeWidget(false),
-          );
+          switch (mimeType) {
+            case "image":
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image(image: MemoryImage(state.decodedData)),
+              );
+
+            //Not working
+            case "audio":
+              return SpqAudioPostContainer(audioUrl: state.decodedData);
+
+            default:
+              return const Text("Type ot implemented");
+          }
         } else {
-          return _getCorrectPostTypeWidget(true);
+          return const SizedBox(height: 0);
         }
       },
     );
-  }
-
-  //Get Correct Post-Data
-  Widget _getCorrectPostTypeWidget(bool isShimmer) {
-    switch (postType) {
-      case "image":
-        return isShimmer ? const Text("image shimmer") : const Text("image");
-
-      case "gif":
-        return isShimmer ? const Text("gif shimmer") : const Text("gif");
-
-      case "video":
-        return isShimmer ? const Text("video shimmer") : const Text("video");
-
-      case "audio":
-        return isShimmer ? const Text("audio shimmer") : const Text("audio");
-
-      default:
-        return const SizedBox(height: 0);
-    }
   }
 
   Widget _buildReactionList() {
