@@ -23,5 +23,5 @@ WHERE id = $1;
 }
 
 func (s Service) CreateResource(bb []byte, mimeType string) (data.Resource, error) {
-	return data.Resource{}, nil
+	panic("implement me")
 }

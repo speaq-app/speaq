@@ -32,7 +32,7 @@ func New() data.Service {
 	}
 
 	return &service{
-		delay: time.Second * 1,
+		delay: time.Second * 0,
 		resources: map[int64]data.Resource{
 			1: {ID: 1,
 				Data:     string(bb),

@@ -109,11 +109,3 @@ func (s *Service) migrateSchema(from, to int) error {
 	_, err := s.Exec(ctx, string(sql))
 	return err
 }
-
-func (s Service) PasswordHashByUsername(username string) ([]byte, int64, error) {
-
-	//TODO implement me
-	panic("implement me")
-
-	return nil, 0, nil
-}
