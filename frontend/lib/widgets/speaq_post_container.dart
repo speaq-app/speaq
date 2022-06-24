@@ -5,68 +5,76 @@ import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
-class PostContainer extends StatelessWidget {
+class PostContainer extends StatefulWidget {
   final int ownerID;
-  final String name;
-  final String username;
   final DateTime creationTime;
   final int numberOfLikes;
   final int numberOfComments;
 
-  final String postType;
+  final String resourceMimeType;
   final String postMessage;
 
-  //As Widget or IDs or Strings?
   final int resourceID;
 
   const PostContainer({
     Key? key,
     required this.ownerID,
-    required this.name,
-    required this.username,
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
-    this.postType = "text", //get From Post
-    this.resourceID = -1, //-1 equals Text Post since no Resource
+    required this.resourceMimeType,
+    this.resourceID = 0,
     this.postMessage = "",
   }) : super(key: key);
 
   @override
+  State<PostContainer> createState() => _PostContainerState();
+}
+
+class _PostContainerState extends State<PostContainer> {
+  final ProfileBloc _profileBloc = ProfileBloc();
+  final ResourceBloc _resourceBlocPost = ResourceBloc();
+  final ResourceBloc _resourceBlocProfile = ResourceBloc();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _profileBloc.add(LoadProfile(userId: widget.ownerID));
+  }
+
+  @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-    final ResourceBloc resourceBlocPost = ResourceBloc();
-    final ResourceBloc resourceBlocProfile = ResourceBloc();
-    final ProfileBloc profileBloc = ProfileBloc();
-    profileBloc.add(LoadProfile(userId: ownerID));
 
-    if (resourceID >= 0) {
-      resourceBlocPost.add(LoadResource(resourceId: resourceID));
+    if (widget.resourceID >= 0) {
+      _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
     }
 
     return Column(
       children: [
         ListTile(
-          leading: _buildOwnerPicture(profileBloc, resourceBlocProfile), //Get Profile from OwnerID and make BlocPattern as on homepage
+          leading: _buildOwnerPicture(),
           title: _buildPostTitle(),
-          subtitle: _buildContent(appLocale, resourceBlocPost),
+          subtitle: _buildContent(appLocale),
         ),
       ],
     );
   }
 
-  Widget _buildOwnerPicture(ProfileBloc profileBloc, ResourceBloc resourceBlocProfile) {
+  Widget _buildOwnerPicture() {
     return BlocBuilder<ProfileBloc, ProfileState>(
-      bloc: profileBloc,
+      bloc: _profileBloc,
       builder: (context, state) {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
-          resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
+          _resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
           return BlocBuilder<ResourceBloc, ResourceState>(
-            bloc: resourceBlocProfile,
+            bloc: _resourceBlocProfile,
             builder: (context, state) {
               if (state is ResourceLoaded) {
                 return CircleAvatar(
@@ -86,22 +94,23 @@ class PostContainer extends StatelessWidget {
         }
       },
     );
-
-    // return const CircleAvatar(
-    //   backgroundImage: NetworkImage('https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg'),
-    // );
   }
 
   Widget _buildPostTitle() {
-    return Column(
-      children: [
-        Row(
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      bloc: _profileBloc,
+      builder: (context, state) {
+        if (state is! ProfileLoaded) {
+          return const CircularProgressIndicator();
+        }
+
+        return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
               flex: 3,
               child: Text(
-                name,
+                state.profile.name,
                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 maxLines: 1,
                 overflow: TextOverflow.clip,
@@ -113,7 +122,7 @@ class PostContainer extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
-                  "@$username",
+                  "@${state.profile.username}",
                   style: const TextStyle(fontSize: 12, color: spqDarkGrey),
                   maxLines: 1,
                   overflow: TextOverflow.clip,
@@ -122,24 +131,28 @@ class PostContainer extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget _buildContent(AppLocalizations appLocale, ResourceBloc resourceBlocPost) {
+  Widget _buildContent(AppLocalizations appLocale) {
     final String formattedDate = _formatDate(appLocale);
+    bool hasText = widget.postMessage.isNotEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          postMessage,
-          overflow: TextOverflow.clip,
-          style: const TextStyle(color: spqBlack, fontSize: 15),
+        Visibility(
+          visible: hasText,
+          child: Text(
+            widget.postMessage,
+            overflow: TextOverflow.clip,
+            style: const TextStyle(color: spqBlack, fontSize: 15),
+          ),
         ),
         const SizedBox(height: 10),
-        _buildCorrectPostItem(resourceBlocPost),
+        _buildCorrectPostItem(),
         const SizedBox(height: 5),
         _buildReactionList(),
         _buildDateAndDivider(formattedDate),
@@ -148,7 +161,7 @@ class PostContainer extends StatelessWidget {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime = DateTimeRange(start: creationTime, end: DateTime.now());
+    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
       return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
     }
@@ -185,43 +198,44 @@ class PostContainer extends StatelessWidget {
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");
-    return appLocale.dateAt + formatter.format(creationTime);
+    return appLocale.dateAt + formatter.format(widget.creationTime);
   }
 
-  Widget _buildCorrectPostItem(ResourceBloc resourceBlocPost) {
+  Widget _buildCorrectPostItem() {
     return BlocBuilder<ResourceBloc, ResourceState>(
       bloc: resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: _getCorrectPostTypeWidget(false),
-          );
+          switch (widget.resourceMimeType) {
+            case "image":
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image(image: MemoryImage(state.decodedData)),
+              );
+
+            case "gif":
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image(image: MemoryImage(state.decodedData)),
+              );
+
+            case "audio":
+              return SpqAudioPostContainer(
+                audioUrl: state.decodedData,
+                maxDuration: state.resource.audioDuration!,
+              );
+
+            case "video":
+              return const Text("Video Type not implemented");
+
+            default:
+              return const SizedBox(height: 0);
+          }
         } else {
-          return _getCorrectPostTypeWidget(true);
+          return const SizedBox(height: 0);
         }
       },
     );
-  }
-
-  //Get Correct Post-Data
-  Widget _getCorrectPostTypeWidget(bool isShimmer) {
-    switch (postType) {
-      case "image":
-        return isShimmer ? const Text("image shimmer") : const Text("image");
-
-      case "gif":
-        return isShimmer ? const Text("gif shimmer") : const Text("gif");
-
-      case "video":
-        return isShimmer ? const Text("video shimmer") : const Text("video");
-
-      case "audio":
-        return isShimmer ? const Text("audio shimmer") : const Text("audio");
-
-      default:
-        return const SizedBox(height: 0);
-    }
   }
 
   Widget _buildReactionList() {
@@ -232,11 +246,11 @@ class PostContainer extends StatelessWidget {
           children: [
             _buildIconWithText(
               const Icon(Icons.mic, color: spqDarkGrey, size: 20),
-              numberOfComments.toString(),
+              widget.numberOfComments.toString(),
             ),
             _buildIconWithText(
               const Icon(Icons.favorite, color: spqErrorRed, size: 20),
-              numberOfLikes.toString(),
+              widget.numberOfLikes.toString(),
             ),
             const Icon(Icons.ios_share, color: spqLightGrey, size: 20),
             const Icon(Icons.bookmark, color: spqLightGrey, size: 20)
@@ -273,5 +287,13 @@ class PostContainer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _profileBloc.close();
+    _resourceBlocPost.close();
+    _resourceBlocProfile.close();
   }
 }

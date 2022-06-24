@@ -3,6 +3,9 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/api/grpc/grpc_user_service.dart';
+import 'package:frontend/api/user_service.dart';
+import 'package:frontend/blocs/login_bloc/login_bloc.dart';
 import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
@@ -17,6 +20,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
+  final LoginBloc _loginBloc = LoginBloc();
 
   bool isHidden = true;
 
@@ -38,11 +42,14 @@ class _LoginPageState extends State<LoginPage> {
       child: ColorfulSafeArea(
         color: spqWhite,
         child: Scaffold(
-          body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-              bloc: _authenticationBloc,
+          body: BlocConsumer<LoginBloc, LoginState>(
+              bloc: _loginBloc,
               listener: (context, state) {
                 if (state is LogInSuccess) {
-                  Navigator.pushNamed(context, "base", arguments: {"userID": state.userID, "token": state.token});
+                  Navigator.pushNamed(context, "base", arguments: {
+                    "userID": state.userID, 
+                    "token": state.token,
+                  });
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {
@@ -67,22 +74,22 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               builder: (context, state) {
-                if (state is TryLoggingIn) {
+                if (state is LoginLoading) {
                   return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
                 } else if (state is LoginError) {
                   return ListView(
                     children: <Widget>[
-                      buildTop(context, appLocale),
-                      buildBottom(context, appLocale),
+                      _buildTop(context, appLocale),
+                      _buildBottom(context, appLocale),
                     ],
                   );
-                } else if (state is LogInSuccess) {
+                } else if (state is LoginSuccess) {
                   return const SizedBox.shrink();
                 } else {
                   return ListView(
                     children: <Widget>[
-                      buildTop(context, appLocale),
-                      buildBottom(context, appLocale),
+                      _buildTop(context, appLocale),
+                      _buildBottom(context, appLocale),
                     ],
                   );
                 }
@@ -92,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildTop(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
         top: 125,
@@ -147,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildBottom(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildBottom(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: <Widget>[
         Padding(
@@ -157,9 +164,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: SpeaqButton(
             loginText: appLocale.login,
-            onPressed: () {
-              _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
-            },
+            onPressed: () => _login(),
           ),
         ),
         SpeaqPageForwarding(
@@ -191,11 +196,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  _login() {
+    _loginBloc.add(
+      Login(
+          username: _usernameController.text,
+          password: _passwordController.text),
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
     _disposeController();
-    _authenticationBloc.close();
+    _loginBloc.close();
   }
 
   void _disposeController() {

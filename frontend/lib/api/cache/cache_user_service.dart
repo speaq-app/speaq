@@ -1,5 +1,8 @@
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/grpc/protos/user.pb.dart';
+import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
+import 'package:frontend/api/grpc/protos/user.pb.dart';
+import 'package:frontend/api/model/user.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:frontend/api/user_service.dart';
@@ -8,6 +11,7 @@ import 'package:frontend/api/model/profile.dart';
 class CacheUserService implements UserService {
   final UserService _userService;
   final Box _profileBox = Hive.box<Profile>("profile");
+  final Box _userBox = Hive.box<User>("user");
 
   CacheUserService(this._userService);
 
@@ -55,16 +59,19 @@ class CacheUserService implements UserService {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
+
   @override
   Future<List<int>> getFollowingIDs({required int id}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
+
   @override
   Future<List<CondensedUser>> getFollower({required List<int> ids}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
+
   @override
   Future<List<CondensedUser>> getFollowing({required List<int> ids}) {
     // TODO: implement getFollower-cache
