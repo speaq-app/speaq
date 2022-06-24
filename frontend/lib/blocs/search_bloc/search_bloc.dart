@@ -10,7 +10,7 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  final UserService _userService = GRPCUserService();
+  final UserService _userService = GRPCUserService("10.0.2.2", port: 8080);
 
   SearchBloc() : super(SearchInitial()) {
     on<StartSearch>(_onStartSearch);

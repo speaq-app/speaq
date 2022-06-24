@@ -2,10 +2,12 @@ package user
 
 import (
 	"context"
+	"log"
+
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/middleware"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"log"
 )
 
 type Server struct {
@@ -14,8 +16,6 @@ type Server struct {
 }
 
 func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileRequest) (*empty.Empty, error) {
-	log.Printf("User with ID %d should be updated", req.UserId)
-
 	p := data.UserProfile{
 		Name:        req.Name,
 		Username:    req.Username,
@@ -23,8 +23,12 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 		Website:     req.Website,
 	}
 
-	log.Println(p)
-	err := s.DataService.UpdateUserProfile(req.UserId, p)
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.DataService.UpdateUserProfile(userID, p)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +43,6 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 	if err != nil {
 		return nil, err
 	}
-	log.Println(p)
 
 	return &GetUserProfileResponse{
 		Name:                   p.Name,
@@ -58,7 +61,6 @@ func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileReque
 	if err != nil {
 		return nil, err
 	}
-	log.Println(er)
 
 	return &GetUserFollowerIDsResponse{
 		FollowerIds: er,

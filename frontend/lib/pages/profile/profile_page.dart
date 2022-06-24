@@ -303,7 +303,7 @@ class ProfilePageState extends State<ProfilePage> {
           ),
         ),
         Text(
-          profile.username,
+          "@${profile.username}",
           style: const TextStyle(
             color: spqDarkGrey,
             fontSize: 18,
