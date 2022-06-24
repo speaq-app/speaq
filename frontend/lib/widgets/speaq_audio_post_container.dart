@@ -58,18 +58,6 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
   }
 
   Future<void> init() async {
-    //TODO CHANGE THAT BITCH
-    FlutterSoundPlayer nobodyGonnaKnow = FlutterSoundPlayer();
-    nobodyGonnaKnow.openPlayer();
-    await nobodyGonnaKnow.startPlayer(
-        fromDataBuffer: widget.audioUrl,
-        codec: Codec.pcm16,
-        whenFinished: () {
-          setState(() {});
-        });
-    nobodyGonnaKnow.stopPlayer();
-    nobodyGonnaKnow.closePlayer();
-
     await _mPlayer.openPlayer(enableVoiceProcessing: true);
 
     await _mPlayer.setSubscriptionDuration(
@@ -170,7 +158,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
                 Text(
                   formatTime(position ~/ 1000),
                 ),
-                SizedBox(width: 150,),
+                const SizedBox(width: 150,),
                 Text(
                   formatTime(widget.maxDuration.inSeconds),
                 ),

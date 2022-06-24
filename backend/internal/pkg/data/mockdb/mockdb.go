@@ -156,7 +156,7 @@ func New() data.Service {
 				OwnerID:     1,
 				CreatedAt:   time.Now(),
 				Description: "Now",
-				ResourceID:  2,
+				ResourceID:  0,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -166,7 +166,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-				ResourceMimeType: "image",
+				ResourceMimeType: "text",
 			},
 
 			2: {
@@ -192,7 +192,7 @@ func New() data.Service {
 				OwnerID:     1,
 				CreatedAt:   time.Now().Add(time.Minute * -3),
 				Description: "Drei Minuten",
-				ResourceID:  -1,
+				ResourceID:  2,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -202,7 +202,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-				ResourceMimeType: "text",
+				ResourceMimeType: "image",
 			},
 
 			4: {
@@ -210,7 +210,7 @@ func New() data.Service {
 				OwnerID:     1,
 				CreatedAt:   time.Now().Add(time.Minute * -60),
 				Description: "1 Stunde",
-				ResourceID:  -1,
+				ResourceID:  3,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -220,7 +220,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-				ResourceMimeType: "text",
+				ResourceMimeType: "gif",
 			},
 
 			5: {
@@ -228,60 +228,6 @@ func New() data.Service {
 				OwnerID:     1,
 				CreatedAt:   time.Now().Add(time.Minute * -180),
 				Description: "Drei Stunden",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-				ResourceMimeType: "image",
-			},
-
-			6: {
-				ID:          1,
-				OwnerID:     1,
-				CreatedAt:   time.Now().Add(time.Minute * -1440),
-				Description: "Einen Tag",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-				ResourceMimeType: "image",
-			},
-
-			7: {
-				ID:          1,
-				OwnerID:     1,
-				CreatedAt:   time.Now().Add(time.Minute * -4320),
-				Description: "Drei Tage",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-				ResourceMimeType: "image",
-			},
-
-			8: {
-				ID:          1,
-				OwnerID:     1,
-				CreatedAt:   time.Now().Add(time.Minute * -10080),
-				Description: "Eine Woche",
 				ResourceID:  4,
 				LikeIDs: []int64{
 					1,
@@ -293,42 +239,6 @@ func New() data.Service {
 					2,
 				},
 				ResourceMimeType: "audio",
-			},
-
-			9: {
-				ID:          1,
-				OwnerID:     1,
-				CreatedAt:   time.Now().Add(time.Minute * -30240),
-				Description: "Drei Wochen",
-				ResourceID:  4,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-				ResourceMimeType: "audio",
-			},
-
-			10: {
-				ID:          1,
-				OwnerID:     1,
-				CreatedAt:   time.Now().Add(time.Minute * -525600),
-				Description: "Ein Jahr",
-				ResourceID:  -1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-				ResourceMimeType: "text",
 			},
 		},
 	}

@@ -27,7 +27,7 @@ class PostContainer extends StatefulWidget {
     required this.numberOfLikes,
     required this.numberOfComments,
     required this.resourceMimeType,
-    this.resourceID = -1, //-1 equals Text Post since no Resource
+    this.resourceID = 0,
     this.postMessage = "",
   }) : super(key: key);
 
@@ -58,7 +58,7 @@ class _PostContainerState extends State<PostContainer> {
     return Column(
       children: [
         ListTile(
-          leading: _buildOwnerPicture(), //Get Profile from OwnerID and make BlocPattern as on homepage
+          leading: _buildOwnerPicture(),
           title: _buildPostTitle(),
           subtitle: _buildContent(appLocale),
         ),
@@ -213,15 +213,23 @@ class _PostContainerState extends State<PostContainer> {
                 child: Image(image: MemoryImage(state.decodedData)),
               );
 
-            //Not working
+            case "gif":
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image(image: MemoryImage(state.decodedData)),
+              );
+
             case "audio":
               return SpqAudioPostContainer(
                 audioUrl: state.decodedData,
                 maxDuration: state.resource.audioDuration!,
               );
 
+            case "video":
+              return const Text("Video Type not implemented");
+
             default:
-              return const Text("Type ot implemented");
+              return const SizedBox(height: 0);
           }
         } else {
           return const SizedBox(height: 0);
