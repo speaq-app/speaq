@@ -15,7 +15,7 @@ class PostContainer extends StatefulWidget {
   final int numberOfLikes;
   final int numberOfComments;
 
-  final String mimeType;
+  final String resourceMimeType;
   final String postMessage;
 
   final int resourceID;
@@ -26,7 +26,7 @@ class PostContainer extends StatefulWidget {
     required this.creationTime,
     required this.numberOfLikes,
     required this.numberOfComments,
-    required this.mimeType,
+    required this.resourceMimeType,
     this.resourceID = -1, //-1 equals Text Post since no Resource
     this.postMessage = "",
   }) : super(key: key);
@@ -141,14 +141,18 @@ class _PostContainerState extends State<PostContainer> {
 
   Widget _buildContent(AppLocalizations appLocale) {
     final String formattedDate = _formatDate(appLocale);
+    bool hasText = widget.postMessage.isNotEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.postMessage,
-          overflow: TextOverflow.clip,
-          style: const TextStyle(color: spqBlack, fontSize: 15),
+        Visibility(
+          visible: hasText,
+          child: Text(
+            widget.postMessage,
+            overflow: TextOverflow.clip,
+            style: const TextStyle(color: spqBlack, fontSize: 15),
+          ),
         ),
         const SizedBox(height: 10),
         _buildCorrectPostItem(),
@@ -212,7 +216,7 @@ class _PostContainerState extends State<PostContainer> {
       bloc: _resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
-          switch (widget.mimeType) {
+          switch (widget.resourceMimeType) {
             case "image":
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8),
