@@ -29,6 +29,4 @@ abstract class UserService {
   Future<bool> checkIfFollowing({required int userID, required int followerID});
 
   Future<bool> followUnfollow({required int userID, required int followerID});
-
-  Future<LoginResponse> login({required String username, required String password});
 }

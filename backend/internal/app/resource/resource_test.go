@@ -27,9 +27,8 @@ func TestGetResource(t *testing.T) {
 			resourceID: rand.Int63(),
 			resource: data.Resource{
 				Data:     "data",
-				Name:     "name",
 				MIMEType: "type",
-				Size:     16,
+				AudioDuration: 187000,
 			},
 		},
 		{
@@ -60,9 +59,7 @@ func TestGetResource(t *testing.T) {
 			}
 
 			if resp.Data != tc.resource.Data ||
-				resp.MimeType != tc.resource.MIMEType ||
-				resp.Name != tc.resource.Name ||
-				resp.Size != tc.resource.Size {
+				resp.MimeType != tc.resource.MIMEType {
 				t.Fail()
 			}
 		})

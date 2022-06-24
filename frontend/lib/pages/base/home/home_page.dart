@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
-      onPressed: () => Navigator.pushNamed(context, 'new_post'),
+      onPressed: () => Navigator.pushNamed(context, 'new_post', arguments: 1), //TODO "Echte User-ID übergeben"
       heroTag: 'post',
       child: const Icon(
         Icons.add,
@@ -178,14 +178,12 @@ class _HomePageState extends State<HomePage> {
             if (index < state.postList.length) {
               return PostContainer(
                 ownerID: state.postList.elementAt(index).ownerID,
-                name: state.postList.elementAt(index).ownerName,
-                username: state.postList.elementAt(index).ownerUsername,
                 creationTime: state.postList.elementAt(index).date,
                 postMessage: state.postList.elementAt(index).description,
-                resourceID: -1,
-                //Only Text
+                resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
                 numberOfComments: state.postList.elementAt(index).numberOfComments,
+                resourceMimeType: state.postList.elementAt(index).mimeType,
               );
             }
             return _buildFeedFooter(appLocale);
