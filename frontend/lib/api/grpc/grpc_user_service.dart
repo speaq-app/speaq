@@ -90,7 +90,7 @@ class GRPCUserService implements UserService {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowerResponse resp = await _client.getUserFollower(
+    CondensedUserListResponse resp = await _client.getUserFollower(
       GetUserFollowerRequest(followerIds: int64IDs),
       options: _callOptions,
     );

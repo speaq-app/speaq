@@ -3,10 +3,7 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/user_service.dart';
 import 'package:frontend/blocs/login_bloc/login_bloc.dart';
-import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:grpc/grpc.dart';
@@ -19,7 +16,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
   final LoginBloc _loginBloc = LoginBloc();
 
   bool isHidden = true;
@@ -45,22 +41,22 @@ class _LoginPageState extends State<LoginPage> {
           body: BlocConsumer<LoginBloc, LoginState>(
               bloc: _loginBloc,
               listener: (context, state) {
-                if (state is LogInSuccess) {
+                if (state is LoginSuccess) {
                   Navigator.pushNamed(context, "base", arguments: {
-                    "userID": state.userID, 
+                    "userID": state.userID,
                     "token": state.token,
                   });
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {
-                    case StatusCode.unauthenticated:
+                    case StatusCode.permissionDenied:
                       message = appLocale.wrongPassword;
                       break;
                     case StatusCode.notFound:
                       message = appLocale.userNotFound;
                       break;
-                    case StatusCode.unknown:
-                      message = appLocale.wrongPassword;
+                    case StatusCode.unauthenticated:
+                      message = appLocale.tokenNotGenerated;
                       break;
                     default:
                       message = appLocale.unknownError;

@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/grpc_auth_service.dart';
+import 'package:frontend/api/grpc/protos/auth.pb.dart';
 import 'package:frontend/utils/token_utils.dart';
-import 'package:grpc/grpc_or_grpcweb.dart';
+import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
 part 'login_event.dart';
@@ -19,14 +19,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _onLogin(Login event, Emitter<LoginState> emit) async {
     emit(LoginLoading());
     try {
-      String token = await _authService.login(
+      LoginResponse resp = await _authService.loginUser(
         username: event.username,
         password: event.password,
       );
-      await TokenUtils.setToken(token);
-      emit(LoginSuccess(token: token));
-    } on GrpcError catch (_) {
-      emit(LoginError());
+      await TokenUtils.setToken(resp.token);
+      emit(LoginSuccess(token: resp.token, userID: resp.userId.toInt()));
+    } on GrpcError catch (e) {
+      print(e.codeName);
+      emit(LoginError(e.code));
     }
   }
 }

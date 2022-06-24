@@ -38,28 +38,33 @@ func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, e
 	hash, err := s.UserService.PasswordHashByUsername(req.Username)
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
 	passwordValid := s.EncryptionService.CompareHashAndPassword(hash, []byte(req.Password))
 	if !passwordValid {
 		log.Println(err)
-		return nil, errors.New("wrong password")
+		log.Println("1")
+		return nil, status.Error(codes.PermissionDenied, errors.New("password invalid").Error())
 	}
 
 	u, err := s.UserService.UserByUsername(req.Username)
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		log.Println("2")
+		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
-	token, err := s.TokenService.GenerateForUserID(u.ID)
+	userToken, err := s.TokenService.GenerateForUserID(u.ID)
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		log.Println("3")
+
+		return nil, status.Error(codes.Unauthenticated, err.Error())
 	}
 
 	return &LoginResponse{
-		Token: token,
+		UserId: u.ID,
+		Token:  userToken,
 	}, nil
 }

@@ -151,7 +151,7 @@ func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 		}
 	}
 
-	return nil, errors.New("no user found")
+	return nil, errors.New("no user found phbn")
 }
 
 func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
@@ -159,7 +159,7 @@ func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, er
 	u, err := s.UserByID(userID)
 
 	if err != nil {
-		return false, -1, errors.New("no User found")
+		return false, -1, errors.New("no User found cif")
 	}
 
 	for i, f := range u.FollowingIDs {
@@ -176,7 +176,7 @@ func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	u, err := s.UserByID(userID)
 
 	if err != nil {
-		return false, errors.New("no User found")
+		return false, errors.New("no User found fu")
 	}
 
 	c, i, err := s.CheckIfFollowing(userID, followID)

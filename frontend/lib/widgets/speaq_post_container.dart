@@ -203,7 +203,7 @@ class _PostContainerState extends State<PostContainer> {
 
   Widget _buildCorrectPostItem() {
     return BlocBuilder<ResourceBloc, ResourceState>(
-      bloc: resourceBlocPost,
+      bloc: _resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
           switch (widget.resourceMimeType) {

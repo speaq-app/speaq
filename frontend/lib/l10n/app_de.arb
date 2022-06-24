@@ -108,5 +108,6 @@
   "errorUsernameAlreadyTaken": "Username already taken.",
   "wrongPassword": "Das eingegebene Password ist falsch",
   "unknownError": "Es ist ein unbekannter Fehler aufgetreten",
-  "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen"
+  "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen",
+  "tokenNotGenerated": "Es konnte kein Nutzertoken"
 }
