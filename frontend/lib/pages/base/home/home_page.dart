@@ -8,11 +8,11 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
-import 'package:frontend/widgets/speaq_post_container.dart';
-import 'package:frontend/widgets/spq_fab.dart';
+import 'package:frontend/widgets/speaq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
+import 'package:frontend/widgets/all_widgets.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class HomePage extends StatefulWidget {
   final int userID;
@@ -37,9 +37,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     //Change from Hardcoded
-    _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
+    _profileBloc.add(LoadProfile(userId: widget.userID, fromCache: false));
     //If no internet connection Load from cache?
-    _postBloc.add(LoadPosts(userId: 1));
+    _postBloc.add(LoadPosts(userId: widget.userID));
     super.initState();
   }
 
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _pullRefresh() async {
     //Change from Hardcoded
-    _postBloc.add(LoadPosts(userId: 1));
+    _postBloc.add(LoadPosts(userId: widget.userID));
     _scrollController.jumpTo(0);
   }
 

@@ -1,8 +1,5 @@
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/grpc/protos/user.pb.dart';
-import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
-import 'package:frontend/api/grpc/protos/user.pb.dart';
-import 'package:frontend/api/model/user.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:frontend/api/user_service.dart';
@@ -11,19 +8,18 @@ import 'package:frontend/api/model/profile.dart';
 class CacheUserService implements UserService {
   final UserService _userService;
   final Box _profileBox = Hive.box<Profile>("profile");
-  final Box _userBox = Hive.box<User>("user");
 
   CacheUserService(this._userService);
 
   @override
   Future<Profile> getProfile(int id) async {
-    Profile? _profile = _profileBox.get(id);
-    if (_profile == null) {
-      _profile = await _userService.getProfile(id);
-      _profileBox.put(id, _profile);
+    Profile? profile = _profileBox.get(id);
+    if (profile == null) {
+      profile = await _userService.getProfile(id);
+      _profileBox.put(id, profile);
     }
 
-    return _profile;
+    return profile;
   }
 
   @override
@@ -55,12 +51,6 @@ class CacheUserService implements UserService {
   }
 
   @override
-  Future<LoginResponse> login({required String username, required String password}) {
-    // TODO: implement login-cache
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<int>> getFollowerIDs({required int id}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
@@ -71,12 +61,12 @@ class CacheUserService implements UserService {
     throw UnimplementedError();
   }
   @override
-  Future<List<FollowUser>> getFollower({required List<int> ids}) {
+  Future<List<CondensedUser>> getFollower({required List<int> ids}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
   @override
-  Future<List<FollowUser>> getFollowing({required List<int> ids}) {
+  Future<List<CondensedUser>> getFollowing({required List<int> ids}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
@@ -90,6 +80,12 @@ class CacheUserService implements UserService {
   @override
   Future<bool> followUnfollow({required int userID, required int followerID}) async {
     // TODO: implement followUnfollow-cache
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<CondensedUser>> userByUsername({required String searchTerm}) {
+    // TODO: implement userByUsername
     throw UnimplementedError();
   }
 

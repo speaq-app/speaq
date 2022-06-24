@@ -7,6 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+/*Geht zurück zum Ursprung des Widget-Trees und ruft die Login-Seite auf*/
+void logOut(BuildContext context) {
+  Navigator.popUntil(context, ModalRoute.withName("main"));
+  Navigator.pushNamed(context, 'main');
+}
+
+
 class ConnectionUtilSingleton {
   //This creates the single instance by calling the `_internal` constructor specified below
   static final ConnectionUtilSingleton _singleton = ConnectionUtilSingleton._internal();

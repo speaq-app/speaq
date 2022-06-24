@@ -2,15 +2,10 @@ package user
 
 import (
 	"context"
-	"errors"
-	"github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
-	"log"
-	"time"
-
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"log"
 )
 
 type Server struct {
@@ -84,7 +79,7 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 	}, nil
 }
 
-func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*GetUserFollowerResponse, error) {
+func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*CondensedUserListResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.FollowerIds)
 
 	us, err := s.DataService.FollowerByIDs(req.FollowerIds)
@@ -93,23 +88,25 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest
 	}
 	log.Println(us)
 
-	var fu []*FollowUser
+	var fu []*CondensedUser
 
 	for _, u := range us {
 
-		fu = append(fu, &FollowUser{
-			Id:       u.ID,
-			Name:     u.Profile.Name,
-			Username: u.Profile.Username,
+		fu = append(fu, &CondensedUser{
+			Id:                     u.ID,
+			Name:                   u.Profile.Name,
+			Username:               u.Profile.Username,
+			ProfileImageBlurHash:   u.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: u.Profile.ProfileImageResourceID,
 		})
 	}
 
-	return &GetUserFollowerResponse{
-		Follower: fu,
+	return &CondensedUserListResponse{
+		Users: fu,
 	}, nil
 }
 
-func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*GetUserFollowingResponse, error) {
+func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*CondensedUserListResponse, error) {
 
 	us, err := s.DataService.FollowingByIDs(req.FollowingIds)
 	if err != nil {
@@ -117,93 +114,70 @@ func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingReque
 	}
 	log.Println(us)
 
-	var fu []*FollowUser
+	var fu []*CondensedUser
 
 	for _, u := range us {
 
-		fu = append(fu, &FollowUser{
-			Id:       u.ID,
-			Name:     u.Profile.Name,
-			Username: u.Profile.Username,
+		fu = append(fu, &CondensedUser{
+			Id:                     u.ID,
+			Name:                   u.Profile.Name,
+			Username:               u.Profile.Username,
+			ProfileImageBlurHash:   u.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: u.Profile.ProfileImageResourceID,
 		})
 	}
 
-	return &GetUserFollowingResponse{
-		Following: fu,
+	return &CondensedUserListResponse{
+		Users: fu,
 	}, nil
 }
 
-func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*CheckIfFollowingResponse, error) {
+func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*IsFollowingResponse, error) {
 	f, _, err := s.DataService.CheckIfFollowing(req.UserId, req.FollowerId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &CheckIfFollowingResponse{
+	return &IsFollowingResponse{
 		IsFollowing: f,
 	}, nil
 }
 
-func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*FollowUnfollowResponse, error) {
+func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*IsFollowingResponse, error) {
 	f, err := s.DataService.FollowUnfollow(req.UserId, req.FollowerId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &FollowUnfollowResponse{
+	return &IsFollowingResponse{
 		IsFollowing: f,
 	}, nil
 }
 
-func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
-	hash, id, err := s.DataService.PasswordHashAndIDByUsername(req.Username)
+func (s Server) UsersByUsername(ctx context.Context, req *SearchUserRequest) (*CondensedUserListResponse, error) {
+	u, err := s.DataService.UsersByUsername(req.Term)
+
 	if err != nil {
 		return nil, err
 	}
 
-	passwordValid := CheckPasswordHash(hash, req.Password)
-	if !passwordValid {
-		return nil, errors.New("wrong password")
+	var cu []*CondensedUser
+
+	for _, user := range u {
+		cu = append(cu, &CondensedUser{
+			Id:                     user.ID,
+			Name:                   user.Profile.Name,
+			Username:               user.Profile.Username,
+			ProfileImageBlurHash:   user.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: user.Profile.ProfileImageResourceID,
+		})
 	}
 
-	/*	if err := bcrypt.CompareHashAndPassword(hash, []byte(req.Password)); err != nil {
-			return nil, errors.New("wrong password")
-		}
-	*/
-	token, err := GenerateJWT(req.Username, "User")
-	if err != nil {
-		return nil, err
-	}
-
-	return &LoginResponse{
-		UserId: id,
-		Token:  token,
+	return &CondensedUserListResponse{
+		Users: cu,
 	}, nil
-}
-
-func CheckPasswordHash(hash []byte, password string) bool {
-	err := bcrypt.CompareHashAndPassword(hash, []byte(password))
-	return err == nil
-}
-
-func GenerateJWT(username, role string) (string, error) {
-	mySigningKey := []byte("Sheeesh")
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-
-	claims["authorized"] = true
-	claims["username"] = username
-	claims["role"] = role
-	claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
-
-	tokenString, err := token.SignedString(mySigningKey)
-
-	if err != nil {
-		return "", errors.New("token couldn't be generated")
-	}
-	return tokenString, nil
 }
 
 /*func verifyToken(token string) (string, error) {

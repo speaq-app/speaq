@@ -12,7 +12,8 @@ class RouteGenerator {
     switch (settings.name) {
       case "main":
         return PageTransition(
-          child: MainApp(),
+          child: const MainApp(),
+          settings: const RouteSettings(name: 'main'),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
@@ -78,49 +79,45 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "search":
+        int userID = args as int;
+
         return PageTransition(
-          child: const SearchPage(),
+          child: SearchPage(userID: userID),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
       //Settings
-      case "settingsPrivacy":
-        return PageTransition(
-          child: const SettingsAndPrivacyPage(),
-          type: PageTransitionType.fade,
-          alignment: Alignment.center,
-        );
-      case "settAccount":
+      case "accountSettings":
         return PageTransition(
           child: const AccountSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settPrivSafety":
+      case "privacySafetySettings":
         return PageTransition(
           child: const PrivacySafetySettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settNotific":
+      case "notificationSettings":
         return PageTransition(
           child: const NotificationsSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settContentPref":
+      case "contentPreferencesSettings":
         return PageTransition(
           child: const ContentPrefSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settDispSound":
+      case "displaySoundSettings":
         return PageTransition(
           child: const DisplaySoundSettingsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "settAboutSpeaq":
+      case "aboutSpeaqSettings":
         return PageTransition(
           child: const AboutSpeaqSettingsPage(),
           type: PageTransitionType.fade,
@@ -129,12 +126,6 @@ class RouteGenerator {
       case "bookmarks":
         return PageTransition(
           child: const BookmarksPage(),
-          type: PageTransitionType.fade,
-          alignment: Alignment.center,
-        );
-      case "impressum":
-        return PageTransition(
-          child: const ImpressumPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );

@@ -21,6 +21,30 @@ WHERE id = $1;
 
 	return u, nil
 }
+
+func (s Service) UsersByUsername(term string) ([]data.User, error) {
+	/*
+			ctx, cancel := context.WithTimeout(context.Background(), s.timeout)
+			defer cancel()
+
+			var u []data.User
+
+			if err := s.QueryRow(ctx, `
+		SELECT name, username, description, website, profile_picture_id
+		FROM users
+		WHERE username LIKE $1;
+		`, username).Scan(&u.Profile.Name, &u.Profile.Username, &u.Profile.Description, &u.Profile.Website); err != nil {
+				return u, err
+			}
+		return u, nil
+	*/
+
+	panic("implement me")
+
+	return []data.User{}, nil
+
+}
+
 func (s Service) FollowerIDsByID(userID int64) ([]int64, error) {
 	panic("implement me")
 

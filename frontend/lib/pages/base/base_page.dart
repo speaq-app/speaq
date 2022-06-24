@@ -28,7 +28,7 @@ class _BasePageState extends State<BasePage> {
 
     super.initState();
 
-    _pages = [HomePage(userID: widget.userID), const SearchPage(), const NotificationsPage(), const MessagesPage()];
+    _pages = [HomePage(userID: widget.userID), SearchPage(userID: widget.userID), const NotificationsPage(), const MessagesPage()];
   }
 
   /*Methode setzt die boolean Variable, welche angibt, ob eine aktive Verbindung zum Internet besteht

@@ -18,4 +18,13 @@ class GRPCAuthService implements AuthService {
       password: password,
     ));
   }
+  @override
+  Future<LoginResponse> loginUser({required String username, required String password}) async {
+
+    LoginResponse resp = await _client.login(LoginRequest()
+      ..username = username
+      ..password = password);
+
+    return resp;
+  }
 }
