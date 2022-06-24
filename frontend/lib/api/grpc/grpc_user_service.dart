@@ -84,7 +84,7 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<List<FollowUser>> getFollower({required List<int> ids}) async {
+  Future<List<CondensedUser>> getFollower({required List<int> ids}) async {
     List<Int64> int64IDs = [];
     for (int i in ids) {
       int64IDs.add(Int64(i));
@@ -95,11 +95,11 @@ class GRPCUserService implements UserService {
       options: _callOptions,
     );
 
-    return resp.follower;
+    return resp.users;
   }
 
   @override
-  Future<List<FollowUser>> getFollowing({required List<int> ids}) async {
+  Future<List<CondensedUser>> getFollowing({required List<int> ids}) async {
     List<Int64> int64IDs = [];
     for (int i in ids) {
       int64IDs.add(Int64(i));
@@ -110,7 +110,7 @@ class GRPCUserService implements UserService {
       options: _callOptions,
     );
 
-    return resp.following;
+    return resp.users;
   }
 
   @override
@@ -135,5 +135,16 @@ class GRPCUserService implements UserService {
     );
 
     return resp.isFollowing;
+  }
+
+  @override
+  Future<List<CondensedUser>> userByUsername(
+      {required String searchTerm}) async {
+    CondensedUserListResponse resp = await _client.usersByUsername(
+      SearchUserRequest(term: searchTerm),
+      options: _callOptions,
+    );
+
+    return resp.users;
   }
 }

@@ -12,6 +12,7 @@ import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class UserMenu extends StatefulWidget {
   final int userID;
@@ -34,7 +35,6 @@ class _UserMenuState extends State<UserMenu> {
 
   //App User (beim login holen)
   late Profile _profile;
-  late User _user;
 
   @override
   void initState() {
@@ -264,7 +264,7 @@ class _UserMenuState extends State<UserMenu> {
           thickness: 0.75,
         ),
         ListTile(
-          title: Text(appLocale.settingsandprivacy),
+          title: Text(appLocale.settingsAndPrivacy),
           onTap: () {
             Navigator.popAndPushNamed(context, "settings");
           },

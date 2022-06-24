@@ -2,12 +2,11 @@ package user
 
 import (
 	"context"
-	"log"
-
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
 	"github.com/speaq-app/speaq/internal/pkg/middleware"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"log"
 )
 
 type Server struct {
@@ -94,7 +93,7 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 	}, nil
 }
 
-func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*GetUserFollowerResponse, error) {
+func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*CondensedUserListResponse, error) {
 	log.Printf("Follower with ID %d should be loaded", req.FollowerIds)
 
 	us, err := s.DataService.FollowerByIDs(req.FollowerIds)
@@ -103,23 +102,25 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest
 	}
 	log.Println(us)
 
-	var fu []*FollowUser
+	var fu []*CondensedUser
 
 	for _, u := range us {
 
-		fu = append(fu, &FollowUser{
-			Id:       u.ID,
-			Name:     u.Profile.Name,
-			Username: u.Profile.Username,
+		fu = append(fu, &CondensedUser{
+			Id:                     u.ID,
+			Name:                   u.Profile.Name,
+			Username:               u.Profile.Username,
+			ProfileImageBlurHash:   u.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: u.Profile.ProfileImageResourceID,
 		})
 	}
 
-	return &GetUserFollowerResponse{
-		Follower: fu,
+	return &CondensedUserListResponse{
+		Users: fu,
 	}, nil
 }
 
-func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*GetUserFollowingResponse, error) {
+func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*CondensedUserListResponse, error) {
 
 	us, err := s.DataService.FollowingByIDs(req.FollowingIds)
 	if err != nil {
@@ -127,42 +128,68 @@ func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingReque
 	}
 	log.Println(us)
 
-	var fu []*FollowUser
+	var fu []*CondensedUser
 
 	for _, u := range us {
 
-		fu = append(fu, &FollowUser{
-			Id:       u.ID,
-			Name:     u.Profile.Name,
-			Username: u.Profile.Username,
+		fu = append(fu, &CondensedUser{
+			Id:                     u.ID,
+			Name:                   u.Profile.Name,
+			Username:               u.Profile.Username,
+			ProfileImageBlurHash:   u.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: u.Profile.ProfileImageResourceID,
 		})
 	}
 
-	return &GetUserFollowingResponse{
-		Following: fu,
+	return &CondensedUserListResponse{
+		Users: fu,
 	}, nil
 }
 
-func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*CheckIfFollowingResponse, error) {
+func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*IsFollowingResponse, error) {
 	f, _, err := s.DataService.CheckIfFollowing(req.UserId, req.FollowerId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &CheckIfFollowingResponse{
+	return &IsFollowingResponse{
 		IsFollowing: f,
 	}, nil
 }
 
-func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*FollowUnfollowResponse, error) {
+func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*IsFollowingResponse, error) {
 	f, err := s.DataService.FollowUnfollow(req.UserId, req.FollowerId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &FollowUnfollowResponse{
+	return &IsFollowingResponse{
 		IsFollowing: f,
+	}, nil
+}
+
+func (s Server) UsersByUsername(ctx context.Context, req *SearchUserRequest) (*CondensedUserListResponse, error) {
+	u, err := s.DataService.UsersByUsername(req.Term)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var cu []*CondensedUser
+
+	for _, user := range u {
+		cu = append(cu, &CondensedUser{
+			Id:                     user.ID,
+			Name:                   user.Profile.Name,
+			Username:               user.Profile.Username,
+			ProfileImageBlurHash:   user.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: user.Profile.ProfileImageResourceID,
+		})
+	}
+
+	return &CondensedUserListResponse{
+		Users: cu,
 	}, nil
 }

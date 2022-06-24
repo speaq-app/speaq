@@ -22,7 +22,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.contentpreferences,
+            appLocale.contentPreferences,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),
@@ -36,26 +36,19 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
                 ),
                 tiles: [
                   //Sprachauswahl
-                  _buildSettingsTile(appLocale.language, "login"),
+                  SpqNavigationSettingsTile(text: appLocale.language),
                 ],
               ),
             ],
           ),
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
           )
         ]),
       ),
     );
   }
 
-  SettingsTile _buildSettingsTile(String text, String route) {
-    return SettingsTile.navigation(
-      trailing: Icon(Icons.adaptive.arrow_forward),
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      onPressed: (context) => Navigator.pushNamed(context, route),
-    );
-  }
 }

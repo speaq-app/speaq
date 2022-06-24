@@ -25,12 +25,12 @@ class SpqSettingsSection extends AbstractSettingsSection {
                 const EdgeInsets.symmetric(vertical: 2.0, horizontal: 24.0),
             child: title),
         Container(
-          child: Column(
-            children: tiles,
-          ),
           decoration: const BoxDecoration(
               color: spqWhite,
               borderRadius: BorderRadius.all(Radius.circular(24.0))),
+          child: Column(
+            children: tiles,
+          ),
         )
       ],
     );

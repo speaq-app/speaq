@@ -18,15 +18,19 @@ abstract class UserService {
     required int id,
   });
 
-  Future<List<FollowUser>> getFollower({
+  Future<List<CondensedUser>> getFollower({
     required List<int> ids,
   });
 
-  Future<List<FollowUser>> getFollowing({
+  Future<List<CondensedUser>> getFollowing({
     required List<int> ids,
   });
 
   Future<bool> checkIfFollowing({required int userID, required int followerID});
 
   Future<bool> followUnfollow({required int userID, required int followerID});
+
+  Future<List<CondensedUser>> userByUsername({
+    required String searchTerm,
+  });
 }

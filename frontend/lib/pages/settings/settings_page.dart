@@ -29,9 +29,9 @@ class _SettingsPageState extends State<SettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.settingsandprivacy,
+            appLocale.settingsAndPrivacy,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Stack(
@@ -47,31 +47,31 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   tiles: [
-                    _buildSettingsTile(appLocale.account, "settAccount"),
-                    _buildSettingsTile(appLocale.privacyandsafety, "settPrivSafety"),
-                    _buildSettingsTile(appLocale.notifications, "settNotific"),
-                    _buildSettingsTile(appLocale.contentpreferences, "settContentPref"),
+                    _buildSettingsTile(appLocale.account, "accountSettings"),
+                    _buildSettingsTile(appLocale.privacyAndSafety, "privacySafetySettings"),
+                    _buildSettingsTile(appLocale.notifications, "notificationSettings"),
+                    _buildSettingsTile(appLocale.contentPreferences, "contentPreferencesSettings"),
                   ],
                 ),
                 SpqSettingsSection(
                   title: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       appLocale.general,
-                      style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                   tiles: [
-                    _buildSettingsTile(appLocale.displayandsound, "settDispSound"),
-                    _buildSettingsTile(appLocale.aboutspeaq, "settAboutSpeaq"),
+                    _buildSettingsTile(appLocale.displayAndSound, "displaySoundSettings"),
+                    _buildSettingsTile(appLocale.aboutSpeaq, "aboutSpeaqSettings"),
                   ],
                 ),
               ],
             ),
             Positioned(
-              child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
               bottom: 20,
               height: deviceSize.height * 0.1,
+              child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
             )
           ],
         ),

@@ -83,7 +83,7 @@ class _PostContainerState extends State<PostContainer> {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
           return BlocBuilder<ResourceBloc, ResourceState>(
-            bloc: _resourceBlocProfile,
+            bloc: resourceBlocProfile,
             builder: (context, state) {
               if (state is ResourceLoaded) {
                 return CircleAvatar(
@@ -226,7 +226,7 @@ class _PostContainerState extends State<PostContainer> {
 
   Widget _buildCorrectPostItem() {
     return BlocBuilder<ResourceBloc, ResourceState>(
-      bloc: _resourceBlocPost,
+      bloc: resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
           switch (widget.resourceMimeType) {

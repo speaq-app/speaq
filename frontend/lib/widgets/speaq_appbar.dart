@@ -9,14 +9,14 @@ class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TabBar? bottom;
   final bool? centerTitle;
   final double? leadingWidth;
-  final bool isAutomaticallyImplyLeading;
+  final bool automaticallyImplyLeading;
 
   const SpqAppBar({
     Key? key,
     required this.preferredSize,
     this.actionList,
     this.leading,
-    this.isAutomaticallyImplyLeading = true,
+    this.automaticallyImplyLeading = true,
     this.title,
     this.bottom,
     this.centerTitle,
@@ -28,7 +28,7 @@ class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
     return SizedBox(
       height: preferredSize.height * 0.075,
       child: AppBar(
-        automaticallyImplyLeading: isAutomaticallyImplyLeading,
+        automaticallyImplyLeading: automaticallyImplyLeading,
         leadingWidth: leadingWidth,
         centerTitle: centerTitle,
         toolbarHeight: preferredSize.height * 0.075,

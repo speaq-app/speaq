@@ -11,7 +11,7 @@ func (s service) ResourceByID(id int64) (data.Resource, error) {
 	time.Sleep(s.delay)
 	r, ok := s.resources[id]
 	if !ok {
-		return r, errors.New("not workin 1")
+		return r, errors.New("not workin resource load")
 	}
 	r.ID = id
 	return r, nil

@@ -24,7 +24,7 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
           title: Text(
             appLocale.notifications,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Stack(children: [
@@ -36,18 +36,18 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                 ),
                 tiles: [
                   //Privates Konto SwitchTile
-                  buildSettingsSwitchTile(appLocale.notdisturb),
+                  SpqSwitchSettingsTile(tileText: appLocale.doNotDisturb, value: valuePrivateSwitch),
                   //Methode für SettingsTile
-                  _buildSettingsTile(appLocale.receivenotifications, "login"),
-                  _buildSettingsTile(appLocale.notificationSound, "login"),
+                  SpqNavigationSettingsTile(text: appLocale.receiveNotifications),
+                  SpqNavigationSettingsTile(text: appLocale.notificationSound),
                 ],
               ),
             ],
           ),
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
           )
         ]),
       ),
@@ -55,23 +55,4 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
   }
 
   //Erstelle SettingsTile
-  SettingsTile buildSettingsSwitchTile(String text) {
-    return SettingsTile.switchTile(
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      initialValue: valuePrivateSwitch,
-      onToggle: (value) {
-        setState(() {
-          valuePrivateSwitch = value;
-        });
-      },
-    );
-  }
-
-  SettingsTile _buildSettingsTile(String text, String route) {
-    return SettingsTile.navigation(
-      trailing: Icon(Icons.adaptive.arrow_forward),
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      onPressed: (context) => Navigator.pushNamed(context, route),
-    );
-  }
 }

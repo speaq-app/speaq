@@ -2,6 +2,7 @@ package mockdb
 
 import (
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
@@ -65,6 +66,19 @@ func (s service) UserByUsername(username string) (data.User, error) {
 		}
 	}
 	return data.User{}, errors.New("user not found")
+}
+
+func (s service) UsersByUsername(term string) ([]data.User, error) {
+	// time.Sleep(s.delay)
+	var u []data.User
+
+	for _, user := range s.users {
+		if strings.Contains(strings.ToLower(user.Profile.Username), strings.ToLower(term)) || strings.Contains(strings.ToLower(user.Profile.Name), strings.ToLower(term)) {
+			u = append(u, user)
+		}
+	}
+
+	return u, nil
 }
 
 func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
@@ -142,9 +156,9 @@ func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 
 func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
 
-	u, ok := s.users[userID]
+	u, err := s.UserByID(userID)
 
-	if !ok {
+	if err != nil {
 		return false, -1, errors.New("no User found")
 	}
 
@@ -159,11 +173,12 @@ func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, er
 
 func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 
-	u, ok := s.users[userID]
+	u, err := s.UserByID(userID)
 
-	if !ok {
+	if err != nil {
 		return false, errors.New("no User found")
 	}
+
 	c, i, err := s.CheckIfFollowing(userID, followID)
 
 	if err != nil {
@@ -179,5 +194,4 @@ func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	s.users[userID] = u
 
 	return !c, nil
-
 }

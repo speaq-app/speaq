@@ -19,8 +19,8 @@ class SpqFloatingActionButton extends StatelessWidget {
       backgroundColor: spqPrimaryBlue,
       foregroundColor: spqWhite,
       onPressed: onPressed,
-      child: child,
       heroTag: heroTag,
+      child: child,
     );
   }
 }

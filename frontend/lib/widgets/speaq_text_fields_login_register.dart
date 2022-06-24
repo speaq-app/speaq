@@ -5,7 +5,7 @@ class RoundTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final bool isHidden;
   final String? hintText;
-  final String? labelTex;
+  final String? labelText;
   final Widget? suffixIcon;
   final IconData? icon;
   final TextEditingController controller;
@@ -17,7 +17,7 @@ class RoundTextField extends StatelessWidget {
     Key? key,
     this.hintText,
     this.autofill,
-    this.labelTex,
+    this.labelText,
     this.suffixIcon,
     this.isHidden = false,
     required this.controller,
@@ -47,7 +47,7 @@ class RoundTextField extends StatelessWidget {
         obscureText: isHidden,
         onChanged: onChanged,
         decoration: InputDecoration(
-          labelText: labelTex,
+          labelText: labelText,
           hintText: hintText,
           suffixIcon: suffixIcon,
           border: InputBorder.none,

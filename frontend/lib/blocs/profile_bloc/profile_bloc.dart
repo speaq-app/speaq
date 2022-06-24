@@ -19,11 +19,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
+
     if (!event.fromCache && _userService is CacheUserService) {
       (_userService as CacheUserService).clearProfile(event.userId);
     }
-    var _profile = await _userService.getProfile(event.userId);
-    emit(ProfileLoaded(profile: _profile));
+    var profile = await _userService.getProfile(event.userId);
+
+    emit(ProfileLoaded(profile: profile));
   }
 
   void _onSaveProfile(SaveProfile event, Emitter<ProfileState> emit) async {

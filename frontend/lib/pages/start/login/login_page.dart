@@ -3,11 +3,9 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/user_service.dart';
-import 'package:frontend/blocs/login_bloc/login_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:grpc/grpc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -43,17 +41,26 @@ class _LoginPageState extends State<LoginPage> {
               bloc: _loginBloc,
               listener: (context, state) {
                 if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base", arguments: {
-                    // TODO: Get correct UserID
-                    "userID": 0,
-                    "token": state.token
-                  });
+                  Navigator.pushNamed(context, "base", arguments: {"userID": state.userID, "token": state.token});
                 } else if (state is LoginError) {
+                  String message;
+                  switch (state.code) {
+                    case StatusCode.unauthenticated:
+                      message = appLocale.wrongPassword;
+                      break;
+                    case StatusCode.notFound:
+                      message = appLocale.userNotFound;
+                      break;
+                    case StatusCode.unknown:
+                      message = appLocale.wrongPassword;
+                      break;
+                    default:
+                      message = appLocale.unknownError;
+                  }
                   Flushbar(
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
-                    // TODO: Error Messages
-                    message: "Error",
+                    message: message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
                 }
@@ -105,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
               hintText: appLocale.username,
               onChanged: (value) {},
               controller: _usernameController,
-              labelTex: appLocale.username,
+              labelText: appLocale.username,
               borderColor: Border.all(color: spqLightBlack),
             ),
           ),
@@ -114,15 +121,16 @@ class _LoginPageState extends State<LoginPage> {
             icon: Icons.lock,
             hintText: appLocale.password,
             isHidden: isHidden,
-            labelTex: appLocale.password,
+            labelText: appLocale.password,
             controller: _passwordController,
             suffixIcon: _buildVisibility(),
-            onChanged: (String value) {},
+            onChanged: (value) {},
             borderColor: Border.all(color: spqLightBlack),
           ),
           GestureDetector(
             onTap: () {
-              print("Forgot password");
+              //TODO - Implement forgot password
+              //print("Forgot password");
             },
             child: Text(
               appLocale.forgotPassword,
@@ -165,6 +173,8 @@ class _LoginPageState extends State<LoginPage> {
             thickness: 0.75,
           ),
         ),
+//TODO - Guest Login
+/*
         SpeaqPageForwarding(
           hintText: appLocale.guestText,
           text: appLocale.guest,
@@ -173,6 +183,7 @@ class _LoginPageState extends State<LoginPage> {
             //Navigator.popAndPushNamed(context, "base");
           },
         ),
+*/
       ],
     );
   }

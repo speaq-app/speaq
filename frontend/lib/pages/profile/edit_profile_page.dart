@@ -33,8 +33,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
 
-  late AppLocalizations appLocale;
-
   @override
   void initState() {
     super.initState();
@@ -45,7 +43,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    appLocale = AppLocalizations.of(context)!;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -155,7 +153,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildNameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthName,
+      maxLength: maxNameLength,
       controller: _nameController,
       label: appLocale.name,
       icon: const Icon(Icons.person_outline),
@@ -164,7 +162,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildUsernameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthUsername,
+      maxLength: maxUsernameLength,
       controller: _usernameController,
       label: appLocale.username,
       icon: const Icon(Icons.alternate_email_rounded),
@@ -173,7 +171,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildDescriptionTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthDescription,
+      maxLength: maxDescriptionLength,
       controller: _descriptionController,
       label: appLocale.description,
       maxLines: 12,
@@ -184,7 +182,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildWebsiteTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthWebsite,
+      maxLength: maxWebsiteLength,
       controller: _websiteController,
       label: appLocale.website,
       icon: const Icon(Icons.link),
@@ -214,7 +212,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthName,
+        maxLength: maxNameLength,
         controller: _nameController,
         label: appLocale.name,
         icon: const Icon(Icons.person_outline),
@@ -228,7 +226,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthUsername,
+        maxLength: maxUsernameLength,
         controller: _usernameController,
         label: appLocale.username,
         icon: const Icon(Icons.alternate_email_rounded),
@@ -242,7 +240,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthDescription,
+        maxLength: maxDescriptionLength,
         controller: _descriptionController,
         label: appLocale.description,
         maxLines: 12,
@@ -258,7 +256,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthWebsite,
+        maxLength: maxWebsiteLength,
         controller: _websiteController,
         label: appLocale.website,
         icon: const Icon(Icons.link),
@@ -309,7 +307,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       centerTitle: true,
       preferredSize: deviceSize,
       leading: null,
-      isAutomaticallyImplyLeading: false,
+      automaticallyImplyLeading: false,
     );
   }
 
@@ -404,14 +402,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveProfile(AppLocalizations appLocale) {
-    Profile _profile = Profile(
+    Profile profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,
       description: _descriptionController.text,
       website: _websiteController.text,
     );
 
-    String errorString = _checkIfInputIsValid(_profile, appLocale);
+    String errorString = _checkIfInputIsValid(profile, appLocale);
     if (errorString.isNotEmpty) {
       final snackBar = SnackBar(
           content: Text(
@@ -426,13 +424,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _profileBloc.add(
       SaveProfile(
         userId: 1,
-        profile: _profile,
+        profile: profile,
       ),
     );
   }
 
   String _checkIfInputIsValid(Profile profile, AppLocalizations appLocale) {
-    if (profile.name.length > maxLengthName) return appLocale.nameIsToLong;
+    if (profile.name.length > maxNameLength) return appLocale.nameIsToLong;
     if (profile.name.isEmpty) return appLocale.nameIsEmpty;
     if (profile.name.endsWith(" ")) return appLocale.nameEndsWithSpace;
     // if (profile.name.contains("\\n")) return appLocale.nameHasBackslashN;
@@ -465,6 +463,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void dispose() {
     super.dispose();
+
     _disposeController();
     _profileBloc.close();
     _resourceBloc.close();
