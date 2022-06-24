@@ -55,16 +55,19 @@ class CacheUserService implements UserService {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
+
   @override
   Future<List<int>> getFollowingIDs({required int id}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
+
   @override
   Future<List<CondensedUser>> getFollower({required List<int> ids}) {
     // TODO: implement getFollower-cache
     throw UnimplementedError();
   }
+
   @override
   Future<List<CondensedUser>> getFollowing({required List<int> ids}) {
     // TODO: implement getFollower-cache
@@ -72,13 +75,15 @@ class CacheUserService implements UserService {
   }
 
   @override
-  Future<bool> checkIfFollowing({required int userID, required int followerID}) async {
+  Future<bool> checkIfFollowing(
+      {required int userID, required int followerID}) async {
     // TODO: implement checkIfFollowing-cache
     throw UnimplementedError();
   }
 
   @override
-  Future<bool> followUnfollow({required int userID, required int followerID}) async {
+  Future<bool> followUnfollow(
+      {required int userID, required int followerID}) async {
     // TODO: implement followUnfollow-cache
     throw UnimplementedError();
   }

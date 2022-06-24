@@ -7,36 +7,46 @@ import 'package:frontend/utils/all_utils.dart';
 
 class FollowerTile extends StatelessWidget {
   final CondensedUser follower;
-  final int userID;
   final Function()? onPop;
 
-  const FollowerTile({Key? key, required this.follower, required this.userID, this.onPop}) : super(key: key);
+  const FollowerTile({Key? key, required this.follower, this.onPop})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final ResourceBloc resourceBlocProfile = ResourceBloc();
-    resourceBlocProfile.add(LoadResource(resourceId: follower.profileImageResourceId.toInt()));
+    resourceBlocProfile
+        .add(LoadResource(resourceId: follower.profileImageResourceId.toInt()));
 
     return ListTile(
-      onTap: () => Navigator.pushNamed(context, "profile", arguments: [follower.id.toInt(), false, userID]).then((value) => onPop),
+      onTap: () => Navigator.pushNamed(context, "profile",
+              arguments: [follower.id.toInt(), false, 0])
+          .then((value) => onPop),
       leading: BlocBuilder<ResourceBloc, ResourceState>(
           bloc: resourceBlocProfile,
           builder: (context, state) {
             if (state is ResourceLoaded) {
-              return CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07, backgroundImage: MemoryImage(state.decodedData));
+              return CircleAvatar(
+                  radius: MediaQuery.of(context).size.width * 0.07,
+                  backgroundImage: MemoryImage(state.decodedData));
             } else {
-              return CircleAvatar(radius: MediaQuery.of(context).size.width * 0.07, backgroundImage: BlurHashImage(follower.profileImageBlurHash));
+              return CircleAvatar(
+                  radius: MediaQuery.of(context).size.width * 0.07,
+                  backgroundImage:
+                      BlurHashImage(follower.profileImageBlurHash));
             }
           }),
       title: Text(
         follower.name,
-        style: const TextStyle(fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
+        style: const TextStyle(
+            fontSize: 18.0, color: spqBlack, fontWeight: FontWeight.w900),
       ),
       subtitle: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(follower.username, style: const TextStyle(fontSize: 16.0, color: spqLightGrey)),
+          Text(follower.username,
+              style: const TextStyle(fontSize: 16.0, color: spqLightGrey)),
         ],
       ),
       isThreeLine: false,

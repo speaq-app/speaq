@@ -12,7 +12,8 @@ part 'resource_event.dart';
 part 'resource_state.dart';
 
 class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
-  final ResourceService _resourceService = CacheResourceService(GRPCResourceService("10.0.2.2", port: 8080));
+  final ResourceService _resourceService =
+      GRPCResourceService("10.0.2.2", port: 8080);
 
   ResourceBloc() : super(ResourceInitial()) {
     on<LoadResource>(_onLoadResource);
@@ -29,6 +30,8 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
 
   void _onSaveResource(SaveResource event, Emitter<ResourceState> emit) async {
     emit(ResourceSaving());
+    //TODO "Resource Uploaden"
+    //var resourceID = await _resourceService.uploadResource();
     emit(ResourceSaved());
   }
 }

@@ -6,9 +6,10 @@ import (
 
 type UserService interface {
 	UserByID(id int64) (User, error)
+	UserByUsername(username string) (User, error)
 	UpdateUserProfile(userID int64, profile UserProfile) error
 	UserProfileByID(userID int64) (UserProfile, error)
-	PasswordHashAndIDByUsername(username string) ([]byte, int64, error)
+	PasswordHashByUsername(username string) ([]byte, error)
 	FollowerIDsByID(userID int64) ([]int64, error)
 	FollowingIDsByID(userID int64) ([]int64, error)
 	CreateUser(username string, passwordHash []byte) (User, error)

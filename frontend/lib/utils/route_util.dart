@@ -79,10 +79,8 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "search":
-        int userID = args as int;
-
         return PageTransition(
-          child: SearchPage(userID: userID),
+          child: SearchPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
@@ -130,8 +128,11 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "new_post":
+        int userID = args as int;
         return PageTransition(
-          child: const NewPostPage(),
+          child: NewPostPage(
+            userID: userID,
+          ),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
@@ -162,7 +163,9 @@ class RouteGenerator {
   static _errorRoute() {
     return MaterialPageRoute(
       builder: (context) {
-        return Scaffold(appBar: AppBar(title: const Text("ERROR")), body: const Center(child: Text("ERROR")));
+        return Scaffold(
+            appBar: AppBar(title: const Text("ERROR")),
+            body: const Center(child: Text("ERROR")));
       },
     );
   }

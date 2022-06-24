@@ -28,7 +28,12 @@ class _BasePageState extends State<BasePage> {
 
     super.initState();
 
-    _pages = [HomePage(userID: widget.userID), SearchPage(userID: widget.userID), const NotificationsPage(), const MessagesPage()];
+    _pages = [
+      HomePage(userID: widget.userID),
+      const SearchPage(),
+      const NotificationsPage(),
+      const MessagesPage()
+    ];
   }
 
   /*Methode setzt die boolean Variable, welche angibt, ob eine aktive Verbindung zum Internet besteht
@@ -49,7 +54,8 @@ class _BasePageState extends State<BasePage> {
 
   void _switchPage(int index) {
     _selectedIndexNotifier.value = index;
-    _pageController.animateToPage(_selectedIndexNotifier.value, duration: const Duration(milliseconds: 200), curve: Curves.linear);
+    _pageController.animateToPage(_selectedIndexNotifier.value,
+        duration: const Duration(milliseconds: 200), curve: Curves.linear);
   }
 
   @override
