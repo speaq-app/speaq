@@ -22,5 +22,6 @@ func (s Server) GetResource(ctx context.Context, req *GetResourceRequest) (*GetR
 	return &GetResourceResponse{
 		Data:     r.Data,
 		MimeType: r.MIMEType,
+		AudioDuration: r.AudioDuration,
 	}, nil
 }

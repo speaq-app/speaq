@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -33,6 +34,7 @@ class _NewPostPageState extends State<NewPostPage> {
   final PostBloc _postBloc = PostBloc();
   final TextEditingController _postController = TextEditingController();
   bool picAndAudioOffstateVisible = false;
+  String resourceMimeType = "";
 
   // Keyboard
   bool mainKeyboardVisible = true;
@@ -57,6 +59,7 @@ class _NewPostPageState extends State<NewPostPage> {
   bool _hasMicrophoneAccess = true;
   final _audio = <int>[];
   StreamSubscription? _mRecordingDataSubscription;
+  Duration audioDuration = Duration.zero;
 
   //region GENERAL
   void keyboardInput() {
@@ -131,7 +134,7 @@ class _NewPostPageState extends State<NewPostPage> {
     isRecorderReady = true;
 
     recorder.setSubscriptionDuration(
-      const Duration(milliseconds: 500),
+      const Duration(milliseconds: 100),
     );
     await initializeDateFormatting();
   }
@@ -188,7 +191,7 @@ class _NewPostPageState extends State<NewPostPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SpqAudioPostContainer(audioUrl: Uint8List.fromList(_audio)),
+              SpqAudioPostContainer(audioUrl: Uint8List.fromList(_audio), maxDuration: audioDuration,),
               IconButton(
                 icon: const Icon(Icons.delete_forever_rounded, color: spqErrorRed),
                 onPressed: () {
@@ -447,10 +450,15 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   void _createPost() {
+    if(audioDuration > Duration.zero){
+      resourceMimeType = "audio";
+    }
+
     _postBloc.add(CreatePost(
       description: _postController.text,
       resourceData: Uint8List.fromList(_audio),
-      resourceMimeType: "audio",
+      resourceMimeType: resourceMimeType,
+      audioDuration: audioDuration,
     ));
   }
 
@@ -471,11 +479,11 @@ class _NewPostPageState extends State<NewPostPage> {
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
                 builder: (context, snapshot) {
-                  final duration = snapshot.hasData ? snapshot.data!.duration : Duration.zero;
+                  audioDuration = snapshot.hasData ? snapshot.data!.duration : Duration.zero;
 
                   String twoDigits(int n) => n.toString().padLeft(2, "0");
-                  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-                  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+                  String twoDigitMinutes = twoDigits(audioDuration.inMinutes.remainder(60));
+                  String twoDigitSeconds = twoDigits(audioDuration.inSeconds.remainder(60));
 
                   return Text(
                     '$twoDigitMinutes:$twoDigitSeconds',

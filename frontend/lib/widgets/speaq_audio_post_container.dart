@@ -8,9 +8,11 @@ typedef Fn = void Function();
 
 class SpqAudioPostContainer extends StatefulWidget {
   final Uint8List audioUrl;
+  final Duration maxDuration;
 
   const SpqAudioPostContainer({
     required this.audioUrl,
+    required this.maxDuration,
     Key? key,
   }) : super(key: key);
 
@@ -22,7 +24,6 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
   final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
   bool _mPlayerIsInited = false;
   double _mSubscriptionDuration = 0;
-  Duration? maxDuration = Duration(seconds: 0);
   StreamSubscription? _mPlayerSubscription;
   int position = 0;
 
@@ -60,7 +61,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
     //TODO CHANGE THAT BITCH
     FlutterSoundPlayer nobodyGonnaKnow = FlutterSoundPlayer();
     nobodyGonnaKnow.openPlayer();
-    maxDuration = await nobodyGonnaKnow.startPlayer(
+    await nobodyGonnaKnow.startPlayer(
         fromDataBuffer: widget.audioUrl,
         codec: Codec.pcm16,
         whenFinished: () {
@@ -79,13 +80,12 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
       setState(() {
         _mSubscriptionDuration = event.position.inMilliseconds.toDouble();
         position = event.position.inMilliseconds;
-        maxDuration = event.duration;
       });
     });
   }
 
   void startPlayer(FlutterSoundPlayer? player) async {
-    maxDuration = await player!.startPlayer(
+    await player!.startPlayer(
         fromDataBuffer: widget.audioUrl,
         codec: Codec.pcm16,
         whenFinished: () {
@@ -159,7 +159,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
               width: 250,
               child: Slider(
                 min: 0.0,
-                max: maxDuration!.inMilliseconds.toDouble(),
+                max: widget.maxDuration.inMilliseconds.toDouble() + 100,
                 value: _mSubscriptionDuration,
                 onChanged: setSubscriptionDuration,
                 onChangeEnd: setPlayerPosition,
@@ -172,7 +172,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
                 ),
                 SizedBox(width: 150,),
                 Text(
-                  formatTime(maxDuration!.inSeconds),
+                  formatTime(widget.maxDuration.inSeconds),
                 ),
               ],
             ),

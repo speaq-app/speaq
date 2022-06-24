@@ -7,5 +7,6 @@ abstract class PostService {
     required String description,
     String resourceDataInBase64 = "",
     String resourceMimeType = "",
+    Duration audioDuration = Duration.zero,
   });
 }

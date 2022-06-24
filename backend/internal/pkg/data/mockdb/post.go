@@ -26,7 +26,7 @@ func (s service) nextPostID() int64 {
 	return nextID
 }
 
-func (s service) CreatePost(ownerID int64, description string, resiourceID int64, resourceMIMEType string) (data.Post, error) {
+func (s service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType string) (data.Post, error) {
 	time.Sleep(s.delay)
 
 	postID := s.nextPostID()
@@ -35,7 +35,7 @@ func (s service) CreatePost(ownerID int64, description string, resiourceID int64
 		OwnerID:          ownerID,
 		CreatedAt:        time.Now(),
 		Description:      description,
-		ResourceID:       resiourceID,
+		ResourceID:       resourceID,
 		ResourceMimeType: resourceMIMEType,
 		LikeIDs:          []int64{},
 		CommentIDs:       []int64{},

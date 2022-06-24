@@ -27,14 +27,14 @@ func (s service) nextResourceID() int64 {
 	return nextID
 }
 
-func (s service) CreateResource(dataa string, mimeType string) (data.Resource, error) {
+func (s service) CreateResource(dataa, mimeType string, audioDuration int64) (data.Resource, error) {
 	time.Sleep(s.delay)
 	resourceID := s.nextResourceID()
 	resource := data.Resource{
-		ID:       resourceID,
-		Data:     dataa,
-		MIMEType: mimeType,
-		Size:     int64(len(dataa)),
+		ID:            resourceID,
+		Data:          dataa,
+		MIMEType:      mimeType,
+		AudioDuration: audioDuration,
 	}
 
 	s.resources[resourceID] = resource

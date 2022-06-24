@@ -58,8 +58,7 @@ class _PostContainerState extends State<PostContainer> {
     return Column(
       children: [
         ListTile(
-          leading:
-              _buildOwnerPicture(), //Get Profile from OwnerID and make BlocPattern as on homepage
+          leading: _buildOwnerPicture(), //Get Profile from OwnerID and make BlocPattern as on homepage
           title: _buildPostTitle(),
           subtitle: _buildContent(appLocale),
         ),
@@ -73,8 +72,7 @@ class _PostContainerState extends State<PostContainer> {
       builder: (context, state) {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
-          _resourceBlocProfile
-              .add(LoadResource(resourceId: profile.profileImageResourceId));
+          _resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
           return BlocBuilder<ResourceBloc, ResourceState>(
             bloc: _resourceBlocProfile,
             builder: (context, state) {
@@ -113,8 +111,7 @@ class _PostContainerState extends State<PostContainer> {
               flex: 3,
               child: Text(
                 state.profile.name,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 maxLines: 1,
                 overflow: TextOverflow.clip,
                 softWrap: false,
@@ -164,20 +161,16 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime =
-        DateTimeRange(start: widget.creationTime, end: DateTime.now());
+    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
-      return calculatedDateTime.duration.inSeconds.toString() +
-          appLocale.secondsAgo;
+      return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
     }
     if (calculatedDateTime.duration.inMinutes < 2) {
-      return calculatedDateTime.duration.inMinutes.toString() +
-          appLocale.minuteAgo;
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minuteAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 1) {
-      return calculatedDateTime.duration.inMinutes.toString() +
-          appLocale.minutesAgo;
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minutesAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 2) {
@@ -185,8 +178,7 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 1) {
-      return calculatedDateTime.duration.inHours.toString() +
-          appLocale.hoursAgo;
+      return calculatedDateTime.duration.inHours.toString() + appLocale.hoursAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 2) {
@@ -198,13 +190,11 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 14) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
-          appLocale.weekAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weekAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 31) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
-          appLocale.weeksAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weeksAgo;
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");
@@ -225,7 +215,10 @@ class _PostContainerState extends State<PostContainer> {
 
             //Not working
             case "audio":
-              return SpqAudioPostContainer(audioUrl: state.decodedData);
+              return SpqAudioPostContainer(
+                audioUrl: state.decodedData,
+                maxDuration: state.resource.audioDuration!,
+              );
 
             default:
               return const Text("Type ot implemented");

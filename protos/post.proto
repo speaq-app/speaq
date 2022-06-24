@@ -8,9 +8,10 @@ service Post {
 }
 
 message CreatePostRequest {
-    string description = 2;
-    string resource_data = 3;
-    string resource_mime_type = 4;
+    string description = 1;     
+    string resource_data = 2;
+    string resource_mime_type = 3;
+    int64 audio_duration = 4;
 }
 
 message CreatePostResponse {
@@ -31,8 +32,8 @@ message SinglePost {
     int64 owner_id = 2;
     int64 date = 3;
     string description = 4;
-    int64 number_of_likes = 6;
-    int64 number_of_comments = 7;
-    int64 resource_id = 5;
-    string resource_mime_type = 10;
+    int64 number_of_likes = 5;
+    int64 number_of_comments = 6;
+    int64 resource_id = 7;
+    string resource_mime_type = 8;
 }

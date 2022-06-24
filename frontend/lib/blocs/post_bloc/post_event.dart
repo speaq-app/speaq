@@ -7,11 +7,13 @@ class CreatePost extends PostEvent {
   final String description;
   final Uint8List? resourceData;
   final String? resourceMimeType;
+  final Duration? audioDuration;
 
   CreatePost({
     required this.description,
     this.resourceData,
     this.resourceMimeType,
+    this.audioDuration,
   });
 }
 

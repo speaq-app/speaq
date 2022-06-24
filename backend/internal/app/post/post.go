@@ -13,7 +13,7 @@ type Server struct {
 }
 
 func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
-	r, err := s.DataService.CreateResource(req.ResourceData, req.ResourceMimeType)
+	r, err := s.DataService.CreateResource(req.ResourceData, req.ResourceMimeType, req.AudioDuration)
 	if err != nil {
 		return nil, err
 	}

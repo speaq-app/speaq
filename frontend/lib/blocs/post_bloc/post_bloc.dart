@@ -24,10 +24,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     await _postService.createPost(
       description: event.description,
-      resourceDataInBase64:
-          (event.resourceData != null) ? base64Encode(event.resourceData!) : "",
-      resourceMimeType:
-          (event.resourceMimeType != null) ? event.resourceMimeType! : "",
+      resourceDataInBase64: (event.resourceData != null) ? base64Encode(event.resourceData!) : "",
+      resourceMimeType: (event.resourceMimeType != null) ? event.resourceMimeType! : "",
+      audioDuration: (event.audioDuration != null) ? event.audioDuration! : Duration.zero,
     );
 
     emit(PostSaved());

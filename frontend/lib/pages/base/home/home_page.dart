@@ -55,8 +55,7 @@ class _HomePageState extends State<HomePage> {
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(
-                  resourceId: state.profile.profileImageResourceId));
+              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
             }
           },
           builder: (context, state) {
@@ -106,8 +105,7 @@ class _HomePageState extends State<HomePage> {
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0,
-                duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -137,8 +135,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
-      onPressed: () => Navigator.pushNamed(context, 'new_post',
-          arguments: 1), //TODO "Echte User-ID übergeben"
+      onPressed: () => Navigator.pushNamed(context, 'new_post', arguments: 1), //TODO "Echte User-ID übergeben"
       heroTag: 'post',
       child: const Icon(
         Icons.add,
@@ -185,9 +182,8 @@ class _HomePageState extends State<HomePage> {
                 postMessage: state.postList.elementAt(index).description,
                 resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                numberOfComments:
-                    state.postList.elementAt(index).numberOfComments,
-                mimeType: state.postList.elementAt(index).mimeType,
+                numberOfComments: state.postList.elementAt(index).numberOfComments,
+                resourceMimeType: state.postList.elementAt(index).mimeType,
               );
             }
             return _buildFeedFooter(appLocale);

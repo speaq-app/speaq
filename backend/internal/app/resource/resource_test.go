@@ -28,7 +28,7 @@ func TestGetResource(t *testing.T) {
 			resource: data.Resource{
 				Data:     "data",
 				MIMEType: "type",
-				Size:     16,
+				AudioDuration: 187000,
 			},
 		},
 		{
