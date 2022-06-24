@@ -29,8 +29,6 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
 
   void _onSaveResource(SaveResource event, Emitter<ResourceState> emit) async {
     emit(ResourceSaving());
-    //TODO "Resource Uploaden"
-    //var resourceID = await _resourceService.uploadResource();
     emit(ResourceSaved());
   }
 }

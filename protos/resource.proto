@@ -12,6 +12,7 @@ message GetResourceRequest {
 
 message GetResourceResponse {
     string data = 1;
-    string mime_type = 2;
-    int64 audio_duration = 3;
+    string name = 2;
+    string mime_type = 3;
+    int64 size = 4;
 }
