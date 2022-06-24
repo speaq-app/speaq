@@ -7,7 +7,6 @@ option go_package = "app/user";
 service User {
   rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
   rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
-  rpc Login(LoginRequest) returns (LoginResponse);
   rpc GetUserFollowerIDs(GetUserProfileRequest) returns (GetUserFollowerIDsResponse);
   rpc GetUserFollowingIDs(GetUserProfileRequest) returns (GetUserFollowingIDsResponse);
   rpc GetUserFollower(GetUserFollowerRequest) returns (GetUserFollowerResponse);
@@ -80,19 +79,8 @@ message GetUserFollowingResponse{
 }
 
 message UpdateUserProfileRequest {
-  int64  user_id = 1;
   string name = 2;
   string username = 3;
   string description = 4;
   string website = 5;
-}
-
-message LoginRequest{
-  string username = 1;
-  string password = 2;;
-}
-
-message LoginResponse{
-  int64 user_id = 1;
-  string token = 2;
 }
