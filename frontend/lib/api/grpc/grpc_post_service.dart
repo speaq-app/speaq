@@ -6,6 +6,7 @@ import 'package:frontend/api/model/post.dart';
 import 'package:frontend/api/post_service.dart';
 import 'package:grpc/grpc.dart';
 
+
 class GRPCPostService implements PostService {
   late PostClient _client;
 
