@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/middleware"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"log"
 )
@@ -14,8 +15,6 @@ type Server struct {
 }
 
 func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileRequest) (*empty.Empty, error) {
-	log.Printf("User with ID %d should be updated", req.UserId)
-
 	p := data.UserProfile{
 		Name:        req.Name,
 		Username:    req.Username,
@@ -23,8 +22,12 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 		Website:     req.Website,
 	}
 
-	log.Println(p)
-	err := s.DataService.UpdateUserProfile(req.UserId, p)
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.DataService.UpdateUserProfile(userID, p)
 	if err != nil {
 		return nil, err
 	}
@@ -33,13 +36,19 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 }
 
 func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) (*GetUserProfileResponse, error) {
-	log.Printf("User Profile with ID %d should be loaded", req.UserId)
+	userID := req.UserId
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-	p, err := s.DataService.UserProfileByID(req.UserId)
+	p, err := s.DataService.UserProfileByID(userID)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(p)
 
 	return &GetUserProfileResponse{
 		Name:                   p.Name,
@@ -52,13 +61,15 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 }
 
 func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowerIDsResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
-
-	er, err := s.DataService.FollowerIDsByID(req.UserId)
+	userID, err := middleware.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(er)
+
+	er, err := s.DataService.FollowerIDsByID(userID)
+	if err != nil {
+		return nil, err
+	}
 
 	return &GetUserFollowerIDsResponse{
 		FollowerIds: er,
@@ -66,9 +77,12 @@ func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileReque
 }
 
 func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowingIDsResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	ing, err := s.DataService.FollowingIDsByID(req.UserId)
+	ing, err := s.DataService.FollowingIDsByID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -179,8 +193,3 @@ func (s Server) UsersByUsername(ctx context.Context, req *SearchUserRequest) (*C
 		Users: cu,
 	}, nil
 }
-
-/*func verifyToken(token string) (string, error) {
-
-}
-*/

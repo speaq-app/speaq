@@ -26,6 +26,10 @@ func New() data.Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+	be, err := ioutil.ReadFile("testAudio.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	passHash, err := bcrypt.GenerateFromPassword([]byte("password"), 10)
 	if err != nil {
 		log.Fatal(err)
@@ -34,19 +38,30 @@ func New() data.Service {
 	return &service{
 		delay: time.Second * 0,
 		resources: map[int64]data.Resource{
-			1: {ID: 1,
-				Data:     string(bb),
-				Name:     "testImage",
-				MIMEType: "image/jpeg",
-				Size:     83935,
+			1: {
+				ID:            1,
+				Data:          string(bb),
+				MIMEType:      "image/jpeg",
+				AudioDuration: 0,
 			},
-			2: {ID: 2,
-				Data:     string(bc),
-				Name:     "testImageKarl",
-				MIMEType: "image/png",
-				Size:     1111111,
+			2: {
+				ID:            2,
+				Data:          string(bc),
+				MIMEType:      "image/png",
+				AudioDuration: 0,
 			},
-			3: {},
+			3: {
+				ID:            3,
+				Data:          string(bc),
+				MIMEType:      "gif",
+				AudioDuration: 0,
+			},
+			4: {
+				ID:            4,
+				Data:          string(be),
+				MIMEType:      "audio/mp3",
+				AudioDuration: 26000,
+			},
 		},
 		users: map[int64]data.User{
 			1: {
@@ -160,9 +175,9 @@ func New() data.Service {
 			1: {
 				ID:          1,
 				OwnerID:     1,
-				Date:        time.Now(),
+				CreatedAt:   time.Now(),
 				Description: "Now",
-				ResourceID:  -1,
+				ResourceID:  0,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -172,14 +187,14 @@ func New() data.Service {
 					1,
 					2,
 				},
+				ResourceMimeType: "text",
 			},
-
 			2: {
 				ID:          2,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -1),
+				CreatedAt:   time.Now().Add(time.Minute * -1),
 				Description: "Eine Minute",
-				ResourceID:  -1,
+				ResourceID:  1,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -189,14 +204,14 @@ func New() data.Service {
 					1,
 					2,
 				},
+				ResourceMimeType: "image",
 			},
-
 			3: {
 				ID:          3,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -3),
-				Description: "Drei Minuten",
-				ResourceID:  -1,
+				CreatedAt:   time.Now().Add(time.Minute * -60),
+				Description: "1 Stunde",
+				ResourceID:  3,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -206,31 +221,14 @@ func New() data.Service {
 					1,
 					2,
 				},
+				ResourceMimeType: "gif",
 			},
-
 			4: {
 				ID:          4,
 				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -60),
-				Description: "1 Stunde",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-			},
-
-			5: {
-				ID:          5,
-				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -180),
+				CreatedAt:   time.Now().Add(time.Minute * -180),
 				Description: "Drei Stunden",
-				ResourceID:  1,
+				ResourceID:  4,
 				LikeIDs: []int64{
 					1,
 					2,
@@ -240,125 +238,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-			},
-
-			6: {
-				ID:          6,
-				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -1440),
-				Description: "Einen Tag",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-			},
-
-			7: {
-				ID:          7,
-				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -4320),
-				Description: "Drei Tage",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-			},
-
-			8: {
-				ID:          8,
-				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -10080),
-				Description: "Eine Woche",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-			},
-
-			9: {
-				ID:          9,
-				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -30240),
-				Description: "Drei Wochen",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-			},
-
-			10: {
-				ID:          10,
-				OwnerID:     1,
-				Date:        time.Now().Add(time.Minute * -525600),
-				Description: "Ein Jahr",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-			},
-
-			11: {
-				ID:          11,
-				OwnerID:     2,
-				Date:        time.Now().Add(time.Hour * -1),
-				Description: "Nosa post 1",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-			},
-
-			12: {
-				ID:          12,
-				OwnerID:     2,
-				Date:        time.Now().Add(time.Minute * -1),
-				Description: "Nosa post 2",
-				ResourceID:  1,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
+				ResourceMimeType: "audio/mp3",
 			},
 		},
 	}

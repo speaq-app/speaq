@@ -8,6 +8,7 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,9 +38,7 @@ class _UserMenuState extends State<UserMenu> {
 
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(
-      userId: (widget.userID),
-    ));
+    _profileBloc.add(LoadProfile(userId: widget.userID));
 
     super.initState();
   }
@@ -59,16 +58,17 @@ class _UserMenuState extends State<UserMenu> {
                 bloc: _profileBloc,
                 listener: (context, state) {
                   if (state is ProfileLoaded) {
-                    _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+                    var profile = state.profile;
                     _followerBloc.add(LoadFollowerIDs(userId: widget.userID));
-                    _profile = state.profile;
+                    _profile = profile;
                   }
                 },
                 builder: (context, state) {
                   if (state is ProfileLoading) {
                     return _buildHeaderShimmer(context, appLocale, deviceSize);
                   } else if (state is ProfileLoaded) {
-                    return _buildHeader(context, appLocale, deviceSize, state.profile);
+                    return _buildHeader(
+                        context, appLocale, deviceSize, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
                   }
@@ -82,7 +82,8 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
+  Widget _buildHeaderShimmer(
+      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
         top: deviceSize.width * 0.06,
@@ -113,7 +114,8 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Size deviceSize, Profile profile) {
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale,
+      Size deviceSize, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -124,22 +126,7 @@ class _UserMenuState extends State<UserMenu> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocBuilder<ResourceBloc, ResourceState>(
-              bloc: _resourceBloc,
-              builder: (context, state) {
-                if (state is ResourceLoaded) {
-                  return CircleAvatar(
-                    radius: 24,
-                    backgroundImage: MemoryImage(state.decodedData),
-                  );
-                } else {
-                  return CircleAvatar(
-                    radius: 24,
-                    backgroundImage: BlurHashImage(profile.profileImageBlurHash),
-                  );
-                }
-              },
-            ),
+            SpqProfileAvatar(profile: profile),
             const SizedBox(height: 5),
             Text(
               profile.name,
@@ -209,7 +196,8 @@ class _UserMenuState extends State<UserMenu> {
               children: [
                 Text(
                   "${_followerIDs.length}",
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.bold),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 2),
@@ -229,7 +217,8 @@ class _UserMenuState extends State<UserMenu> {
                   padding: const EdgeInsets.only(right: 2.0),
                   child: Text(
                     "${_followingIDs.length}",
-                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
@@ -251,7 +240,9 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            Navigator.popAndPushNamed(context, "profile", arguments: [widget.userID, true, widget.userID]);
+            //TODO User übergeben
+            Navigator.popAndPushNamed(context, "profile",
+                arguments: [widget.userID, true, widget.userID]);
           },
         ),
         ListTile(
@@ -310,7 +301,6 @@ class _UserMenuState extends State<UserMenu> {
     _settingsBloc.close();
     _followerBloc.close();
     _profileBloc.close();
-    _resourceBloc.close();
 
     super.dispose();
   }

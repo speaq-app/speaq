@@ -6,6 +6,7 @@ import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/utils/token_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'widgets/all_widgets.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
   connectionStatus.initialize();
 
   await initHive();
+  await TokenUtils.init();
 
   await Settings.init(cacheProvider: SharePreferenceCache());
 
@@ -76,14 +78,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<bool>(
       future: verifyToken("Token aus Cache laden!!!!!!!!"),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const LoginPage();
         } else if (snapshot.hasData) {
-            return const LoginPage();
+          return const LoginPage();
         } else {
           return SpqLoadingWidget(
               MediaQuery.of(context).size.shortestSide * 0.15);

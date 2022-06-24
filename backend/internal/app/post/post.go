@@ -2,9 +2,9 @@ package post
 
 import (
 	"context"
-	"log"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/middleware"
 )
 
 type Server struct {
@@ -13,16 +13,17 @@ type Server struct {
 }
 
 func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
-	log.Printf("Post of User with ID %d should be created.", req.OwnerId)
-
-	p := data.Post{
-		OwnerID:     req.OwnerId,
-		Description: req.Description,
+	r, err := s.DataService.CreateResource(req.ResourceData, req.ResourceMimeType, req.AudioDuration)
+	if err != nil {
+		return nil, err
 	}
 
-	log.Println(p)
-	err := s.DataService.CreatePost(req.OwnerId, &p)
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
+	p, err := s.DataService.CreatePost(userID, req.Description, r.ID, r.MIMEType)
 	if err != nil {
 		return nil, err
 	}
@@ -31,19 +32,23 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 		CreatedPost: &SinglePost{
 			PostId:           p.ID,
 			OwnerId:          p.OwnerID,
-			Date:             p.Date.Unix(),
+			Date:             p.CreatedAt.Unix(),
 			Description:      p.Description,
-			ResourceId:       p.ResourceID,
+			ResourceId:       r.ID,
+			ResourceMimeType: r.MIMEType,
 			NumberOfLikes:    int64(len(p.LikeIDs)),
 			NumberOfComments: int64(len(p.CommentIDs)),
 		},
 	}, nil
 }
 
-func (s Server) GetPosts(ctx context.Context, req *GetPostsRequest) (*GetPostsResponse, error) {
-	log.Printf("Post of Feed of User with ID %d should be returned.", req.UserId)
+func (s Server) GetPostFeed(ctx context.Context, req *GetPostFeedRequest) (*GetPostFeedResponse, error) {
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	posts, err := s.DataService.PostsByID(req.UserId)
+	posts, err := s.DataService.PostFeedForUserID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -54,17 +59,16 @@ func (s Server) GetPosts(ctx context.Context, req *GetPostsRequest) (*GetPostsRe
 		postList = append(postList, &SinglePost{
 			PostId:           post.ID,
 			OwnerId:          post.OwnerID,
-			Date:             post.Date.Unix(),
+			Date:             post.CreatedAt.Unix(),
 			Description:      post.Description,
 			ResourceId:       post.ResourceID,
+			ResourceMimeType: post.ResourceMimeType,
 			NumberOfLikes:    int64(len(post.LikeIDs)),
 			NumberOfComments: int64(len(post.CommentIDs)),
-			OwnerName:        post.OwnerName,
-			OwnerUsername:    post.OwnerUsername,
 		})
 	}
 
-	return &GetPostsResponse{
+	return &GetPostFeedResponse{
 		PostList: postList,
 	}, nil
 }
