@@ -11,15 +11,19 @@ class Resource extends HiveObject {
   final String data;
 
   @HiveField(2)
-  final String mimeType;
+  final String name;
 
   @HiveField(3)
-  final Duration? audioDuration;
+  final String mimeType;
+
+  @HiveField(4)
+  final int size;
 
   Resource({
     required this.id,
     required this.data,
+    required this.name,
     required this.mimeType,
-    required this.audioDuration,
+    required this.size,
   });
 }

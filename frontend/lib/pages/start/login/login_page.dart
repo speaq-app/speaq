@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/user_service.dart';
-import 'package:frontend/blocs/login_bloc/login_bloc.dart';
+import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
@@ -17,7 +17,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final LoginBloc _loginBloc = LoginBloc();
+  final UserService _userService = GRPCUserService();
+  final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
 
   bool isHidden = true;
 
@@ -39,42 +40,38 @@ class _LoginPageState extends State<LoginPage> {
       child: ColorfulSafeArea(
         color: spqWhite,
         child: Scaffold(
-          body: BlocConsumer<LoginBloc, LoginState>(
-              bloc: _loginBloc,
+          body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+              bloc: _authenticationBloc,
               listener: (context, state) {
-                if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base", arguments: {
-                    // TODO: Get correct UserID
-                    "userID": 1,
-                    "token": state.token
-                  });
-                } else if (state is LoginError) {
+                if (state is LogInSuccess) {
+                  print("Login Success");
+                  Navigator.pushNamed(context, "base", arguments: {"userID": state.userID, "token": state.token});
+                } else if (state is LogInFail) {
                   Flushbar(
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
-                    // TODO: Error Messages
-                    message: "Error",
+                    message: state.message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
                 }
               },
               builder: (context, state) {
-                if (state is LoginLoading) {
+                if (state is TryLoggingIn) {
                   return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
-                } else if (state is LoginError) {
+                } else if (state is LogInFail) {
                   return ListView(
                     children: <Widget>[
-                      _buildTop(context, appLocale),
-                      _buildBottom(context, appLocale),
+                      buildTop(context, appLocale),
+                      buildBottom(context, appLocale),
                     ],
                   );
-                } else if (state is LoginSuccess) {
+                } else if (state is LogInSuccess) {
                   return const SizedBox.shrink();
                 } else {
                   return ListView(
                     children: <Widget>[
-                      _buildTop(context, appLocale),
-                      _buildBottom(context, appLocale),
+                      buildTop(context, appLocale),
+                      buildBottom(context, appLocale),
                     ],
                   );
                 }
@@ -84,7 +81,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTop(BuildContext context, AppLocalizations appLocale) {
+/*
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
+
+    return Drawer(
+      child: SafeArea(
+        child: ListView(
+          children: <Widget>[
+            buildTop(context, appLocale),
+            buildBottom(context, appLocale),
+          ],
+        ),
+      ),
+    );
+  }
+*/
+
+  Widget buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
         top: 125,
@@ -138,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildBottom(BuildContext context, AppLocalizations appLocale) {
+  Widget buildBottom(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: <Widget>[
         Padding(
@@ -148,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: SpeaqButton(
             loginText: appLocale.login,
-            onPressed: () => _login(),
+            onPressed: () => tryLogin(),
           ),
         ),
         SpeaqPageForwarding(
@@ -177,19 +192,28 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _login() {
-    _loginBloc.add(
-      Login(
-          username: _usernameController.text,
-          password: _passwordController.text),
-    );
+  Future<void> tryLogin() async {
+    print("3. sdjklhfujkhsjklgfhsjklrhgjsh");
+    print("username UI: " + _usernameController.text);
+    print("password UI: " + _passwordController.text);
+
+    _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
+
+    //LoginResponse loginResponse = await _userService.login(username: _usernameController.text, password: _passwordController.text);
+
+/*    if (loginResponse.token != null && loginResponse.token.isNotEmpty) {
+      print(loginResponse.token);
+      Navigator.popAndPushNamed(context, "base");
+    } else {
+      print("UFF!");
+    }*/
   }
 
   @override
   void dispose() {
     super.dispose();
     _disposeController();
-    _loginBloc.close();
+    _authenticationBloc.close();
   }
 
   void _disposeController() {

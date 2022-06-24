@@ -11,7 +11,7 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final AuthService _authService = GRPCAuthService("10.0.2.2", port: 8080);
+  final AuthService _authService = GRPCAuthService();
 
   RegisterBloc() : super(RegisterInitial()) {
     on<RegisterUser>(_onRegisterUser);
@@ -22,6 +22,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     try {
       await _authService.registerUser(event.username, event.password);
     } on GrpcError catch (e) {
+      
       emit(RegisterError(e.code));
       return;
     }

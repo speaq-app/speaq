@@ -9,9 +9,6 @@ import (
 	"path"
 	"strings"
 
-	"github.com/dgrijalva/jwt-go"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"github.com/speaq-app/speaq/internal/app/auth"
 	"github.com/speaq-app/speaq/internal/app/post"
 	"github.com/speaq-app/speaq/internal/app/resource"
@@ -19,8 +16,6 @@ import (
 	"github.com/speaq-app/speaq/internal/app/user"
 	"github.com/speaq-app/speaq/internal/pkg/data/mockdb"
 	"github.com/speaq-app/speaq/internal/pkg/encryption"
-	"github.com/speaq-app/speaq/internal/pkg/middleware"
-	"github.com/speaq-app/speaq/internal/pkg/token"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
@@ -81,19 +76,8 @@ var (
 			encryptionService := encryption.BcryptService{
 				Cost: 10,
 			}
-			tokenService := token.JWTService{
-				Secret:        []byte("changeMe"),
-				SigningMethod: jwt.SigningMethodHS512,
-			}
 
-			srv := grpc.NewServer(
-				grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
-					grpc_auth.StreamServerInterceptor(middleware.Auth(tokenService)),
-				)),
-				grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-					grpc_auth.UnaryServerInterceptor(middleware.Auth(tokenService)),
-				)),
-			)
+			srv := grpc.NewServer()
 			resourceSrv := resource.Server{
 				ResourceService: db,
 			}
@@ -113,7 +97,6 @@ var (
 			authSrv := auth.Server{
 				UserService:       db,
 				EncryptionService: encryptionService,
-				TokenService:      tokenService,
 			}
 			auth.RegisterAuthServer(srv, authSrv)
 

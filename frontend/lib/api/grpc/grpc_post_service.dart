@@ -4,12 +4,10 @@ import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/post.pbgrpc.dart';
 import 'package:frontend/api/model/post.dart';
 import 'package:frontend/api/post_service.dart';
-import 'package:frontend/utils/token_utils.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCPostService implements PostService {
   late PostClient _client;
-  late CallOptions _callOptions;
 
   GRPCPostService(
     String ip, {
@@ -19,40 +17,32 @@ class GRPCPostService implements PostService {
       ClientChannel(
         ip,
         port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
-
-    var token = TokenUtils.getToken();
-    _callOptions = CallOptions(metadata: {"authorization": "bearer $token"});
   }
 
   @override
   Future<List<Post>> getPosts(int id) async {
-    var token = await TokenUtils.getToken();
-    GetPostFeedResponse response = await _client.getPostFeed(
-      GetPostFeedRequest(),
-      options: _callOptions,
-    );
+    GetPostsResponse response = await _client.getPosts(GetPostsRequest()..userId = Int64(id));
 
     List<Post> postList = <Post>[];
 
     for (int i = 0; i < response.postList.length; i++) {
+      //DateTime Convertion not correct!
       log(response.postList.elementAt(i).date.toString());
       postList.add(
         Post(
           id: response.postList.elementAt(i).postId.toInt(),
           resourceID: response.postList.elementAt(i).resourceId.toInt(),
-          date: DateTime.fromMillisecondsSinceEpoch(
-              response.postList.elementAt(i).date.toInt() * 1000,
-              isUtc: true),
+          //date: DateTime.parse(response.postList.elementAt(i).date.toString()),
+          date: DateTime.fromMillisecondsSinceEpoch(response.postList.elementAt(i).date.toInt() * 1000, isUtc: true),
           description: response.postList.elementAt(i).description,
           ownerID: response.postList.elementAt(i).ownerId.toInt(),
           numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
-          numberOfComments:
-              response.postList.elementAt(i).numberOfComments.toInt(),
-          mimeType: response.postList.elementAt(i).resourceMimeType,
+          numberOfComments: response.postList.elementAt(i).numberOfComments.toInt(),
+          ownerName: response.postList.elementAt(i).ownerName,
+          ownerUsername: response.postList.elementAt(i).ownerUsername,
         ),
       );
     }
@@ -61,19 +51,11 @@ class GRPCPostService implements PostService {
   }
 
   @override
-  Future<void> createPost({
-    required String description,
-    String? resourceDataInBase64,
-    String? resourceMimeType,
-    Duration? audioDuration,
-  }) async {
+  Future<void> createPost({required int ownerId, required Post post}) async {
     await _client.createPost(
       CreatePostRequest()
-        ..description = description
-        ..resourceData = resourceDataInBase64 ?? ""
-        ..resourceMimeType = resourceMimeType ?? ""
-        ..audioDuration = Int64((audioDuration ?? Duration.zero).inMilliseconds),
-      options: _callOptions,
+        ..ownerId = Int64(ownerId)
+        ..description = post.description,
     );
   }
 }

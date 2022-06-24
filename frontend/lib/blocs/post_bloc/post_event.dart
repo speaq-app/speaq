@@ -4,16 +4,12 @@ part of 'post_bloc.dart';
 abstract class PostEvent {}
 
 class CreatePost extends PostEvent {
-  final String description;
-  final Uint8List? resourceData;
-  final String? resourceMimeType;
-  final Duration? audioDuration;
+  final int ownerId;
+  final Post post;
 
   CreatePost({
-    required this.description,
-    this.resourceData,
-    this.resourceMimeType,
-    this.audioDuration,
+    required this.ownerId,
+    required this.post,
   });
 }
 

@@ -66,9 +66,6 @@
   "aboutustext": "Du willst der Welt deine Meinungen, Gedanken und News mitteilen - mit all deinen Gefühlen und Rhetoriken - ganz persönlich? \nViele Kunden wünschen sich eine persönlichere Form der Online-Kommunikation, wie sie heute noch nicht geboten wird. Und hier kommt Speaq zum Einsatz! Wir bieten mit Speaq eine innovative Kommunikationsplattform, die Abwechslung von bekannten Plattformen wie Twitter und Facebook bietet.",
   "frontendDeveloper": "Frontend-Entwickler",
   "backendDeveloper": "Backend-Entwickler",
-  "createdPost": "Speaq wurde erstellt.",
-  "noRecents": "Bisher keine Emojis verwendet.",
-  "backendDeveloper": "Backend-Entwickler",
   "search": "Suche",
   "hintTextSearchBarSearchPage": "Nach Personen suchen",
   "wrongInput": "Falsche Eingabe: ",
@@ -106,6 +103,6 @@
 
   "noMorePosts" : "Es scheint, als ob es keine Posts mehr gibt!",
   "followOthersForMorePosts" : "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!",
-  "errorUsernameAlreadyTaken": "Username already taken."
 
+  "errorUsernameAlreadyTaken": "Username already taken."
 }

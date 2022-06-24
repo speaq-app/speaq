@@ -2,36 +2,20 @@ import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/user_service.dart';
-import 'package:frontend/utils/token_utils.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCUserService implements UserService {
-  late UserClient _client;
-  late CallOptions _callOptions;
-
-  GRPCUserService(
-    String ip, {
-    int port = 443,
-  }) {
-    _client = UserClient(
-      ClientChannel(
-        ip,
-        port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
-      ),
-    );
-
-    var token = TokenUtils.getToken();
-    _callOptions = CallOptions(metadata: {"authorization": "bearer $token"});
-  }
+  final UserClient _client = UserClient(
+    ClientChannel(
+      "10.0.2.2",
+      port: 8080,
+      options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
+    ),
+  );
 
   @override
   Future<Profile> getProfile(int id) async {
-    GetUserProfileResponse resp = await _client.getUserProfile(
-      GetUserProfileRequest()..userId = Int64(id),
-      options: _callOptions,
-    );
+    GetUserProfileResponse resp = await _client.getUserProfile(GetUserProfileRequest()..userId = Int64(id));
     return Profile(
       name: resp.name,
       username: resp.username,
@@ -49,20 +33,17 @@ class GRPCUserService implements UserService {
   }) async {
     await _client.updateUserProfile(
       UpdateUserProfileRequest()
+        ..userId = Int64(id)
         ..name = profile.name
         ..username = profile.username
         ..description = profile.description
         ..website = profile.website,
-      options: _callOptions,
     );
   }
 
   @override
   Future<List<int>> getFollowerIDs({required int id}) async {
-    GetUserFollowerIDsResponse resp = await _client.getUserFollowerIDs(
-      GetUserProfileRequest(userId: Int64(id)),
-      options: _callOptions,
-    );
+    GetUserFollowerIDsResponse resp = await _client.getUserFollowerIDs(GetUserProfileRequest(userId: Int64(id)));
     List<int> follower = [];
     for (Int64 i in resp.followerIds) {
       follower.add(i.toInt());
@@ -72,10 +53,7 @@ class GRPCUserService implements UserService {
 
   @override
   Future<List<int>> getFollowingIDs({required int id}) async {
-    GetUserFollowingIDsResponse resp = await _client.getUserFollowingIDs(
-      GetUserProfileRequest()..userId = Int64(id),
-      options: _callOptions,
-    );
+    GetUserFollowingIDsResponse resp = await _client.getUserFollowingIDs(GetUserProfileRequest()..userId = Int64(id));
     List<int> following = [];
     for (Int64 i in resp.followingIds) {
       following.add(i.toInt());
@@ -90,10 +68,7 @@ class GRPCUserService implements UserService {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowerResponse resp = await _client.getUserFollower(
-      GetUserFollowerRequest(followerIds: int64IDs),
-      options: _callOptions,
-    );
+    GetUserFollowerResponse resp = await _client.getUserFollower(GetUserFollowerRequest(followerIds: int64IDs));
 
     return resp.follower;
   }
@@ -105,35 +80,38 @@ class GRPCUserService implements UserService {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowingResponse resp = await _client.getUserFollowing(
-      GetUserFollowingRequest(followingIds: int64IDs),
-      options: _callOptions,
-    );
+    GetUserFollowingResponse resp = await _client.getUserFollowing(GetUserFollowingRequest(followingIds: int64IDs));
 
     return resp.following;
   }
 
   @override
-  Future<bool> checkIfFollowing(
-      {required int userID, required int followerID}) async {
-    CheckIfFollowingResponse resp = await _client.checkIfFollowing(
-      CheckIfFollowingRequest(
-          userId: Int64(userID), followerId: Int64(followerID)),
-      options: _callOptions,
-    );
+  Future<bool> checkIfFollowing({required int userID, required int followerID}) async {
+    CheckIfFollowingResponse resp = await _client.checkIfFollowing(CheckIfFollowingRequest(userId: Int64(userID), followerId: Int64(followerID)));
 
     return resp.isFollowing;
   }
 
   @override
-  Future<bool> followUnfollow(
-      {required int userID, required int followerID}) async {
-    FollowUnfollowResponse resp = await _client.followUnfollow(
-      FollowUnfollowRequest(
-          userId: Int64(userID), followerId: Int64(followerID)),
-      options: _callOptions,
-    );
+  Future<bool> followUnfollow({required int userID, required int followerID}) async {
+    FollowUnfollowResponse resp = await _client.followUnfollow(FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)));
 
+    print("exec: followUnfollow GRPC");
     return resp.isFollowing;
+  }
+
+  @override
+  Future<LoginResponse> login({required String username, required String password}) async {
+    print("username Login: " + username);
+    print("password Login: " + password);
+
+    LoginResponse resp = await _client.login(LoginRequest()
+      ..username = username
+      ..password = password);
+
+    print("username Response: ${resp.userId}");
+    print("password Response: " + resp.token);
+
+    return resp;
   }
 }
