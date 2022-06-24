@@ -7,12 +7,14 @@ import 'package:flutter_sound/flutter_sound.dart';
 typedef Fn = void Function();
 
 class SpqAudioPostContainer extends StatefulWidget {
-  final Uint8List audioUrl;
-  final Duration maxDuration;
+  final Uint8List audioData;
+  final Codec codec;
+  final int durationInMillis;
 
   const SpqAudioPostContainer({
-    required this.audioUrl,
-    required this.maxDuration,
+    required this.audioData,
+    required this.durationInMillis,
+    this.codec = Codec.pcm16,
     Key? key,
   }) : super(key: key);
 
@@ -21,113 +23,75 @@ class SpqAudioPostContainer extends StatefulWidget {
 }
 
 class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
-  final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
-  bool _mPlayerIsInited = false;
-  double _mSubscriptionDuration = 0;
-  StreamSubscription? _mPlayerSubscription;
-  int position = 0;
+  final FlutterSoundPlayer _player = FlutterSoundPlayer();
+  bool _playerIsInited = false;
+  StreamSubscription? _playerSubscription;
 
-  FlutterSoundHelper fsh = FlutterSoundHelper();
+  late int _duration;
+  int _progress = 0;
 
   @override
   void initState() {
     super.initState();
+    _duration = widget.durationInMillis;
 
     init().then((value) {
       setState(() {
-        _mPlayerIsInited = true;
+        _playerIsInited = true;
       });
     });
-  }
-
-  @override
-  void dispose() {
-    stopPlayer(_mPlayer);
-    cancelPlayerSubscriptions();
-
-    _mPlayer.closePlayer();
-
-    super.dispose();
-  }
-
-  void cancelPlayerSubscriptions() {
-    if (_mPlayerSubscription != null) {
-      _mPlayerSubscription!.cancel();
-      _mPlayerSubscription = null;
-    }
   }
 
   Future<void> init() async {
-    await _mPlayer.openPlayer(enableVoiceProcessing: true);
+    await _player.openPlayer(enableVoiceProcessing: true);
 
-    await _mPlayer.setSubscriptionDuration(
+    await _player.setSubscriptionDuration(
       const Duration(milliseconds: 100),
     );
 
-    _mPlayerSubscription = _mPlayer.dispositionStream()!.listen((event) {
+    _playerSubscription = _player.dispositionStream()!.listen((event) {
       setState(() {
-        _mSubscriptionDuration = event.position.inMilliseconds.toDouble();
-        position = event.position.inMilliseconds;
+        _progress = event.position.inMilliseconds;
       });
     });
   }
 
-  void startPlayer(FlutterSoundPlayer? player) async {
-    await player!.startPlayer(
-        fromDataBuffer: widget.audioUrl,
-        codec: Codec.pcm16,
+  _startPlayer() async {
+    var duration = await _player.startPlayer(
+        fromDataBuffer: widget.audioData,
+        codec: widget.codec,
         whenFinished: () {
           setState(() {});
         });
+    setState(() {
+      _duration = duration!.inMilliseconds;
+    });
+  }
+
+  Future<void> _onPlayerSeek(double d) async {
+    _progress = d.floor();
     setState(() {});
-  }
-
-  Future<void> resumePlayer(FlutterSoundPlayer player) async {
-    await player.resumePlayer();
-  }
-
-  Future<void> stopPlayer(FlutterSoundPlayer player) async {
-    await player.stopPlayer();
-  }
-
-  Future<void> pausePlayer(FlutterSoundPlayer player) async {
-    await player.pausePlayer();
-  }
-
-  Future<void> setSubscriptionDuration(double d) async {
-    _mSubscriptionDuration = d;
-    setState(() {});
-  }
-
-  Future<void> setPlayerPosition(double d) async {
-    // _mSubscriptionDuration = d;
-    setState(() {});
-    await _mPlayer.seekToPlayer(
+    await _player.seekToPlayer(
       Duration(milliseconds: d.floor()),
     );
   }
 
-  Fn? getPlaybackFn(FlutterSoundPlayer? player) {
-    if (!_mPlayerIsInited) {
-      return null;
+  _onControllButtonPressed() {
+    if (!_playerIsInited) {
+      return;
     }
-    if (player!.isPaused) {
-      return () {
-        resumePlayer(player).then((value) => setState(() {}));
-      };
+
+    if (_player.isPaused) {
+      _player.resumePlayer().then((value) => setState(() {}));
+    } else if (_player.isStopped) {
+      _startPlayer();
+    } else {
+      _player.pausePlayer().then((value) => setState(() {}));
     }
-    return player.isStopped
-        ? () {
-            startPlayer(player);
-          }
-        : () {
-            pausePlayer(player).then((value) => setState(() {}));
-          };
   }
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -135,10 +99,10 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
           radius: 20,
           child: IconButton(
             icon: Icon(
-              _mPlayer.isPlaying ? Icons.pause : Icons.play_arrow,
+              _player.isPlaying ? Icons.pause : Icons.play_arrow,
             ),
             iconSize: 25,
-            onPressed: getPlaybackFn(_mPlayer),
+            onPressed: _onControllButtonPressed,
           ),
         ),
         Column(
@@ -147,21 +111,17 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
               width: 250,
               child: Slider(
                 min: 0.0,
-                max: widget.maxDuration.inMilliseconds.toDouble() + 100,
-                value: _mSubscriptionDuration,
-                onChanged: setSubscriptionDuration,
-                onChangeEnd: setPlayerPosition,
+                max: _duration.toDouble(),
+                value: _progress.toDouble(),
+                onChanged: _onPlayerSeek,
+                onChangeEnd: _onPlayerSeek,
               ),
             ),
             Row(
               children: [
-                Text(
-                  formatTime(position ~/ 1000),
-                ),
-                const SizedBox(width: 150,),
-                Text(
-                  formatTime(widget.maxDuration.inSeconds),
-                ),
+                Text(_formatTime(_progress ~/ 1000)),
+                const SizedBox(width: 150),
+                Text(_formatTime(_duration ~/ 1000))
               ],
             ),
           ],
@@ -170,7 +130,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
     );
   }
 
-  String formatTime(int duration) {
+  String _formatTime(int duration) {
     if (duration >= 60) {
       return "${duration ~/ 60}:${duration % 60}";
     }
@@ -178,5 +138,17 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
       return "0:${duration % 60}";
     }
     return "0:0${duration % 60}";
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    if (_playerSubscription != null) {
+      _playerSubscription!.cancel();
+      _playerSubscription = null;
+    }
+
+    await _player.stopPlayer();
+    await _player.closePlayer();
   }
 }

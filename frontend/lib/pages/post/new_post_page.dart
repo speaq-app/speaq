@@ -59,17 +59,18 @@ class _NewPostPageState extends State<NewPostPage> {
   bool _hasMicrophoneAccess = true;
   final _audio = <int>[];
   StreamSubscription? _mRecordingDataSubscription;
-  Duration audioDuration = Duration.zero;
+  Duration _audioDuration = Duration.zero;
+
+  late StreamSubscription<bool> _keyboardSubscription;
 
   //region GENERAL
-  void keyboardInput() {
-    KeyboardVisibility.onChange.listen(
+  void initKeyboard() {
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    _keyboardSubscription = keyboardVisibilityController.onChange.listen(
       (bool keyboardShowing) {
-        setState(
-          () {
-            switchOffStage("MAIN", mainVisible: keyboardShowing);
-          },
-        );
+        setState(() {
+          switchOffStage("MAIN", mainVisible: keyboardShowing);
+        });
       },
     );
   }
@@ -119,7 +120,7 @@ class _NewPostPageState extends State<NewPostPage> {
     initRecorder();
 
     // KEYBOARD VISIBILITY
-    keyboardInput();
+    initKeyboard();
   }
 
   Future initRecorder() async {
@@ -144,39 +145,42 @@ class _NewPostPageState extends State<NewPostPage> {
     Size deviceSize = MediaQuery.of(context).size;
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     return SafeArea(
-      child: BlocConsumer<PostBloc, PostState>(
-        bloc: _postBloc,
-        listener: (context, state) async {
-          if (state is PostSaved) {
-            Navigator.pop(context);
-          }
-        },
-        builder: (context, state) {
-          if (state is PostSaving) {
-            return SpqLoadingWidget(
-              MediaQuery.of(context).size.shortestSide * 0.15,
-            );
-          } else {
-            return Scaffold(
-              appBar: SpqAppBar(
-                preferredSize: deviceSize,
-                actionList: [
-                  _buildSendPostButton(),
-                ],
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    child: _buildAttachmentPreview(),
-                  ),
-                  _buildInputRow(),
-                  _buildEmojiKeyboard(appLocale),
-                  _buildAudioKeyboard(deviceSize),
-                ],
-              ),
-            );
-          }
-        },
+      child: KeyboardDismissOnTap(
+        dismissOnCapturedTaps: true,
+        child: BlocConsumer<PostBloc, PostState>(
+          bloc: _postBloc,
+          listener: (context, state) async {
+            if (state is PostSaved) {
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+            if (state is PostSaving) {
+              return SpqLoadingWidget(
+                MediaQuery.of(context).size.shortestSide * 0.15,
+              );
+            } else {
+              return Scaffold(
+                appBar: SpqAppBar(
+                  preferredSize: deviceSize,
+                  actionList: [
+                    _buildSendPostButton(),
+                  ],
+                ),
+                body: Column(
+                  children: [
+                    Expanded(
+                      child: _buildAttachmentPreview(),
+                    ),
+                    _buildInputRow(),
+                    _buildEmojiKeyboard(appLocale),
+                    _buildAudioKeyboard(deviceSize),
+                  ],
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -191,9 +195,13 @@ class _NewPostPageState extends State<NewPostPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SpqAudioPostContainer(audioUrl: Uint8List.fromList(_audio), maxDuration: audioDuration,),
+              SpqAudioPostContainer(
+                audioData: Uint8List.fromList(_audio),
+                durationInMillis: _audioDuration.inMilliseconds,
+              ),
               IconButton(
-                icon: const Icon(Icons.delete_forever_rounded, color: spqErrorRed),
+                icon: const Icon(Icons.delete_forever_rounded,
+                    color: spqErrorRed),
                 onPressed: () {
                   setState(
                     () {
@@ -284,7 +292,8 @@ class _NewPostPageState extends State<NewPostPage> {
                   ),
                 ),
                 hintText: 'Speaq',
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.0),
                 ),
@@ -450,15 +459,15 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   void _createPost() {
-    if(audioDuration > Duration.zero){
-      resourceMimeType = "audio";
+    if (_audioDuration > Duration.zero) {
+      resourceMimeType = "audio/pcm16";
     }
 
     _postBloc.add(CreatePost(
       description: _postController.text,
       resourceData: Uint8List.fromList(_audio),
       resourceMimeType: resourceMimeType,
-      audioDuration: audioDuration,
+      audioDuration: _audioDuration,
     ));
   }
 
@@ -479,11 +488,15 @@ class _NewPostPageState extends State<NewPostPage> {
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
                 builder: (context, snapshot) {
-                  audioDuration = snapshot.hasData ? snapshot.data!.duration : Duration.zero;
+                  _audioDuration = snapshot.hasData
+                      ? snapshot.data!.duration
+                      : Duration.zero;
 
                   String twoDigits(int n) => n.toString().padLeft(2, "0");
-                  String twoDigitMinutes = twoDigits(audioDuration.inMinutes.remainder(60));
-                  String twoDigitSeconds = twoDigits(audioDuration.inSeconds.remainder(60));
+                  String twoDigitMinutes =
+                      twoDigits(_audioDuration.inMinutes.remainder(60));
+                  String twoDigitSeconds =
+                      twoDigits(_audioDuration.inSeconds.remainder(60));
 
                   return Text(
                     '$twoDigitMinutes:$twoDigitSeconds',
@@ -534,7 +547,8 @@ class _NewPostPageState extends State<NewPostPage> {
     if (!isRecorderReady) return;
     _audio.clear();
     var recordingDataController = StreamController<Food>();
-    _mRecordingDataSubscription = recordingDataController.stream.listen((buffer) {
+    _mRecordingDataSubscription =
+        recordingDataController.stream.listen((buffer) {
       if (buffer is FoodData) {
         _audio.addAll(buffer.data!);
       }
@@ -570,7 +584,7 @@ class _NewPostPageState extends State<NewPostPage> {
       await _mRecordingDataSubscription!.cancel();
       _mRecordingDataSubscription = null;
     }
-
+    _keyboardSubscription.cancel();
     _postBloc.close();
 
     isRecorderReady = false;

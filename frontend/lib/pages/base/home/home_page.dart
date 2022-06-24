@@ -10,6 +10,7 @@ import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_post_container.dart';
+import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets/spq_fab.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     //Change from Hardcoded
-    _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
+    _profileBloc.add(LoadProfile(fromCache: false));
     //If no internet connection Load from cache?
     _postBloc.add(LoadPosts(userId: 1));
     super.initState();
@@ -55,7 +56,11 @@ class _HomePageState extends State<HomePage> {
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+              var profileImageResourceId = state.profile.profileImageResourceId;
+              if (profileImageResourceId > 0) {
+                _resourceBloc
+                    .add(LoadResource(resourceId: profileImageResourceId));
+              }
             }
           },
           builder: (context, state) {
@@ -100,12 +105,13 @@ class _HomePageState extends State<HomePage> {
         )
       ],
       leading: Builder(builder: (context) {
-        return _buildProfileImage(context, profile.profileImageBlurHash);
+        return _buildProfileImage(context, profile);
       }),
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0,
+                duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -135,7 +141,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
-      onPressed: () => Navigator.pushNamed(context, 'new_post', arguments: 1), //TODO "Echte User-ID übergeben"
+      onPressed: () => Navigator.pushNamed(context, 'new_post',
+          arguments: 1), //TODO "Echte User-ID übergeben"
       heroTag: 'post',
       child: const Icon(
         Icons.add,
@@ -144,25 +151,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
+  Widget _buildProfileImage(BuildContext context, Profile profile) {
     return IconButton(
       onPressed: () => Scaffold.of(context).openDrawer(),
-      icon: BlocBuilder<ResourceBloc, ResourceState>(
-        bloc: _resourceBloc,
-        builder: (context, state) {
-          if (state is ResourceLoaded) {
-            return CircleAvatar(
-              radius: 20,
-              backgroundImage: MemoryImage(state.decodedData),
-            );
-          } else {
-            return CircleAvatar(
-              radius: 20,
-              backgroundImage: BlurHashImage(profileImageBlurHash),
-            );
-          }
-        },
-      ),
+      icon: SpqProfileAvatar(profile: profile),
     );
   }
 
@@ -182,7 +174,8 @@ class _HomePageState extends State<HomePage> {
                 postMessage: state.postList.elementAt(index).description,
                 resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                numberOfComments: state.postList.elementAt(index).numberOfComments,
+                numberOfComments:
+                    state.postList.elementAt(index).numberOfComments,
                 resourceMimeType: state.postList.elementAt(index).mimeType,
               );
             }

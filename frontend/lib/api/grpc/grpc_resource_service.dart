@@ -37,7 +37,7 @@ class GRPCResourceService implements ResourceService {
       id: id,
       data: resp.data,
       mimeType: resp.mimeType,
-      audioDuration: Duration(milliseconds: resp.audioDuration.toInt())
+      audioDurationInMillis: resp.audioDuration.toInt(),
     );
   }
 }

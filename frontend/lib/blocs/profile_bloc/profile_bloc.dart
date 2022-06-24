@@ -10,8 +10,7 @@ part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final UserService _userService =
-      CacheUserService(GRPCUserService("10.0.2.2", port: 8080));
+  final UserService _userService = GRPCUserService("10.0.2.2", port: 8080);
 
   ProfileBloc() : super(ProfileInitial()) {
     on<LoadProfile>(_onLoadProfile);

@@ -38,24 +38,30 @@ func New() data.Service {
 	return &service{
 		delay: time.Second * 0,
 		resources: map[int64]data.Resource{
-			1: {ID: 1,
+			1: {
+				ID:            1,
 				Data:          string(bb),
 				MIMEType:      "image/jpeg",
 				AudioDuration: 0,
 			},
-			2: {ID: 2,
+			2: {
+				ID:            2,
 				Data:          string(bc),
 				MIMEType:      "image/png",
 				AudioDuration: 0,
 			},
-			3: {ID: 3,
+			3: {
+				ID:            3,
 				Data:          string(bc),
 				MIMEType:      "gif",
-				AudioDuration: 0},
-			4: {ID: 4,
+				AudioDuration: 0,
+			},
+			4: {
+				ID:            4,
 				Data:          string(be),
-				MIMEType:      "audio",
-				AudioDuration: 6000},
+				MIMEType:      "audio/mp3",
+				AudioDuration: 26000,
+			},
 		},
 		users: map[int64]data.User{
 			1: {
@@ -168,7 +174,6 @@ func New() data.Service {
 				},
 				ResourceMimeType: "text",
 			},
-
 			2: {
 				ID:          1,
 				OwnerID:     1,
@@ -186,26 +191,7 @@ func New() data.Service {
 				},
 				ResourceMimeType: "image",
 			},
-
 			3: {
-				ID:          1,
-				OwnerID:     1,
-				CreatedAt:   time.Now().Add(time.Minute * -3),
-				Description: "Drei Minuten",
-				ResourceID:  2,
-				LikeIDs: []int64{
-					1,
-					2,
-					3,
-				},
-				CommentIDs: []int64{
-					1,
-					2,
-				},
-				ResourceMimeType: "image",
-			},
-
-			4: {
 				ID:          1,
 				OwnerID:     1,
 				CreatedAt:   time.Now().Add(time.Minute * -60),
@@ -222,8 +208,7 @@ func New() data.Service {
 				},
 				ResourceMimeType: "gif",
 			},
-
-			5: {
+			4: {
 				ID:          1,
 				OwnerID:     1,
 				CreatedAt:   time.Now().Add(time.Minute * -180),
@@ -238,7 +223,7 @@ func New() data.Service {
 					1,
 					2,
 				},
-				ResourceMimeType: "audio",
+				ResourceMimeType: "audio/mp3",
 			},
 		},
 	}

@@ -37,9 +37,16 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 }
 
 func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) (*GetUserProfileResponse, error) {
-	log.Printf("User Profile with ID %d should be loaded", req.UserId)
+	userID := req.UserId
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-	p, err := s.DataService.UserProfileByID(req.UserId)
+	p, err := s.DataService.UserProfileByID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -55,9 +62,12 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 }
 
 func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowerIDsResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	er, err := s.DataService.FollowerIDsByID(req.UserId)
+	er, err := s.DataService.FollowerIDsByID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -68,9 +78,12 @@ func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileReque
 }
 
 func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowingIDsResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	ing, err := s.DataService.FollowingIDsByID(req.UserId)
+	ing, err := s.DataService.FollowingIDsByID(userID)
 	if err != nil {
 		return nil, err
 	}

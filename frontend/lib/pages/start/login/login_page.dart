@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (state is LoginSuccess) {
                   Navigator.pushNamed(context, "base", arguments: {
                     // TODO: Get correct UserID
-                    "userID": 1,
+                    "userID": 0,
                     "token": state.token
                   });
                 } else if (state is LoginError) {

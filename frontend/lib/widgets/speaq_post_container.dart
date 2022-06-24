@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
@@ -45,15 +46,15 @@ class _PostContainerState extends State<PostContainer> {
     super.initState();
 
     _profileBloc.add(LoadProfile(userId: widget.ownerID));
+
+    if (widget.resourceID > 0) {
+      _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-
-    if (widget.resourceID >= 0) {
-      _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
-    }
 
     return Column(
       children: [
@@ -67,12 +68,20 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   Widget _buildOwnerPicture() {
-    return BlocBuilder<ProfileBloc, ProfileState>(
+    return BlocConsumer<ProfileBloc, ProfileState>(
       bloc: _profileBloc,
+      listener: (context, state) {
+        if (state is ProfileLoaded) {
+          var profileImageResourceId = state.profile.profileImageResourceId;
+          if (profileImageResourceId > 0) {
+            _resourceBlocProfile
+                .add(LoadResource(resourceId: profileImageResourceId));
+          }
+        }
+      },
       builder: (context, state) {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
-          _resourceBlocProfile.add(LoadResource(resourceId: profile.profileImageResourceId));
           return BlocBuilder<ResourceBloc, ResourceState>(
             bloc: _resourceBlocProfile,
             builder: (context, state) {
@@ -81,10 +90,16 @@ class _PostContainerState extends State<PostContainer> {
                   radius: 24,
                   backgroundImage: MemoryImage(state.decodedData),
                 );
-              } else {
+              } else if (profile.profileImageBlurHash.isNotEmpty) {
                 return CircleAvatar(
                   radius: 24,
                   backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+                );
+              } else {
+                return CircleAvatar(
+                  radius: 24,
+                  backgroundColor: spqPrimaryBlue,
+                  child: Text(profile.name[0]),
                 );
               }
             },
@@ -111,7 +126,8 @@ class _PostContainerState extends State<PostContainer> {
               flex: 3,
               child: Text(
                 state.profile.name,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 maxLines: 1,
                 overflow: TextOverflow.clip,
                 softWrap: false,
@@ -161,16 +177,20 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime, end: DateTime.now());
+    final DateTimeRange calculatedDateTime =
+        DateTimeRange(start: widget.creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
-      return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
+      return calculatedDateTime.duration.inSeconds.toString() +
+          appLocale.secondsAgo;
     }
     if (calculatedDateTime.duration.inMinutes < 2) {
-      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minuteAgo;
+      return calculatedDateTime.duration.inMinutes.toString() +
+          appLocale.minuteAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 1) {
-      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minutesAgo;
+      return calculatedDateTime.duration.inMinutes.toString() +
+          appLocale.minutesAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 2) {
@@ -178,7 +198,8 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 1) {
-      return calculatedDateTime.duration.inHours.toString() + appLocale.hoursAgo;
+      return calculatedDateTime.duration.inHours.toString() +
+          appLocale.hoursAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 2) {
@@ -190,11 +211,13 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 14) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weekAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
+          appLocale.weekAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 31) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weeksAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
+          appLocale.weeksAgo;
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");
@@ -219,10 +242,17 @@ class _PostContainerState extends State<PostContainer> {
                 child: Image(image: MemoryImage(state.decodedData)),
               );
 
-            case "audio":
+            case "audio/pcm16":
               return SpqAudioPostContainer(
-                audioUrl: state.decodedData,
-                maxDuration: state.resource.audioDuration!,
+                audioData: state.decodedData,
+                durationInMillis: state.resource.audioDurationInMillis,
+              );
+
+            case "audio/mp3":
+              return SpqAudioPostContainer(
+                audioData: state.decodedData,
+                durationInMillis: state.resource.audioDurationInMillis,
+                codec: Codec.mp3,
               );
 
             case "video":
