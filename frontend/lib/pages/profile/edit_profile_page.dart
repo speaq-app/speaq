@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -119,13 +120,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
       children: [
         Center(
           child: GestureDetector(
-            onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    _buildFullScreenProfileImage(context, profile.username),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return child;
-                })),
+            onTap: () {
+              if (profile.profileImageResourceId > 0) {
+                Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        _buildFullScreenProfileImage(context, profile.username),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return child;
+                    }));
+              } else {
+                Flushbar(
+                  backgroundColor: spqPrimaryBlue,
+                  messageText: const Center(
+                      child: Text(
+                    "📸",
+                    style: TextStyle(fontSize: 256),
+                  )),
+                  duration: const Duration(milliseconds: 500),
+                ).show(context);
+              }
+            },
             child: _buildProfileImage(profile),
           ),
         ),
