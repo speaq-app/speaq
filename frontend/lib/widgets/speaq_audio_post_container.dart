@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -141,22 +140,23 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return Column(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              child: IconButton(
-                icon: Icon(
-                  _mPlayer.isPlaying ? Icons.pause : Icons.play_arrow,
-                ),
-                iconSize: 25,
-                onPressed: getPlaybackFn(_mPlayer),
-              ),
+        CircleAvatar(
+          radius: 20,
+          child: IconButton(
+            icon: Icon(
+              _mPlayer.isPlaying ? Icons.pause : Icons.play_arrow,
             ),
+            iconSize: 25,
+            onPressed: getPlaybackFn(_mPlayer),
+          ),
+        ),
+        Column(
+          children: [
             SizedBox(
-              width: deviceSize.width * 0.57,
+              width: 250,
               child: Slider(
                 min: 0.0,
                 max: maxDuration!.inMilliseconds.toDouble(),
@@ -165,21 +165,18 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
                 onChangeEnd: setPlayerPosition,
               ),
             ),
+            Row(
+              children: [
+                Text(
+                  formatTime(position ~/ 1000),
+                ),
+                SizedBox(width: 150,),
+                Text(
+                  formatTime(maxDuration!.inSeconds),
+                ),
+              ],
+            ),
           ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 65),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                formatTime(position ~/ 1000),
-              ),
-              Text(
-                formatTime(maxDuration!.inSeconds),
-              ),
-            ],
-          ),
         ),
       ],
     );

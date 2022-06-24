@@ -11,9 +11,9 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/blocs/post_bloc/post_bloc.dart';
-import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -182,48 +182,15 @@ class _NewPostPageState extends State<NewPostPage> {
     return Visibility(
       visible: picAndAudioOffstateVisible,
       child: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Align(
-                alignment: Alignment.center,
-                child: dataIsAudio
-                    ? IconButton(
-                        icon: Icon(Icons.play_arrow),
-                        color: spqWhite,
-                        onPressed: () {
-                          if (player.isPlaying) {
-                            player.stopPlayer();
-                          }
-
-                          player.startPlayer(
-                            fromDataBuffer: Uint8List.fromList(_audio),
-                            codec: Codec.pcm16,
-                          );
-                        },
-                      )
-                    : null),
-            Expanded(
-              child: Center(
-                child: dataIsAudio
-                    ? InkWell(
-                        onTap: () => print("Data is Audio"),
-                        child: SvgPicture.asset(
-                            "assets/images/logo/speaq_logo_white.svg"),
-                      )
-                    : Image.file(
-                        _imageFile!,
-                        alignment: Alignment.center,
-                        fit: BoxFit.fitWidth,
-                      ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: const Icon(Icons.delete_forever_rounded,
-                    color: spqErrorRed),
+        padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
+        child: Center(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SpqAudioPostContainer(audioUrl: Uint8List.fromList(_audio)),
+              IconButton(
+                icon: const Icon(Icons.delete_forever_rounded, color: spqErrorRed),
                 onPressed: () {
                   setState(
                     () {
@@ -232,8 +199,8 @@ class _NewPostPageState extends State<NewPostPage> {
                   );
                 },
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -314,8 +281,7 @@ class _NewPostPageState extends State<NewPostPage> {
                   ),
                 ),
                 hintText: 'Speaq',
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.0),
                 ),
@@ -505,15 +471,11 @@ class _NewPostPageState extends State<NewPostPage> {
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
                 builder: (context, snapshot) {
-                  final duration = snapshot.hasData
-                      ? snapshot.data!.duration
-                      : Duration.zero;
+                  final duration = snapshot.hasData ? snapshot.data!.duration : Duration.zero;
 
                   String twoDigits(int n) => n.toString().padLeft(2, "0");
-                  String twoDigitMinutes =
-                      twoDigits(duration.inMinutes.remainder(60));
-                  String twoDigitSeconds =
-                      twoDigits(duration.inSeconds.remainder(60));
+                  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+                  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
 
                   return Text(
                     '$twoDigitMinutes:$twoDigitSeconds',
@@ -564,8 +526,7 @@ class _NewPostPageState extends State<NewPostPage> {
     if (!isRecorderReady) return;
     _audio.clear();
     var recordingDataController = StreamController<Food>();
-    _mRecordingDataSubscription =
-        recordingDataController.stream.listen((buffer) {
+    _mRecordingDataSubscription = recordingDataController.stream.listen((buffer) {
       if (buffer is FoodData) {
         _audio.addAll(buffer.data!);
       }
