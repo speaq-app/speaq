@@ -11,6 +11,7 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:frontend/utils/all_utils.dart';
 
 class UserMenu extends StatefulWidget {
   final int userID;
@@ -33,12 +34,11 @@ class _UserMenuState extends State<UserMenu> {
 
   //App User (beim login holen)
   late Profile _profile;
-  late User _user;
 
   @override
   void initState() {
     _profileBloc.add(LoadProfile(
-      userId: 1,
+      userId: (widget.userID),
     ));
 
     super.initState();
@@ -251,7 +251,6 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            //TODO User übergeben
             Navigator.popAndPushNamed(context, "profile", arguments: [widget.userID, true, widget.userID]);
           },
         ),
@@ -274,7 +273,7 @@ class _UserMenuState extends State<UserMenu> {
           thickness: 0.75,
         ),
         ListTile(
-          title: Text(appLocale.settingsandprivacy),
+          title: Text(appLocale.settingsAndPrivacy),
           onTap: () {
             Navigator.popAndPushNamed(context, "settings");
           },

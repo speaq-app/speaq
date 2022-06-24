@@ -22,9 +22,9 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.displayandsound,
+            appLocale.displayAndSound,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
         body: Stack(children: [
@@ -36,30 +36,18 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
                 ),
                 tiles: [
                   //Darkmode SwitchTile
-                  buildSettingsSwitchTile(appLocale.darkmode),
+                  SpqSwitchSettingsTile(tileText: appLocale.darkMode, value: valuePrivateSwitch),
                 ],
               ),
             ],
           ),
           Positioned(
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
             bottom: 20,
             height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
           )
         ]),
       ),
-    );
-  }
-
-  SettingsTile buildSettingsSwitchTile(String text) {
-    return SettingsTile.switchTile(
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      initialValue: valuePrivateSwitch,
-      onToggle: (value) {
-        setState(() {
-          valuePrivateSwitch = value;
-        });
-      },
     );
   }
 }

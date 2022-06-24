@@ -18,10 +18,10 @@ class LogInSuccess extends AuthenticationState {
   LogInSuccess({required this.userID, required this.token});
 }
 
-class LogInFail extends AuthenticationState {
-  final String message;
+class LoginError extends AuthenticationState {
+  final int code;
 
-  LogInFail({required this.message});
+  LoginError(this.code);
 }
 
 class TokenSaving extends AuthenticationState {}
