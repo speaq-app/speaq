@@ -3,6 +3,7 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/blocs/login_bloc/login_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:grpc/grpc.dart';
@@ -41,7 +42,8 @@ class _LoginPageState extends State<LoginPage> {
               bloc: _loginBloc,
               listener: (context, state) {
                 if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base", arguments: {"userID": state.userID, "token": state.token});
+                  Navigator.pushNamed(context, "base",
+                      arguments: {"userID": 0, "token": state.token});
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {

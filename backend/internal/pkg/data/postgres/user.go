@@ -51,3 +51,7 @@ func (s Service) PasswordHashByUsername(username string) ([]byte, error) {
 func (s Service) CreateUser(username string, passwordHash []byte) (data.User, error) {
 	panic("implement me")
 }
+
+func (s Service) UsersByUsername(term string) ([]data.User, error) {
+	panic("implement me")
+}

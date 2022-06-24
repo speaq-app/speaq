@@ -106,7 +106,7 @@
 
   "noMorePosts" : "Es scheint, als ob es keine Posts mehr gibt!",
   "followOthersForMorePosts" : "Folge doch neuen Profilen oder\nlade die Seite neu und schaue ob\nes schon wieder neue Beiträge gibt!",
-  "errorUsernameAlreadyTaken": "Username already taken."
+  "errorUsernameAlreadyTaken": "Username already taken.",
   "wrongPassword": "Das eingegebene Password ist falsch",
   "unknownError": "Es ist ein unbekannter Fehler aufgetreten",
   "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen"

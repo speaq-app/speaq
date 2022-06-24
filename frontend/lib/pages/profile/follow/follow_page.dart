@@ -21,7 +21,6 @@ class _FollowPageState extends State<FollowPage> {
   final FollowerBloc _followerBloc = FollowerBloc();
   final ProfileBloc _profileBloc = ProfileBloc();
 
-
   int _followerCount = 0;
   int _followingCount = 0;
 
@@ -58,8 +57,10 @@ class _FollowPageState extends State<FollowPage> {
                 _followerCount = state.followerIDs.length;
                 _followingCount = state.followingIDs.length;
 
-                _followerBloc.add(LoadFollower(followerIDs: state.followerIDs, followingIDs: state.followingIDs));
-              }else if(state is FollowerLoaded) {
+                _followerBloc.add(LoadFollower(
+                    followerIDs: state.followerIDs,
+                    followingIDs: state.followingIDs));
+              } else if (state is FollowerLoaded) {
                 _follower = state.follower;
                 _following = state.following;
               }
@@ -96,7 +97,10 @@ class _FollowPageState extends State<FollowPage> {
                     ],
                   ),
                   body: TabBarView(
-                    children: [_buildFollowerList(deviceSize, _follower), _buildFollowingList(deviceSize, _following)],
+                    children: [
+                      _buildFollowerList(deviceSize, _follower),
+                      _buildFollowingList(deviceSize, _following)
+                    ],
                   ),
                 );
               } else {
@@ -142,7 +146,14 @@ class _FollowPageState extends State<FollowPage> {
   SingleChildScrollView _buildShimmerList(Size deviceSize) {
     return SingleChildScrollView(
       child: Column(
-        children: [for (int i = 0; i <= 10; i++) Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), child: ShimmerCube(width: double.infinity, height: deviceSize.height * 0.024))],
+        children: [
+          for (int i = 0; i <= 10; i++)
+            Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: ShimmerCube(
+                    width: double.infinity, height: deviceSize.height * 0.024))
+        ],
       ),
     );
   }
@@ -158,7 +169,8 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  Widget _buildFollowingList(Size deviceSize, List<CondensedUser> followingList) {
+  Widget _buildFollowingList(
+      Size deviceSize, List<CondensedUser> followingList) {
     return Column(
       children: [
         SizedBox(
@@ -174,13 +186,13 @@ class _FollowPageState extends State<FollowPage> {
       onRefresh: refresh,
       child: ListView.builder(
           shrinkWrap: false,
-          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+          physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics()),
           itemBuilder: (context, index) {
             CondensedUser currentFollower = followUserList[index];
 
             return FollowerTile(
               follower: currentFollower,
-              userID: widget.user.id,
               onPop: refresh,
             );
           },

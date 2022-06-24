@@ -15,4 +15,10 @@ class LoginSuccess extends LoginState {
   });
 }
 
-class LoginError extends LoginState {}
+class LoginError extends LoginState {
+  final int code;
+
+  LoginError({
+    required this.code,
+  });
+}

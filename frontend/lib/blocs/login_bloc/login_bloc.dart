@@ -25,8 +25,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
       await TokenUtils.setToken(token);
       emit(LoginSuccess(token: token));
-    } on GrpcError catch (_) {
-      emit(LoginError());
+    } on GrpcError catch (e) {
+      emit(LoginError(code: e.code));
     }
   }
 }

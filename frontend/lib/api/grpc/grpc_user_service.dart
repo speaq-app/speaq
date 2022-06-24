@@ -90,7 +90,7 @@ class GRPCUserService implements UserService {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowerResponse resp = await _client.getUserFollower(
+    CondensedUserListResponse resp = await _client.getUserFollower(
       GetUserFollowerRequest(followerIds: int64IDs),
       options: _callOptions,
     );
@@ -105,7 +105,7 @@ class GRPCUserService implements UserService {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowingResponse resp = await _client.getUserFollowing(
+    CondensedUserListResponse resp = await _client.getUserFollowing(
       GetUserFollowingRequest(followingIds: int64IDs),
       options: _callOptions,
     );
@@ -116,7 +116,7 @@ class GRPCUserService implements UserService {
   @override
   Future<bool> checkIfFollowing(
       {required int userID, required int followerID}) async {
-    CheckIfFollowingResponse resp = await _client.checkIfFollowing(
+    IsFollowingResponse resp = await _client.checkIfFollowing(
       CheckIfFollowingRequest(
           userId: Int64(userID), followerId: Int64(followerID)),
       options: _callOptions,
@@ -128,7 +128,7 @@ class GRPCUserService implements UserService {
   @override
   Future<bool> followUnfollow(
       {required int userID, required int followerID}) async {
-    FollowUnfollowResponse resp = await _client.followUnfollow(
+    IsFollowingResponse resp = await _client.followUnfollow(
       FollowUnfollowRequest(
           userId: Int64(userID), followerId: Int64(followerID)),
       options: _callOptions,

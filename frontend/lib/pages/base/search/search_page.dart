@@ -7,16 +7,13 @@ import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_search_bar_widget.dart';
 
 class SearchPage extends StatefulWidget {
-  final int userID;
-
-  const SearchPage({Key? key, required this.userID}) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-
   final SearchBloc _searchBloc = SearchBloc();
   List<CondensedUser> foundUsers = [];
 
@@ -35,14 +32,16 @@ class _SearchPageState extends State<SearchPage> {
         appBar: SpqAppBar(
           leading: null,
           automaticallyImplyLeading: false,
-          title: SpqSearchBar(searchBloc: _searchBloc, hintText: appLocale.hintTextSearchBarSearchPage),
+          title: SpqSearchBar(
+              searchBloc: _searchBloc,
+              hintText: appLocale.hintTextSearchBarSearchPage),
           preferredSize: deviceSize,
           centerTitle: true,
         ),
         body: BlocConsumer<SearchBloc, SearchState>(
           bloc: _searchBloc,
           listener: (context, state) {
-            if(state is ResultsReceived) {
+            if (state is ResultsReceived) {
               foundUsers = state.users;
             }
           },
@@ -52,20 +51,17 @@ class _SearchPageState extends State<SearchPage> {
                 shrinkWrap: true,
                 itemCount: foundUsers.length,
                 itemBuilder: (context, index) {
-                  print(index);
-                  return FollowerTile(follower: foundUsers[index], userID: widget.userID);
+                  return FollowerTile(follower: foundUsers[index]);
                 },
               );
-            }
-            else if (state is RequestSend) {
+            } else if (state is RequestSend) {
               return SpqLoadingWidget(deviceSize.width * 0.2);
-            }   else if (state is ResultsReceived) {
+            } else if (state is ResultsReceived) {
               return ListView.builder(
                 shrinkWrap: true,
                 itemCount: foundUsers.length,
                 itemBuilder: (context, index) {
-                  print(index);
-                  return FollowerTile(follower: foundUsers[index], userID: widget.userID);
+                  return FollowerTile(follower: foundUsers[index]);
                 },
               );
             }
@@ -87,7 +83,9 @@ class _SearchPageState extends State<SearchPage> {
           decoration: InputDecoration(
             filled: true,
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(50), borderSide: BorderSide.none),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+                borderSide: BorderSide.none),
             hintStyle: const TextStyle(
               fontSize: 16,
               color: spqDarkGreyTranslucent,
