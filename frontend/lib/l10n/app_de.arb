@@ -71,7 +71,7 @@
   "backendDeveloper": "Backend-Entwickler",
   "search": "Suche",
   "hintTextSearchBarSearchPage": "Nach Personen suchen",
-  "wrongInput": "Falsche Eingabe: ",
+  "wrongInput": "Falsche Eingabe!",
   "nameIsToLong": "Name ist zu lang!",
   "nameIsEmpty": "Name darf nicht leer sein!",
   "nameEndsWithSpace": "Name darf nicht mit Leertaste enden!",

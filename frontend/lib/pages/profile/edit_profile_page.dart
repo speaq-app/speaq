@@ -124,11 +124,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               } else {
                 Flushbar(
                   backgroundColor: spqPrimaryBlue,
-                  messageText: const Center(
-                      child: Text(
+                  messageText: const Text(
                     "📸",
                     style: TextStyle(fontSize: 256),
-                  )),
+                    textAlign: TextAlign.center,
+                  ),
                   duration: const Duration(milliseconds: 500),
                 ).show(context);
               }
@@ -404,7 +404,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (errorString.isNotEmpty) {
       final snackBar = SnackBar(
           content: Text(
-        appLocale.wrongInput + errorString,
+        "${appLocale.wrongInput} :$errorString",
         textAlign: TextAlign.center,
       ));
       ScaffoldMessenger.of(context).clearSnackBars();
