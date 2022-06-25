@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
-import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:frontend/utils/all_utils.dart';
 
 class UserMenu extends StatefulWidget {
   final int userID;
@@ -25,7 +22,6 @@ class UserMenu extends StatefulWidget {
 
 class _UserMenuState extends State<UserMenu> {
   final ProfileBloc _profileBloc = ProfileBloc();
-  final ResourceBloc _resourceBloc = ResourceBloc();
   final SettingsBloc _settingsBloc = SettingsBloc();
   final FollowerBloc _followerBloc = FollowerBloc();
 

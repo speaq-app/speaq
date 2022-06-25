@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/post_bloc/post_bloc.dart';
@@ -13,7 +12,6 @@ import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/utils/all_utils.dart';
 
 class HomePage extends StatefulWidget {
   final int userID;
