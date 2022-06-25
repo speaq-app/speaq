@@ -68,7 +68,7 @@
   "backendDeveloper": "Backend developer",
   "createdPost": "Speaq has been created.",
   "noRecents": "No recent.",
-  "wrongInput": "Wrong Input: ",
+  "wrongInput": "Wrong Input!",
   "nameIsToLong": "Name is to long!",
   "nameIsEmpty": "Name must not be empty!",
   "nameEndsWithSpace": "Name must not end with a space!",
@@ -108,5 +108,7 @@
   "errorUsernameAlreadyTaken": "Username already taken.",
   "wrongPassword": "Wrong password",
   "unknownError": "An unknown error has occurred",
-  "userNotFound": "There is no user with the given username"
+  "userNotFound": "There is no user with the given username",
+  "noTokenGenerated": "Couldn't generate user token"
+
 }

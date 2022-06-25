@@ -71,7 +71,7 @@
   "backendDeveloper": "Backend-Entwickler",
   "search": "Suche",
   "hintTextSearchBarSearchPage": "Nach Personen suchen",
-  "wrongInput": "Falsche Eingabe: ",
+  "wrongInput": "Falsche Eingabe!",
   "nameIsToLong": "Name ist zu lang!",
   "nameIsEmpty": "Name darf nicht leer sein!",
   "nameEndsWithSpace": "Name darf nicht mit Leertaste enden!",
@@ -109,5 +109,6 @@
   "errorUsernameAlreadyTaken": "Username already taken.",
   "wrongPassword": "Das eingegebene Password ist falsch",
   "unknownError": "Es ist ein unbekannter Fehler aufgetreten",
-  "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen"
+  "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen",
+  "noTokenGenerated": "Es konnte kein User-token generiert werden"
 }

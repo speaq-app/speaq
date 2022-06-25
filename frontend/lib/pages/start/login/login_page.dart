@@ -42,27 +42,32 @@ class _LoginPageState extends State<LoginPage> {
               bloc: _loginBloc,
               listener: (context, state) {
                 if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base",
-                      arguments: {"userID": 0, "token": state.token});
+                  Navigator.pushNamed(context, "base", arguments: {"userID": 0, "token": state.token});
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {
-                    case StatusCode.unauthenticated:
+                    case StatusCode.invalidArgument:
                       message = appLocale.wrongPassword;
                       break;
                     case StatusCode.notFound:
                       message = appLocale.userNotFound;
                       break;
+                    case StatusCode.unauthenticated:
+                      message = appLocale.noTokenGenerated;
+                      break;
                     case StatusCode.unknown:
-                      message = appLocale.wrongPassword;
+                      message = appLocale.unknownError;
                       break;
                     default:
                       message = appLocale.unknownError;
                   }
                   Flushbar(
+                    messageText: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                    ),
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
-                    message: message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
                 }
@@ -192,9 +197,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _login() {
     _loginBloc.add(
-      Login(
-          username: _usernameController.text,
-          password: _passwordController.text),
+      Login(username: _usernameController.text, password: _passwordController.text),
     );
   }
 

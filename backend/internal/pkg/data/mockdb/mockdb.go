@@ -14,7 +14,6 @@ type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
 	posts     map[int64]data.Post
-	delay     time.Duration
 }
 
 func New() data.Service {
@@ -36,7 +35,6 @@ func New() data.Service {
 	}
 
 	return &service{
-		delay: time.Second * 0,
 		resources: map[int64]data.Resource{
 			1: {
 				ID:            1,
@@ -77,7 +75,7 @@ func New() data.Service {
 				},
 				Password:     passHash,
 				FollowerIDs:  []int64{2, 3, 4, 5, 6, 7},
-				FollowingIDs: []int64{2, 4, 7},
+				FollowingIDs: []int64{2, 3, 4, 5, 6, 7},
 				CreatedAt:    time.Now().Add(time.Hour * -3),
 			},
 			2: {
@@ -91,7 +89,7 @@ func New() data.Service {
 					ProfileImageResourceID: 1,
 				},
 				Password:     passHash,
-				FollowerIDs:  []int64{1, 3},
+				FollowerIDs:  []int64{1},
 				FollowingIDs: []int64{1, 3},
 				CreatedAt:    time.Now().Add(time.Hour * -3),
 			},
@@ -106,8 +104,8 @@ func New() data.Service {
 					ProfileImageResourceID: 1,
 				},
 				Password:     passHash,
-				FollowerIDs:  []int64{1, 2, 5, 6},
-				FollowingIDs: []int64{1, 2, 5, 6},
+				FollowerIDs:  []int64{1, 2},
+				FollowingIDs: []int64{1, 4},
 				CreatedAt:    time.Now().Add(time.Hour * -3),
 			},
 			4: {
@@ -122,7 +120,7 @@ func New() data.Service {
 				},
 				Password:     passHash,
 				FollowerIDs:  []int64{1, 3},
-				FollowingIDs: []int64{1, 3},
+				FollowingIDs: []int64{1, 5},
 				CreatedAt:    time.Now().Add(time.Hour * -3),
 			},
 			5: {
@@ -136,8 +134,8 @@ func New() data.Service {
 					ProfileImageResourceID: 1,
 				},
 				Password:     passHash,
-				FollowerIDs:  []int64{1, 3},
-				FollowingIDs: []int64{1, 3},
+				FollowerIDs:  []int64{1, 4},
+				FollowingIDs: []int64{1, 6},
 				CreatedAt:    time.Now().Add(time.Hour * -3),
 			},
 			6: {
@@ -151,8 +149,8 @@ func New() data.Service {
 					ProfileImageResourceID: 2,
 				},
 				Password:     passHash,
-				FollowerIDs:  []int64{1, 3},
-				FollowingIDs: []int64{1, 3},
+				FollowerIDs:  []int64{1, 5},
+				FollowingIDs: []int64{1, 7},
 				CreatedAt:    time.Now().Add(time.Hour * -3),
 			},
 			7: {
@@ -166,8 +164,8 @@ func New() data.Service {
 					ProfileImageResourceID: 1,
 				},
 				Password:     passHash,
-				FollowerIDs:  []int64{1, 3},
-				FollowingIDs: []int64{1, 3},
+				FollowerIDs:  []int64{1, 6},
+				FollowingIDs: []int64{1},
 				CreatedAt:    time.Now().Add(time.Hour * -3),
 			},
 		},
