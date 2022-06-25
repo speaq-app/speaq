@@ -162,12 +162,34 @@ func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, er
 	return false, -1, nil
 }
 
-func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
+func (s service) GetFollowerIndex(userID int64, followerID int64) (bool, int, error) {
 
+	f, err := s.UserByID(followerID)
+
+	if err != nil {
+		return false, -1, errors.New("no User found")
+	}
+
+	for i, u := range f.FollowerIDs {
+		if u == userID {
+			return true, i, nil
+		}
+	}
+
+	return false, -1, nil
+}
+
+func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	u, err := s.UserByID(userID)
 
 	if err != nil {
-		return false, errors.New("no User found")
+		return false, errors.New("user not found")
+	}
+
+	f, err := s.UserByID(followID)
+
+	if err != nil {
+		return false, errors.New("follower not found")
 	}
 
 	c, i, err := s.CheckIfFollowing(userID, followID)
@@ -176,13 +198,22 @@ func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 		return false, err
 	}
 
+	_, j, err := s.GetFollowerIndex(userID, followID)
+
+	if err != nil {
+		return false, err
+	}
+
 	if c {
 		u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
+		f.FollowerIDs = append(f.FollowerIDs[:j], f.FollowerIDs[j+1:]...)
 	} else {
 		u.FollowingIDs = append(u.FollowingIDs, followID)
+		f.FollowerIDs = append(f.FollowerIDs, userID)
 	}
 
 	s.users[userID] = u
+	s.users[followID] = f
 
 	return !c, nil
 }

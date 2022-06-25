@@ -49,16 +49,19 @@ class ProfilePageState extends State<ProfilePage> {
   //TODO *Get CreatedAt from Backend*
   final String _joined = "Joined August 2022";
 
-  bool _isFollowing = false;
-
   @override
   void initState() {
+    _loadPage();
+
+    super.initState();
+  }
+
+  Future<void> _loadPage() async {
     _profileBloc.add(LoadProfile(userId: widget.pageUserID));
     if (!widget.isOwnPage) {
       _followUnfollowBloc.add(CheckIfFollowing(userID: 0, followerID: widget.pageUserID));
     }
 
-    super.initState();
   }
 
   @override
@@ -71,13 +74,16 @@ class ProfilePageState extends State<ProfilePage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
         ),
-        body: ListView(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            _buildProfileCover(deviceSize, context),
-            _buildProfileStack(appLocale, deviceSize),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () => _loadPage(),
+          child: ListView(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            children: [
+              _buildProfileCover(deviceSize, context),
+              _buildProfileStack(appLocale, deviceSize),
+            ],
+          ),
         ),
         bottomNavigationBar: SpqButtonNavigationBar(
           switchPage: (index) {
@@ -190,33 +196,28 @@ class ProfilePageState extends State<ProfilePage> {
               name: appLocale.editProfile,
               textStyle: const TextStyle(color: spqPrimaryBlue),
             )
-          : BlocConsumer<FollowerBloc, FollowerState>(
+          : BlocBuilder<FollowerBloc, FollowerState>(
               bloc: _followUnfollowBloc,
-              listener: (context, state) {
-                if (state is CheckIfFollowingLoaded) {
-                  _isFollowing = state.isFollowing;
-                } else if (state is FollowUnfollowLoaded) {
-                  _isFollowing = state.isFollowing;
-                }
-              },
               builder: (context, state) {
                 if (state is CheckIfFollowingLoaded) {
                   return SpqTextButton(
                     onPressed: () {
                       _followUnfollowBloc.add(FollowUnfollow(userID: 0, followerID: widget.pageUserID));
+                      _loadPage();
                     },
-                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
-                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
-                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
+                    name: state.isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
                 } else if (state is FollowUnfollowLoaded) {
                   return SpqTextButton(
                     onPressed: () {
                       _followUnfollowBloc.add(FollowUnfollow(userID: 0, followerID: widget.pageUserID));
+                      _loadPage();
                     },
-                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
-                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
-                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
+                    name: state.isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
                 }
                 return Container(
