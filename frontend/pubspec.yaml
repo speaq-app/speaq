@@ -108,8 +108,11 @@ flutter_native_splash:
   image: assets/images/speaq_splash_screen.png
   color: "#ffffff"
 
+#Hier wird das Logo als Icon deklariert
 flutter_icons:
-  image_path: "assets/images/speaq_app_icon.png"
+  #image_path: "assets/images/speaq_app_icon.png"
+  image_path_android: "assets/images/speaq_app_icon.png"
+  image_path_ios: "assets/images/speaq_app_icon.png"
   android: true
   ios: true
 
