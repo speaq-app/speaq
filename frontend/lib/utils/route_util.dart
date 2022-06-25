@@ -128,11 +128,8 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "new_post":
-        int userID = args as int;
         return PageTransition(
-          child: NewPostPage(
-            userID: userID,
-          ),
+          child: const NewPostPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
