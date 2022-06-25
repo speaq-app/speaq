@@ -3,13 +3,11 @@ package mockdb
 import (
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
-
 	u, ok := s.users[userID]
 	if !ok {
 		return nil, errors.New("followers by ID not working")
@@ -28,7 +26,6 @@ func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 }
 
 func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
-
 	var ul []data.User
 	for _, u := range userIDs {
 		ul = append(ul, s.users[u])
@@ -38,7 +35,6 @@ func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
 }
 
 func (s service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
-
 	var ul []data.User
 	for _, u := range userIDs {
 		ul = append(ul, s.users[u])
@@ -48,7 +44,6 @@ func (s service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
 }
 
 func (s service) UserByID(id int64) (data.User, error) {
-
 	u, ok := s.users[id]
 	if !ok {
 		return u, errors.New("not workin 2")
@@ -58,7 +53,6 @@ func (s service) UserByID(id int64) (data.User, error) {
 }
 
 func (s service) UserByUsername(username string) (data.User, error) {
-
 	for _, u := range s.users {
 		if u.Profile.Username == username {
 			return u, nil
@@ -82,7 +76,6 @@ func (s service) SearchUser(userID int64, term string) ([]data.User, error) {
 }
 
 func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
-	time.Sleep(s.delay)
 	u, err := s.UserByID(id)
 	if err != nil {
 		return err
@@ -97,7 +90,6 @@ func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
 }
 
 func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
-	time.Sleep(s.delay)
 	u, err := s.UserByID(id)
 	if err != nil {
 		return data.UserProfile{}, err
@@ -126,7 +118,6 @@ func (s service) isDuplicateUsername(username string) bool {
 }
 
 func (s service) CreateUser(username string, passwordHash []byte) (data.User, error) {
-	time.Sleep(s.delay)
 	if s.isDuplicateUsername(username) {
 		return data.User{}, errors.New("username already taken")
 	}

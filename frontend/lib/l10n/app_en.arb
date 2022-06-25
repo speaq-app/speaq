@@ -68,7 +68,7 @@
   "backendDeveloper": "Backend developer",
   "createdPost": "Speaq has been created.",
   "noRecents": "No recent.",
-  "wrongInput": "Wrong Input: ",
+  "wrongInput": "Wrong Input!",
   "nameIsToLong": "Name is to long!",
   "nameIsEmpty": "Name must not be empty!",
   "nameEndsWithSpace": "Name must not end with a space!",

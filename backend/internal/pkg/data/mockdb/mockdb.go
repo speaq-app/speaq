@@ -14,7 +14,6 @@ type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
 	posts     map[int64]data.Post
-	delay     time.Duration
 }
 
 func New() data.Service {
@@ -36,7 +35,6 @@ func New() data.Service {
 	}
 
 	return &service{
-		delay: time.Second * 0,
 		resources: map[int64]data.Resource{
 			1: {
 				ID:            1,

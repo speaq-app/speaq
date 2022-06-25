@@ -2,13 +2,11 @@ package mockdb
 
 import (
 	"errors"
-	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 func (s service) ResourceByID(id int64) (data.Resource, error) {
-	time.Sleep(s.delay)
 	r, ok := s.resources[id]
 	if !ok {
 		return r, errors.New("not workin resource load")
@@ -28,7 +26,6 @@ func (s service) nextResourceID() int64 {
 }
 
 func (s service) CreateResource(dataa, mimeType string, audioDuration int64) (data.Resource, error) {
-	time.Sleep(s.delay)
 	resourceID := s.nextResourceID()
 	resource := data.Resource{
 		ID:            resourceID,

@@ -42,8 +42,7 @@ class _LoginPageState extends State<LoginPage> {
               bloc: _loginBloc,
               listener: (context, state) {
                 if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base",
-                      arguments: {"userID": 0, "token": state.token});
+                  Navigator.pushNamed(context, "base", arguments: {"userID": 0, "token": state.token});
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {
@@ -63,9 +62,12 @@ class _LoginPageState extends State<LoginPage> {
                       message = appLocale.unknownError;
                   }
                   Flushbar(
+                    messageText: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                    ),
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
-                    message: message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
                 }
@@ -195,9 +197,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _login() {
     _loginBloc.add(
-      Login(
-          username: _usernameController.text,
-          password: _passwordController.text),
+      Login(username: _usernameController.text, password: _passwordController.text),
     );
   }
 

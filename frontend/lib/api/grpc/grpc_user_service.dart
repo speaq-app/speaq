@@ -17,8 +17,7 @@ class GRPCUserService implements UserService {
       ClientChannel(
         ip,
         port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
 
@@ -114,11 +113,9 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<bool> checkIfFollowing(
-      {required int userID, required int followerID}) async {
+  Future<bool> checkIfFollowing({required int userID, required int followerID}) async {
     IsFollowingResponse resp = await _client.checkIfFollowing(
-      CheckIfFollowingRequest(
-          userId: Int64(userID), followerId: Int64(followerID)),
+      CheckIfFollowingRequest(userId: Int64(userID), followerId: Int64(followerID)),
       options: _callOptions,
     );
 
@@ -126,11 +123,9 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<bool> followUnfollow(
-      {required int userID, required int followerID}) async {
+  Future<bool> followUnfollow({required int userID, required int followerID}) async {
     IsFollowingResponse resp = await _client.followUnfollow(
-      FollowUnfollowRequest(
-          userId: Int64(userID), followerId: Int64(followerID)),
+      FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)),
       options: _callOptions,
     );
 

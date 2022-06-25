@@ -4,7 +4,6 @@ import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
-import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_profile_avatar.dart';
@@ -13,9 +12,7 @@ import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
-  final int userID;
-
-  const UserMenu({Key? key, required this.userID}) : super(key: key);
+  const UserMenu({Key? key}) : super(key: key);
 
   @override
   State<UserMenu> createState() => _UserMenuState();
@@ -35,7 +32,7 @@ class _UserMenuState extends State<UserMenu> {
 
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(userId: widget.userID));
+    _profileBloc.add(LoadProfile(userId: 0));
 
     super.initState();
   }
@@ -56,7 +53,7 @@ class _UserMenuState extends State<UserMenu> {
                 listener: (context, state) {
                   if (state is ProfileLoaded) {
                     var profile = state.profile;
-                    _followerBloc.add(LoadFollowerIDs(userId: widget.userID));
+                    _followerBloc.add(LoadFollowerIDs(userId: 0));
                     _profile = profile;
                   }
                 },
@@ -64,8 +61,7 @@ class _UserMenuState extends State<UserMenu> {
                   if (state is ProfileLoading) {
                     return _buildHeaderShimmer(context, appLocale, deviceSize);
                   } else if (state is ProfileLoaded) {
-                    return _buildHeader(
-                        context, appLocale, deviceSize, state.profile);
+                    return _buildHeader(context, appLocale, deviceSize, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
                   }
@@ -79,8 +75,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeaderShimmer(
-      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
+  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
         top: deviceSize.width * 0.06,
@@ -111,8 +106,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale,
-      Size deviceSize, Profile profile) {
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Size deviceSize, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -178,7 +172,7 @@ class _UserMenuState extends State<UserMenu> {
     return InkWell(
       onTap: () => Navigator.pushNamed(context, 'follow',
           arguments: User(
-            id: widget.userID,
+            id: 0,
             profile: _profile,
             password: '',
             followerIDs: _followerIDs,
@@ -193,8 +187,7 @@ class _UserMenuState extends State<UserMenu> {
               children: [
                 Text(
                   "${_followerIDs.length}",
-                  style: const TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 2),
@@ -214,8 +207,7 @@ class _UserMenuState extends State<UserMenu> {
                   padding: const EdgeInsets.only(right: 2.0),
                   child: Text(
                     "${_followingIDs.length}",
-                    style: const TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
@@ -237,9 +229,7 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            //TODO User übergeben
-            Navigator.popAndPushNamed(context, "profile",
-                arguments: [widget.userID, true, widget.userID]);
+            Navigator.popAndPushNamed(context, "profile", arguments: [0, true]);
           },
         ),
         ListTile(
