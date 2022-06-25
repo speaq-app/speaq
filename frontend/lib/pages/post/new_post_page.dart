@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -17,8 +18,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NewPostPage extends StatefulWidget {
-  const NewPostPage({Key? key, required this.userID}) : super(key: key);
-  final int userID;
+  const NewPostPage({Key? key}) : super(key: key);
 
   @override
   State<NewPostPage> createState() => _NewPostPageState();
