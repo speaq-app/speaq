@@ -20,8 +20,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       StartSearch event, Emitter<SearchState> emit) async {
     emit(SearchStarted());
 
-    await Future.delayed(const Duration(seconds: 1));
-
     emit(RequestSend());
 
     List<CondensedUser> matchingUsers =
