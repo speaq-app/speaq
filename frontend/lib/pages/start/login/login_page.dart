@@ -47,14 +47,17 @@ class _LoginPageState extends State<LoginPage> {
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {
-                    case StatusCode.unauthenticated:
+                    case StatusCode.invalidArgument:
                       message = appLocale.wrongPassword;
                       break;
                     case StatusCode.notFound:
                       message = appLocale.userNotFound;
                       break;
+                    case StatusCode.unauthenticated:
+                      message = appLocale.noTokenGenerated;
+                      break;
                     case StatusCode.unknown:
-                      message = appLocale.wrongPassword;
+                      message = appLocale.unknownError;
                       break;
                     default:
                       message = appLocale.unknownError;
