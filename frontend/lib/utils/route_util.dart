@@ -52,7 +52,6 @@ class RouteGenerator {
           child: ProfilePage(
             pageUserID: profileInfo[0],
             isOwnPage: profileInfo[1],
-            appUserID: profileInfo[2],
           ),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
@@ -163,9 +162,7 @@ class RouteGenerator {
   static _errorRoute() {
     return MaterialPageRoute(
       builder: (context) {
-        return Scaffold(
-            appBar: AppBar(title: const Text("ERROR")),
-            body: const Center(child: Text("ERROR")));
+        return Scaffold(appBar: AppBar(title: const Text("ERROR")), body: const Center(child: Text("ERROR")));
       },
     );
   }

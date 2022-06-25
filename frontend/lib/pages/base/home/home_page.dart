@@ -56,8 +56,7 @@ class _HomePageState extends State<HomePage> {
             if (state is ProfileLoaded) {
               var profileImageResourceId = state.profile.profileImageResourceId;
               if (profileImageResourceId > 0) {
-                _resourceBloc
-                    .add(LoadResource(resourceId: profileImageResourceId));
+                _resourceBloc.add(LoadResource(resourceId: profileImageResourceId));
               }
             }
           },
@@ -71,9 +70,7 @@ class _HomePageState extends State<HomePage> {
             } else if (state is ProfileLoaded) {
               return Scaffold(
                 appBar: _buildLoadedAppBar(deviceSize, state.profile),
-                drawer: UserMenu(
-                  userID: widget.userID,
-                ),
+                drawer: const UserMenu(),
                 body: _buildPostView(appLocale),
                 floatingActionButton: _buildFloatingActionButton(),
               );
@@ -108,8 +105,7 @@ class _HomePageState extends State<HomePage> {
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0,
-                duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -139,8 +135,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
-      onPressed: () => Navigator.pushNamed(context, 'new_post',
-          arguments: 1), //TODO "Echte User-ID übergeben"
+      onPressed: () => Navigator.pushNamed(context, 'new_post', arguments: 1), //TODO "Echte User-ID übergeben"
       heroTag: 'post',
       child: const Icon(
         Icons.add,
@@ -172,8 +167,7 @@ class _HomePageState extends State<HomePage> {
                 postMessage: state.postList.elementAt(index).description,
                 resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                numberOfComments:
-                    state.postList.elementAt(index).numberOfComments,
+                numberOfComments: state.postList.elementAt(index).numberOfComments,
                 resourceMimeType: state.postList.elementAt(index).mimeType,
               );
             }

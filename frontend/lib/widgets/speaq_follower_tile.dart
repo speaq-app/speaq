@@ -18,7 +18,7 @@ class FollowerTile extends StatelessWidget {
       resourceBlocProfile.add(LoadResource(resourceId: follower.profileImageResourceId.toInt()));
     }
     return ListTile(
-      onTap: () => Navigator.pushNamed(context, "profile", arguments: [follower.id.toInt(), false, 0]).then((value) => onPop),
+      onTap: () => Navigator.pushNamed(context, "profile", arguments: [follower.id.toInt(), false]),
       leading: BlocBuilder<ResourceBloc, ResourceState>(
           bloc: resourceBlocProfile,
           builder: (context, state) {
