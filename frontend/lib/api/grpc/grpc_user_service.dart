@@ -140,7 +140,7 @@ class GRPCUserService implements UserService {
   @override
   Future<List<CondensedUser>> userByUsername(
       {required String searchTerm}) async {
-    CondensedUserListResponse resp = await _client.usersByUsername(
+    CondensedUserListResponse resp = await _client.searchUser(
       SearchUserRequest(term: searchTerm),
       options: _callOptions,
     );

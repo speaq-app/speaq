@@ -9,7 +9,7 @@ import (
 )
 
 func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
-	time.Sleep(s.delay)
+
 	u, ok := s.users[userID]
 	if !ok {
 		return nil, errors.New("followers by ID not working")
@@ -19,7 +19,6 @@ func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 }
 
 func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
-	time.Sleep(s.delay)
 	u, ok := s.users[userID]
 	if !ok {
 		return nil, errors.New("following by ID not working")
@@ -29,7 +28,7 @@ func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 }
 
 func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
-	time.Sleep(s.delay)
+
 	var ul []data.User
 	for _, u := range userIDs {
 		ul = append(ul, s.users[u])
@@ -39,7 +38,7 @@ func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
 }
 
 func (s service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
-	time.Sleep(s.delay)
+
 	var ul []data.User
 	for _, u := range userIDs {
 		ul = append(ul, s.users[u])
@@ -49,7 +48,7 @@ func (s service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
 }
 
 func (s service) UserByID(id int64) (data.User, error) {
-	time.Sleep(s.delay)
+
 	u, ok := s.users[id]
 	if !ok {
 		return u, errors.New("not workin 2")
@@ -59,7 +58,7 @@ func (s service) UserByID(id int64) (data.User, error) {
 }
 
 func (s service) UserByUsername(username string) (data.User, error) {
-	time.Sleep(s.delay)
+
 	for _, u := range s.users {
 		if u.Profile.Username == username {
 			return u, nil
@@ -68,13 +67,14 @@ func (s service) UserByUsername(username string) (data.User, error) {
 	return data.User{}, errors.New("user not found")
 }
 
-func (s service) UsersByUsername(term string) ([]data.User, error) {
-	// time.Sleep(s.delay)
+func (s service) SearchUser(userID int64, term string) ([]data.User, error) {
 	var u []data.User
 
 	for _, user := range s.users {
-		if strings.Contains(strings.ToLower(user.Profile.Username), strings.ToLower(term)) || strings.Contains(strings.ToLower(user.Profile.Name), strings.ToLower(term)) {
-			u = append(u, user)
+		if user.ID != userID {
+			if strings.Contains(strings.ToLower(user.Profile.Username), strings.ToLower(term)) || strings.Contains(strings.ToLower(user.Profile.Name), strings.ToLower(term)) {
+				u = append(u, user)
+			}
 		}
 	}
 

@@ -170,8 +170,13 @@ func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) 
 	}, nil
 }
 
-func (s Server) UsersByUsername(ctx context.Context, req *SearchUserRequest) (*CondensedUserListResponse, error) {
-	u, err := s.DataService.UsersByUsername(req.Term)
+func (s Server) SearchUser(ctx context.Context, req *SearchUserRequest) (*CondensedUserListResponse, error) {
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := s.DataService.SearchUser(userID, req.Term)
 
 	if err != nil {
 		return nil, err

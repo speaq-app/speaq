@@ -13,7 +13,7 @@ service User {
   rpc GetUserFollowing(GetUserFollowingRequest) returns (CondensedUserListResponse);
   rpc CheckIfFollowing(CheckIfFollowingRequest) returns (IsFollowingResponse);
   rpc FollowUnfollow(FollowUnfollowRequest) returns (IsFollowingResponse);
-  rpc UsersByUsername(SearchUserRequest) returns (CondensedUserListResponse);
+  rpc SearchUser(SearchUserRequest) returns (CondensedUserListResponse);
 }
 
 message CondensedUser{

@@ -119,8 +119,7 @@ class ProfilePageState extends State<ProfilePage> {
               _resourceBloc.add(LoadResource(
                   resourceId: state.profile.profileImageResourceId));
             }
-            _pageUserFollowerBloc
-                .add(LoadFollowerIDs(userId: widget.pageUserID));
+            _pageUserFollowerBloc.add(LoadFollowerIDs(userId: widget.pageUserID));
             _profile = state.profile;
           }
         },
