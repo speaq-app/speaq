@@ -6,7 +6,7 @@ import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 class BasePage extends StatefulWidget {
   final int userID;
 
-  const BasePage({Key? key, required this.userID}) : super(key: key);
+  const BasePage({Key? key, this.userID = 0}) : super(key: key);
 
   @override
   State<BasePage> createState() => _BasePageState();

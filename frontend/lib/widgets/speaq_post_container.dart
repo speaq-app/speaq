@@ -7,6 +7,7 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_audio_post_container.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
@@ -116,7 +117,17 @@ class _PostContainerState extends State<PostContainer> {
       bloc: _profileBloc,
       builder: (context, state) {
         if (state is! ProfileLoaded) {
-          return const CircularProgressIndicator();
+          return Row(
+            children: const [
+              Expanded(
+                child: ShimmerCube(width: 1, height: 4),
+              ),
+              SizedBox(width: 100),
+              Expanded(
+                child: ShimmerCube(width: 0.1, height: 3),
+              ),
+            ],
+          );
         }
 
         return Row(

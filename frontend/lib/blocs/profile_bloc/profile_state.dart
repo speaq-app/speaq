@@ -16,3 +16,5 @@ class ProfileLoaded extends ProfileState {
 class ProfileSaving extends ProfileState {}
 
 class ProfileSaved extends ProfileState {}
+
+class ProfileError extends ProfileState {}
