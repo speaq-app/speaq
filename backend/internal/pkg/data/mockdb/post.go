@@ -14,6 +14,18 @@ func (s service) PostFeedForUserID(userID int64) ([]data.Post, error) {
 	return posts, nil
 }
 
+func (s service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, error) {
+	var posts []data.Post
+	for _, post := range s.posts {
+		for _, followerID := range followerIDs {
+			if followerID == post.OwnerID {
+				posts = append(posts, post)
+			}
+		}
+	}
+	return posts, nil
+}
+
 func (s service) nextPostID() int64 {
 	var nextID int64 = 1
 	for id := range s.posts {

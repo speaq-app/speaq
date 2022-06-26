@@ -48,7 +48,19 @@ func (s Server) GetPostFeed(ctx context.Context, req *GetPostFeedRequest) (*GetP
 		return nil, err
 	}
 
-	posts, err := s.DataService.PostFeedForUserID(userID)
+	// posts, err := s.DataService.PostFeedForUserID(userID)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+
+	followerIDs, err := s.DataService.FollowingIDsByID(userID)
+	if err != nil {
+		return nil, err
+	}
+
+
+	posts, err := s.DataService.PostFeedFromFollowerIDs(followerIDs)
 	if err != nil {
 		return nil, err
 	}
