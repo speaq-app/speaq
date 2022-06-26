@@ -6,24 +6,26 @@ class SpqSearchBar extends StatelessWidget {
   final SearchBloc searchBloc;
   final String hintText;
 
-
-  const SpqSearchBar({Key? key, required this.searchBloc, required this.hintText}) : super(key: key);
+  const SpqSearchBar({
+    Key? key,
+    required this.searchBloc,
+    required this.hintText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
-
-    return SizedBox(
-      height: deviceSize.height * 0.1,
-      width: deviceSize.width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: spqWhite,
+      ),
+      child: Center(
         child: TextField(
           onChanged: (value) => searchBloc.add(StartSearch(username: value)),
           decoration: InputDecoration(
-            filled: true,
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(50), borderSide: BorderSide.none),
+            border: InputBorder.none,
             hintStyle: const TextStyle(
               fontSize: 16,
               color: spqDarkGreyTranslucent,

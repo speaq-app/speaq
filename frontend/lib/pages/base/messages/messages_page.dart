@@ -14,7 +14,20 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage> {
   String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
-  final List<CondensedUser> _allUserList = [];
+  final List<CondensedUser> _allUserList = [
+    CondensedUser(name: "Hendrik"),
+    CondensedUser(name: "Daniel"),
+    CondensedUser(name: "Nosa"),
+    CondensedUser(name: "Eric"),
+    CondensedUser(name: "Sven"),
+    CondensedUser(name: "David"),
+    CondensedUser(name: "Martin"),
+    CondensedUser(name: "Karl"),
+    CondensedUser(name: "Hans"),
+    CondensedUser(name: "Petra"),
+    CondensedUser(name: "Steffi"),
+    CondensedUser(name: "Jürgen"),
+  ];
   List<CondensedUser> _foundUsersList = [];
 
   @override
@@ -39,17 +52,6 @@ class _MessagesPageState extends State<MessagesPage> {
           preferredSize: deviceSize,
           centerTitle: true,
           actionList: [generateSettingsIcon(context)],
-          leading: Builder(
-            builder: (context) {
-              return IconButton(
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                icon: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(profilePicture),
-                ),
-              );
-            },
-          ),
         ),
         body: Column(
           children: <Widget>[
@@ -59,8 +61,9 @@ class _MessagesPageState extends State<MessagesPage> {
                 itemCount: _foundUsersList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    leading: const CircleAvatar(
-                      backgroundImage: const AssetImage("assets/images/logo/speaq_logo.svg"),
+                    leading: CircleAvatar(
+                      backgroundColor: spqPrimaryBlue,
+                      child: Text(_foundUsersList[index].name[0]),
                     ),
                     title: Text(
                       _foundUsersList[index].name,
@@ -87,6 +90,7 @@ class _MessagesPageState extends State<MessagesPage> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         child: TextField(
+          onSubmitted: (value) => filterSearchResults(value),
           onChanged: (value) => filterSearchResults(value),
           decoration: InputDecoration(
             filled: true,
@@ -118,11 +122,13 @@ class _MessagesPageState extends State<MessagesPage> {
     List<CondensedUser> filterList = <CondensedUser>[];
     if (text != null && text.isNotEmpty) {
       setState(() {
-        filterList.addAll(_allUserList.where((user) => user.name.toString().contains(text)).toList());
+        filterList.addAll(_allUserList.where((user) => user.name.toString().toLowerCase().contains(text.toLowerCase())).toList());
         _foundUsersList = filterList;
       });
     } else {
-      _foundUsersList = _allUserList;
+      setState(() {
+        _foundUsersList = _allUserList;
+      });
     }
   }
 }
