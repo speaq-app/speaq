@@ -1,6 +1,7 @@
 package mockdb
 
 import (
+	"sort"
 	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
@@ -23,6 +24,11 @@ func (s service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, erro
 			}
 		}
 	}
+
+	sort.Slice(posts, func(i, j int) bool {
+		return posts[i].CreatedAt.After(posts[j].CreatedAt)
+	})
+
 	return posts, nil
 }
 
