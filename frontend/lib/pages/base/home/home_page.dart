@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                 floatingActionButton: _buildFloatingActionButton(),
               );
             } else {
-              return const Text("Profile State failed");
+              return SizedBox(height: 0,);
             }
           },
         ),
