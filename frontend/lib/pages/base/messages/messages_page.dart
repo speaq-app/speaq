@@ -14,8 +14,7 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage> {
   String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
-  final List<CondensedUser> _allUserList = [
-  ];
+  final List<CondensedUser> _allUserList = [];
   List<CondensedUser> _foundUsersList = [];
 
   @override
@@ -66,7 +65,10 @@ class _MessagesPageState extends State<MessagesPage> {
                     title: Text(
                       _foundUsersList[index].name,
                     ),
-                    subtitle: const Text("Hier steht die letzte nachricht, die in diesem Chat verfasst wurde", overflow: TextOverflow.ellipsis,),
+                    subtitle: const Text(
+                      "Hier steht die letzte nachricht, die in diesem Chat verfasst wurde",
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     trailing: const Text("12:34 Uhr"),
                   );
                 },

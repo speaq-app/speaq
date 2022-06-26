@@ -170,7 +170,7 @@ class _UserMenuState extends State<UserMenu> {
 
   Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, 'follow',
+      onTap: () => Navigator.popAndPushNamed(context, 'follow',
           arguments: User(
             id: 0,
             profile: _profile,
