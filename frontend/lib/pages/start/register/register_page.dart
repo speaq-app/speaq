@@ -41,6 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  /// Creates the layout for entering the [name] and [newPassword] and [password] of the user.
   Widget buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
@@ -106,6 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  /// Creates the bottom part of the page with a flush-bar for the user and user interface.
   Widget buildBottom(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Column(
       children: <Widget>[
@@ -114,6 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
             bottom: 30,
             top: 10,
           ),
+          // Checks state and shows the correct message in a flush-bar.
           child: BlocConsumer<RegisterBloc, RegisterState>(
             bloc: _registerBloc,
             listener: (context, state) {
@@ -242,6 +245,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  /// Checks if the entered newPassword meets the requirements.
   _onPasswordChanged(String newPassword) {
     RegExp passValid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
     String password = newPassword;

@@ -39,6 +39,7 @@ class _SearchPageState extends State<SearchPage> {
           centerTitle: true,
           actionList: [SpqSettingsIconButton(onPressed:() => Navigator.pushNamed(context, "privacySafetySettings"),)],
         ),
+        // Selects the appropriate state and returns a [foundUsers] Listview.
         body: BlocConsumer<SearchBloc, SearchState>(
           bloc: _searchBloc,
           listener: (context, state) {

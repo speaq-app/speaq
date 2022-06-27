@@ -12,8 +12,10 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
-  String profilePicture = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
+  String profilePicture =
+      "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
+  // Todo: Include backend
   final List<CondensedUser> _allUserList = [
     CondensedUser(name: "Hendrik"),
     CondensedUser(name: "Daniel"),
@@ -52,7 +54,12 @@ class _MessagesPageState extends State<MessagesPage> {
           centerTitle: true,
           leading: null,
           automaticallyImplyLeading: false,
-          actionList: [SpqSettingsIconButton(onPressed:() => Navigator.pushNamed(context, "notificationSettings"),)],
+          actionList: [
+            SpqSettingsIconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, "notificationSettings"),
+            )
+          ],
         ),
         body: Column(
           children: <Widget>[
@@ -97,7 +104,9 @@ class _MessagesPageState extends State<MessagesPage> {
           decoration: InputDecoration(
             filled: true,
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(50), borderSide: BorderSide.none),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+                borderSide: BorderSide.none),
             hintStyle: const TextStyle(
               fontSize: 14,
               color: spqDarkGreyTranslucent,
@@ -109,18 +118,27 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
+  /// Checks if user input [text] is equal to the [name] of all users and overwrites [_foundUsersList].
   filterSearchResults(String? text) {
     List<CondensedUser> filterList = <CondensedUser>[];
     if (text != null && text.isNotEmpty) {
-      setState(() {
-        filterList.addAll(_allUserList.where((user) => user.name.toString().toLowerCase().contains(text.toLowerCase())).toList());
-        _foundUsersList = filterList;
-      });
+      setState(
+        () {
+          filterList.addAll(_allUserList
+              .where((user) => user.name
+                  .toString()
+                  .toLowerCase()
+                  .contains(text.toLowerCase()))
+              .toList());
+          _foundUsersList = filterList;
+        },
+      );
     } else {
-      setState(() {
-        _foundUsersList = _allUserList;
-      });
+      setState(
+        () {
+          _foundUsersList = _allUserList;
+        },
+      );
     }
   }
 }
-

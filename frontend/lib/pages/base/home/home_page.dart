@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    //Change from Hardcoded
     _profileBloc.add(LoadProfile(fromCache: false));
     // Load from cache.
     _postBloc.add(LoadPosts());
@@ -54,7 +53,8 @@ class _HomePageState extends State<HomePage> {
             if (state is ProfileLoaded) {
               var profileImageResourceId = state.profile.profileImageResourceId;
               if (profileImageResourceId > 0) {
-                _resourceBloc.add(LoadResource(resourceId: profileImageResourceId));
+                _resourceBloc
+                    .add(LoadResource(resourceId: profileImageResourceId));
               }
             }
           },
@@ -73,7 +73,9 @@ class _HomePageState extends State<HomePage> {
                 floatingActionButton: _buildFloatingActionButton(),
               );
             } else {
-              return const SizedBox(height: 0,);
+              return const SizedBox(
+                height: 0,
+              );
             }
           },
         ),
@@ -81,14 +83,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ///
+  /// Jumps to the top of [HomePage] and updates automatically.
   Future<void> _pullRefresh() async {
-    //Change from Hardcoded
     _postBloc.add(LoadPosts());
     _scrollController.jumpTo(0);
   }
 
-  ///
   PreferredSizeWidget _buildLoadedAppBar(Size deviceSize, Profile profile) {
     return SpqAppBar(
       actionList: [
@@ -105,7 +105,8 @@ class _HomePageState extends State<HomePage> {
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0,
+                duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -153,7 +154,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Returns a [ListView] for a list of posts.
+  /// Returns a [ListView] containing a list of posts.
   Widget _buildPostList(PostsLoaded state, AppLocalizations appLocale) {
     return ListView(
       controller: _scrollController,
@@ -170,7 +171,8 @@ class _HomePageState extends State<HomePage> {
                 postMessage: state.postList.elementAt(index).description,
                 resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                numberOfComments: state.postList.elementAt(index).numberOfComments,
+                numberOfComments:
+                    state.postList.elementAt(index).numberOfComments,
                 resourceMimeType: state.postList.elementAt(index).mimeType,
               );
             }
@@ -181,7 +183,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Creates amd returns a [Colum] to build a FeedFooter
+  /// Creates and returns a [Column] to build a FeedFooter.
   Widget _buildFeedFooter(AppLocalizations appLocale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -221,7 +223,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Close all Blocs ond dispose.
   @override
   void dispose() {
     _profileBloc.close();

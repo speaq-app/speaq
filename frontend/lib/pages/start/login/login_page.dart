@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  ///
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
@@ -97,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Creates the layout for entering [name] and [password] for logging in the user.
   Widget _buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
@@ -150,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
+  /// Creates the bottom part of the page with a user interface.
   Widget _buildBottom(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: <Widget>[

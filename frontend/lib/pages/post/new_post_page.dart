@@ -144,6 +144,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+  /// depending on what [_PostAttachments] was used and saves in [_postAttachment].
   Widget _buildAttachmentPreview(Size deviceSize) {
     switch (_postAttachment) {
       case _PostAttachments.none:
@@ -155,6 +156,7 @@ class _NewPostPageState extends State<NewPostPage> {
             alignment: Alignment.center,
           ),
         );
+      // Generating [Container] to show user the selected image.
       case _PostAttachments.image:
         return Container(
           padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
@@ -167,15 +169,18 @@ class _NewPostPageState extends State<NewPostPage> {
                   File(_pickedImage!.path),
                 ),
               ),
+              // An Option to delete the image.
               IconButton(
                 icon: const Icon(
                   Icons.delete_forever_rounded,
                   color: spqErrorRed,
                 ),
                 onPressed: () {
-                  setState(() {
-                    _postAttachment = _PostAttachments.none;
-                  });
+                  setState(
+                    () {
+                      _postAttachment = _PostAttachments.none;
+                    },
+                  );
                 },
               ),
             ],
@@ -196,15 +201,18 @@ class _NewPostPageState extends State<NewPostPage> {
                   durationInMillis: _audioDuration.inMilliseconds,
                 ),
               ),
+              // An Option to delete the audio.
               IconButton(
                 icon: const Icon(
                   Icons.delete_forever_rounded,
                   color: spqErrorRed,
                 ),
                 onPressed: () {
-                  setState(() {
-                    _postAttachment = _PostAttachments.none;
-                  });
+                  setState(
+                    () {
+                      _postAttachment = _PostAttachments.none;
+                    },
+                  );
                 },
               ),
             ],
@@ -213,6 +221,8 @@ class _NewPostPageState extends State<NewPostPage> {
     }
   }
 
+  /// Generating [TextFormField] for user input.
+  /// Opens two more options for Camera and Gallery [SpeedDialChild] when clicked.
   Widget _buildInputRow() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -232,6 +242,7 @@ class _NewPostPageState extends State<NewPostPage> {
                   await _pickImage(ImageSource.camera);
                 },
               ),
+              // Gallery
               SpeedDialChild(
                 child: const Icon(Icons.image, color: spqBlack),
                 onTap: () async {
@@ -281,6 +292,7 @@ class _NewPostPageState extends State<NewPostPage> {
             ),
           ),
         ),
+        // Opens audio keyboard when clicked.
         _buildAudioRecordButton(),
       ],
     );
@@ -300,6 +312,7 @@ class _NewPostPageState extends State<NewPostPage> {
     });
   }
 
+  /// Shows a keyboard of emojis and displays the recent used emojis.
   Widget _buildEmojiKeyboard(AppLocalizations appLocale) {
     return Visibility(
       visible: _activeKeyboard == _Keyboards.emoji,
@@ -420,6 +433,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+  /// Creates either an image or audio depending on [_postAttachment] for the [_postController].
   Future<void> _createPost() async {
     Uint8List? data;
     String? mimeType;
@@ -436,7 +450,6 @@ class _NewPostPageState extends State<NewPostPage> {
       case _PostAttachments.none:
         break;
     }
-
     _postBloc.add(CreatePost(
       description: _postController.text,
       resourceData: data,
@@ -490,6 +503,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+  /// Starting or stopping the recording depends on the status of [_recorder] and overrides [_postAttachment].
   Widget _buildAudioButtonFunction() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -520,6 +534,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+  /// Starts recording audio when [_recorder] is activated.
   Future<void> _record() async {
     if (_recorder == null) {
       return;
@@ -538,7 +553,6 @@ class _NewPostPageState extends State<NewPostPage> {
       toStream: recordingDataController.sink,
       codec: Codec.pcm16,
     );
-
     setState(() {});
   }
 
