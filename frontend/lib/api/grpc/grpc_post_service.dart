@@ -30,7 +30,6 @@ class GRPCPostService implements PostService {
 
   @override
   Future<List<Post>> getPosts(int id) async {
-    var token = await TokenUtils.getToken();
     GetPostFeedResponse response = await _client.getPostFeed(
       GetPostFeedRequest(),
       options: _callOptions,
@@ -72,7 +71,8 @@ class GRPCPostService implements PostService {
         ..description = description
         ..resourceData = resourceDataInBase64 ?? ""
         ..resourceMimeType = resourceMimeType ?? ""
-        ..audioDuration = Int64((audioDuration ?? Duration.zero).inMilliseconds),
+        ..audioDuration =
+            Int64((audioDuration ?? Duration.zero).inMilliseconds),
       options: _callOptions,
     );
   }

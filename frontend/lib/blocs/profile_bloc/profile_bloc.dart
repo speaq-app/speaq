@@ -4,13 +4,17 @@ import 'package:frontend/api/cache/cache_user_service.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/api/model/profile.dart';
+import 'package:frontend/utils/backend_utils.dart';
 import 'package:meta/meta.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final UserService _userService = GRPCUserService("10.0.2.2", port: 8080);
+  final UserService _userService = GRPCUserService(
+    BackendUtils.getHost(),
+    port: BackendUtils.getPort(),
+  );
 
   ProfileBloc() : super(ProfileInitial()) {
     on<LoadProfile>(_onLoadProfile);
