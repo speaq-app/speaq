@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/grpc_auth_service.dart';
 import 'package:frontend/utils/backend_utils.dart';
+import 'package:frontend/utils/speaq_global_constants.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 

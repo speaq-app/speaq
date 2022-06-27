@@ -5,6 +5,7 @@ import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/utils/backend_utils.dart';
+import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
 part 'profile_event.dart';
