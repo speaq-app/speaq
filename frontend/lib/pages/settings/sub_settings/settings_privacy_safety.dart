@@ -7,7 +7,8 @@ class PrivacySafetySettingsPage extends StatefulWidget {
   const PrivacySafetySettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<PrivacySafetySettingsPage> createState() => _PrivacySafetySettingsPageState();
+  State<PrivacySafetySettingsPage> createState() =>
+      _PrivacySafetySettingsPageState();
 }
 
 class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
@@ -27,33 +28,39 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
             style: const TextStyle(fontSize: 16),
           ),
         ),
-        body: Stack(children: [
-          SettingsList(
-            sections: [
-              SpqSettingsSection(
-                title: const Padding(
-                  padding: EdgeInsets.all(25.0),
-                ),
-                tiles: [
-                  //Privates Konto SwitchTile
-                  SpqSwitchSettingsTile(tileText: appLocale.privateAccount, value: valuePrivateSwitch),
-                  //Suchverlauf löschen
-                  SpqPopUpSettingsTile(
-                    tileText: appLocale.deleteSearchHistory,
-                    actionButtonText: appLocale.delete,
-                    popupMessage: appLocale.askDeleteSearchHistory,
-                    actionButtonColor: spqErrorRed,
+        body: Stack(
+          children: [
+            SettingsList(
+              sections: [
+                SpqSettingsSection(
+                  title: const Padding(
+                    padding: EdgeInsets.all(25.0),
                   ),
-                ],
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 20,
-            height: deviceSize.height * 0.1,
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
-          )
-        ]),
+                  tiles: [
+                    // Private account [SwitchTile].
+                    SpqSwitchSettingsTile(
+                        tileText: appLocale.privateAccount,
+                        value: valuePrivateSwitch),
+                    // Delete search history.
+                    SpqPopUpSettingsTile(
+                      tileText: appLocale.deleteSearchHistory,
+                      actionButtonText: appLocale.delete,
+                      popupMessage: appLocale.askDeleteSearchHistory,
+                      actionButtonColor: spqErrorRed,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 20,
+              height: deviceSize.height * 0.1,
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            ),
+          ],
+        ),
       ),
     );
   }

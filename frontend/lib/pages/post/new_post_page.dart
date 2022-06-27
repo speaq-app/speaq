@@ -68,6 +68,9 @@ class _NewPostPageState extends State<NewPostPage> {
     _player = await FlutterSoundPlayer().openPlayer();
   }
 
+  /// Checks if user has given a permission to access the device's microphone.
+  ///
+  /// Throws an [Exception] if microphone is not permitted.
   Future<void> _initRecorder() async {
     var status = await Permission.microphone.request();
     _hasMicrophoneAccess = status == PermissionStatus.granted;
@@ -185,6 +188,7 @@ class _NewPostPageState extends State<NewPostPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // Generating [SizedBox] to show user that an audio was created.
               SizedBox(
                 height: 69,
                 child: SpqAudioPostContainer(
@@ -221,6 +225,7 @@ class _NewPostPageState extends State<NewPostPage> {
             buttonSize: const Size(34, 34),
             childPadding: const EdgeInsets.only(left: 18),
             children: [
+              // Camera
               SpeedDialChild(
                 child: const Icon(Icons.camera_alt, color: spqBlack),
                 onTap: () async {
@@ -281,6 +286,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+  /// Get access to device resources [ImageSource.gallery] an [ImageSource.camera] and save in [_pickedImage].
   Future<void> _pickImage(ImageSource imageSource) async {
     var newImage = await _picker.pickImage(source: imageSource);
     if (newImage == null) {
@@ -335,6 +341,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
+  /// Saves selected emojis in [_postController].
   void _onEmojiSelected(Emoji emoji) {
     _postController
       ..text += emoji.emoji
@@ -354,6 +361,7 @@ class _NewPostPageState extends State<NewPostPage> {
       );
   }
 
+  /// Changes the icon depending on whether the microphone is allowed by the user.
   Widget _buildAudioRecordButton() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -437,6 +445,11 @@ class _NewPostPageState extends State<NewPostPage> {
     ));
   }
 
+  /// Updates the numbers of the running audio.
+  ///
+  /// ```dart
+  /// Returns e.g. 00:12
+  /// ```
   Widget _buildAudioKeyboard(Size deviceSize) {
     return Visibility(
       visible: _activeKeyboard == _Keyboards.audio,

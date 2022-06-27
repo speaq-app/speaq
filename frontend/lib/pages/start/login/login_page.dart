@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           GestureDetector(
             onTap: () {
-              //TODO - Implement forgot password
+              // TODO - Implement forgot password
             },
             child: Text(
               appLocale.forgotPassword,
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
             thickness: 0.75,
           ),
         ),
-        //TODO - Guest Login
+        //TODO - Login as a guest
       ],
     );
   }

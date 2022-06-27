@@ -27,7 +27,7 @@ class _UserMenuState extends State<UserMenu> {
   List<int> _followerIDs = [];
   List<int> _followingIDs = [];
 
-  // App User (get at login).
+  // App user (get at login).
   late Profile _profile;
 
   ///
@@ -62,7 +62,8 @@ class _UserMenuState extends State<UserMenu> {
                   if (state is ProfileLoading) {
                     return _buildHeaderShimmer(context, appLocale, deviceSize);
                   } else if (state is ProfileLoaded) {
-                    return _buildHeader(context, appLocale, deviceSize, state.profile);
+                    return _buildHeader(
+                        context, appLocale, deviceSize, state.profile);
                   } else {
                     return const Text("Error UserMenuState");
                   }
@@ -77,7 +78,8 @@ class _UserMenuState extends State<UserMenu> {
   }
 
   ///
-  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
+  Widget _buildHeaderShimmer(
+      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
         top: deviceSize.width * 0.06,
@@ -109,7 +111,8 @@ class _UserMenuState extends State<UserMenu> {
   }
 
   ///
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Size deviceSize, Profile profile) {
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale,
+      Size deviceSize, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -192,14 +195,14 @@ class _UserMenuState extends State<UserMenu> {
               children: [
                 Text(
                   "${_followerIDs.length}",
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.bold),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 2),
                   child: Text(
                     appLocale.follower,
-                    style: const TextStyle(fontSize: 10
-                    ),
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ),
               ],
@@ -213,8 +216,8 @@ class _UserMenuState extends State<UserMenu> {
                   padding: const EdgeInsets.only(right: 2.0),
                   child: Text(
                     "${_followingIDs.length}",
-                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold
-                    ),
+                    style: const TextStyle(
+                        fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
@@ -237,7 +240,8 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            Navigator.popAndPushNamed(context, "profile", arguments: [0, true, 0]);
+            Navigator.popAndPushNamed(context, "profile",
+                arguments: [0, true, 0]);
           },
         ),
         ListTile(
@@ -291,7 +295,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  ///
+  /// Close all blocs ond dispose.
   @override
   void dispose() {
     _settingsBloc.close();

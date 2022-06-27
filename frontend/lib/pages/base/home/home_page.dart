@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     //Change from Hardcoded
     _profileBloc.add(LoadProfile(fromCache: false));
-    //If no internet connection Load from cache?
+    // Load from cache.
     _postBloc.add(LoadPosts());
     super.initState();
   }
@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Returns a [ListView] for different PostShimmer effects.
+  /// Returns a [ListView] for different postShimmer effects.
   Widget _buildPostContainerShimmer() {
     return ListView(
       controller: _scrollController,

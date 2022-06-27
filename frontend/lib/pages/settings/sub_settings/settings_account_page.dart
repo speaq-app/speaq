@@ -56,7 +56,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
               ),
             ],
           ),
-          //Logo
+          // Logo.
           Positioned(
             bottom: 20,
             height: deviceSize.height * 0.1,

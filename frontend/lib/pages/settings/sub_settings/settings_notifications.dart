@@ -35,9 +35,9 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                   padding: EdgeInsets.all(25.0),
                 ),
                 tiles: [
-                  //Privates Konto SwitchTile
+                  // Private account SwitchTile.
                   SpqSwitchSettingsTile(tileText: appLocale.doNotDisturb, value: valuePrivateSwitch),
-                  //Methode für SettingsTile
+                  // Methode für SettingsTile.
                   SpqNavigationSettingsTile(text: appLocale.receiveNotifications),
                   SpqNavigationSettingsTile(text: appLocale.notificationSound),
                 ],

@@ -50,5 +50,4 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
       ),
     );
   }
-
 }
