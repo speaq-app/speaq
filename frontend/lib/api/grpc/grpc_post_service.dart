@@ -30,7 +30,6 @@ class GRPCPostService implements PostService {
 
   @override
   Future<List<Post>> getPosts(int id) async {
-    var token = await TokenUtils.getToken();
     GetPostFeedResponse response = await _client.getPostFeed(
       GetPostFeedRequest(),
       options: _callOptions,

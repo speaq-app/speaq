@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SpqNavigationSettingsTile extends StatelessWidget {

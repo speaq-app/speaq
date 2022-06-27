@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -47,7 +45,6 @@ class ProfilePageState extends State<ProfilePage> {
   late Profile _profile;
 
   //User-Data
-  //TODO *Get CreatedAt from Backend*
   final String _joined = "Joined August 2022";
 
   @override

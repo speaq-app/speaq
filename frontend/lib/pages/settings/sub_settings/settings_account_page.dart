@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:frontend/utils/token_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import 'package:frontend/widgets/all_widgets.dart';

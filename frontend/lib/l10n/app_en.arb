@@ -92,7 +92,6 @@
   "hintTextSearchBarSearchPage": "Search for persons",
   "toFollow": "Follow",
   "toUnfollow": "Unfollow",
-
   "secondsAgo" : " seconds ago",
   "minuteAgo" : " minute ago",
   "minutesAgo" : " minutes ago",
@@ -110,5 +109,4 @@
   "unknownError": "An unknown error has occurred",
   "userNotFound": "There is no user with the given username",
   "noTokenGenerated": "Couldn't generate user token"
-
 }

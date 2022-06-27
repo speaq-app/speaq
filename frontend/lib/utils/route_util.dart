@@ -59,8 +59,6 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "home":
-        int userID = args as int;
-
         return PageTransition(
           child: const HomePage(),
           type: PageTransitionType.bottomToTop,

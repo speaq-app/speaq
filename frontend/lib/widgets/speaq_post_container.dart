@@ -51,7 +51,6 @@ class _PostContainerState extends State<PostContainer> {
     if (widget.resourceID > 0) {
       _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
     }
-    print("${widget.ownerID}!!!!!!!!!!!!!!!!!");
   }
 
   @override

@@ -137,7 +137,6 @@ class _LoginPageState extends State<LoginPage> {
           GestureDetector(
             onTap: () {
               //TODO - Implement forgot password
-              //print("Forgot password");
             },
             child: Text(
               appLocale.forgotPassword,
@@ -180,17 +179,7 @@ class _LoginPageState extends State<LoginPage> {
             thickness: 0.75,
           ),
         ),
-//TODO - Guest Login
-/*
-        SpeaqPageForwarding(
-          hintText: appLocale.guestText,
-          text: appLocale.guest,
-          press: () {
-            print("1. jbnklhskl");
-            //Navigator.popAndPushNamed(context, "base");
-          },
-        ),
-*/
+        //TODO - Guest Login
       ],
     );
   }

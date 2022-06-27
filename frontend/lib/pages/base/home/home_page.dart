@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 floatingActionButton: _buildFloatingActionButton(),
               );
             } else {
-              return SizedBox(height: 0,);
+              return const SizedBox(height: 0,);
             }
           },
         ),
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
-      onPressed: () => Navigator.pushNamed(context, 'new_post', arguments: 1), //TODO "Echte User-ID übergeben"
+      onPressed: () => Navigator.pushNamed(context, 'new_post'),
       heroTag: 'post',
       child: const Icon(
         Icons.add,
