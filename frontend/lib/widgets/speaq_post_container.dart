@@ -84,7 +84,11 @@ class _PostContainerState extends State<PostContainer> {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
           return InkWell(
-            onTap: () => Navigator.pushNamed(context, "profile", arguments: [widget.ownerID, state.profile.isOwnProfile]),
+            onTap: () => Navigator.pushNamed(context, "profile", arguments: [
+              widget.ownerID,
+              state.profile.isOwnProfile,
+              state.profile.isOwnProfile ? 0 : 1,
+            ]),
             child: BlocBuilder<ResourceBloc, ResourceState>(
               bloc: _resourceBlocProfile,
               builder: (context, state) {
@@ -134,7 +138,11 @@ class _PostContainerState extends State<PostContainer> {
         }
 
         return InkWell(
-          onTap: () => Navigator.pushNamed(context, "profile", arguments: [widget.ownerID, state.profile.isOwnProfile]),
+          onTap: () => Navigator.pushNamed(context, "profile", arguments: [
+            widget.ownerID,
+            state.profile.isOwnProfile,
+            state.profile.isOwnProfile ? 0 : 1,
+          ]),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

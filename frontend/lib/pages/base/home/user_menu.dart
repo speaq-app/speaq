@@ -229,7 +229,7 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            Navigator.popAndPushNamed(context, "profile", arguments: [0, true]);
+            Navigator.popAndPushNamed(context, "profile", arguments: [0, true, 0]);
           },
         ),
         ListTile(

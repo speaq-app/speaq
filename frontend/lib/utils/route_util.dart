@@ -53,6 +53,7 @@ class RouteGenerator {
           child: ProfilePage(
             pageUserID: profileInfo[0],
             isOwnPage: profileInfo[1],
+            initialPageIndex: profileInfo[2],
           ),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
