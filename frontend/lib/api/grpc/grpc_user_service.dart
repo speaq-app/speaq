@@ -38,6 +38,7 @@ class GRPCUserService implements UserService {
       website: resp.website,
       profileImageBlurHash: resp.profileImageBlurHash,
       profileImageResourceId: resp.profileImageResourceId.toInt(),
+      isOwnProfile: resp.isOwnProfile,
     );
   }
 
@@ -133,8 +134,7 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<List<CondensedUser>> userByUsername(
-      {required String searchTerm}) async {
+  Future<List<CondensedUser>> searchUser({required String searchTerm}) async {
     CondensedUserListResponse resp = await _client.searchUser(
       SearchUserRequest(term: searchTerm),
       options: _callOptions,

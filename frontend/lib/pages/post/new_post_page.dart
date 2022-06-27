@@ -224,13 +224,13 @@ class _NewPostPageState extends State<NewPostPage> {
               SpeedDialChild(
                 child: const Icon(Icons.camera_alt, color: spqBlack),
                 onTap: () async {
-                  await _pickIamge(ImageSource.camera);
+                  await _pickImage(ImageSource.camera);
                 },
               ),
               SpeedDialChild(
                 child: const Icon(Icons.image, color: spqBlack),
                 onTap: () async {
-                  await _pickIamge(ImageSource.gallery);
+                  await _pickImage(ImageSource.gallery);
                 },
               ),
             ],
@@ -281,7 +281,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Future<void> _pickIamge(ImageSource imageSource) async {
+  Future<void> _pickImage(ImageSource imageSource) async {
     var newImage = await _picker.pickImage(source: imageSource);
     if (newImage == null) {
       return;

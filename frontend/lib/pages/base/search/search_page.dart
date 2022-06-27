@@ -79,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         child: TextField(
-          onChanged: (value) => _searchBloc.add(StartSearch(username: value)),
+          onChanged: (value) => _searchBloc.add(StartSearch(term: value)),
           decoration: InputDecoration(
             filled: true,
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),

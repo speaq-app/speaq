@@ -22,7 +22,7 @@ class SpqSearchBar extends StatelessWidget {
       ),
       child: Center(
         child: TextField(
-          onChanged: (value) => searchBloc.add(StartSearch(username: value)),
+          onChanged: (value) => searchBloc.add(StartSearch(term: value)),
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
             border: InputBorder.none,

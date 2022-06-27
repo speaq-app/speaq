@@ -21,6 +21,6 @@ class LoadPosts extends PostEvent {
   final int userId;
 
   LoadPosts({
-    required this.userId,
+    this.userId = 0,
   });
 }

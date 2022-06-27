@@ -4,9 +4,9 @@ part of 'search_bloc.dart';
 abstract class SearchEvent {}
 
 class StartSearch extends SearchEvent {
-  final String username;
+  final String term;
 
   StartSearch({
-    required this.username,
+    required this.term,
   });
 }

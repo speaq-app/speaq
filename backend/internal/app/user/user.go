@@ -36,17 +36,24 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 }
 
 func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) (*GetUserProfileResponse, error) {
-	userID := req.UserId
+	var op bool
 
-	if userID <= 0 {
-		var err error
-		userID, err = middleware.GetUserIDFromContext(ctx)
-		if err != nil {
-			return nil, err
-		}
+	var reqUserID int64
+
+	appUserID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
 	}
 
-	p, err := s.DataService.UserProfileByID(userID)
+	if req.UserId <= 0 || req.UserId == appUserID {
+		reqUserID = appUserID
+		op = true
+	} else {
+		reqUserID = req.UserId
+		op = false
+	}
+
+	p, err := s.DataService.UserProfileByID(reqUserID)
 	if err != nil {
 		return nil, err
 	}
@@ -58,6 +65,7 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 		Website:                p.Website,
 		ProfileImageBlurHash:   p.ProfileImageBlurHash,
 		ProfileImageResourceId: p.ProfileImageResourceID,
+		IsOwnProfile:           op,
 	}, nil
 }
 
@@ -164,7 +172,7 @@ func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingReque
 			return nil, err
 		}
 	}
-	
+
 	f, _, err := s.DataService.CheckIfFollowing(userID, req.FollowerId)
 
 	if err != nil {

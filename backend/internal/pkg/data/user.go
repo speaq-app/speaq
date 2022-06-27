@@ -40,6 +40,7 @@ type UserProfile struct {
 	Website                string
 	ProfileImageBlurHash   string
 	ProfileImageResourceID int64
+	IsOwnProfile           bool
 }
 
 /*type UserLogin struct {

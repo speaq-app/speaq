@@ -7,6 +7,7 @@ import 'package:frontend/api/user_service.dart';
 import 'package:meta/meta.dart';
 
 part 'search_event.dart';
+
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
@@ -16,14 +17,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<StartSearch>(_onStartSearch);
   }
 
-  Future<void> _onStartSearch(
-      StartSearch event, Emitter<SearchState> emit) async {
+  Future<void> _onStartSearch(StartSearch event, Emitter<SearchState> emit) async {
     emit(SearchStarted());
 
     emit(RequestSend());
 
-    List<CondensedUser> matchingUsers =
-        await _userService.userByUsername(searchTerm: event.username);
+    List<CondensedUser> matchingUsers = event.term.isNotEmpty
+        ? await _userService.searchUser(searchTerm: event.term.trim())
+        : [];
 
     emit(ResultsReceived(users: matchingUsers));
   }

@@ -18,9 +18,10 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "base":
-        Map<String, dynamic> map = args as Map<String, dynamic>;
+        int index = args as int;
+
         return PageTransition(
-          child: BasePage(userID: map["userID"]),
+          child: BasePage(initialPage: index),
           settings: const RouteSettings(
             name: "base", //HERE is where you name your route for using popUntil
           ),
@@ -60,7 +61,7 @@ class RouteGenerator {
         int userID = args as int;
 
         return PageTransition(
-          child: HomePage(userID: userID),
+          child: const HomePage(),
           type: PageTransitionType.bottomToTop,
           duration: const Duration(milliseconds: 400),
           alignment: Alignment.center,
@@ -79,7 +80,7 @@ class RouteGenerator {
         );
       case "search":
         return PageTransition(
-          child: SearchPage(),
+          child: const SearchPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );

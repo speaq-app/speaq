@@ -14,9 +14,7 @@ import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
 class HomePage extends StatefulWidget {
-  final int userID;
-
-  const HomePage({Key? key, required this.userID}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -38,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     //Change from Hardcoded
     _profileBloc.add(LoadProfile(fromCache: false));
     //If no internet connection Load from cache?
-    _postBloc.add(LoadPosts(userId: widget.userID));
+    _postBloc.add(LoadPosts());
     super.initState();
   }
 
@@ -85,7 +83,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _pullRefresh() async {
     //Change from Hardcoded
-    _postBloc.add(LoadPosts(userId: widget.userID));
+    _postBloc.add(LoadPosts());
     _scrollController.jumpTo(0);
   }
 

@@ -18,11 +18,12 @@ import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 class ProfilePage extends StatefulWidget {
   final int pageUserID;
   final bool isOwnPage;
+  final int initialIndex;
 
   const ProfilePage({
     Key? key,
     required this.pageUserID,
-    this.isOwnPage = false,
+    this.isOwnPage = false, this.initialIndex = 0,
   }) : super(key: key);
 
   @override
@@ -88,6 +89,7 @@ class ProfilePageState extends State<ProfilePage> {
         bottomNavigationBar: SpqButtonNavigationBar(
           switchPage: (index) {
             Navigator.popUntil(context, ModalRoute.withName("base"));
+            Navigator.pushNamed(context, "base", arguments: index);
           },
           selectedIndex: 0,
         ),
