@@ -7,8 +7,7 @@ class ContentPrefSettingsPage extends StatefulWidget {
   const ContentPrefSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<ContentPrefSettingsPage> createState() =>
-      _ContentPrefSettingsPageState();
+  State<ContentPrefSettingsPage> createState() => _ContentPrefSettingsPageState();
 }
 
 class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
@@ -23,49 +22,33 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.contentpreferences,
+            appLocale.contentPreferences,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),
         ),
-        body: Stack(
-          children: [
-            SettingsList(
-              sections: [
-                SpqSettingsSection(
-                  title: const Padding(
-                    padding: EdgeInsets.all(25.0),
-                  ),
-                  tiles: [
-                    // Language selection.
-                    _buildSettingsTile(appLocale.language, "login"
-                    ),
-                  ],
+        body: Stack(children: [
+          SettingsList(
+            sections: [
+              SpqSettingsSection(
+                title: const Padding(
+                  padding: EdgeInsets.all(25.0),
                 ),
-              ],
-            ),
-            // Speaq logo.
-            Positioned(
-              bottom: 20,
-              height: deviceSize.height * 0.1,
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SpeaqBottomLogo(deviceSize: deviceSize)
+                tiles: [
+                  //Sprachauswahl
+                  SpqNavigationSettingsTile(text: appLocale.language),
+                ],
               ),
-            )
-          ],
-        ),
+            ],
+          ),
+          Positioned(
+            bottom: 20,
+            height: deviceSize.height * 0.1,
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
+          )
+        ]),
       ),
     );
   }
 
-  /// Creates and returns one element for [SettingsList].
-  SettingsTile _buildSettingsTile(String text, String route) {
-    return SettingsTile.navigation(
-      trailing: Icon(Icons.adaptive.arrow_forward),
-      title: Text(text, style: const TextStyle(fontSize: 15)),
-      onPressed: (context) => Navigator.pushNamed(context, route
-      ),
-    );
-  }
 }

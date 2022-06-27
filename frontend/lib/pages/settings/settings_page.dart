@@ -28,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
           title: Text(
-            appLocale.settingsandprivacy,
+            appLocale.settingsAndPrivacy,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),
@@ -46,10 +46,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   tiles: [
-                    _buildSettingsTile(appLocale.account, "settAccount"),
-                    _buildSettingsTile(appLocale.privacyandsafety, "settPrivSafety"),
-                    _buildSettingsTile(appLocale.notifications, "settNotific"),
-                    _buildSettingsTile(appLocale.contentpreferences, "settContentPref"),
+                    _buildSettingsTile(appLocale.account, "accountSettings"),
+                    _buildSettingsTile(appLocale.privacyAndSafety, "privacySafetySettings"),
+                    _buildSettingsTile(appLocale.notifications, "notificationSettings"),
+                    _buildSettingsTile(appLocale.contentPreferences, "contentPreferencesSettings"),
                   ],
                 ),
                 SpqSettingsSection(
@@ -61,8 +61,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   tiles: [
-                    _buildSettingsTile(appLocale.displayandsound, "settDispSound"),
-                    _buildSettingsTile(appLocale.aboutspeaq, "settAboutSpeaq"),
+                    _buildSettingsTile(appLocale.displayAndSound, "displaySoundSettings"),
+                    _buildSettingsTile(appLocale.aboutSpeaq, "aboutSpeaqSettings"),
                   ],
                 ),
               ],

@@ -60,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
               autofill: const [AutofillHints.name],
               hintText: appLocale.username,
               controller: _nameController,
-              labelTex: appLocale.username,
+              labelText: appLocale.username,
               onChanged: (value) {},
               icon: Icons.person,
               borderColor: Border.all(color: spqLightBlack),
@@ -69,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
           RoundTextField(
             autofill: const [AutofillHints.newPassword],
             hintText: appLocale.password,
-            labelTex: _passwordStrength == 0
+            labelText: _passwordStrength == 0
                 ? appLocale.password
                 : _passwordStrength <= 2 / 4
                     ? appLocale.passwordMin
@@ -94,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
           RoundTextField(
             autofill: const [AutofillHints.password],
             hintText: appLocale.passwordCheck,
-            labelTex: appLocale.passwordCheck,
+            labelText: appLocale.passwordCheck,
             isHidden: true,
             icon: Icons.lock,
             controller: _passwordCheckController,
@@ -121,11 +121,48 @@ class _RegisterPageState extends State<RegisterPage> {
                 switch (state.code) {
                   case StatusCode.alreadyExists:
                     Flushbar(
+                      messageText: Text(
+                        appLocale.errorUsernameAlreadyTaken,
+                        textAlign: TextAlign.center,
+                      ),
                       backgroundColor: spqPrimaryBlue,
                       messageColor: spqWhite,
-                      message: appLocale.errorUsernameAlreadyTaken,
                       duration: const Duration(seconds: 5),
                     ).show(context);
+                    break;
+                  case 1101:
+                    Flushbar(
+                      messageText: Text(
+                        appLocale.errorUsernameAlreadyTaken,
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                    break;
+                  case 1103:
+                    Flushbar(
+                      messageText: Text(
+                        appLocale.errorUsernameAlreadyTaken,
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                    break;
+                  case StatusCode.invalidArgument:
+                    Flushbar(
+                      messageText: Text(
+                        appLocale.wrongInput,
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                    break;
                 }
               } else if (state is RegisterSuccess) {
                 Navigator.pop(context);
@@ -205,23 +242,23 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  _onPasswordChanged(String password) {
+  _onPasswordChanged(String newPassword) {
     RegExp passValid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
-    String _password = password;
-    if (_password.isEmpty) {
+    String password = newPassword;
+    if (password.isEmpty) {
       setState(() {
         _passwordStrength = 0;
       });
-    } else if (_password.length < 6) {
+    } else if (password.length < 6) {
       setState(() {
         _passwordStrength = 1 / 4;
       });
-    } else if (_password.length < 8) {
+    } else if (password.length < 8) {
       setState(() {
         _passwordStrength = 2 / 4;
       });
     } else {
-      if (passValid.hasMatch(_password)) {
+      if (passValid.hasMatch(password)) {
         setState(() {
           _passwordStrength = 4 / 4;
         });
@@ -237,12 +274,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _onRegister() {
-    var username = _nameController.text;
-    var password = _passwordController.text;
-
     _registerBloc.add(RegisterUser(
-      username: username,
-      password: password,
+      username: _nameController.text,
+      password: _passwordController.text,
+      passwordCheck: _passwordCheckController.text,
     ));
   }
 }

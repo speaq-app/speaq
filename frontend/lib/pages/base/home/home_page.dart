@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/blocs/post_bloc/post_bloc.dart';
@@ -8,16 +7,14 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/pages/base/home/user_menu.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
-import 'package:frontend/widgets/speaq_post_container.dart';
-import 'package:frontend/widgets/spq_fab.dart';
+import 'package:frontend/widgets/speaq_fab.dart';
+import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
+import 'package:frontend/widgets/all_widgets.dart';
 
 class HomePage extends StatefulWidget {
-  final int userID;
-
-  const HomePage({Key? key, required this.userID}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -36,9 +33,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(userId: 1, fromCache: false));
-    // If no internet connection Load from cache?
-    _postBloc.add(LoadPosts(userId: 1));
+    //Change from Hardcoded
+    _profileBloc.add(LoadProfile(fromCache: false));
+    //If no internet connection Load from cache?
+    _postBloc.add(LoadPosts());
     super.initState();
   }
 
@@ -54,8 +52,10 @@ class _HomePageState extends State<HomePage> {
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              _resourceBloc.add(LoadResource(
-                  resourceId: state.profile.profileImageResourceId));
+              var profileImageResourceId = state.profile.profileImageResourceId;
+              if (profileImageResourceId > 0) {
+                _resourceBloc.add(LoadResource(resourceId: profileImageResourceId));
+              }
             }
           },
           builder: (context, state) {
@@ -68,14 +68,12 @@ class _HomePageState extends State<HomePage> {
             } else if (state is ProfileLoaded) {
               return Scaffold(
                 appBar: _buildLoadedAppBar(deviceSize, state.profile),
-                drawer: UserMenu(
-                  userID: widget.userID,
-                ),
+                drawer: const UserMenu(),
                 body: _buildPostView(appLocale),
                 floatingActionButton: _buildFloatingActionButton(),
               );
             } else {
-              return const Text("Profile State failed");
+              return const SizedBox(height: 0,);
             }
           },
         ),
@@ -85,7 +83,8 @@ class _HomePageState extends State<HomePage> {
 
   ///
   Future<void> _pullRefresh() async {
-    _postBloc.add(LoadPosts(userId: 1));
+    //Change from Hardcoded
+    _postBloc.add(LoadPosts());
     _scrollController.jumpTo(0);
   }
 
@@ -100,16 +99,13 @@ class _HomePageState extends State<HomePage> {
           onPressed: () => {},
         )
       ],
-      leading: Builder(
-        builder: (context) {
-          return _buildProfileImage(context, profile.profileImageBlurHash);
-        },
-      ),
+      leading: Builder(builder: (context) {
+        return _buildProfileImage(context, profile);
+      }),
       title: Center(
         child: InkWell(
           onTap: () {
-            _scrollController.animateTo(0,
-                duration: const Duration(seconds: 1), curve: Curves.linear);
+            _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
           },
           child: SvgPicture.asset(
             spqImage,
@@ -150,26 +146,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ///
-  Widget _buildProfileImage(BuildContext context, String profileImageBlurHash) {
+  Widget _buildProfileImage(BuildContext context, Profile profile) {
     return IconButton(
       onPressed: () => Scaffold.of(context).openDrawer(),
-      icon: BlocBuilder<ResourceBloc, ResourceState>(
-        bloc: _resourceBloc,
-        builder: (context, state) {
-          if (state is ResourceLoaded) {
-            return CircleAvatar(
-              radius: 20,
-              backgroundImage: MemoryImage(state.decodedData),
-            );
-          } else {
-            return CircleAvatar(
-              radius: 20,
-              backgroundImage: BlurHashImage(profileImageBlurHash),
-            );
-          }
-        },
-      ),
+      icon: SpqProfileAvatar(profile: profile),
     );
   }
 
@@ -186,15 +166,12 @@ class _HomePageState extends State<HomePage> {
             if (index < state.postList.length) {
               return PostContainer(
                 ownerID: state.postList.elementAt(index).ownerID,
-                name: state.postList.elementAt(index).ownerName,
-                username: state.postList.elementAt(index).ownerUsername,
                 creationTime: state.postList.elementAt(index).date,
                 postMessage: state.postList.elementAt(index).description,
-                resourceID: -1,
-                // Only Text.
+                resourceID: state.postList.elementAt(index).resourceID,
                 numberOfLikes: state.postList.elementAt(index).numberOfLikes,
-                numberOfComments:
-                    state.postList.elementAt(index).numberOfComments,
+                numberOfComments: state.postList.elementAt(index).numberOfComments,
+                resourceMimeType: state.postList.elementAt(index).mimeType,
               );
             }
             return _buildFeedFooter(appLocale);

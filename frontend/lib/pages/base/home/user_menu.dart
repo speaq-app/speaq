@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
-import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
-  final int userID;
-
-  const UserMenu({Key? key, required this.userID}) : super(key: key);
+  const UserMenu({Key? key}) : super(key: key);
 
   @override
   State<UserMenu> createState() => _UserMenuState();
@@ -23,7 +20,6 @@ class UserMenu extends StatefulWidget {
 
 class _UserMenuState extends State<UserMenu> {
   final ProfileBloc _profileBloc = ProfileBloc();
-  final ResourceBloc _resourceBloc = ResourceBloc();
   final SettingsBloc _settingsBloc = SettingsBloc();
   final FollowerBloc _followerBloc = FollowerBloc();
 
@@ -33,14 +29,11 @@ class _UserMenuState extends State<UserMenu> {
 
   // App User (get at login).
   late Profile _profile;
-  late User _user;
 
   ///
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(
-      userId: 1,
-    ));
+    _profileBloc.add(LoadProfile(userId: 0));
 
     super.initState();
   }
@@ -60,9 +53,9 @@ class _UserMenuState extends State<UserMenu> {
                 bloc: _profileBloc,
                 listener: (context, state) {
                   if (state is ProfileLoaded) {
-                    _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
-                    _followerBloc.add(LoadFollowerIDs(userId: widget.userID));
-                    _profile = state.profile;
+                    var profile = state.profile;
+                    _followerBloc.add(LoadFollowerIDs(userId: 0));
+                    _profile = profile;
                   }
                 },
                 builder: (context, state) {
@@ -127,22 +120,7 @@ class _UserMenuState extends State<UserMenu> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocBuilder<ResourceBloc, ResourceState>(
-              bloc: _resourceBloc,
-              builder: (context, state) {
-                if (state is ResourceLoaded) {
-                  return CircleAvatar(
-                    radius: 24,
-                    backgroundImage: MemoryImage(state.decodedData),
-                  );
-                } else {
-                  return CircleAvatar(
-                    radius: 24,
-                    backgroundImage: BlurHashImage(profile.profileImageBlurHash),
-                  );
-                }
-              },
-            ),
+            SpqProfileAvatar(profile: profile),
             const SizedBox(height: 5),
             Text(
               profile.name,
@@ -197,9 +175,9 @@ class _UserMenuState extends State<UserMenu> {
   ///
   Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, 'follow',
+      onTap: () => Navigator.popAndPushNamed(context, 'follow',
           arguments: User(
-            id: widget.userID,
+            id: 0,
             profile: _profile,
             password: '',
             followerIDs: _followerIDs,
@@ -259,9 +237,7 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            //TODO User übergeben
-            Navigator.popAndPushNamed(context, "profile", arguments: [widget.userID, true, widget.userID]
-            );
+            Navigator.popAndPushNamed(context, "profile", arguments: [0, true, 0]);
           },
         ),
         ListTile(
@@ -283,34 +259,30 @@ class _UserMenuState extends State<UserMenu> {
           thickness: 0.75,
         ),
         ListTile(
-          title: Text(appLocale.settingsandprivacy),
+          title: Text(appLocale.settingsAndPrivacy),
           onTap: () {
-            Navigator.popAndPushNamed(context, "settings"
-            );
+            Navigator.popAndPushNamed(context, "settings");
           },
         ),
         BlocConsumer<SettingsBloc, SettingsState>(
           bloc: _settingsBloc,
           listener: (context, state) async {
             if (state is ImprintURLLoaded) {
-              await launchUrl(state.imprintURL
-              );
+              await launchUrl(state.imprintURL);
             }
           },
           builder: (context, state) {
             if (state is LoadingImprintURL) {
               return ListTile(
                 title: Text(appLocale.imprint),
-                trailing: const CircularProgressIndicator(
-                ),
+                trailing: const CircularProgressIndicator(),
               );
             }
 
             return ListTile(
               title: Text(appLocale.imprint),
               onTap: () {
-                _settingsBloc.add(LoadImprintURL()
-                );
+                _settingsBloc.add(LoadImprintURL());
               },
             );
           },
@@ -325,7 +297,7 @@ class _UserMenuState extends State<UserMenu> {
     _settingsBloc.close();
     _followerBloc.close();
     _profileBloc.close();
-    _resourceBloc.close();
+
     super.dispose();
   }
 }

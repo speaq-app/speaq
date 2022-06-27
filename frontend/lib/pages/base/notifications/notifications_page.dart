@@ -19,6 +19,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
           preferredSize: deviceSize,
         ),
         backgroundColor: spqPrimaryBlue,

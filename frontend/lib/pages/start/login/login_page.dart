@@ -3,11 +3,10 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/api/grpc/grpc_user_service.dart';
-import 'package:frontend/api/user_service.dart';
-import 'package:frontend/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:frontend/blocs/login_bloc/login_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
+import 'package:grpc/grpc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,8 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final UserService _userService = GRPCUserService();
-  final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
+  final LoginBloc _loginBloc = LoginBloc();
 
   bool isHidden = true;
 
@@ -39,38 +37,57 @@ class _LoginPageState extends State<LoginPage> {
       child: ColorfulSafeArea(
         color: spqWhite,
         child: Scaffold(
-          body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-              bloc: _authenticationBloc,
+          body: BlocConsumer<LoginBloc, LoginState>(
+              bloc: _loginBloc,
               listener: (context, state) {
-                if (state is LogInSuccess) {
-                  print("Login Success");
-                  Navigator.pushNamed(context, "base", arguments: {"userID": state.userID, "token": state.token});
-                } else if (state is LogInFail) {
+                if (state is LoginSuccess) {
+                  Navigator.pushNamed(context, "base", arguments: 0);
+                } else if (state is LoginError) {
+                  String message;
+                  switch (state.code) {
+                    case StatusCode.invalidArgument:
+                      message = appLocale.wrongPassword;
+                      break;
+                    case StatusCode.notFound:
+                      message = appLocale.userNotFound;
+                      break;
+                    case StatusCode.unauthenticated:
+                      message = appLocale.noTokenGenerated;
+                      break;
+                    case StatusCode.unknown:
+                      message = appLocale.unknownError;
+                      break;
+                    default:
+                      message = appLocale.unknownError;
+                  }
                   Flushbar(
+                    messageText: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                    ),
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
-                    message: state.message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
                 }
               },
               builder: (context, state) {
-                if (state is TryLoggingIn) {
+                if (state is LoginLoading) {
                   return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
-                } else if (state is LogInFail) {
+                } else if (state is LoginError) {
                   return ListView(
                     children: <Widget>[
-                      buildTop(context, appLocale),
-                      buildBottom(context, appLocale),
+                      _buildTop(context, appLocale),
+                      _buildBottom(context, appLocale),
                     ],
                   );
-                } else if (state is LogInSuccess) {
+                } else if (state is LoginSuccess) {
                   return const SizedBox.shrink();
                 } else {
                   return ListView(
                     children: <Widget>[
-                      buildTop(context, appLocale),
-                      buildBottom(context, appLocale),
+                      _buildTop(context, appLocale),
+                      _buildBottom(context, appLocale),
                     ],
                   );
                 }
@@ -80,25 +97,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-/*
-  @override
-  Widget build(BuildContext context) {
-    AppLocalizations appLocale = AppLocalizations.of(context)!;
-
-    return Drawer(
-      child: SafeArea(
-        child: ListView(
-          children: <Widget>[
-            buildTop(context, appLocale),
-            buildBottom(context, appLocale),
-          ],
-        ),
-      ),
-    );
-  }
-*/
-
-  Widget buildTop(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
         top: 125,
@@ -119,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
               hintText: appLocale.username,
               onChanged: (value) {},
               controller: _usernameController,
-              labelTex: appLocale.username,
+              labelText: appLocale.username,
               borderColor: Border.all(color: spqLightBlack),
             ),
           ),
@@ -128,15 +127,15 @@ class _LoginPageState extends State<LoginPage> {
             icon: Icons.lock,
             hintText: appLocale.password,
             isHidden: isHidden,
-            labelTex: appLocale.password,
+            labelText: appLocale.password,
             controller: _passwordController,
             suffixIcon: _buildVisibility(),
-            onChanged: (String value) {},
+            onChanged: (value) {},
             borderColor: Border.all(color: spqLightBlack),
           ),
           GestureDetector(
             onTap: () {
-              print("Forgot password");
+              //TODO - Implement forgot password
             },
             child: Text(
               appLocale.forgotPassword,
@@ -152,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildBottom(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildBottom(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: <Widget>[
         Padding(
@@ -162,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: SpeaqButton(
             loginText: appLocale.login,
-            onPressed: () => tryLogin(),
+            onPressed: () => _login(),
           ),
         ),
         SpeaqPageForwarding(
@@ -179,40 +178,22 @@ class _LoginPageState extends State<LoginPage> {
             thickness: 0.75,
           ),
         ),
-        SpeaqPageForwarding(
-          hintText: appLocale.guestText,
-          text: appLocale.guest,
-          press: () {
-            print("1. jbnklhskl");
-            //Navigator.popAndPushNamed(context, "base");
-          },
-        ),
+        //TODO - Guest Login
       ],
     );
   }
 
-  Future<void> tryLogin() async {
-    print("3. sdjklhfujkhsjklgfhsjklrhgjsh");
-    print("username UI: " + _usernameController.text);
-    print("password UI: " + _passwordController.text);
-
-    _authenticationBloc.add(LoggingIn(username: _usernameController.text, password: _passwordController.text));
-
-    //LoginResponse loginResponse = await _userService.login(username: _usernameController.text, password: _passwordController.text);
-
-/*    if (loginResponse.token != null && loginResponse.token.isNotEmpty) {
-      print(loginResponse.token);
-      Navigator.popAndPushNamed(context, "base");
-    } else {
-      print("UFF!");
-    }*/
+  _login() {
+    _loginBloc.add(
+      Login(username: _usernameController.text, password: _passwordController.text),
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
     _disposeController();
-    _authenticationBloc.close();
+    _loginBloc.close();
   }
 
   void _disposeController() {

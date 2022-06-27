@@ -9,10 +9,6 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
-import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
-import 'package:frontend/widgets/speaq_post_container.dart';
-import 'package:frontend/widgets/speaq_text_button.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:frontend/widgets_shimmer/post_shimmer.dart';
@@ -20,9 +16,13 @@ import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 class ProfilePage extends StatefulWidget {
   final int pageUserID;
   final bool isOwnPage;
-  final int? appUserID;
+  final int initialPageIndex;
 
-  const ProfilePage({Key? key, required this.pageUserID, this.isOwnPage = false, this.appUserID}) : super(key: key);
+  const ProfilePage({
+    Key? key,
+    required this.pageUserID,
+    this.isOwnPage = false, this.initialPageIndex = 0,
+  }) : super(key: key);
 
   @override
   ProfilePageState createState() => ProfilePageState();
@@ -47,30 +47,19 @@ class ProfilePageState extends State<ProfilePage> {
   // User-Data.
   final String _joined = "Joined August 2022";
 
-  // Posts.
-  final String _postImage = "https://images.ctfassets.net/l3l0sjr15nav/dGLEVnJ6E3IuJE4NNFX4z/418da4b5783fa29d4abcabb7c37f71b7/2020-06-11_-_Wie_man_schnell_ein_GIF_erstellt.gif";
-  final String _postImage2 = "https://www.architekten-online.com/media/03_-hhn-hochschule-heilbronn.jpg";
-  final String _postMessage = "Welcome to our presentation, how are you ? Just did something lit here!!! yeah #speaq #beer";
-
-  bool _isFollowing = false;
-
-/*
-    final User _user = User(
-    id: 1,
-    profile: Profile(name: "Karl Ess", username: "essiggurke", description: "Leude ihr müsst husteln! Macht erscht mal die Basics!", website: "ess.com"),
-    followerIDs: [2, 3],
-    followingIDs: [2, 3],
-    password: 'OpenToWork',
-  );
-*/
   @override
   void initState() {
-    _profileBloc.add(LoadProfile(userId: widget.pageUserID));
-    if (!widget.isOwnPage) {
-      _followUnfollowBloc.add(CheckIfFollowing(userID: widget.appUserID!, followerID: widget.pageUserID));
-    }
+    _loadPage();
 
     super.initState();
+  }
+
+  Future<void> _loadPage() async {
+    _profileBloc.add(LoadProfile(userId: widget.pageUserID));
+    if (!widget.isOwnPage) {
+      _followUnfollowBloc.add(CheckIfFollowing(userID: 0, followerID: widget.pageUserID));
+    }
+
   }
 
   @override
@@ -83,19 +72,23 @@ class ProfilePageState extends State<ProfilePage> {
         appBar: SpqAppBar(
           preferredSize: deviceSize,
         ),
-        body: ListView(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
-            _buildProfileCover(deviceSize, context),
-            _buildProfileStack(appLocale, deviceSize),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () => _loadPage(),
+          child: ListView(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            children: [
+              _buildProfileCover(deviceSize, context),
+              _buildProfileStack(appLocale, deviceSize),
+            ],
+          ),
         ),
         bottomNavigationBar: SpqButtonNavigationBar(
           switchPage: (index) {
             Navigator.popUntil(context, ModalRoute.withName("base"));
+            Navigator.pushNamed(context, "base", arguments: index);
           },
-          selectedIndex: 0,
+          selectedIndex: widget.initialPageIndex,
         ),
       ),
     );
@@ -122,7 +115,9 @@ class ProfilePageState extends State<ProfilePage> {
         bloc: _profileBloc,
         listener: (context, state) {
           if (state is ProfileLoaded) {
-            _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+            if (state.profile.profileImageResourceId > 0) {
+              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+            }
             _pageUserFollowerBloc.add(LoadFollowerIDs(userId: widget.pageUserID));
             _profile = state.profile;
           }
@@ -132,10 +127,8 @@ class ProfilePageState extends State<ProfilePage> {
             return _buildProfilePage(deviceSize, appLocale, state.profile);
           } else if (state is ProfileLoading) {
             return _buildProfilePageShimmer(deviceSize, appLocale);
-          } else {
-            return const Text("State failed"
-            );
           }
+          return const Text("State failed");
         },
       ),
     );
@@ -151,36 +144,8 @@ class ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              _buildProfilePicture(deviceSize, profile.profileImageBlurHash),
+              _buildProfilePicture(deviceSize, profile),
               _buildEditProfileButton(deviceSize, appLocale),
-              /*Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  width: deviceSize.width * 0.31,
-                  height: deviceSize.height * 0.05,
-                  child: isFollow == true
-                      ? SpqTextbutton(
-                          onPressed: () {
-                            setState(
-                              () {
-                                isFollow = false;
-                              },
-                            );
-                          },
-                          name: _unfollow,
-                          style: const TextStyle(color: spqErrorRed),
-                        )
-                      : SpqTextbutton(
-                          onPressed: () {
-                            setState(
-                              () {
-                                isFollow = true;
-                              },
-                            );
-                          },
-                          name: _follow,
-                          style: const TextStyle(color: spqPrimaryBlue),
-                        ),
-                ),*/
             ],
           ),
         ),
@@ -201,20 +166,19 @@ class ProfilePageState extends State<ProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: deviceSize.width / 100 * 5),
+          padding: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),
           child: const ShimmerProfilePicture(diameter: 21.5),
         ),
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: deviceSize.width / 100 * 4,
-            vertical: deviceSize.width / 100 * 1,
+            horizontal: deviceSize.width * 0.04,
+            vertical: deviceSize.width * 0.01,
           ),
           child: _buildProfileInformationShimmer(deviceSize),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: deviceSize.width / 100 * 1),
-          child: _buildTabsShimmer(deviceSize
-          ),
+          padding: EdgeInsets.symmetric(vertical: deviceSize.width * 0.01),
+          child: _buildTabsShimmer(deviceSize),
         ),
       ],
     );
@@ -227,92 +191,103 @@ class ProfilePageState extends State<ProfilePage> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: widget.isOwnPage
           ? SpqTextButton(
-              onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 1))),
+              onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 0))),
               name: appLocale.editProfile,
               textStyle: const TextStyle(color: spqPrimaryBlue),
             )
-          : BlocConsumer<FollowerBloc, FollowerState>(
+          : BlocBuilder<FollowerBloc, FollowerState>(
               bloc: _followUnfollowBloc,
-              listener: (context, state) {
-                if (state is CheckIfFollowingLoaded) {
-                  print("JEEEEEEEEEEE 111111111111");
-                  _isFollowing = state.isFollowing;
-                } else if (state is FollowUnfollowLoaded) {
-                  print("ISFOLLOWING: ${state.isFollowing} l"
-                  );
-                  _isFollowing = state.isFollowing;
-                }
-              },
               builder: (context, state) {
                 if (state is CheckIfFollowingLoaded) {
-                  //_isFollowing = state.isFollowing;
-
-                  print("JEEEEEEEEEEE 22222222222222");
                   return SpqTextButton(
                     onPressed: () {
-                      _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
+                      _followUnfollowBloc.add(FollowUnfollow(userID: 0, followerID: widget.pageUserID));
+                      _loadPage();
                     },
-                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
-                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
-                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
+                    name: state.isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
                 } else if (state is FollowUnfollowLoaded) {
-                  //_isFollowing = state.isFollowing;
-
-                  print("JEEEEEEEEEEE 22222222222222");
                   return SpqTextButton(
                     onPressed: () {
-                      _followUnfollowBloc.add(FollowUnfollow(userID: widget.appUserID!, followerID: widget.pageUserID));
+                      _followUnfollowBloc.add(FollowUnfollow(userID: 0, followerID: widget.pageUserID));
+                      _loadPage();
                     },
-                    name: _isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
-                    textStyle: TextStyle(color: _isFollowing ? spqLightRed : spqPrimaryBlue),
-                    borderColor: _isFollowing ? spqLightRed : spqPrimaryBlue,
+                    name: state.isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
+                    textStyle: TextStyle(color: state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor: state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
                 }
-                return SpqTextButton(
-                  onPressed: () => print("ERROR - UNKNOWN STATE"),
-                  name: "ERROR",
-                  textStyle: const TextStyle(color: spqPrimaryBlue),
-                );
+                return Container(
+                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: ShimmerCube(
+                      width: deviceSize.width * 0.01,
+                      height: deviceSize.height * 0.01,
+                    ));
               },
             ),
     );
   }
 
-  Widget _buildProfilePicture(Size deviceSize, String profileImageBlurHash) {
+  Widget _buildProfilePicture(Size deviceSize, Profile profile) {
     return BlocBuilder<ResourceBloc, ResourceState>(
         bloc: _resourceBloc,
         builder: (context, state) {
           if (state is ResourceLoaded) {
-            return GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => _buildProfileImageFullScreen(context, state.decodedData),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    return child;
-                  },
-                ),
-              ),
-              child: Hero(
-                tag: 'myImage',
-                child: CircleAvatar(
-                  backgroundColor: spqWhite,
-                  radius: 45,
-                  child: CircleAvatar(
-                    radius: 43,
-                    backgroundImage: MemoryImage(state.decodedData),
+            if (state.resource.id > 0) {
+              return GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => _buildProfileImageFullScreen(context, state.decodedData),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return child;
+                    },
                   ),
                 ),
-              ),
-            );
-          } else {
+                child: Hero(
+                  tag: 'myProfileImage',
+                  child: CircleAvatar(
+                    backgroundColor: spqWhite,
+                    radius: 45,
+                    child: CircleAvatar(
+                      radius: 43,
+                      backgroundImage: MemoryImage(state.decodedData),
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return Container(
+                width: 150,
+                height: 150,
+                decoration: const BoxDecoration(
+                  color: spqPrimaryBlue,
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.add_a_photo,
+                    color: spqWhite,
+                    size: 38,
+                  ),
+                ),
+              );
+            }
+          } else if (profile.profileImageBlurHash.isNotEmpty) {
             return CircleAvatar(
               backgroundColor: spqWhite,
               radius: 45,
               child: CircleAvatar(
                 radius: 43,
-                backgroundImage: BlurHashImage(profileImageBlurHash),
+                backgroundImage: BlurHashImage(profile.profileImageBlurHash),
               ),
+            );
+          } else {
+            return CircleAvatar(
+              backgroundColor: spqPrimaryBlue,
+              radius: 45,
+              child: Text(profile.name[0].toUpperCase()),
             );
           }
         });
@@ -335,7 +310,7 @@ class ProfilePageState extends State<ProfilePage> {
         color: spqWhite,
         child: Center(
           child: Hero(
-            tag: 'myImage',
+            tag: 'myProfileImage',
             child: Image(
               image: MemoryImage(decodedData),
             ),
@@ -358,7 +333,7 @@ class ProfilePageState extends State<ProfilePage> {
           ),
         ),
         Text(
-          profile.username,
+          "@${profile.username}",
           style: const TextStyle(
             color: spqDarkGrey,
             fontSize: 18,
@@ -514,8 +489,8 @@ class ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 7.0),
             child: TabBarView(
               children: [
-                _buildPostContainer(),
-                _buildPostContainer(),
+                _buildPostsContainer(deviceSize),
+                _buildPostsContainer(deviceSize),
               ],
             ),
           ),
@@ -557,88 +532,19 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildPostContainer() {
+  Widget _buildPostsContainer(Size deviceSize) {
     return Column(
       children: [
-        const SizedBox(height: 10),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
-        ),
-        const Divider(thickness: 0.57, color: spqLightGreyTranslucent),
-        PostContainer(
-          ownerID: 1,
-          name: _profile.name,
-          username: _profile.username,
-          creationTime: DateTime.now(),
-          postMessage: _postMessage,
-          numberOfComments: 0,
-          numberOfLikes: 0,
+        SizedBox(
+          height: deviceSize.height * 0.75,
+          child: Container(
+              color: spqPrimaryBlue,
+              child: const Center(
+                child: Text(
+                  "coming soon...",
+                  style: TextStyle(fontSize: 25),
+                ),
+              )),
         ),
       ],
     );

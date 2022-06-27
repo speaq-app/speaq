@@ -1,10 +1,15 @@
 package data
 
+import (
+	"time"
+)
+
 type UserService interface {
 	UserByID(id int64) (User, error)
+	UserByUsername(username string) (User, error)
 	UpdateUserProfile(userID int64, profile UserProfile) error
 	UserProfileByID(userID int64) (UserProfile, error)
-	PasswordHashAndIDByUsername(username string) ([]byte, int64, error)
+	PasswordHashByUsername(username string) ([]byte, error)
 	FollowerIDsByID(userID int64) ([]int64, error)
 	FollowingIDsByID(userID int64) ([]int64, error)
 	CreateUser(username string, passwordHash []byte) (User, error)
@@ -14,6 +19,8 @@ type UserService interface {
 
 	FollowerByIDs(userIDs []int64) ([]User, error)
 	FollowingByIDs(userIDs []int64) ([]User, error)
+
+	SearchUser(userID int64, term string) ([]User, error)
 }
 
 type User struct {
@@ -23,6 +30,7 @@ type User struct {
 	//Settings    UserSettings
 	FollowerIDs  []int64
 	FollowingIDs []int64
+	CreatedAt    time.Time
 }
 
 type UserProfile struct {
@@ -32,6 +40,7 @@ type UserProfile struct {
 	Website                string
 	ProfileImageBlurHash   string
 	ProfileImageResourceID int64
+	IsOwnProfile           bool
 }
 
 /*type UserLogin struct {

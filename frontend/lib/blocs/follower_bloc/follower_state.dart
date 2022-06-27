@@ -17,8 +17,8 @@ class FollowerIDsLoaded extends FollowerState {
 class FollowerLoading extends FollowerState {}
 
 class FollowerLoaded extends FollowerState {
-  final List<FollowUser> follower;
-  final List<FollowUser> following;
+  final List<CondensedUser> follower;
+  final List<CondensedUser> following;
 
   FollowerLoaded({required this.follower, required this.following});
 }

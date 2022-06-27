@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -22,8 +23,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final ProfileBloc _profileBloc = ProfileBloc();
   final ResourceBloc _resourceBloc = ResourceBloc();
 
-  late String hcImageURL = "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
-
   int maxLengthName = 30;
   int maxLengthUsername = 20;
   int maxLengthDescription = 120;
@@ -34,20 +33,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
 
-  late AppLocalizations appLocale;
-
   @override
   void initState() {
     super.initState();
     _profileBloc.add(LoadProfile(
-      userId: 1,
       fromCache: false,
     ));
   }
 
   @override
   Widget build(BuildContext context) {
-    appLocale = AppLocalizations.of(context)!;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -67,7 +63,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               _usernameController.text = profile.username;
               _descriptionController.text = profile.description;
               _websiteController.text = profile.website;
-              _resourceBloc.add(LoadResource(resourceId: profile.profileImageResourceId));
+              if (profile.profileImageResourceId > 0) {
+                _resourceBloc.add(LoadResource(resourceId: profile.profileImageResourceId));
+              }
             } else if (state is ProfileSaved) {
               Navigator.pop(context);
             }
@@ -116,12 +114,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
       children: [
         Center(
           child: GestureDetector(
-            onTap: () => Navigator.of(context).push(PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, profile.username),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  return child;
-                })),
-            child: _buildProfileImage(profile.profileImageBlurHash),
+            onTap: () {
+              if (profile.profileImageResourceId > 0) {
+                Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, profile.username),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return child;
+                    }));
+              } else {
+                Flushbar(
+                  backgroundColor: spqPrimaryBlue,
+                  messageText: const Text(
+                    "📸",
+                    style: TextStyle(fontSize: 256),
+                    textAlign: TextAlign.center,
+                  ),
+                  duration: const Duration(milliseconds: 500),
+                ).show(context);
+              }
+            },
+            child: _buildProfileImage(profile),
           ),
         ),
         const SizedBox(height: 40),
@@ -135,7 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildNameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthName,
+      maxLength: maxNameLength,
       controller: _nameController,
       label: appLocale.name,
       icon: const Icon(Icons.person_outline),
@@ -144,7 +156,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildUsernameTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthUsername,
+      maxLength: maxUsernameLength,
       controller: _usernameController,
       label: appLocale.username,
       icon: const Icon(Icons.alternate_email_rounded),
@@ -153,7 +165,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildDescriptionTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthDescription,
+      maxLength: maxDescriptionLength,
       controller: _descriptionController,
       label: appLocale.description,
       maxLines: 12,
@@ -164,7 +176,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _buildWebsiteTextField(AppLocalizations appLocale) {
     return SpeaqTextField(
-      maxLength: maxLengthWebsite,
+      maxLength: maxWebsiteLength,
       controller: _websiteController,
       label: appLocale.website,
       icon: const Icon(Icons.link),
@@ -193,7 +205,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthName,
+        maxLength: maxNameLength,
         controller: _nameController,
         label: appLocale.name,
         icon: const Icon(Icons.person_outline),
@@ -207,7 +219,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthUsername,
+        maxLength: maxUsernameLength,
         controller: _usernameController,
         label: appLocale.username,
         icon: const Icon(Icons.alternate_email_rounded),
@@ -221,7 +233,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthDescription,
+        maxLength: maxDescriptionLength,
         controller: _descriptionController,
         label: appLocale.description,
         maxLines: 12,
@@ -237,7 +249,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       highlightColor: spqLightGrey,
       child: SpeaqTextField(
         isEnabled: false,
-        maxLength: maxLengthWebsite,
+        maxLength: maxWebsiteLength,
         controller: _websiteController,
         label: appLocale.website,
         icon: const Icon(Icons.link),
@@ -286,11 +298,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       centerTitle: true,
       preferredSize: deviceSize,
       leading: null,
-      isAutomaticallyImplyLeading: false,
+      automaticallyImplyLeading: false,
     );
   }
 
-  Widget _buildProfileImage(String profileImageBlurHash) {
+  Widget _buildProfileImage(Profile profile) {
     return Hero(
       tag: 'dash',
       child: BlocBuilder<ResourceBloc, ResourceState>(
@@ -308,16 +320,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 shape: BoxShape.circle,
               ),
             );
-          } else {
+          } else if (profile.profileImageBlurHash.isNotEmpty) {
             return Container(
               width: 150,
               height: 150,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: BlurHashImage(profileImageBlurHash),
+                  image: BlurHashImage(profile.profileImageBlurHash),
                   fit: BoxFit.cover,
                 ),
                 shape: BoxShape.circle,
+              ),
+            );
+          } else {
+            return Container(
+              width: 150,
+              height: 150,
+              decoration: const BoxDecoration(
+                color: spqPrimaryBlue,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.add_a_photo,
+                  color: spqWhite,
+                  size: 38,
+                ),
               ),
             );
           }
@@ -365,18 +393,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _saveProfile(AppLocalizations appLocale) {
-    Profile _profile = Profile(
+    Profile profile = Profile(
       name: _nameController.text,
       username: _usernameController.text,
       description: _descriptionController.text,
       website: _websiteController.text,
     );
 
-    String errorString = _checkIfInputIsValid(_profile, appLocale);
+    String errorString = _checkIfInputIsValid(profile, appLocale);
     if (errorString.isNotEmpty) {
       final snackBar = SnackBar(
           content: Text(
-        appLocale.wrongInput + errorString,
+        "${appLocale.wrongInput} :$errorString",
         textAlign: TextAlign.center,
       ));
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -387,34 +415,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _profileBloc.add(
       SaveProfile(
         userId: 1,
-        profile: _profile,
+        profile: profile,
       ),
     );
   }
 
   String _checkIfInputIsValid(Profile profile, AppLocalizations appLocale) {
-    if (profile.name.length > maxLengthName) return appLocale.nameIsToLong;
+    if (profile.name.length > maxNameLength) return appLocale.nameIsToLong;
     if (profile.name.isEmpty) return appLocale.nameIsEmpty;
     if (profile.name.endsWith(" ")) return appLocale.nameEndsWithSpace;
-    // if (profile.name.contains("\\n")) return appLocale.nameHasBackslashN;
-    // if (profile.name.contains("\\t")) return appLocale.nameHasBackslashT;
 
     if (profile.username.length > maxLengthUsername) return appLocale.usernameIsToLong;
     if (profile.username.isEmpty) return appLocale.usernameIsEmpty;
     if (profile.username.endsWith(" ")) return appLocale.usernameEndsWithSpace;
-    // if (profile.username.contains("\\n")) return appLocale.usernameHasBackslashN;
-    // if (profile.username.contains("\\t")) return appLocale.usernameHasBackslashT;
 
     if (profile.description.length > maxLengthDescription) return appLocale.descriptionIsToLong;
     if (profile.description.endsWith(" ")) return appLocale.descriptionEndsWithSpace;
-    // if (profile.description.contains("\n")) return appLocale.descriptionHasBackslashN;
-    // if (profile.description.contains("\\t")) return appLocale.descriptionHasBackslashT;
 
     if (profile.website.length > maxLengthWebsite) return appLocale.websiteIsToLong;
-    if (!profile.website.contains(".")) return appLocale.websiteHasNoDot;
+    if (!profile.website.contains(".") && profile.website.isNotEmpty) return appLocale.websiteHasNoDot;
     if (profile.website.endsWith(" ")) return appLocale.websiteEndsWithSpace;
-    // if (profile.website.contains("\\n")) return appLocale.websiteHasBackslashN;
-    // if (profile.website.contains("\\t")) return appLocale.websiteHasBackslashT;
 
     return "";
   }
@@ -422,6 +442,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void dispose() {
     super.dispose();
+
     _disposeController();
     _profileBloc.close();
     _resourceBloc.close();

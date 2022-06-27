@@ -2,20 +2,35 @@ import 'package:fixnum/fixnum.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/user_service.dart';
+import 'package:frontend/utils/token_utils.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCUserService implements UserService {
-  final UserClient _client = UserClient(
-    ClientChannel(
-      "10.0.2.2",
-      port: 8080,
-      options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
-    ),
-  );
+  late UserClient _client;
+  late CallOptions _callOptions;
+
+  GRPCUserService(
+    String ip, {
+    int port = 443,
+  }) {
+    _client = UserClient(
+      ClientChannel(
+        ip,
+        port: port,
+        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
+      ),
+    );
+
+    var token = TokenUtils.getToken();
+    _callOptions = CallOptions(metadata: {"authorization": "bearer $token"});
+  }
 
   @override
   Future<Profile> getProfile(int id) async {
-    GetUserProfileResponse resp = await _client.getUserProfile(GetUserProfileRequest()..userId = Int64(id));
+    GetUserProfileResponse resp = await _client.getUserProfile(
+      GetUserProfileRequest()..userId = Int64(id),
+      options: _callOptions,
+    );
     return Profile(
       name: resp.name,
       username: resp.username,
@@ -23,6 +38,7 @@ class GRPCUserService implements UserService {
       website: resp.website,
       profileImageBlurHash: resp.profileImageBlurHash,
       profileImageResourceId: resp.profileImageResourceId.toInt(),
+      isOwnProfile: resp.isOwnProfile,
     );
   }
 
@@ -33,17 +49,20 @@ class GRPCUserService implements UserService {
   }) async {
     await _client.updateUserProfile(
       UpdateUserProfileRequest()
-        ..userId = Int64(id)
         ..name = profile.name
         ..username = profile.username
         ..description = profile.description
         ..website = profile.website,
+      options: _callOptions,
     );
   }
 
   @override
   Future<List<int>> getFollowerIDs({required int id}) async {
-    GetUserFollowerIDsResponse resp = await _client.getUserFollowerIDs(GetUserProfileRequest(userId: Int64(id)));
+    GetUserFollowerIDsResponse resp = await _client.getUserFollowerIDs(
+      GetUserProfileRequest(userId: Int64(id)),
+      options: _callOptions,
+    );
     List<int> follower = [];
     for (Int64 i in resp.followerIds) {
       follower.add(i.toInt());
@@ -53,7 +72,10 @@ class GRPCUserService implements UserService {
 
   @override
   Future<List<int>> getFollowingIDs({required int id}) async {
-    GetUserFollowingIDsResponse resp = await _client.getUserFollowingIDs(GetUserProfileRequest()..userId = Int64(id));
+    GetUserFollowingIDsResponse resp = await _client.getUserFollowingIDs(
+      GetUserProfileRequest()..userId = Int64(id),
+      options: _callOptions,
+    );
     List<int> following = [];
     for (Int64 i in resp.followingIds) {
       following.add(i.toInt());
@@ -62,56 +84,62 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<List<FollowUser>> getFollower({required List<int> ids}) async {
+  Future<List<CondensedUser>> getFollower({required List<int> ids}) async {
     List<Int64> int64IDs = [];
     for (int i in ids) {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowerResponse resp = await _client.getUserFollower(GetUserFollowerRequest(followerIds: int64IDs));
+    CondensedUserListResponse resp = await _client.getUserFollower(
+      GetUserFollowerRequest(followerIds: int64IDs),
+      options: _callOptions,
+    );
 
-    return resp.follower;
+    return resp.users;
   }
 
   @override
-  Future<List<FollowUser>> getFollowing({required List<int> ids}) async {
+  Future<List<CondensedUser>> getFollowing({required List<int> ids}) async {
     List<Int64> int64IDs = [];
     for (int i in ids) {
       int64IDs.add(Int64(i));
     }
 
-    GetUserFollowingResponse resp = await _client.getUserFollowing(GetUserFollowingRequest(followingIds: int64IDs));
+    CondensedUserListResponse resp = await _client.getUserFollowing(
+      GetUserFollowingRequest(followingIds: int64IDs),
+      options: _callOptions,
+    );
 
-    return resp.following;
+    return resp.users;
   }
 
   @override
   Future<bool> checkIfFollowing({required int userID, required int followerID}) async {
-    CheckIfFollowingResponse resp = await _client.checkIfFollowing(CheckIfFollowingRequest(userId: Int64(userID), followerId: Int64(followerID)));
+    IsFollowingResponse resp = await _client.checkIfFollowing(
+      CheckIfFollowingRequest(userId: Int64(userID), followerId: Int64(followerID)),
+      options: _callOptions,
+    );
 
     return resp.isFollowing;
   }
 
   @override
   Future<bool> followUnfollow({required int userID, required int followerID}) async {
-    FollowUnfollowResponse resp = await _client.followUnfollow(FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)));
+    IsFollowingResponse resp = await _client.followUnfollow(
+      FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)),
+      options: _callOptions,
+    );
 
-    print("exec: followUnfollow GRPC");
     return resp.isFollowing;
   }
 
   @override
-  Future<LoginResponse> login({required String username, required String password}) async {
-    print("username Login: " + username);
-    print("password Login: " + password);
+  Future<List<CondensedUser>> searchUser({required String searchTerm}) async {
+    CondensedUserListResponse resp = await _client.searchUser(
+      SearchUserRequest(term: searchTerm),
+      options: _callOptions,
+    );
 
-    LoginResponse resp = await _client.login(LoginRequest()
-      ..username = username
-      ..password = password);
-
-    print("username Response: ${resp.userId}");
-    print("password Response: " + resp.token);
-
-    return resp;
+    return resp.users;
   }
 }

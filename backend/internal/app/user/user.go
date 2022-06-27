@@ -2,15 +2,11 @@ package user
 
 import (
 	"context"
-	"errors"
-	"github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
-	"log"
-	"time"
-
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/middleware"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"log"
 )
 
 type Server struct {
@@ -19,8 +15,6 @@ type Server struct {
 }
 
 func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileRequest) (*empty.Empty, error) {
-	log.Printf("User with ID %d should be updated", req.UserId)
-
 	p := data.UserProfile{
 		Name:        req.Name,
 		Username:    req.Username,
@@ -28,8 +22,12 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 		Website:     req.Website,
 	}
 
-	log.Println(p)
-	err := s.DataService.UpdateUserProfile(req.UserId, p)
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.DataService.UpdateUserProfile(userID, p)
 	if err != nil {
 		return nil, err
 	}
@@ -38,13 +36,27 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 }
 
 func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) (*GetUserProfileResponse, error) {
-	log.Printf("User Profile with ID %d should be loaded", req.UserId)
+	var op bool
 
-	p, err := s.DataService.UserProfileByID(req.UserId)
+	var reqUserID int64
+
+	appUserID, err := middleware.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(p)
+
+	if req.UserId <= 0 || req.UserId == appUserID {
+		reqUserID = appUserID
+		op = true
+	} else {
+		reqUserID = req.UserId
+		op = false
+	}
+
+	p, err := s.DataService.UserProfileByID(reqUserID)
+	if err != nil {
+		return nil, err
+	}
 
 	return &GetUserProfileResponse{
 		Name:                   p.Name,
@@ -53,17 +65,25 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 		Website:                p.Website,
 		ProfileImageBlurHash:   p.ProfileImageBlurHash,
 		ProfileImageResourceId: p.ProfileImageResourceID,
+		IsOwnProfile:           op,
 	}, nil
 }
 
 func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowerIDsResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
+	userID := req.UserId
 
-	er, err := s.DataService.FollowerIDsByID(req.UserId)
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	er, err := s.DataService.FollowerIDsByID(userID)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(er)
 
 	return &GetUserFollowerIDsResponse{
 		FollowerIds: er,
@@ -71,9 +91,17 @@ func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileReque
 }
 
 func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowingIDsResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.UserId)
+	userID := req.UserId
 
-	ing, err := s.DataService.FollowingIDsByID(req.UserId)
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	ing, err := s.DataService.FollowingIDsByID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -84,129 +112,125 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 	}, nil
 }
 
-func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*GetUserFollowerResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.FollowerIds)
-
+func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*CondensedUserListResponse, error) {
 	us, err := s.DataService.FollowerByIDs(req.FollowerIds)
 	if err != nil {
 		return nil, err
 	}
 	log.Println(us)
 
-	var fu []*FollowUser
+	var fu []*CondensedUser
 
 	for _, u := range us {
 
-		fu = append(fu, &FollowUser{
-			Id:       u.ID,
-			Name:     u.Profile.Name,
-			Username: u.Profile.Username,
+		fu = append(fu, &CondensedUser{
+			Id:                     u.ID,
+			Name:                   u.Profile.Name,
+			Username:               u.Profile.Username,
+			ProfileImageBlurHash:   u.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: u.Profile.ProfileImageResourceID,
 		})
 	}
 
-	return &GetUserFollowerResponse{
-		Follower: fu,
+	return &CondensedUserListResponse{
+		Users: fu,
 	}, nil
 }
 
-func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*GetUserFollowingResponse, error) {
-
+func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*CondensedUserListResponse, error) {
 	us, err := s.DataService.FollowingByIDs(req.FollowingIds)
 	if err != nil {
 		return nil, err
 	}
 	log.Println(us)
 
-	var fu []*FollowUser
+	var fu []*CondensedUser
 
 	for _, u := range us {
 
-		fu = append(fu, &FollowUser{
-			Id:       u.ID,
-			Name:     u.Profile.Name,
-			Username: u.Profile.Username,
+		fu = append(fu, &CondensedUser{
+			Id:                     u.ID,
+			Name:                   u.Profile.Name,
+			Username:               u.Profile.Username,
+			ProfileImageBlurHash:   u.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: u.Profile.ProfileImageResourceID,
 		})
 	}
 
-	return &GetUserFollowingResponse{
-		Following: fu,
+	return &CondensedUserListResponse{
+		Users: fu,
 	}, nil
 }
 
-func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*CheckIfFollowingResponse, error) {
-	f, _, err := s.DataService.CheckIfFollowing(req.UserId, req.FollowerId)
+func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*IsFollowingResponse, error) {
+	userID := req.UserId
 
-	if err != nil {
-		return nil, err
-	}
-
-	return &CheckIfFollowingResponse{
-		IsFollowing: f,
-	}, nil
-}
-
-func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*FollowUnfollowResponse, error) {
-	f, err := s.DataService.FollowUnfollow(req.UserId, req.FollowerId)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &FollowUnfollowResponse{
-		IsFollowing: f,
-	}, nil
-}
-
-func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
-	hash, id, err := s.DataService.PasswordHashAndIDByUsername(req.Username)
-	if err != nil {
-		return nil, err
-	}
-
-	passwordValid := CheckPasswordHash(hash, req.Password)
-	if !passwordValid {
-		return nil, errors.New("wrong password")
-	}
-
-	/*	if err := bcrypt.CompareHashAndPassword(hash, []byte(req.Password)); err != nil {
-			return nil, errors.New("wrong password")
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
 		}
-	*/
-	token, err := GenerateJWT(req.Username, "User")
+	}
+
+	f, _, err := s.DataService.CheckIfFollowing(userID, req.FollowerId)
+
 	if err != nil {
 		return nil, err
 	}
 
-	return &LoginResponse{
-		UserId: id,
-		Token:  token,
+	return &IsFollowingResponse{
+		IsFollowing: f,
 	}, nil
 }
 
-func CheckPasswordHash(hash []byte, password string) bool {
-	err := bcrypt.CompareHashAndPassword(hash, []byte(password))
-	return err == nil
-}
+func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*IsFollowingResponse, error) {
+	userID := req.UserId
 
-func GenerateJWT(username, role string) (string, error) {
-	mySigningKey := []byte("Sheeesh")
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-	claims["authorized"] = true
-	claims["username"] = username
-	claims["role"] = role
-	claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
-
-	tokenString, err := token.SignedString(mySigningKey)
+	f, err := s.DataService.FollowUnfollow(userID, req.FollowerId)
 
 	if err != nil {
-		return "", errors.New("token couldn't be generated")
+		return nil, err
 	}
-	return tokenString, nil
+
+	return &IsFollowingResponse{
+		IsFollowing: f,
+	}, nil
 }
 
-/*func verifyToken(token string) (string, error) {
+func (s Server) SearchUser(ctx context.Context, req *SearchUserRequest) (*CondensedUserListResponse, error) {
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
+	u, err := s.DataService.SearchUser(userID, req.Term)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var cu []*CondensedUser
+
+	for _, user := range u {
+		cu = append(cu, &CondensedUser{
+			Id:                     user.ID,
+			Name:                   user.Profile.Name,
+			Username:               user.Profile.Username,
+			ProfileImageBlurHash:   user.Profile.ProfileImageBlurHash,
+			ProfileImageResourceId: user.Profile.ProfileImageResourceID,
+		})
+	}
+
+	return &CondensedUserListResponse{
+		Users: cu,
+	}, nil
 }
-*/
