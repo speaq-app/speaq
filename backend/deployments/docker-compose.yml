@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: build/package/Dockerfile
+    container_name: speaq-backend
+    restart: "always"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes: 
+      - ./data/config.yml:/config.yml
+    environment:
+      SPEAQ_CONFIG: "/config.yml"
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portainer.rule=Host(`api.speaq.app`)
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.tls.certresolver=lets-encrypt
+      - traefik.http.services.portainer.loadbalancer.server.port=8080
+
+networks:
+  traefik:
+    external: true

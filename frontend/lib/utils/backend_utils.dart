@@ -4,7 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 
 class BackendUtils {
-  static String _host = "api.haveachin.de";
+  static String _host = "api.speaq.app";
   static int _port = 443;
 
   static init({
