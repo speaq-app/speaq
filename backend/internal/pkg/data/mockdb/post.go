@@ -1,18 +1,34 @@
 package mockdb
 
 import (
+	"sort"
 	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
 func (s service) PostFeedForUserID(userID int64) ([]data.Post, error) {
-	time.Sleep(s.delay)
-
 	var posts []data.Post
 	for _, post := range s.posts {
 		posts = append(posts, post)
 	}
+	return posts, nil
+}
+
+func (s service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, error) {
+	var posts []data.Post
+	for _, post := range s.posts {
+		for _, followerID := range followerIDs {
+			if followerID == post.OwnerID {
+				posts = append(posts, post)
+			}
+		}
+	}
+
+	sort.Slice(posts, func(i, j int) bool {
+		return posts[i].CreatedAt.After(posts[j].CreatedAt)
+	})
+
 	return posts, nil
 }
 
@@ -27,8 +43,6 @@ func (s service) nextPostID() int64 {
 }
 
 func (s service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType string) (data.Post, error) {
-	time.Sleep(s.delay)
-
 	postID := s.nextPostID()
 	post := data.Post{
 		ID:               postID,

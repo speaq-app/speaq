@@ -89,7 +89,7 @@ class CacheUserService implements UserService {
   }
 
   @override
-  Future<List<CondensedUser>> userByUsername({required String searchTerm}) {
+  Future<List<CondensedUser>> searchUser({required String searchTerm}) {
     // TODO: implement userByUsername
     throw UnimplementedError();
   }

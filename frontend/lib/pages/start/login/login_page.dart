@@ -42,27 +42,32 @@ class _LoginPageState extends State<LoginPage> {
               bloc: _loginBloc,
               listener: (context, state) {
                 if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base",
-                      arguments: {"userID": 0, "token": state.token});
+                  Navigator.pushNamed(context, "base", arguments: 0);
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {
-                    case StatusCode.unauthenticated:
+                    case StatusCode.invalidArgument:
                       message = appLocale.wrongPassword;
                       break;
                     case StatusCode.notFound:
                       message = appLocale.userNotFound;
                       break;
+                    case StatusCode.unauthenticated:
+                      message = appLocale.noTokenGenerated;
+                      break;
                     case StatusCode.unknown:
-                      message = appLocale.wrongPassword;
+                      message = appLocale.unknownError;
                       break;
                     default:
                       message = appLocale.unknownError;
                   }
                   Flushbar(
+                    messageText: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                    ),
                     backgroundColor: spqPrimaryBlue,
                     messageColor: spqWhite,
-                    message: message,
                     duration: const Duration(seconds: 5),
                   ).show(context);
                 }
@@ -132,7 +137,6 @@ class _LoginPageState extends State<LoginPage> {
           GestureDetector(
             onTap: () {
               //TODO - Implement forgot password
-              //print("Forgot password");
             },
             child: Text(
               appLocale.forgotPassword,
@@ -175,26 +179,14 @@ class _LoginPageState extends State<LoginPage> {
             thickness: 0.75,
           ),
         ),
-//TODO - Guest Login
-/*
-        SpeaqPageForwarding(
-          hintText: appLocale.guestText,
-          text: appLocale.guest,
-          press: () {
-            print("1. jbnklhskl");
-            //Navigator.popAndPushNamed(context, "base");
-          },
-        ),
-*/
+        //TODO - Guest Login
       ],
     );
   }
 
   _login() {
     _loginBloc.add(
-      Login(
-          username: _usernameController.text,
-          password: _passwordController.text),
+      Login(username: _usernameController.text, password: _passwordController.text),
     );
   }
 

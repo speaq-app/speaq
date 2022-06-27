@@ -5,6 +5,7 @@ import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/utils/backend_utils.dart';
+import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
 part 'profile_event.dart';
@@ -27,9 +28,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if (!event.fromCache && _userService is CacheUserService) {
       (_userService as CacheUserService).clearProfile(event.userId);
     }
-    var profile = await _userService.getProfile(event.userId);
 
-    emit(ProfileLoaded(profile: profile));
+    try {
+      var profile = await _userService.getProfile(event.userId);
+      emit(ProfileLoaded(profile: profile));
+    } on GrpcError catch (_) {
+      emit(ProfileError());
+    }
   }
 
   void _onSaveProfile(SaveProfile event, Emitter<ProfileState> emit) async {

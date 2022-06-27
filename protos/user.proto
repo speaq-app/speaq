@@ -13,7 +13,7 @@ service User {
   rpc GetUserFollowing(GetUserFollowingRequest) returns (CondensedUserListResponse);
   rpc CheckIfFollowing(CheckIfFollowingRequest) returns (IsFollowingResponse);
   rpc FollowUnfollow(FollowUnfollowRequest) returns (IsFollowingResponse);
-  rpc UsersByUsername(SearchUserRequest) returns (CondensedUserListResponse);
+  rpc SearchUser(SearchUserRequest) returns (CondensedUserListResponse);
 }
 
 message CondensedUser{
@@ -35,6 +35,7 @@ message GetUserProfileResponse {
   string website = 4;
   string profile_image_blur_hash = 5;
   int64 profile_image_resource_id = 6;
+  bool isOwnProfile = 7;
 }
 
 message GetUserFollowerIDsResponse{

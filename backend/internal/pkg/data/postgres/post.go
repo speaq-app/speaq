@@ -9,3 +9,7 @@ func (s Service) CreatePost(ownerID int64, description string, resourceID int64,
 func (s Service) PostFeedForUserID(userID int64) ([]data.Post, error) {
 	panic("implement me")
 }
+
+func (s Service) PostFeedFromFollowerIDs(userID []int64) ([]data.Post, error) {
+	panic("implement me")
+}

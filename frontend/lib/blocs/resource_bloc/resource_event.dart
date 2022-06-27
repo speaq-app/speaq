@@ -8,9 +8,3 @@ class LoadResource extends ResourceEvent {
 
   LoadResource({required this.resourceId});
 }
-
-class SaveResource extends ResourceEvent {
-
-  final Resource resource;
-  SaveResource({required this.resource});
-}

@@ -5,18 +5,21 @@ import 'package:app_settings/app_settings.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/token_utils.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 /*Geht zurück zum Ursprung des Widget-Trees und ruft die Login-Seite auf*/
 void logOut(BuildContext context) {
-  Navigator.popUntil(context, ModalRoute.withName("main"));
-  Navigator.pushNamed(context, 'main');
+  TokenUtils.setToken(null).then((_) {
+    Navigator.popUntil(context, ModalRoute.withName("main"));
+    Navigator.pushNamed(context, 'main');
+  });
 }
-
 
 class ConnectionUtilSingleton {
   //This creates the single instance by calling the `_internal` constructor specified below
-  static final ConnectionUtilSingleton _singleton = ConnectionUtilSingleton._internal();
+  static final ConnectionUtilSingleton _singleton =
+      ConnectionUtilSingleton._internal();
 
   ConnectionUtilSingleton._internal();
 
@@ -49,7 +52,8 @@ class ConnectionUtilSingleton {
   Future<bool> _hasInternetInternetConnection() async {
     bool previousConnection = hasConnection;
     var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
       // this is the different
       if (await InternetConnectionChecker().hasConnection) {
         hasConnection = true;

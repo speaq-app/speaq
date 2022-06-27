@@ -18,9 +18,10 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "base":
-        Map<String, dynamic> map = args as Map<String, dynamic>;
+        int index = args as int;
+
         return PageTransition(
-          child: BasePage(userID: map["userID"]),
+          child: BasePage(initialPage: index),
           settings: const RouteSettings(
             name: "base", //HERE is where you name your route for using popUntil
           ),
@@ -52,16 +53,14 @@ class RouteGenerator {
           child: ProfilePage(
             pageUserID: profileInfo[0],
             isOwnPage: profileInfo[1],
-            appUserID: profileInfo[2],
+            initialPageIndex: profileInfo[2],
           ),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
       case "home":
-        int userID = args as int;
-
         return PageTransition(
-          child: HomePage(userID: userID),
+          child: const HomePage(),
           type: PageTransitionType.bottomToTop,
           duration: const Duration(milliseconds: 400),
           alignment: Alignment.center,
@@ -80,7 +79,7 @@ class RouteGenerator {
         );
       case "search":
         return PageTransition(
-          child: SearchPage(),
+          child: const SearchPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
@@ -128,11 +127,8 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
       case "new_post":
-        int userID = args as int;
         return PageTransition(
-          child: NewPostPage(
-            userID: userID,
-          ),
+          child: const NewPostPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
@@ -163,9 +159,7 @@ class RouteGenerator {
   static _errorRoute() {
     return MaterialPageRoute(
       builder: (context) {
-        return Scaffold(
-            appBar: AppBar(title: const Text("ERROR")),
-            body: const Center(child: Text("ERROR")));
+        return Scaffold(appBar: AppBar(title: const Text("ERROR")), body: const Center(child: Text("ERROR")));
       },
     );
   }

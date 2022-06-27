@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -16,114 +14,61 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_audio_post_container.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NewPostPage extends StatefulWidget {
-  const NewPostPage({Key? key, required this.userID}) : super(key: key);
-  final int userID;
+  const NewPostPage({Key? key}) : super(key: key);
 
   @override
   State<NewPostPage> createState() => _NewPostPageState();
 }
 
 class _NewPostPageState extends State<NewPostPage> {
-  FlutterSoundPlayer player = FlutterSoundPlayer();
+  final _postBloc = PostBloc();
+  FlutterSoundPlayer? _player;
+  FlutterSoundRecorder? _recorder;
+  final _picker = ImagePicker();
+  final _keyboardVisibilityController = KeyboardVisibilityController();
+  final _postController = TextEditingController();
 
-  // Main
-  final PostBloc _postBloc = PostBloc();
-  final TextEditingController _postController = TextEditingController();
-  bool picAndAudioOffstateVisible = false;
-  String resourceMimeType = "";
+  var _hasMicrophoneAccess = true;
+  var _postAttachment = _PostAttachments.none;
+  var _activeKeyboard = _Keyboards.none;
 
-  // Keyboard
-  bool mainKeyboardVisible = true;
-  bool cameraOffstateVisible = false;
+  final _recordedAudio = <int>[];
+  var _audioDuration = Duration.zero;
+  StreamSubscription? _recordingDataSubscription;
+  StreamSubscription? _keyboardSubscription;
+  XFile? _pickedImage;
 
-  // Emoji
-  bool emojiKeyboardOffstateVisible = false;
+  String spqImage = "assets/images/logo/speaq_logo.svg";
 
-  // Camera/Gallery
-  bool checkImageVisible = false;
-  String pathImageFile = "";
-  late File? _imageFile = File(pathImageFile);
-  late PickedFile im;
+  void _switchKeyboard(_Keyboards keyboard) {
+    if (keyboard != _Keyboards.buildIn) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
 
-  bool dataIsAudio = false;
-
-  // Audio
-  late final recorder = FlutterSoundRecorder();
-  bool audioKeyboardVisible = false;
-  bool isRecorderReady = false;
-  bool isRecording = false;
-  bool _hasMicrophoneAccess = true;
-  final _audio = <int>[];
-  StreamSubscription? _mRecordingDataSubscription;
-  Duration _audioDuration = Duration.zero;
-
-  late StreamSubscription<bool> _keyboardSubscription;
-
-  //region GENERAL
-  void initKeyboard() {
-    var keyboardVisibilityController = KeyboardVisibilityController();
-    _keyboardSubscription = keyboardVisibilityController.onChange.listen(
-      (bool keyboardShowing) {
-        setState(() {
-          switchOffStage("MAIN", mainVisible: keyboardShowing);
-        });
-      },
-    );
-  }
-
-  void switchOffStage(String offstage, {bool? mainVisible}) {
-    switch (offstage) {
-      case "MAIN":
-        if (mainVisible! == true) {
-          audioKeyboardVisible = false;
-          emojiKeyboardOffstateVisible = false;
-        }
-        mainKeyboardVisible = mainVisible;
-        break;
-
-      case "AUDIO":
-        mainKeyboardVisible = false;
-        audioKeyboardVisible = !audioKeyboardVisible;
-        emojiKeyboardOffstateVisible = false;
-        break;
-
-      case "EMOJI":
-        mainKeyboardVisible = false;
-        emojiKeyboardOffstateVisible = !emojiKeyboardOffstateVisible;
-        audioKeyboardVisible = false;
-        break;
-
-      case "CAMERA":
-        cameraOffstateVisible = !cameraOffstateVisible;
-        break;
-
-      case "BACK":
-        mainKeyboardVisible = false;
-        cameraOffstateVisible = false;
-        audioKeyboardVisible = false;
-        emojiKeyboardOffstateVisible = false;
-        break;
+    if (_activeKeyboard == keyboard) {
+      _activeKeyboard = _Keyboards.none;
+    } else {
+      _activeKeyboard = keyboard;
     }
   }
-  //endregion
 
   @override
   void initState() {
     super.initState();
-    player.openPlayer();
 
-    // Initialize Recorder for Audio
-    initRecorder();
-
-    // KEYBOARD VISIBILITY
-    initKeyboard();
+    _initPlayer();
+    _initRecorder();
+    _initKeyboard();
   }
 
-  Future initRecorder() async {
+  Future<void> _initPlayer() async {
+    _player = await FlutterSoundPlayer().openPlayer();
+  }
+
+  Future<void> _initRecorder() async {
     var status = await Permission.microphone.request();
     _hasMicrophoneAccess = status == PermissionStatus.granted;
 
@@ -131,13 +76,24 @@ class _NewPostPageState extends State<NewPostPage> {
       throw 'Microphone permission not granted';
     }
 
-    await recorder.openRecorder();
-    isRecorderReady = true;
-
-    recorder.setSubscriptionDuration(
+    _recorder = await FlutterSoundRecorder().openRecorder();
+    _recorder?.setSubscriptionDuration(
       const Duration(milliseconds: 100),
     );
-    await initializeDateFormatting();
+  }
+
+  void _initKeyboard() {
+    _keyboardSubscription = _keyboardVisibilityController.onChange.listen(
+      (bool keyboardShowing) {
+        if (!keyboardShowing) {
+          return;
+        }
+
+        setState(() {
+          _switchKeyboard(_Keyboards.buildIn);
+        });
+      },
+    );
   }
 
   @override
@@ -170,7 +126,7 @@ class _NewPostPageState extends State<NewPostPage> {
                 body: Column(
                   children: [
                     Expanded(
-                      child: _buildAttachmentPreview(),
+                      child: _buildAttachmentPreview(deviceSize),
                     ),
                     _buildInputRow(),
                     _buildEmojiKeyboard(appLocale),
@@ -185,36 +141,72 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Widget _buildAttachmentPreview() {
-    return Visibility(
-      visible: picAndAudioOffstateVisible,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
-        child: Center(
+  Widget _buildAttachmentPreview(Size deviceSize) {
+    switch (_postAttachment) {
+      case _PostAttachments.none:
+        return Opacity(
+          opacity: 0.2,
+          child: SvgPicture.asset(
+            spqImage,
+            height: deviceSize.height * 0.2,
+            alignment: Alignment.center,
+          ),
+        );
+      case _PostAttachments.image:
+        return Container(
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SpqAudioPostContainer(
-                audioData: Uint8List.fromList(_audio),
-                durationInMillis: _audioDuration.inMilliseconds,
+              Expanded(
+                child: Image.file(
+                  File(_pickedImage!.path),
+                ),
               ),
               IconButton(
-                icon: const Icon(Icons.delete_forever_rounded,
-                    color: spqErrorRed),
+                icon: const Icon(
+                  Icons.delete_forever_rounded,
+                  color: spqErrorRed,
+                ),
                 onPressed: () {
-                  setState(
-                    () {
-                      picAndAudioOffstateVisible = !picAndAudioOffstateVisible;
-                    },
-                  );
+                  setState(() {
+                    _postAttachment = _PostAttachments.none;
+                  });
                 },
               ),
             ],
           ),
-        ),
-      ),
-    );
+        );
+      case _PostAttachments.audio:
+        return Container(
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                height: 69,
+                child: SpqAudioPostContainer(
+                  audioData: Uint8List.fromList(_recordedAudio),
+                  durationInMillis: _audioDuration.inMilliseconds,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.delete_forever_rounded,
+                  color: spqErrorRed,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _postAttachment = _PostAttachments.none;
+                  });
+                },
+              ),
+            ],
+          ),
+        );
+    }
   }
 
   Widget _buildInputRow() {
@@ -230,36 +222,15 @@ class _NewPostPageState extends State<NewPostPage> {
             childPadding: const EdgeInsets.only(left: 18),
             children: [
               SpeedDialChild(
-                  child: const Icon(Icons.camera_alt, color: spqBlack),
-                  onTap: () async {
-                    await getImage(true);
-                    setState(() {
-                      _imageFile = File(im.path);
-                      dataIsAudio = false;
-                      picAndAudioOffstateVisible = true;
-                      if (checkImageVisible) {
-                        checkImageVisible = !checkImageVisible;
-                      } else {
-                        checkImageVisible = true;
-                      }
-                    });
-                  }),
+                child: const Icon(Icons.camera_alt, color: spqBlack),
+                onTap: () async {
+                  await _pickImage(ImageSource.camera);
+                },
+              ),
               SpeedDialChild(
                 child: const Icon(Icons.image, color: spqBlack),
                 onTap: () async {
-                  await getImage(false);
-                  setState(
-                    () {
-                      _imageFile = File(im.path);
-                      dataIsAudio = false;
-                      picAndAudioOffstateVisible = true;
-                      if (checkImageVisible) {
-                        checkImageVisible = !checkImageVisible;
-                      } else {
-                        checkImageVisible = true;
-                      }
-                    },
-                  );
+                  await _pickImage(ImageSource.gallery);
                 },
               ),
             ],
@@ -283,7 +254,11 @@ class _NewPostPageState extends State<NewPostPage> {
                 suffixIcon: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 1),
                   child: IconButton(
-                    onPressed: _onEmojiClick,
+                    onPressed: () {
+                      setState(() {
+                        _switchKeyboard(_Keyboards.emoji);
+                      });
+                    },
                     icon: const Icon(
                       Icons.emoji_emotions_outlined,
                       size: 30,
@@ -306,10 +281,22 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  //region EMOJI
-  Offstage _buildEmojiKeyboard(AppLocalizations appLocale) {
-    return Offstage(
-      offstage: !emojiKeyboardOffstateVisible,
+  Future<void> _pickImage(ImageSource imageSource) async {
+    var newImage = await _picker.pickImage(source: imageSource);
+    if (newImage == null) {
+      return;
+    }
+
+    _pickedImage = newImage;
+
+    setState(() {
+      _postAttachment = _PostAttachments.image;
+    });
+  }
+
+  Widget _buildEmojiKeyboard(AppLocalizations appLocale) {
+    return Visibility(
+      visible: _activeKeyboard == _Keyboards.emoji,
       child: SizedBox(
         height: 280,
         child: EmojiPicker(
@@ -348,7 +335,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  _onEmojiSelected(Emoji emoji) {
+  void _onEmojiSelected(Emoji emoji) {
     _postController
       ..text += emoji.emoji
       ..selection = TextSelection.fromPosition(
@@ -356,45 +343,16 @@ class _NewPostPageState extends State<NewPostPage> {
       );
   }
 
-  _onBackspacePressed() {
-    setState(
-      () {
-        switchOffStage("BACK");
-      },
-    );
+  void _onBackspacePressed() {
+    setState(() {
+      _switchKeyboard(_Keyboards.none);
+    });
     _postController
       ..text = _postController.text.characters.skipLast(1).toString()
       ..selection = TextSelection.fromPosition(
         TextPosition(offset: _postController.text.length),
       );
   }
-
-  _onEmojiClick() {
-    if (mainKeyboardVisible) {
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
-    }
-    setState(
-      () {
-        switchOffStage("EMOJI");
-      },
-    );
-  }
-
-  //endregion
-
-  //region CAMERA/GALLERY AND FUNCTIONALITIES
-
-  Future getImage(bool isCamera) async {
-    if (isCamera) {
-      im = (await ImagePicker.platform.pickImage(source: ImageSource.camera))!;
-    } else {
-      im = (await ImagePicker.platform.pickImage(source: ImageSource.gallery))!;
-    }
-  }
-
-  //endregion*/
-
-  //region BUILD ALL BUTTONS IN KEYBOARD
 
   Widget _buildAudioRecordButton() {
     return Padding(
@@ -407,15 +365,9 @@ class _NewPostPageState extends State<NewPostPage> {
             return;
           }
 
-          if (mainKeyboardVisible) {
-            SystemChannels.textInput.invokeMethod('TextInput.hide');
-          }
-          setState(
-            () {
-              print("Button");
-              switchOffStage("AUDIO");
-            },
-          );
+          setState(() {
+            _switchKeyboard(_Keyboards.audio);
+          });
         },
       ),
     );
@@ -424,7 +376,9 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget _buildSendPostButton() {
     return TextButton(
       onPressed: () {
-        picAndAudioOffstateVisible = false;
+        setState(() {
+          _switchKeyboard(_Keyboards.none);
+        });
         _createPost();
       },
       child: Container(
@@ -458,25 +412,34 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  void _createPost() {
-    if (_audioDuration > Duration.zero) {
-      resourceMimeType = "audio/pcm16";
+  Future<void> _createPost() async {
+    Uint8List? data;
+    String? mimeType;
+
+    switch (_postAttachment) {
+      case _PostAttachments.audio:
+        data = Uint8List.fromList(_recordedAudio);
+        mimeType = "audio/pcm16";
+        break;
+      case _PostAttachments.image:
+        data = await _pickedImage!.readAsBytes();
+        mimeType = "image";
+        break;
+      case _PostAttachments.none:
+        break;
     }
 
     _postBloc.add(CreatePost(
       description: _postController.text,
-      resourceData: Uint8List.fromList(_audio),
-      resourceMimeType: resourceMimeType,
+      resourceData: data,
+      resourceMimeType: mimeType,
       audioDuration: _audioDuration,
     ));
   }
 
-  //endregion
-
-  //region AUDIO
   Widget _buildAudioKeyboard(Size deviceSize) {
-    return Offstage(
-      offstage: !audioKeyboardVisible,
+    return Visibility(
+      visible: _activeKeyboard == _Keyboards.audio,
       child: SizedBox(
         height: deviceSize.height * 0.333,
         width: deviceSize.width * 0.25,
@@ -484,9 +447,9 @@ class _NewPostPageState extends State<NewPostPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildAudioButtonFunction(),
+              _buildAudioButtonFunction(),
               StreamBuilder<RecordingDisposition>(
-                stream: recorder.onProgress,
+                stream: _recorder?.onProgress,
                 builder: (context, snapshot) {
                   _audioDuration = snapshot.hasData
                       ? snapshot.data!.duration
@@ -514,47 +477,51 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Widget buildAudioButtonFunction() {
+  Widget _buildAudioButtonFunction() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         fixedSize: const Size(132, 132),
         shape: const CircleBorder(),
       ),
       onPressed: () async {
-        if (recorder.isRecording) {
-          await stop();
-          setState(
-            () {
-              dataIsAudio = true;
-              picAndAudioOffstateVisible = true;
-            },
-          );
+        if (_recorder == null) {
+          return;
+        }
+
+        if (_recorder!.isRecording) {
+          await _recorder?.stopRecorder();
+          setState(() {
+            _postAttachment = _PostAttachments.audio;
+          });
         } else {
-          await record();
-          setState(
-            () {
-              dataIsAudio = false;
-              picAndAudioOffstateVisible = false;
-            },
-          );
+          await _record();
+          setState(() {
+            _postAttachment = _PostAttachments.none;
+          });
         }
       },
-      child: Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 32),
+      child: Icon(
+        _recorder?.isRecording ?? false ? Icons.stop : Icons.mic,
+        size: 32,
+      ),
     );
   }
 
-  Future record() async {
-    if (!isRecorderReady) return;
-    _audio.clear();
+  Future<void> _record() async {
+    if (_recorder == null) {
+      return;
+    }
+
+    _recordedAudio.clear();
     var recordingDataController = StreamController<Food>();
-    _mRecordingDataSubscription =
+    _recordingDataSubscription =
         recordingDataController.stream.listen((buffer) {
       if (buffer is FoodData) {
-        _audio.addAll(buffer.data!);
+        _recordedAudio.addAll(buffer.data!);
       }
     });
 
-    await recorder.startRecorder(
+    await _recorder!.startRecorder(
       toStream: recordingDataController.sink,
       codec: Codec.pcm16,
     );
@@ -562,31 +529,27 @@ class _NewPostPageState extends State<NewPostPage> {
     setState(() {});
   }
 
-  Future stop() async {
-    if (!isRecorderReady) return;
-    isRecording = !isRecording;
-    final path = await recorder.stopRecorder();
-    final audiopath = File(path!);
-
-    print('Recorded audio: $audiopath');
-  }
-
-  //endregion
-
   @override
-  void dispose() async {
+  void dispose() {
     super.dispose();
-    player.stopPlayer();
-    player.closePlayer();
-    recorder.closeRecorder();
-    _postController.dispose();
-    if (_mRecordingDataSubscription != null) {
-      await _mRecordingDataSubscription!.cancel();
-      _mRecordingDataSubscription = null;
-    }
-    _keyboardSubscription.cancel();
     _postBloc.close();
-
-    isRecorderReady = false;
+    _player?.closePlayer();
+    _recorder?.closeRecorder();
+    _recordingDataSubscription?.cancel();
+    _keyboardSubscription?.cancel();
+    _postController.dispose();
   }
+}
+
+enum _PostAttachments {
+  none,
+  image,
+  audio,
+}
+
+enum _Keyboards {
+  none,
+  buildIn,
+  emoji,
+  audio,
 }

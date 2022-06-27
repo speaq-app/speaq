@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/utils/speaq_styles.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SpqNavigationSettingsTile extends StatelessWidget {
@@ -51,7 +50,8 @@ class SpqPopUpSettingsTile extends StatelessWidget {
 
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),
-      title: Text(tileText, style: TextStyle(fontSize: 15, color: actionButtonColor)),
+      title: Text(tileText,
+          style: TextStyle(fontSize: 15, color: actionButtonColor)),
       onPressed: (context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -63,7 +63,9 @@ class SpqPopUpSettingsTile extends StatelessWidget {
                   style: TextStyle(color: actionButtonColor),
                 ),
                 onPressed: () => logOut(context)),
-            TextButton(child: Text(appLocale.cancel), onPressed: () => Navigator.pop(context)),
+            TextButton(
+                child: Text(appLocale.cancel),
+                onPressed: () => Navigator.pop(context)),
           ],
         ),
       ),
@@ -75,8 +77,8 @@ class SpqSwitchSettingsTile extends StatelessWidget {
   const SpqSwitchSettingsTile({
     Key? key,
     required this.value,
-    required this.tileText, this.onToggle,
-
+    required this.tileText,
+    this.onToggle,
   }) : super(key: key);
 
   final String tileText;

@@ -39,13 +39,6 @@ class _SettingsPageState extends State<SettingsPage> {
             SettingsList(
               sections: [
                 SpqSettingsSection(
-                  title: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "@eric",
-                      style: TextStyle(color: spqBlack, fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                   tiles: [
                     _buildSettingsTile(appLocale.account, "accountSettings"),
                     _buildSettingsTile(appLocale.privacyAndSafety, "privacySafetySettings"),
