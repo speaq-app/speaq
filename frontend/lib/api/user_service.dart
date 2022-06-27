@@ -30,7 +30,5 @@ abstract class UserService {
 
   Future<bool> followUnfollow({required int userID, required int followerID});
 
-  Future<List<CondensedUser>> userByUsername({
-    required String searchTerm,
-  });
+  Future<List<CondensedUser>> searchUser({required String searchTerm,});
 }

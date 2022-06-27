@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/protos/auth.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
-import 'package:grpc/grpc_web.dart';
+import 'package:grpc/grpc.dart';
 
 class GRPCAuthService implements AuthService {
   late AuthClient _client;

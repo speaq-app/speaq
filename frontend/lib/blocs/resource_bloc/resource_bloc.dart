@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/grpc/grpc_resource_service.dart';
@@ -19,7 +18,6 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
 
   ResourceBloc() : super(ResourceInitial()) {
     on<LoadResource>(_onLoadResource);
-    on<SaveResource>(_onSaveResource);
   }
 
   void _onLoadResource(LoadResource event, Emitter<ResourceState> emit) async {
@@ -28,12 +26,5 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
     var decodedData = base64Decode(resource.data);
 
     emit(ResourceLoaded(resource, decodedData));
-  }
-
-  void _onSaveResource(SaveResource event, Emitter<ResourceState> emit) async {
-    emit(ResourceSaving());
-    //TODO "Resource Uploaden"
-    //var resourceID = await _resourceService.uploadResource();
-    emit(ResourceSaved());
   }
 }

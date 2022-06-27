@@ -9,7 +9,7 @@ class TokenUtils {
     _token = await _secureStorage.read(key: _tokenKey);
   }
 
-  static Future<void> setToken(String token) async {
+  static Future<void> setToken(String? token) async {
     _token = token;
     await _secureStorage.write(key: _tokenKey, value: token);
   }

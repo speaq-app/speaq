@@ -36,16 +36,24 @@ func (s Server) UpdateUserProfile(ctx context.Context, req *UpdateUserProfileReq
 }
 
 func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) (*GetUserProfileResponse, error) {
-	userID := req.UserId
-	if userID <= 0 {
-		var err error
-		userID, err = middleware.GetUserIDFromContext(ctx)
-		if err != nil {
-			return nil, err
-		}
+	var op bool
+
+	var reqUserID int64
+
+	appUserID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
 	}
 
-	p, err := s.DataService.UserProfileByID(userID)
+	if req.UserId <= 0 || req.UserId == appUserID {
+		reqUserID = appUserID
+		op = true
+	} else {
+		reqUserID = req.UserId
+		op = false
+	}
+
+	p, err := s.DataService.UserProfileByID(reqUserID)
 	if err != nil {
 		return nil, err
 	}
@@ -57,13 +65,19 @@ func (s Server) GetUserProfile(ctx context.Context, req *GetUserProfileRequest) 
 		Website:                p.Website,
 		ProfileImageBlurHash:   p.ProfileImageBlurHash,
 		ProfileImageResourceId: p.ProfileImageResourceID,
+		IsOwnProfile:           op,
 	}, nil
 }
 
 func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowerIDsResponse, error) {
-	userID, err := middleware.GetUserIDFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := req.UserId
+
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	er, err := s.DataService.FollowerIDsByID(userID)
@@ -77,9 +91,14 @@ func (s Server) GetUserFollowerIDs(ctx context.Context, req *GetUserProfileReque
 }
 
 func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequest) (*GetUserFollowingIDsResponse, error) {
-	userID, err := middleware.GetUserIDFromContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := req.UserId
+
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	ing, err := s.DataService.FollowingIDsByID(userID)
@@ -94,8 +113,6 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 }
 
 func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*CondensedUserListResponse, error) {
-	log.Printf("Follower with ID %d should be loaded", req.FollowerIds)
-
 	us, err := s.DataService.FollowerByIDs(req.FollowerIds)
 	if err != nil {
 		return nil, err
@@ -121,7 +138,6 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest
 }
 
 func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*CondensedUserListResponse, error) {
-
 	us, err := s.DataService.FollowingByIDs(req.FollowingIds)
 	if err != nil {
 		return nil, err
@@ -147,7 +163,17 @@ func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingReque
 }
 
 func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingRequest) (*IsFollowingResponse, error) {
-	f, _, err := s.DataService.CheckIfFollowing(req.UserId, req.FollowerId)
+	userID := req.UserId
+
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	f, _, err := s.DataService.CheckIfFollowing(userID, req.FollowerId)
 
 	if err != nil {
 		return nil, err
@@ -159,7 +185,17 @@ func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingReque
 }
 
 func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) (*IsFollowingResponse, error) {
-	f, err := s.DataService.FollowUnfollow(req.UserId, req.FollowerId)
+	userID := req.UserId
+
+	if userID <= 0 {
+		var err error
+		userID, err = middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	f, err := s.DataService.FollowUnfollow(userID, req.FollowerId)
 
 	if err != nil {
 		return nil, err
@@ -170,8 +206,13 @@ func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) 
 	}, nil
 }
 
-func (s Server) UsersByUsername(ctx context.Context, req *SearchUserRequest) (*CondensedUserListResponse, error) {
-	u, err := s.DataService.UsersByUsername(req.Term)
+func (s Server) SearchUser(ctx context.Context, req *SearchUserRequest) (*CondensedUserListResponse, error) {
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := s.DataService.SearchUser(userID, req.Term)
 
 	if err != nil {
 		return nil, err

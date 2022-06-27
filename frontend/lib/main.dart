@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/model/user.dart';
+import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/utils/backend_utils.dart';
@@ -72,30 +74,49 @@ class Speaq extends StatelessWidget {
   }
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({Key? key}) : super(key: key);
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final _profileBloc = ProfileBloc();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _profileBloc.add(LoadProfile());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: verifyToken("Token aus Cache laden!!!!!!!!"),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const LoginPage();
-        } else if (snapshot.hasData) {
-          return const LoginPage();
-        } else {
-          return SpqLoadingWidget(
-              MediaQuery.of(context).size.shortestSide * 0.15);
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      bloc: _profileBloc,
+      listener: (context, state) async {
+        if (state is ProfileError) {
+          await TokenUtils.setToken(null);
         }
+      },
+      builder: (context, state) {
+        if (state is ProfileError) {
+          return const LoginPage();
+        } else if (state is ProfileLoaded) {
+          return const BasePage();
+        }
+
+        return SpqLoadingWidget(
+            MediaQuery.of(context).size.shortestSide * 0.15);
       },
     );
   }
-}
 
-Future<bool> verifyToken(String token) {
-  return Future.delayed(
-    const Duration(seconds: 1),
-    () => false,
-  );
+  @override
+  void dispose() {
+    super.dispose();
+
+    _profileBloc.close();
+  }
 }

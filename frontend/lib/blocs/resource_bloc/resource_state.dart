@@ -13,7 +13,3 @@ class ResourceLoaded extends ResourceState {
 
   ResourceLoaded(this.resource, this.decodedData);
 }
-
-class ResourceSaving extends ResourceState {}
-
-class ResourceSaved extends ResourceState {}

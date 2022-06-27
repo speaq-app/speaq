@@ -52,7 +52,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     popupMessage: appLocale.askDeleteAccount,
                     actionButtonColor: spqErrorRed,
                   ),
-
                 ],
               ),
             ],
@@ -61,7 +60,9 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           Positioned(
             bottom: 20,
             height: deviceSize.height * 0.1,
-            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _buildLogoPictures(deviceSize)),
           )
         ]),
       ),
@@ -71,7 +72,8 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
+      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg",
+          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
     );
   }
 }

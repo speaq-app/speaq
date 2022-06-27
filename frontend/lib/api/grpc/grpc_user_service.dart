@@ -17,8 +17,7 @@ class GRPCUserService implements UserService {
       ClientChannel(
         ip,
         port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
 
@@ -39,6 +38,7 @@ class GRPCUserService implements UserService {
       website: resp.website,
       profileImageBlurHash: resp.profileImageBlurHash,
       profileImageResourceId: resp.profileImageResourceId.toInt(),
+      isOwnProfile: resp.isOwnProfile,
     );
   }
 
@@ -114,11 +114,9 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<bool> checkIfFollowing(
-      {required int userID, required int followerID}) async {
+  Future<bool> checkIfFollowing({required int userID, required int followerID}) async {
     IsFollowingResponse resp = await _client.checkIfFollowing(
-      CheckIfFollowingRequest(
-          userId: Int64(userID), followerId: Int64(followerID)),
+      CheckIfFollowingRequest(userId: Int64(userID), followerId: Int64(followerID)),
       options: _callOptions,
     );
 
@@ -126,11 +124,9 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<bool> followUnfollow(
-      {required int userID, required int followerID}) async {
+  Future<bool> followUnfollow({required int userID, required int followerID}) async {
     IsFollowingResponse resp = await _client.followUnfollow(
-      FollowUnfollowRequest(
-          userId: Int64(userID), followerId: Int64(followerID)),
+      FollowUnfollowRequest(userId: Int64(userID), followerId: Int64(followerID)),
       options: _callOptions,
     );
 
@@ -138,9 +134,8 @@ class GRPCUserService implements UserService {
   }
 
   @override
-  Future<List<CondensedUser>> userByUsername(
-      {required String searchTerm}) async {
-    CondensedUserListResponse resp = await _client.usersByUsername(
+  Future<List<CondensedUser>> searchUser({required String searchTerm}) async {
+    CondensedUserListResponse resp = await _client.searchUser(
       SearchUserRequest(term: searchTerm),
       options: _callOptions,
     );

@@ -4,9 +4,9 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_bottom_navi_bar.dart';
 
 class BasePage extends StatefulWidget {
-  final int userID;
+  final int initialPage;
 
-  const BasePage({Key? key, required this.userID}) : super(key: key);
+  const BasePage({Key? key, this.initialPage = 0}) : super(key: key);
 
   @override
   State<BasePage> createState() => _BasePageState();
@@ -17,24 +17,6 @@ class _BasePageState extends State<BasePage> {
   late ConnectionUtilSingleton connectionStatus;
   bool hasInternetConnection = true;
 
-  /*Alle Seiten, direkt nach dem Login aufgerufen werden können
-  * und in der BottomNavigationBar vertreten sind*/
-
-  /*Die Variable wird initialisiert und hört dem Stream, welcher updates über die Internetverbindung gibt, zu*/
-  @override
-  initState() {
-    connectionStatus = ConnectionUtilSingleton.getInstance();
-    connectionStatus.connectionChange.listen(_connectionChanged);
-
-    super.initState();
-
-    _pages = [
-      HomePage(userID: widget.userID),
-      const SearchPage(),
-      const NotificationsPage(),
-      const MessagesPage()
-    ];
-  }
 
   /*Methode setzt die boolean Variable, welche angibt, ob eine aktive Verbindung zum Internet besteht
   * und ruft bei keine Internetverbindung einen Alert-Dialog auf*/
@@ -49,13 +31,32 @@ class _BasePageState extends State<BasePage> {
 
   late final List<Widget> _pages;
   late List<String> pageTitles;
-  final ValueNotifier _selectedIndexNotifier = ValueNotifier<int>(0);
-  final PageController _pageController = PageController();
+  late final ValueNotifier _selectedIndexNotifier = ValueNotifier<int>(widget.initialPage);
+  late final PageController _pageController = PageController(initialPage: widget.initialPage);
 
   void _switchPage(int index) {
     _selectedIndexNotifier.value = index;
     _pageController.animateToPage(_selectedIndexNotifier.value,
         duration: const Duration(milliseconds: 200), curve: Curves.linear);
+  }
+
+  /*Alle Seiten, direkt nach dem Login aufgerufen werden können
+  * und in der BottomNavigationBar vertreten sind*/
+
+  /*Die Variable wird initialisiert und hört dem Stream, welcher updates über die Internetverbindung gibt, zu*/
+  @override
+  initState() {
+    connectionStatus = ConnectionUtilSingleton.getInstance();
+    connectionStatus.connectionChange.listen(_connectionChanged);
+
+    super.initState();
+
+    _pages = [
+      const HomePage(),
+      const SearchPage(),
+      const NotificationsPage(),
+      const MessagesPage()
+    ];
   }
 
   @override

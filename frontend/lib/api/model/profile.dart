@@ -22,6 +22,9 @@ class Profile extends HiveObject {
   @HiveField(5)
   final int profileImageResourceId;
 
+  @HiveField(6)
+  final bool isOwnProfile;
+
   Profile({
     required this.name,
     required this.username,
@@ -29,5 +32,6 @@ class Profile extends HiveObject {
     required this.website,
     this.profileImageBlurHash = "",
     this.profileImageResourceId = 0,
+    this.isOwnProfile = false,
   });
 }

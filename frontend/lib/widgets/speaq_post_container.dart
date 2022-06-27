@@ -7,6 +7,7 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_audio_post_container.dart';
+import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
 import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
@@ -74,35 +75,41 @@ class _PostContainerState extends State<PostContainer> {
         if (state is ProfileLoaded) {
           var profileImageResourceId = state.profile.profileImageResourceId;
           if (profileImageResourceId > 0) {
-            _resourceBlocProfile
-                .add(LoadResource(resourceId: profileImageResourceId));
+            _resourceBlocProfile.add(LoadResource(resourceId: profileImageResourceId));
           }
         }
       },
       builder: (context, state) {
         if (state is ProfileLoaded) {
           Profile profile = state.profile;
-          return BlocBuilder<ResourceBloc, ResourceState>(
-            bloc: _resourceBlocProfile,
-            builder: (context, state) {
-              if (state is ResourceLoaded) {
-                return CircleAvatar(
-                  radius: 24,
-                  backgroundImage: MemoryImage(state.decodedData),
-                );
-              } else if (profile.profileImageBlurHash.isNotEmpty) {
-                return CircleAvatar(
-                  radius: 24,
-                  backgroundImage: BlurHashImage(profile.profileImageBlurHash),
-                );
-              } else {
-                return CircleAvatar(
-                  radius: 24,
-                  backgroundColor: spqPrimaryBlue,
-                  child: Text(profile.name[0]),
-                );
-              }
-            },
+          return InkWell(
+            onTap: () => Navigator.pushNamed(context, "profile", arguments: [
+              widget.ownerID,
+              state.profile.isOwnProfile,
+              state.profile.isOwnProfile ? 0 : 1,
+            ]),
+            child: BlocBuilder<ResourceBloc, ResourceState>(
+              bloc: _resourceBlocProfile,
+              builder: (context, state) {
+                if (state is ResourceLoaded) {
+                  return CircleAvatar(
+                    radius: 24,
+                    backgroundImage: MemoryImage(state.decodedData),
+                  );
+                } else if (profile.profileImageBlurHash.isNotEmpty) {
+                  return CircleAvatar(
+                    radius: 24,
+                    backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+                  );
+                } else {
+                  return CircleAvatar(
+                    radius: 24,
+                    backgroundColor: spqPrimaryBlue,
+                    child: Text(profile.name[0]),
+                  );
+                }
+              },
+            ),
           );
         } else {
           return const ShimmerProfilePicture(diameter: 10);
@@ -116,37 +123,53 @@ class _PostContainerState extends State<PostContainer> {
       bloc: _profileBloc,
       builder: (context, state) {
         if (state is! ProfileLoaded) {
-          return const CircularProgressIndicator();
+          return Row(
+            children: const [
+              Expanded(
+                child: ShimmerCube(width: 1, height: 4),
+              ),
+              SizedBox(width: 100),
+              Expanded(
+                child: ShimmerCube(width: 0.1, height: 3),
+              ),
+            ],
+          );
         }
 
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: Text(
-                state.profile.name,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                maxLines: 1,
-                overflow: TextOverflow.clip,
-                softWrap: false,
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        return InkWell(
+          onTap: () => Navigator.pushNamed(context, "profile", arguments: [
+            widget.ownerID,
+            state.profile.isOwnProfile,
+            state.profile.isOwnProfile ? 0 : 1,
+          ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 3,
                 child: Text(
-                  "@${state.profile.username}",
-                  style: const TextStyle(fontSize: 12, color: spqDarkGrey),
+                  state.profile.name,
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.clip,
                   softWrap: false,
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    "@${state.profile.username}",
+                    style: const TextStyle(fontSize: 12, color: spqDarkGrey),
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
+                    softWrap: false,
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -177,20 +200,16 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime =
-        DateTimeRange(start: widget.creationTime, end: DateTime.now());
+    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
-      return calculatedDateTime.duration.inSeconds.toString() +
-          appLocale.secondsAgo;
+      return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
     }
     if (calculatedDateTime.duration.inMinutes < 2) {
-      return calculatedDateTime.duration.inMinutes.toString() +
-          appLocale.minuteAgo;
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minuteAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 1) {
-      return calculatedDateTime.duration.inMinutes.toString() +
-          appLocale.minutesAgo;
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minutesAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 2) {
@@ -198,8 +217,7 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 1) {
-      return calculatedDateTime.duration.inHours.toString() +
-          appLocale.hoursAgo;
+      return calculatedDateTime.duration.inHours.toString() + appLocale.hoursAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 2) {
@@ -211,13 +229,11 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 14) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
-          appLocale.weekAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weekAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 31) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
-          appLocale.weeksAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weeksAgo;
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");

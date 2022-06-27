@@ -121,29 +121,48 @@ class _RegisterPageState extends State<RegisterPage> {
                 switch (state.code) {
                   case StatusCode.alreadyExists:
                     Flushbar(
+                      messageText: Text(
+                        appLocale.errorUsernameAlreadyTaken,
+                        textAlign: TextAlign.center,
+                      ),
                       backgroundColor: spqPrimaryBlue,
                       messageColor: spqWhite,
-                      message: appLocale.errorUsernameAlreadyTaken,
                       duration: const Duration(seconds: 5),
                     ).show(context);
                     break;
                   case 1101:
                     Flushbar(
+                      messageText: Text(
+                        appLocale.errorUsernameAlreadyTaken,
+                        textAlign: TextAlign.center,
+                      ),
                       backgroundColor: spqPrimaryBlue,
                       messageColor: spqWhite,
-                      message: appLocale.errorUsernameAlreadyTaken,
                       duration: const Duration(seconds: 5),
                     ).show(context);
                     break;
                   case 1103:
                     Flushbar(
+                      messageText: Text(
+                        appLocale.errorUsernameAlreadyTaken,
+                        textAlign: TextAlign.center,
+                      ),
                       backgroundColor: spqPrimaryBlue,
                       messageColor: spqWhite,
-                      message: appLocale.errorUsernameAlreadyTaken,
                       duration: const Duration(seconds: 5),
                     ).show(context);
                     break;
-
+                  case StatusCode.invalidArgument:
+                    Flushbar(
+                      messageText: Text(
+                        appLocale.wrongInput,
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: spqPrimaryBlue,
+                      messageColor: spqWhite,
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                    break;
                 }
               } else if (state is RegisterSuccess) {
                 Navigator.pop(context);
@@ -255,12 +274,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _onRegister() {
-    var username = _nameController.text;
-    var password = _passwordController.text;
-
     _registerBloc.add(RegisterUser(
-      username: username,
-      password: password,
+      username: _nameController.text,
+      password: _passwordController.text,
+      passwordCheck: _passwordCheckController.text,
     ));
   }
 }
