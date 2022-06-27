@@ -31,7 +31,7 @@ class BackendUtils {
       if (!isPhysicalDevice) {
         _host = "10.0.2.2";
       }
-    } else {}
+    }
   }
 
   static String getHost() {
