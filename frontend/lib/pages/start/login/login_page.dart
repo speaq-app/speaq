@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
               bloc: _loginBloc,
               listener: (context, state) {
                 if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base", arguments: {"userID": 0, "token": state.token});
+                  Navigator.pushNamed(context, "base", arguments: 0);
                 } else if (state is LoginError) {
                   String message;
                   switch (state.code) {
