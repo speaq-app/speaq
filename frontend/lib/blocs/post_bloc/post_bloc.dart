@@ -7,12 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:frontend/api/grpc/grpc_post_service.dart';
 import 'package:frontend/api/model/post.dart';
 import 'package:frontend/api/post_service.dart';
+import 'package:frontend/utils/backend_utils.dart';
 
 part 'post_event.dart';
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  final PostService _postService = GRPCPostService("10.0.2.2", port: 8080);
+  final PostService _postService = GRPCPostService(
+    BackendUtils.getHost(),
+    port: BackendUtils.getPort(),
+  );
 
   PostBloc() : super(PostInitial()) {
     on<CreatePost>(_onCreatePost);
