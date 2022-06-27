@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/user_service.dart';
@@ -21,7 +21,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<StartSearch>(_onStartSearch);
   }
 
-  Future<void> _onStartSearch(StartSearch event, Emitter<SearchState> emit) async {
+  Future<void> _onStartSearch(
+      StartSearch event, Emitter<SearchState> emit) async {
     emit(SearchStarted());
 
     emit(RequestSend());

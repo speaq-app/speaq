@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/api/grpc/grpc_settings_service.dart';
 import 'package:frontend/api/settings_service.dart';
 import 'package:frontend/utils/backend_utils.dart';

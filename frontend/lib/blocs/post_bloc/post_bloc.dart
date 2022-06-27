@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/api/grpc/grpc_post_service.dart';
 import 'package:frontend/api/model/post.dart';
@@ -27,9 +27,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     await _postService.createPost(
       description: event.description,
-      resourceDataInBase64: (event.resourceData != null) ? base64Encode(event.resourceData!) : "",
-      resourceMimeType: (event.resourceMimeType != null) ? event.resourceMimeType! : "",
-      audioDuration: (event.audioDuration != null) ? event.audioDuration! : Duration.zero,
+      resourceDataInBase64:
+          (event.resourceData != null) ? base64Encode(event.resourceData!) : "",
+      resourceMimeType:
+          (event.resourceMimeType != null) ? event.resourceMimeType! : "",
+      audioDuration:
+          (event.audioDuration != null) ? event.audioDuration! : Duration.zero,
     );
 
     emit(PostSaved());
