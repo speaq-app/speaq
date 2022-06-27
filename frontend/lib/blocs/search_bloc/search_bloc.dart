@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:frontend/api/grpc/grpc_user_service.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/user_service.dart';
+import 'package:frontend/utils/backend_utils.dart';
 import 'package:meta/meta.dart';
 
 part 'search_event.dart';
@@ -11,7 +12,10 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  final UserService _userService = GRPCUserService("10.0.2.2", port: 8080);
+  final UserService _userService = GRPCUserService(
+    BackendUtils.getHost(),
+    port: BackendUtils.getPort(),
+  );
 
   SearchBloc() : super(SearchInitial()) {
     on<StartSearch>(_onStartSearch);

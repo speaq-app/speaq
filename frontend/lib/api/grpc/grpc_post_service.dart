@@ -71,7 +71,8 @@ class GRPCPostService implements PostService {
         ..description = description
         ..resourceData = resourceDataInBase64 ?? ""
         ..resourceMimeType = resourceMimeType ?? ""
-        ..audioDuration = Int64((audioDuration ?? Duration.zero).inMilliseconds),
+        ..audioDuration =
+            Int64((audioDuration ?? Duration.zero).inMilliseconds),
       options: _callOptions,
     );
   }
