@@ -6,6 +6,7 @@ import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/model/user.dart';
 import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
+import 'package:frontend/utils/backend_utils.dart';
 import 'package:frontend/utils/token_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
 
   await initHive();
   await TokenUtils.init();
+  await BackendUtils.init();
 
   await Settings.init(cacheProvider: SharePreferenceCache());
 
@@ -68,12 +70,9 @@ class Speaq extends StatelessWidget {
       },
     );
   }
-
-
 }
 
 class MainApp extends StatelessWidget {
-
   const MainApp({Key? key}) : super(key: key);
 
   @override
