@@ -37,6 +37,7 @@ class _SearchPageState extends State<SearchPage> {
               hintText: appLocale.hintTextSearchBarSearchPage),
           preferredSize: deviceSize,
           centerTitle: true,
+          actionList: [SpqSettingsIconButton(onPressed:() => Navigator.pushNamed(context, "privacySafetySettings"),)],
         ),
         body: BlocConsumer<SearchBloc, SearchState>(
           bloc: _searchBloc,

@@ -18,10 +18,6 @@ void logOut(BuildContext context) {
 
 class ConnectionUtilSingleton {
   //This creates the single instance by calling the `_internal` constructor specified below
-  static final ConnectionUtilSingleton _singleton =
-      ConnectionUtilSingleton._internal();
-
-  /// Creates the single instance by calling the [_internal] constructor specified below.
   static final ConnectionUtilSingleton _singleton = ConnectionUtilSingleton._internal();
 
   ConnectionUtilSingleton._internal();
@@ -54,8 +50,7 @@ class ConnectionUtilSingleton {
   Future<bool> _hasInternetInternetConnection() async {
     bool previousConnection = hasConnection;
     var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       // this is the different
       if (await InternetConnectionChecker().hasConnection) {
         hasConnection = true;

@@ -112,13 +112,6 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
     );
   }
 
-  Widget buildImage(String jpgString, Size deviceSize) {
-    return CircleAvatar(
-      backgroundImage: AssetImage(jpgString),
-      radius: deviceSize.width / 8,
-    );
-  }
-
   /// Returns a [Container] for one developer profile and later for [buildGridView].
   Widget buildDeveloperProfile(
       String name, String jpgString, String role, Size deviceSize) {
@@ -130,9 +123,16 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
           textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        footer: Text(role, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold)),
-        child: Center(child: buildImage(jpgString)),
+        footer: Text(role, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold),),
+        child: Center(child: buildImage(jpgString, deviceSize),),
       ),
+    );
+  }
+
+  Widget buildImage(String jpgString, Size deviceSize) {
+    return CircleAvatar(
+      backgroundImage: AssetImage(jpgString),
+      radius: deviceSize.width / 8,
     );
   }
 }

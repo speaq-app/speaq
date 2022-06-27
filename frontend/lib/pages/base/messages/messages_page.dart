@@ -40,6 +40,7 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
@@ -49,11 +50,13 @@ class _MessagesPageState extends State<MessagesPage> {
           ),
           preferredSize: deviceSize,
           centerTitle: true,
-          actionList: [generateSettingsIcon(context)],
+          leading: null,
+          automaticallyImplyLeading: false,
+          actionList: [SpqSettingsIconButton(onPressed:() => Navigator.pushNamed(context, "notificationSettings"),)],
         ),
         body: Column(
           children: <Widget>[
-            generateSearchBar(deviceSize),
+            generateSearchBar(deviceSize, appLocale),
             Expanded(
               child: ListView.builder(
                 itemCount: _foundUsersList.length,
@@ -82,7 +85,7 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
-  SizedBox generateSearchBar(Size deviceSize) {
+  SizedBox generateSearchBar(Size deviceSize, AppLocalizations appLocale) {
     return SizedBox(
       height: deviceSize.height * 0.08,
       width: deviceSize.width,
@@ -106,17 +109,6 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
-  IconButton generateSettingsIcon(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.settings),
-      color: Colors.blue,
-      iconSize: 25,
-      onPressed: () => {
-        Navigator.pushNamed(context, "notificationSettings"),
-      },
-    );
-  }
-
   filterSearchResults(String? text) {
     List<CondensedUser> filterList = <CondensedUser>[];
     if (text != null && text.isNotEmpty) {
@@ -131,3 +123,4 @@ class _MessagesPageState extends State<MessagesPage> {
     }
   }
 }
+
