@@ -17,7 +17,7 @@ type service struct {
 }
 
 func New() data.Service {
-	audio, err := ioutil.ReadFile("testAudio.txt")
+	audio, err := ioutil.ReadFile("testdata/testAudio.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,27 +26,27 @@ func New() data.Service {
 		log.Fatal(err)
 	}
 
-	imageDaniel, err := ioutil.ReadFile("testDanielImage.txt")
+	imageDaniel, err := ioutil.ReadFile("testdata/testDanielImage.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	imageDavid, err := ioutil.ReadFile("testDavidImage.txt")
+	imageDavid, err := ioutil.ReadFile("testdata/testDavidImage.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	imageEric, err := ioutil.ReadFile("testEricImage.txt")
+	imageEric, err := ioutil.ReadFile("testdata/testEricImage.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	imageSven, err := ioutil.ReadFile("testSvenImage.txt")
+	imageSven, err := ioutil.ReadFile("testdata/testSvenImage.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	imageNosa, err := ioutil.ReadFile("testNosaImage.txt")
+	imageNosa, err := ioutil.ReadFile("testdata/testNosaImage.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	imageHendrik, err := ioutil.ReadFile("testHendrikImage.txt")
+	imageHendrik, err := ioutil.ReadFile("testdata/testHendrikImage.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
