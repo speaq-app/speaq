@@ -86,14 +86,15 @@ class _FollowPageState extends State<FollowPage> {
                         ),
                       ),
                       SizedBox(
-                          height: deviceSize.height * 0.05,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              "$_followingCount ${appLocale.following}",
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          )),
+                        height: deviceSize.height * 0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            "$_followingCount ${appLocale.following}",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   body: TabBarView(
@@ -123,14 +124,15 @@ class _FollowPageState extends State<FollowPage> {
                         ),
                       ),
                       SizedBox(
-                          height: deviceSize.height * 0.05,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              "$_followingCount ${appLocale.following}",
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          )),
+                        height: deviceSize.height * 0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            "$_followingCount ${appLocale.following}",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   body: _buildShimmerList(deviceSize),
@@ -208,47 +210,3 @@ class _FollowPageState extends State<FollowPage> {
     super.dispose();
   }
 }
-
-/*
-
-class FollowerSearchDelegate extends SearchDelegate {
-  FollowerSearchDelegate({required this.followerList});
-
-  List<FollowUser> followerList = [];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [IconButton(onPressed: () => query = "", icon: const Icon(Icons.clear_outlined))];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(onPressed: () => close(context, null), icon: Icon(Icons.adaptive.arrow_back_rounded));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<FollowUser> matchQuery = [];
-
-    for (FollowUser currentFollower in followerList) {
-      if (currentFollower.name.isNotEmpty ? currentFollower.name.toLowerCase().contains(query.toLowerCase()) : false) {
-        matchQuery.add(currentFollower);
-      }
-    }
-
-    return _buildFollowList(matchQuery);
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<FollowUser> matchQuery = [];
-
-    for (FollowUser currentFollower in followerList) {
-      if (currentFollower.name.isNotEmpty ? currentFollower.name.toLowerCase().contains(query.toLowerCase()) : false) {
-        matchQuery.add(currentFollower);
-      }
-    }
-
-    return _buildFollowList(matchQuery);
-  }
-}*/

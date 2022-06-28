@@ -23,14 +23,11 @@ class _UserMenuState extends State<UserMenu> {
   final SettingsBloc _settingsBloc = SettingsBloc();
   final FollowerBloc _followerBloc = FollowerBloc();
 
-  // Follower.
   List<int> _followerIDs = [];
   List<int> _followingIDs = [];
 
-  // App user (get at login).
   late Profile _profile;
 
-  ///
   @override
   void initState() {
     _profileBloc.add(LoadProfile(userId: 0));

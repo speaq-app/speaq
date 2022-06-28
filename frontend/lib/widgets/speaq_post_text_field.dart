@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
+/// Custom [TextFormField] e.g. in [NewPostPage].
 class SpqPostTextField extends StatelessWidget {
   const SpqPostTextField({
     Key? key,

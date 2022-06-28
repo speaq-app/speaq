@@ -144,7 +144,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  /// depending on what [_PostAttachments] was used and saves in [_postAttachment].
+  /// Uses case for audio or image depending on what [_PostAttachments] and saves in [_postAttachment].
   Widget _buildAttachmentPreview(Size deviceSize) {
     switch (_postAttachment) {
       case _PostAttachments.none:

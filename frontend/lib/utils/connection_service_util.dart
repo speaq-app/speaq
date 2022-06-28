@@ -17,21 +17,20 @@ void logOut(BuildContext context) {
 }
 
 class ConnectionUtilSingleton {
-  //This creates the single instance by calling the `_internal` constructor specified below
+  /// Creates the single instance by calling the [ConnectionUtilSingleton._internal()] constructor specified below.
   static final ConnectionUtilSingleton _singleton = ConnectionUtilSingleton._internal();
 
   ConnectionUtilSingleton._internal();
 
-  // Retrieve the instance through the app.
+  ///  Retrieve the instance through the app.
   static ConnectionUtilSingleton getInstance() => _singleton;
 
-  // Tracks the current connection status.
+  /// Tracks the current connection status.
   bool hasConnection = false;
 
-  // Subscribing to connection changes.
+  /// Subscribing to connection changes.
   StreamController connectionChangeController = StreamController.broadcast();
 
-  // Flutter_connectivity.
   final Connectivity _connectivity = Connectivity();
 
   /// Hook into flutter_connectivity's Stream to listen for changes and check the connection status out of the gate.
@@ -39,7 +38,7 @@ class ConnectionUtilSingleton {
     _connectivity.onConnectivityChanged.listen(_connectionChange);
   }
 
-  // Flutter_connectivity's listener.
+  /// Flutter_connectivity's listener.
   void _connectionChange(ConnectivityResult result) {
     _hasInternetInternetConnection();
   }
@@ -95,7 +94,7 @@ class ConnectionUtilSingleton {
       );
     }
 
-    // todo : showDialog for ios
+    // Todo : showDialog for ios
     return showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(

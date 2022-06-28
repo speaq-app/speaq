@@ -7,7 +7,7 @@ import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
 
-  ///Creates different Routes.
+  /// Creates different Routes.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
 

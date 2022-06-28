@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -24,6 +25,7 @@ class SpqNavigationSettingsTile extends StatelessWidget {
   }
 }
 
+/// Settings elements for [SettingsPage].
 class SpqPopUpSettingsTile extends StatelessWidget {
   final Function()? onPressed;
   final String tileText;

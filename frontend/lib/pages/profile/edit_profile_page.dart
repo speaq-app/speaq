@@ -36,9 +36,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _profileBloc.add(LoadProfile(
-      fromCache: false,
-    ));
+    _profileBloc.add(
+      LoadProfile(
+        fromCache: false,
+      ),
+    );
   }
 
   @override
@@ -64,7 +66,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               _descriptionController.text = profile.description;
               _websiteController.text = profile.website;
               if (profile.profileImageResourceId > 0) {
-                _resourceBloc.add(LoadResource(resourceId: profile.profileImageResourceId));
+                _resourceBloc.add(
+                    LoadResource(resourceId: profile.profileImageResourceId));
               }
             } else if (state is ProfileSaved) {
               Navigator.pop(context);
@@ -72,7 +75,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           builder: (context, state) {
             if (state is ProfileSaving) {
-              return SpqLoadingWidget(MediaQuery.of(context).size.shortestSide * 0.15);
+              return SpqLoadingWidget(
+                  MediaQuery.of(context).size.shortestSide * 0.15);
             } else if (state is ProfileSaved) {
               return _buildCheckScreen();
             } else if (state is ProfileLoading) {
@@ -88,7 +92,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 appBar: _buildAppBar(deviceSize, state.profile, appLocale),
                 body: Container(
                   padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
-                  child: _buildListViewWithData(context, appLocale, state.profile),
+                  child:
+                      _buildListViewWithData(context, appLocale, state.profile),
                 ),
               );
             }
@@ -109,7 +114,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  ListView _buildListViewWithData(BuildContext context, AppLocalizations appLocale, Profile profile) {
+  ListView _buildListViewWithData(
+      BuildContext context, AppLocalizations appLocale, Profile profile) {
     return ListView(
       children: [
         Center(
@@ -117,8 +123,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             onTap: () {
               if (profile.profileImageResourceId > 0) {
                 Navigator.of(context).push(PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => _buildFullScreenProfileImage(context, profile.username),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        _buildFullScreenProfileImage(context, profile.username),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
                       return child;
                     }));
               } else {
@@ -183,7 +191,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildListViewShimmer(BuildContext context, AppLocalizations appLocale) {
+  Widget _buildListViewShimmer(
+      BuildContext context, AppLocalizations appLocale) {
     return ListView(
       children: [
         const Center(
@@ -257,7 +266,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(Size deviceSize, Profile profile, AppLocalizations appLocale) {
+  PreferredSizeWidget _buildAppBar(
+      Size deviceSize, Profile profile, AppLocalizations appLocale) {
     return SpqAppBar(
       title: Text(
         appLocale.editProfile,
@@ -289,7 +299,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  PreferredSizeWidget _buildLoadingAppBar(Size deviceSize, AppLocalizations appLocale) {
+  PreferredSizeWidget _buildLoadingAppBar(
+      Size deviceSize, AppLocalizations appLocale) {
     return SpqAppBar(
       title: Text(
         appLocale.editProfile,
@@ -403,10 +414,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String errorString = _checkIfInputIsValid(profile, appLocale);
     if (errorString.isNotEmpty) {
       final snackBar = SnackBar(
-          content: Text(
-        "${appLocale.wrongInput} :$errorString",
-        textAlign: TextAlign.center,
-      ));
+        content: Text(
+          "${appLocale.wrongInput} :$errorString",
+          textAlign: TextAlign.center,
+        ),
+      );
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
@@ -425,15 +437,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (profile.name.isEmpty) return appLocale.nameIsEmpty;
     if (profile.name.endsWith(" ")) return appLocale.nameEndsWithSpace;
 
-    if (profile.username.length > maxLengthUsername) return appLocale.usernameIsToLong;
+    if (profile.username.length > maxLengthUsername)
+      return appLocale.usernameIsToLong;
     if (profile.username.isEmpty) return appLocale.usernameIsEmpty;
     if (profile.username.endsWith(" ")) return appLocale.usernameEndsWithSpace;
 
-    if (profile.description.length > maxLengthDescription) return appLocale.descriptionIsToLong;
-    if (profile.description.endsWith(" ")) return appLocale.descriptionEndsWithSpace;
+    if (profile.description.length > maxLengthDescription)
+      return appLocale.descriptionIsToLong;
+    if (profile.description.endsWith(" "))
+      return appLocale.descriptionEndsWithSpace;
 
-    if (profile.website.length > maxLengthWebsite) return appLocale.websiteIsToLong;
-    if (!profile.website.contains(".") && profile.website.isNotEmpty) return appLocale.websiteHasNoDot;
+    if (profile.website.length > maxLengthWebsite)
+      return appLocale.websiteIsToLong;
+    if (!profile.website.contains(".") && profile.website.isNotEmpty)
+      return appLocale.websiteHasNoDot;
     if (profile.website.endsWith(" ")) return appLocale.websiteEndsWithSpace;
 
     return "";

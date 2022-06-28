@@ -23,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  ///
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
@@ -152,6 +151,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   /// Creates the bottom part of the page with a user interface.
   Widget _buildBottom(BuildContext context, AppLocalizations appLocale) {
     return Column(

@@ -59,34 +59,6 @@ class FollowerTile extends StatelessWidget {
         ],
       ),
       isThreeLine: false,
-/*      trailing: BlocConsumer<FollowerBloc, FollowerState>(
-            bloc: _followerBloc,
-            listener: (context, state) {
-              if (state is FollowedUnfollowLoaded) {
-                isFollowing = state.isFollowing;
-              }
-            },
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: () {
-                  _followerBloc.add(FollowUnfollow(userID: widget.userID, followerID: widget.follower.id.toInt()));
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: spqWhite,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    side: BorderSide(
-                      color: isFollowing ? spqLightRed : spqPrimaryBlue,
-                    ),
-                  ),
-                ),
-                child: Text(
-                  isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
-                  style: TextStyle(color: isFollowing ? spqLightRed : spqPrimaryBlue),
-                ),
-              );
-            },
-          ),*/
     );
   }
 }
