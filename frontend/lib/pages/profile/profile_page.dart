@@ -195,6 +195,7 @@ class ProfilePageState extends State<ProfilePage> {
               name: appLocale.editProfile,
               textStyle: const TextStyle(color: spqPrimaryBlue),
             )
+            // Selects the appropriate state and returns the right button.
           : BlocBuilder<FollowerBloc, FollowerState>(
               bloc: _followUnfollowBloc,
               builder: (context, state) {
