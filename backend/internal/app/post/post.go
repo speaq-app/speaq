@@ -12,6 +12,10 @@ type Server struct {
 	UnimplementedPostServer
 }
 
+//CreatePost takes a description, recourceData, recourceMimeType and audioDuration frm CreatePostRequest.
+//First it creates a resource in the backend by resourceData, resourceMimeType and audioDuration.
+//Then it gets the userID corresponding to the logged in user.
+//Then it creates a post taking the userID, description, resourceID and mimeType and returns it in CreatePostResponse.
 func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
 	r, err := s.DataService.CreateResource(req.ResourceData, req.ResourceMimeType, req.AudioDuration)
 	if err != nil {
@@ -42,6 +46,10 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 	}, nil
 }
 
+//GetPostFeed firstly gets the corresponding userID to the logged in user.
+//Then it gets all of the userIDs whom the logged in user is following.
+//Based on all those IDs and his own the posts are loaded and returned.
+//In case there is no post related to the IDs an empty List will be returned.
 func (s Server) GetPostFeed(ctx context.Context, req *GetPostFeedRequest) (*GetPostFeedResponse, error) {
 	userID, err := middleware.GetUserIDFromContext(ctx)
 	if err != nil {
