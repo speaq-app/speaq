@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,7 +121,7 @@ class _NewPostPageState extends State<NewPostPage> {
                 appBar: SpqAppBar(
                   preferredSize: deviceSize,
                   actionList: [
-                    _buildSendPostButton(),
+                    _buildSendPostButton(appLocale),
                   ],
                 ),
                 body: Column(
@@ -373,13 +374,13 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Widget _buildSendPostButton() {
+  Widget _buildSendPostButton(AppLocalizations appLocale) {
     return TextButton(
       onPressed: () {
         setState(() {
           _switchKeyboard(_Keyboards.none);
         });
-        _createPost();
+        _createPost(appLocale);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -412,7 +413,7 @@ class _NewPostPageState extends State<NewPostPage> {
     );
   }
 
-  Future<void> _createPost() async {
+  Future<void> _createPost(AppLocalizations appLocale) async {
     Uint8List? data;
     String? mimeType;
 
@@ -427,6 +428,22 @@ class _NewPostPageState extends State<NewPostPage> {
         break;
       case _PostAttachments.none:
         break;
+    }
+
+    if (data != null && data.length > maxPostAttachmentSize) {
+      setState(() {
+        Flushbar(
+          messageText: Text(
+            appLocale.errorPostAttachmentTooBig,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: spqWhite),
+          ),
+          duration: const Duration(seconds: 3),
+          backgroundColor: spqPrimaryBlue,
+        ).show(context);
+        _postAttachment = _PostAttachments.none;
+      });
+      return;
     }
 
     _postBloc.add(CreatePost(

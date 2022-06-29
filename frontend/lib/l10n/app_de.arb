@@ -109,5 +109,6 @@
   "wrongPassword": "Das eingegebene Password ist falsch",
   "unknownError": "Es ist ein unbekannter Fehler aufgetreten",
   "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen",
-  "noTokenGenerated": "Es konnte kein User-token generiert werden"
+  "noTokenGenerated": "Es konnte kein User-token generiert werden",
+  "errorPostAttachmentTooBig": "Anhang zu groß!"
 }

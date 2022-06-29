@@ -108,5 +108,6 @@
   "wrongPassword": "Wrong password",
   "unknownError": "An unknown error has occurred",
   "userNotFound": "There is no user with the given username",
-  "noTokenGenerated": "Couldn't generate user token"
+  "noTokenGenerated": "Couldn't generate user token",
+  "errorPostAttachmentTooBig": "Attachment too big!"
 }
