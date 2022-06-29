@@ -25,19 +25,23 @@ class SpqButtonNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
             icon: Icon(Icons.home, color: spqDarkGrey),
             activeIcon: Icon(Icons.home, color: spqPrimaryBlue),
-            label: 'Home'),
+            label: 'Home'
+        ),
         BottomNavigationBarItem(
             icon: Icon(Icons.search, color: spqDarkGrey),
             activeIcon: Icon(Icons.search, color: spqPrimaryBlue),
-            label: 'Search'),
+            label: 'Search'
+        ),
         BottomNavigationBarItem(
             icon: Icon(Icons.notifications, color: spqDarkGrey),
             activeIcon: Icon(Icons.notifications, color: spqPrimaryBlue),
-            label: 'Notification'),
+            label: 'Notification'
+        ),
         BottomNavigationBarItem(
             icon: Icon(Icons.message, color: spqDarkGrey),
             activeIcon: Icon(Icons.message, color: spqPrimaryBlue),
-            label: 'Message'),
+            label: 'Message'
+        ),
       ],
       currentIndex: selectedIndex,
       onTap: switchPage,

@@ -154,7 +154,8 @@ class _FollowPageState extends State<FollowPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: ShimmerCube(
-                    width: double.infinity, height: deviceSize.height * 0.024))
+                    width: double.infinity, height: deviceSize.height * 0.024)
+            )
         ],
       ),
     );
@@ -189,7 +190,8 @@ class _FollowPageState extends State<FollowPage> {
       child: ListView.builder(
           shrinkWrap: false,
           physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics()),
+              parent: BouncingScrollPhysics()
+          ),
           itemBuilder: (context, index) {
             CondensedUser currentFollower = followUserList[index];
 
@@ -198,7 +200,8 @@ class _FollowPageState extends State<FollowPage> {
               onPop: refresh,
             );
           },
-          itemCount: followUserList.length),
+          itemCount: followUserList.length
+      ),
     );
   }
 

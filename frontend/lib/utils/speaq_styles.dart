@@ -46,7 +46,7 @@ final ThemeData spqLightTheme = ThemeData(
     visualDensity: VisualDensity.adaptivePlatformDensity,
     errorColor: spqErrorRed,
     shadowColor: spqLightGreyTranslucent,
-    //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
+    //MOCKUP-Font (POPPINS) as default font.
     textTheme: spqTextTheme);
 
 final ThemeData spqDarkTheme = ThemeData(
@@ -61,6 +61,6 @@ final ThemeData spqDarkTheme = ThemeData(
     visualDensity: VisualDensity.adaptivePlatformDensity,
     errorColor: spqErrorRed,
     shadowColor: spqLightGreyTranslucent,
-    //MOCKUP-SCHRIFTART (POPPINS) ALS STANDARDFONT
+    //MOCKUP-Font (POPPINS) as default font.
     textTheme: spqTextTheme);
 //endregion
