@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 class BackendUtils {
   static String _host = "api.speaq.app";
-  static int _port = 443;
+  static int _port = 1337;
 
   static init({
     String? host,
