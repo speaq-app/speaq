@@ -87,7 +87,7 @@ var (
 			}
 
 			srv := grpc.NewServer(
-				grpc.MaxRecvMsgSize(1024*1024*50),
+				grpc.MaxRecvMsgSize(1024*1024*1024),
 				grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 					grpc_auth.StreamServerInterceptor(middleware.Auth(tokenService)),
 				)),
