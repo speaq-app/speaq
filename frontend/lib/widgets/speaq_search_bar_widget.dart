@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/blocs/search_bloc/search_bloc.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 
+/// Custom [Searchbar] used for instance in [MessagesPage] and [SearchPage].
 class SpqSearchBar extends StatelessWidget {
   final SearchBloc searchBloc;
   final String hintText;

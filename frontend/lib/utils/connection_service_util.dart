@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/token_utils.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-/*Geht zurück zum Ursprung des Widget-Trees und ruft die Login-Seite auf*/
+/// Goes back to the origin of the widget tree and calls the login page.
 void logOut(BuildContext context) {
   TokenUtils.setToken(null).then((_) {
     Navigator.popUntil(context, ModalRoute.withName("main"));
@@ -94,7 +94,7 @@ class ConnectionUtilSingleton {
       );
     }
 
-    // Todo : showDialog for ios
+    // Todo : ShowDialog for ios
     return showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(

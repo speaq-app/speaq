@@ -3,7 +3,6 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 /// Width should be between 1 and 100; representing a percentage of the available space.
-///
 /// Height should be between 1 and 100; representing a percentage of the available space.
 class ShimmerCube extends StatelessWidget {
   final double width;

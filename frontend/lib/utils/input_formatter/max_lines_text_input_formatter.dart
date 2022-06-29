@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/services.dart';
-// Source https://stackoverflow.com/questions/59427590/flutter-multiline-with-max-lines
+// * Source https://stackoverflow.com/questions/59427590/flutter-multiline-with-max-lines
 
 class MaxLinesTextInputFormatter extends TextInputFormatter {
   MaxLinesTextInputFormatter(this.maxLines) : assert(maxLines == -1 || maxLines > 0);
@@ -9,13 +9,14 @@ class MaxLinesTextInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue, // unused.
+    TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
     if (maxLines <= 0) {
       return newValue;
     }
 
+    /// Format a String with following symbols.
     final regEx = RegExp("^.*((\n?.*){0,${maxLines - 1}})");
     String newString = regEx.stringMatch(newValue.text) ?? "";
     final maxLength = newString.length;

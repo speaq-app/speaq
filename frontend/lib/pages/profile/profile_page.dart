@@ -21,7 +21,8 @@ class ProfilePage extends StatefulWidget {
   const ProfilePage({
     Key? key,
     required this.pageUserID,
-    this.isOwnPage = false, this.initialPageIndex = 0,
+    this.isOwnPage = false,
+    this.initialPageIndex = 0,
   }) : super(key: key);
 
   @override
@@ -34,17 +35,14 @@ class ProfilePageState extends State<ProfilePage> {
   final FollowerBloc _pageUserFollowerBloc = FollowerBloc();
   final FollowerBloc _followUnfollowBloc = FollowerBloc();
 
-  // Background picture.
-  final String _backgroundImage = "https://cdn0.scrvt.com/5b9bbd140a15e188780a6244ebe572d4/772147c289ad227c/ca6d6d455211/v/1abab81df2ad/C_Sont_001_300dpi.jpg";
+  final String _backgroundImage =
+      "https://cdn0.scrvt.com/5b9bbd140a15e188780a6244ebe572d4/772147c289ad227c/ca6d6d455211/v/1abab81df2ad/C_Sont_001_300dpi.jpg";
 
-  // Follower.
   List<int> _followerIDs = [];
   List<int> _followingIDs = [];
 
-  // App User (get at login).
   late Profile _profile;
 
-  // User-Data.
   final String _joined = "Joined August 2022";
 
   @override
@@ -57,9 +55,9 @@ class ProfilePageState extends State<ProfilePage> {
   Future<void> _loadPage() async {
     _profileBloc.add(LoadProfile(userId: widget.pageUserID));
     if (!widget.isOwnPage) {
-      _followUnfollowBloc.add(CheckIfFollowing(userID: 0, followerID: widget.pageUserID));
+      _followUnfollowBloc
+          .add(CheckIfFollowing(userID: 0, followerID: widget.pageUserID));
     }
-
   }
 
   @override
@@ -76,7 +74,8 @@ class ProfilePageState extends State<ProfilePage> {
           onRefresh: () => _loadPage(),
           child: ListView(
             shrinkWrap: true,
-            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
             children: [
               _buildProfileCover(deviceSize, context),
               _buildProfileStack(appLocale, deviceSize),
@@ -116,9 +115,11 @@ class ProfilePageState extends State<ProfilePage> {
         listener: (context, state) {
           if (state is ProfileLoaded) {
             if (state.profile.profileImageResourceId > 0) {
-              _resourceBloc.add(LoadResource(resourceId: state.profile.profileImageResourceId));
+              _resourceBloc.add(LoadResource(
+                  resourceId: state.profile.profileImageResourceId));
             }
-            _pageUserFollowerBloc.add(LoadFollowerIDs(userId: widget.pageUserID));
+            _pageUserFollowerBloc
+                .add(LoadFollowerIDs(userId: widget.pageUserID));
             _profile = state.profile;
           }
         },
@@ -134,7 +135,8 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfilePage(Size deviceSize, AppLocalizations appLocale, Profile profile) {
+  Widget _buildProfilePage(
+      Size deviceSize, AppLocalizations appLocale, Profile profile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -151,7 +153,8 @@ class ProfilePageState extends State<ProfilePage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: _buildProfileInformation(context, appLocale, deviceSize, profile),
+          child:
+              _buildProfileInformation(context, appLocale, deviceSize, profile),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -191,41 +194,56 @@ class ProfilePageState extends State<ProfilePage> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: widget.isOwnPage
           ? SpqTextButton(
-              onPressed: () => Navigator.pushNamed(context, 'edit_profile').then((value) => _profileBloc.add(LoadProfile(userId: 0))),
+              onPressed: () => Navigator.pushNamed(context, 'edit_profile')
+                  .then((value) => _profileBloc.add(LoadProfile(userId: 0))),
               name: appLocale.editProfile,
               textStyle: const TextStyle(color: spqPrimaryBlue),
             )
-            // Selects the appropriate state and returns the right button.
+          // Selects the appropriate state and returns the right button.
           : BlocBuilder<FollowerBloc, FollowerState>(
               bloc: _followUnfollowBloc,
               builder: (context, state) {
                 if (state is CheckIfFollowingLoaded) {
                   return SpqTextButton(
                     onPressed: () {
-                      _followUnfollowBloc.add(FollowUnfollow(userID: 0, followerID: widget.pageUserID));
+                      _followUnfollowBloc.add(FollowUnfollow(
+                          userID: 0, followerID: widget.pageUserID));
                       _loadPage();
                     },
-                    name: state.isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
-                    textStyle: TextStyle(color: state.isFollowing ? spqLightRed : spqPrimaryBlue),
-                    borderColor: state.isFollowing ? spqLightRed : spqPrimaryBlue,
+                    name: state.isFollowing
+                        ? appLocale.toUnfollow
+                        : appLocale.toFollow,
+                    textStyle: TextStyle(
+                        color:
+                            state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor:
+                        state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
                 } else if (state is FollowUnfollowLoaded) {
                   return SpqTextButton(
                     onPressed: () {
-                      _followUnfollowBloc.add(FollowUnfollow(userID: 0, followerID: widget.pageUserID));
+                      _followUnfollowBloc.add(FollowUnfollow(
+                          userID: 0, followerID: widget.pageUserID));
                       _loadPage();
                     },
-                    name: state.isFollowing ? appLocale.toUnfollow : appLocale.toFollow,
-                    textStyle: TextStyle(color: state.isFollowing ? spqLightRed : spqPrimaryBlue),
-                    borderColor: state.isFollowing ? spqLightRed : spqPrimaryBlue,
+                    name: state.isFollowing
+                        ? appLocale.toUnfollow
+                        : appLocale.toFollow,
+                    textStyle: TextStyle(
+                        color:
+                            state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                    borderColor:
+                        state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
                 }
                 return Container(
-                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: ShimmerCube(
-                      width: deviceSize.width * 0.01,
-                      height: deviceSize.height * 0.01,
-                    ));
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: ShimmerCube(
+                    width: deviceSize.width * 0.01,
+                    height: deviceSize.height * 0.01,
+                  ),
+                );
               },
             ),
     );
@@ -233,68 +251,72 @@ class ProfilePageState extends State<ProfilePage> {
 
   Widget _buildProfilePicture(Size deviceSize, Profile profile) {
     return BlocBuilder<ResourceBloc, ResourceState>(
-        bloc: _resourceBloc,
-        builder: (context, state) {
-          if (state is ResourceLoaded) {
-            if (state.resource.id > 0) {
-              return GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => _buildProfileImageFullScreen(context, state.decodedData),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      return child;
-                    },
-                  ),
+      bloc: _resourceBloc,
+      builder: (context, state) {
+        if (state is ResourceLoaded) {
+          if (state.resource.id > 0) {
+            return GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      _buildProfileImageFullScreen(context, state.decodedData),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return child;
+                  },
                 ),
-                child: Hero(
-                  tag: 'myProfileImage',
+              ),
+              child: Hero(
+                tag: 'myProfileImage',
+                child: CircleAvatar(
+                  backgroundColor: spqWhite,
+                  radius: 45,
                   child: CircleAvatar(
-                    backgroundColor: spqWhite,
-                    radius: 45,
-                    child: CircleAvatar(
-                      radius: 43,
-                      backgroundImage: MemoryImage(state.decodedData),
-                    ),
+                    radius: 43,
+                    backgroundImage: MemoryImage(state.decodedData),
                   ),
                 ),
-              );
-            } else {
-              return Container(
-                width: 150,
-                height: 150,
-                decoration: const BoxDecoration(
-                  color: spqPrimaryBlue,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.add_a_photo,
-                    color: spqWhite,
-                    size: 38,
-                  ),
-                ),
-              );
-            }
-          } else if (profile.profileImageBlurHash.isNotEmpty) {
-            return CircleAvatar(
-              backgroundColor: spqWhite,
-              radius: 45,
-              child: CircleAvatar(
-                radius: 43,
-                backgroundImage: BlurHashImage(profile.profileImageBlurHash),
               ),
             );
           } else {
-            return CircleAvatar(
-              backgroundColor: spqPrimaryBlue,
-              radius: 45,
-              child: Text(profile.name[0].toUpperCase()),
+            return Container(
+              width: 150,
+              height: 150,
+              decoration: const BoxDecoration(
+                color: spqPrimaryBlue,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.add_a_photo,
+                  color: spqWhite,
+                  size: 38,
+                ),
+              ),
             );
           }
-        });
+        } else if (profile.profileImageBlurHash.isNotEmpty) {
+          return CircleAvatar(
+            backgroundColor: spqWhite,
+            radius: 45,
+            child: CircleAvatar(
+              radius: 43,
+              backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+            ),
+          );
+        } else {
+          return CircleAvatar(
+            backgroundColor: spqPrimaryBlue,
+            radius: 45,
+            child: Text(profile.name[0].toUpperCase()),
+          );
+        }
+      },
+    );
   }
 
-  Widget _buildProfileImageFullScreen(BuildContext context, Uint8List decodedData) {
+  Widget _buildProfileImageFullScreen(
+      BuildContext context, Uint8List decodedData) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -321,7 +343,8 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfileInformation(BuildContext context, AppLocalizations appLocale, Size deviceSize, Profile profile) {
+  Widget _buildProfileInformation(BuildContext context,
+      AppLocalizations appLocale, Size deviceSize, Profile profile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -539,13 +562,14 @@ class ProfilePageState extends State<ProfilePage> {
         SizedBox(
           height: deviceSize.height * 0.75,
           child: Container(
-              color: spqPrimaryBlue,
-              child: const Center(
-                child: Text(
-                  "coming soon...",
-                  style: TextStyle(fontSize: 25),
-                ),
-              )),
+            color: spqPrimaryBlue,
+            child: const Center(
+              child: Text(
+                "coming soon...",
+                style: TextStyle(fontSize: 25),
+              ),
+            ),
+          ),
         ),
       ],
     );

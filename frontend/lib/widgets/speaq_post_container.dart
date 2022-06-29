@@ -239,6 +239,7 @@ class _PostContainerState extends State<PostContainer> {
     final DateFormat formatter = DateFormat("d. MMMM y");
     return appLocale.dateAt + formatter.format(widget.creationTime);
   }
+
   /// Selects the correct case for different Post-Types.
   Widget _buildCorrectPostItem() {
     return BlocBuilder<ResourceBloc, ResourceState>(

@@ -1,4 +1,3 @@
-
 const int maxUsernameLength = 16;
 const int maxNameLength = 20;
 const int maxPasswordLength = 32;

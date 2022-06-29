@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 
+/// Custom bottom navigation bar used in all Main-Pages.
 class SpqButtonNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final void Function(int) switchPage;

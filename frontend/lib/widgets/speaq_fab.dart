@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 
+/// Custom action button used in [HomePage].
 class SpqFloatingActionButton extends StatelessWidget {
   final Widget child;
   final String heroTag;
