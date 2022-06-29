@@ -23,8 +23,7 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
   void _onLoadResource(LoadResource event, Emitter<ResourceState> emit) async {
     emit(ResourceLoading());
     var resource = await _resourceService.getResource(event.resourceId);
-    var decodedData = base64Decode(resource.data);
 
-    emit(ResourceLoaded(resource, decodedData));
+    emit(ResourceLoaded(resource, Uint8List.fromList(resource.data)));
   }
 }

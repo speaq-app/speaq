@@ -62,14 +62,14 @@ class GRPCPostService implements PostService {
   @override
   Future<void> createPost({
     required String description,
-    String? resourceDataInBase64,
+    List<int>? resourceData,
     String? resourceMimeType,
     Duration? audioDuration,
   }) async {
     await _client.createPost(
       CreatePostRequest()
         ..description = description
-        ..resourceData = resourceDataInBase64 ?? ""
+        ..resourceData = resourceData ?? <int>[]
         ..resourceMimeType = resourceMimeType ?? ""
         ..audioDuration =
             Int64((audioDuration ?? Duration.zero).inMilliseconds),

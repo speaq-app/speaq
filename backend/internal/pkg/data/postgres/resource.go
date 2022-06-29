@@ -22,6 +22,6 @@ WHERE id = $1;
 	return r, nil
 }
 
-func (s Service) CreateResource(bb string, mimeType string, audioDuration int64) (data.Resource, error) {
+func (s Service) CreateResource(bb []byte, mimeType string, audioDuration int64) (data.Resource, error) {
 	panic("implement me")
 }

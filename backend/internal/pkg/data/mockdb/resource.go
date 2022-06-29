@@ -25,11 +25,11 @@ func (s service) nextResourceID() int64 {
 	return nextID
 }
 
-func (s service) CreateResource(dataa, mimeType string, audioDuration int64) (data.Resource, error) {
+func (s service) CreateResource(bb []byte, mimeType string, audioDuration int64) (data.Resource, error) {
 	resourceID := s.nextResourceID()
 	resource := data.Resource{
 		ID:            resourceID,
-		Data:          dataa,
+		Data:          bb,
 		MIMEType:      mimeType,
 		AudioDuration: audioDuration,
 	}

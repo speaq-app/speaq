@@ -8,7 +8,7 @@ class Resource extends HiveObject {
   final int id;
 
   @HiveField(1)
-  final String data;
+  final List<int> data;
 
   @HiveField(2)
   final String mimeType;
