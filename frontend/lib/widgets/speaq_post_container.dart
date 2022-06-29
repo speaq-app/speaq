@@ -284,7 +284,7 @@ class _PostContainerState extends State<PostContainer> {
       },
     );
   }
-
+  /// Builds a row with comment, like, share and bookmark icon.
   Widget _buildReactionList() {
     return Column(
       children: [

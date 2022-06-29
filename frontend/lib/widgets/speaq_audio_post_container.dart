@@ -26,7 +26,10 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
   bool _playerIsInited = false;
   StreamSubscription? _playerSubscription;
 
+  // Duration of Voice-Message.
   late int _duration;
+
+  // Progress of Time and Slider.
   int _progress = 0;
 
   @override
@@ -79,7 +82,6 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
     if (!_playerIsInited) {
       return;
     }
-
     if (_player.isPaused) {
       _player.resumePlayer().then((value) => setState(() {}));
     } else if (_player.isStopped) {
@@ -89,6 +91,7 @@ class _SpqAudioPostContainerState extends State<SpqAudioPostContainer> {
     }
   }
 
+  /// Builds the Voice-Message Ui.
   @override
   Widget build(BuildContext context) {
     return Row(
