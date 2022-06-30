@@ -10,7 +10,6 @@ class BackendUtils {
   static init({
     String? host,
   }) async {
-    return;
     if (!kDebugMode) {
       return;
     }

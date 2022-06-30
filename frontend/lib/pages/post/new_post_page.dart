@@ -14,6 +14,7 @@ import 'package:frontend/blocs/post_bloc/post_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/widgets/speaq_audio_post_container.dart';
+import 'package:image/image.dart' as image;
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -424,27 +425,30 @@ class _NewPostPageState extends State<NewPostPage> {
         break;
       case _PostAttachments.image:
         data = await _pickedImage!.readAsBytes();
-        mimeType = _pickedImage!.mimeType!;
-        mimeType = "image";
+        var decoder = image.findDecoderForData(data);
+        if (decoder == null) {
+          return _errorUnsupportedImageType(appLocale);
+        }
+
+        if (decoder.runtimeType == image.GifDecoder) {
+          mimeType = "image/gif";
+          break;
+        }
+
+        var img = decoder.decodeImage(data);
+        if (img == null) {
+          return _errorWhileDecodingImage(appLocale);
+        }
+
+        data = Uint8List.fromList(image.encodeJpg(img));
+        mimeType = "image/jpeg";
         break;
       case _PostAttachments.none:
         break;
     }
 
     if (data != null && data.length > maxPostAttachmentSize) {
-      setState(() {
-        Flushbar(
-          messageText: Text(
-            appLocale.errorPostAttachmentTooBig,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: spqWhite),
-          ),
-          duration: const Duration(seconds: 3),
-          backgroundColor: spqPrimaryBlue,
-        ).show(context);
-        _postAttachment = _PostAttachments.none;
-      });
-      return;
+      return _errorAttachmentTooBig(appLocale);
     }
 
     _postBloc.add(CreatePost(
@@ -453,6 +457,33 @@ class _NewPostPageState extends State<NewPostPage> {
       resourceMimeType: mimeType,
       audioDuration: _audioDuration,
     ));
+  }
+
+  void _errorAttachmentTooBig(AppLocalizations appLocale) {
+    _errorWithAttachment(appLocale.errorPostAttachmentTooBig);
+  }
+
+  void _errorWhileDecodingImage(AppLocalizations appLocale) {
+    _errorWithAttachment(appLocale.errorPostAttachmentTooBig);
+  }
+
+  void _errorUnsupportedImageType(AppLocalizations appLocale) {
+    _errorWithAttachment("error while decoding image");
+  }
+
+  void _errorWithAttachment(String message) {
+    setState(() {
+      Flushbar(
+        messageText: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: spqWhite),
+        ),
+        duration: const Duration(seconds: 3),
+        backgroundColor: spqPrimaryBlue,
+      ).show(context);
+      _postAttachment = _PostAttachments.none;
+    });
   }
 
   Widget _buildAudioKeyboard(Size deviceSize) {

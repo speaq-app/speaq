@@ -3,7 +3,7 @@ package post
 import (
 	"bytes"
 	"context"
-	"image"
+	"image/jpeg"
 
 	"github.com/buckket/go-blurhash"
 	"github.com/speaq-app/speaq/internal/pkg/data"
@@ -28,7 +28,7 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 
 	var blurHash string
 	if r.MIMEType == "image" {
-		img, _, err := image.Decode(bytes.NewReader(req.ResourceData))
+		img, err := jpeg.Decode(bytes.NewReader(req.ResourceData))
 		if err != nil {
 			return nil, err
 		}

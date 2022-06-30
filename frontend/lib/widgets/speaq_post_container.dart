@@ -258,36 +258,25 @@ class _PostContainerState extends State<PostContainer> {
       builder: (context, state) {
         if (state is ResourceLoaded) {
           switch (widget.resourceMimeType) {
-            case "image":
+            case "image/gif":
+            case "image/jpeg":
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image(image: MemoryImage(state.decodedData)),
               );
-
-            case "gif":
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image(image: MemoryImage(state.decodedData)),
-              );
-
             case "audio/pcm16":
               return SpqAudioPostContainer(
                 audioData: state.decodedData,
                 durationInMillis: state.resource.audioDurationInMillis,
               );
-
             case "audio/mp3":
               return SpqAudioPostContainer(
                 audioData: state.decodedData,
                 durationInMillis: state.resource.audioDurationInMillis,
                 codec: Codec.mp3,
               );
-
-            case "video":
-              return const Text("Video Type not implemented");
-
             default:
-              return const SizedBox(height: 0);
+              return const Text("Media Type not implemented yet");
           }
         } else if (widget.resourceBlurHash.isNotEmpty) {
           return ClipRRect(
