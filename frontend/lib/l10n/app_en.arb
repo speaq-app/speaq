@@ -109,5 +109,9 @@
   "unknownError": "An unknown error has occurred",
   "userNotFound": "There is no user with the given username",
   "noTokenGenerated": "Couldn't generate user token",
-  "errorPostAttachmentTooBig": "Attachment too big!"
+  "errorPostAttachmentTooBig": "Attachment too big",
+  "errorWhileDecodingImage": "Failed to decode image",
+  "errorUnsupportedImageType": "Image Type is not supported",
+  "processing": "Processing",
+  "uploadingPost": "Uploading Post"
 }

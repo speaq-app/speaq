@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/api/cache/cache_resource_service.dart';
 import 'package:frontend/api/grpc/grpc_resource_service.dart';
 import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/resource_service.dart';

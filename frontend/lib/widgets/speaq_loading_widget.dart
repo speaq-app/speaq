@@ -4,28 +4,31 @@ import 'package:frontend/utils/all_utils.dart';
 
 class SpqLoadingWidget extends StatelessWidget {
   final double radius;
+  final Widget? child;
 
   const SpqLoadingWidget(
     this.radius, {
     Key? key,
+    this.child,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.maxFinite,
-      height: double.maxFinite,
       color: spqWhite,
-      child: Stack(
+      child: Column(
         children: [
-          Positioned.fill(
-            child: Center(
-              child: SpinKitWave(
-                color: spqPrimaryBlue,
-                size: radius,
-              ),
+          Expanded(
+            flex: 4,
+            child: SpinKitWave(
+              color: spqPrimaryBlue,
+              size: radius,
             ),
-          )
+          ),
+          if (child != null)
+            Expanded(
+              child: child!,
+            ),
         ],
       ),
     );

@@ -17,7 +17,6 @@ class _BasePageState extends State<BasePage> {
   late ConnectionUtilSingleton connectionStatus;
   bool hasInternetConnection = true;
 
-
   /*Methode setzt die boolean Variable, welche angibt, ob eine aktive Verbindung zum Internet besteht
   * und ruft bei keine Internetverbindung einen Alert-Dialog auf*/
   void _connectionChanged(dynamic hasConnection) {
@@ -31,8 +30,10 @@ class _BasePageState extends State<BasePage> {
 
   late final List<Widget> _pages;
   late List<String> pageTitles;
-  late final ValueNotifier _selectedIndexNotifier = ValueNotifier<int>(widget.initialPage);
-  late final PageController _pageController = PageController(initialPage: widget.initialPage);
+  late final ValueNotifier _selectedIndexNotifier =
+      ValueNotifier<int>(widget.initialPage);
+  late final PageController _pageController =
+      PageController(initialPage: widget.initialPage);
 
   void _switchPage(int index) {
     _selectedIndexNotifier.value = index;

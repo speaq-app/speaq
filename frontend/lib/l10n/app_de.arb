@@ -110,5 +110,9 @@
   "unknownError": "Es ist ein unbekannter Fehler aufgetreten",
   "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen",
   "noTokenGenerated": "Es konnte kein User-token generiert werden",
-  "errorPostAttachmentTooBig": "Anhang zu groß!"
+  "errorPostAttachmentTooBig": "Anhang zu groß",
+  "errorWhileDecodingImage": "Bild konnte nicht dekodiert werden",
+  "errorUnsupportedImageType": "Bild-Typ wird nicht unterstützt",
+  "processing": "Bearbeiten",
+  "uploadingPost": "Post wird hochgeladen"
 }

@@ -18,8 +18,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   );
 
   PostBloc() : super(PostInitial()) {
+    on<ProcessingPost>(_onProcessingPost);
     on<CreatePost>(_onCreatePost);
     on<LoadPosts>(_onLoadPosts);
+  }
+
+  void _onProcessingPost(ProcessingPost event, Emitter<PostState> emit) async {
+    emit(PostProcessing(event.message));
   }
 
   void _onCreatePost(CreatePost event, Emitter<PostState> emit) async {

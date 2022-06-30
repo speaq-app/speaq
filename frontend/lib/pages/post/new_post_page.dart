@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -41,6 +42,7 @@ class _NewPostPageState extends State<NewPostPage> {
   var _audioDuration = Duration.zero;
   StreamSubscription? _recordingDataSubscription;
   StreamSubscription? _keyboardSubscription;
+  final _jpegEncoder = image.JpegEncoder(quality: 30);
   XFile? _pickedImage;
 
   String spqImage = "assets/images/logo/speaq_logo.svg";
@@ -102,42 +104,51 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
     AppLocalizations appLocale = AppLocalizations.of(context)!;
-    return SafeArea(
-      child: KeyboardDismissOnTap(
-        dismissOnCapturedTaps: true,
-        child: BlocConsumer<PostBloc, PostState>(
-          bloc: _postBloc,
-          listener: (context, state) async {
-            if (state is PostSaved) {
-              Navigator.pop(context);
-            }
-          },
-          builder: (context, state) {
-            if (state is PostSaving) {
-              return SpqLoadingWidget(
-                MediaQuery.of(context).size.shortestSide * 0.15,
-              );
-            } else {
-              return Scaffold(
-                appBar: SpqAppBar(
-                  preferredSize: deviceSize,
-                  actionList: [
-                    _buildSendPostButton(appLocale),
-                  ],
-                ),
-                body: Column(
-                  children: [
-                    Expanded(
-                      child: _buildAttachmentPreview(deviceSize),
-                    ),
-                    _buildInputRow(),
-                    _buildEmojiKeyboard(appLocale),
-                    _buildAudioKeyboard(deviceSize),
-                  ],
-                ),
-              );
-            }
-          },
+    return Scaffold(
+      body: SafeArea(
+        child: KeyboardDismissOnTap(
+          dismissOnCapturedTaps: true,
+          child: BlocConsumer<PostBloc, PostState>(
+            bloc: _postBloc,
+            listener: (context, state) async {
+              if (state is PostSaved) {
+                Navigator.pop(context);
+              }
+            },
+            builder: (context, state) {
+              if (state is PostProcessing) {
+                return SpqLoadingWidget(
+                  MediaQuery.of(context).size.shortestSide * 0.15,
+                  child: Text(state.message),
+                );
+              }
+              if (state is PostSaving) {
+                return SpqLoadingWidget(
+                  MediaQuery.of(context).size.shortestSide * 0.15,
+                  child: Text(appLocale.uploadingPost),
+                );
+              } else {
+                return Scaffold(
+                  appBar: SpqAppBar(
+                    preferredSize: deviceSize,
+                    actionList: [
+                      _buildSendPostButton(appLocale),
+                    ],
+                  ),
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: _buildAttachmentPreview(deviceSize),
+                      ),
+                      _buildInputRow(),
+                      _buildEmojiKeyboard(appLocale),
+                      _buildAudioKeyboard(deviceSize),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );
@@ -377,7 +388,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Widget _buildSendPostButton(AppLocalizations appLocale) {
     return TextButton(
-      onPressed: () {
+      onPressed: () async {
         setState(() {
           _switchKeyboard(_Keyboards.none);
         });
@@ -415,6 +426,7 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   Future<void> _createPost(AppLocalizations appLocale) async {
+    _postBloc.add(ProcessingPost("${appLocale.processing} 0%"));
     Uint8List? data;
     String? mimeType;
 
@@ -435,17 +447,23 @@ class _NewPostPageState extends State<NewPostPage> {
           break;
         }
 
-        var img = decoder.decodeImage(data);
+        _postBloc.add(ProcessingPost("${appLocale.processing} 30%"));
+        var img = await foundation.compute(decoder.decodeImage, data);
         if (img == null) {
           return _errorWhileDecodingImage(appLocale);
         }
 
-        data = Uint8List.fromList(image.encodeJpg(img));
+        _postBloc.add(ProcessingPost("${appLocale.processing} 60%"));
+
+        var jpegData = await foundation.compute(_jpegEncoder.encodeImage, img);
+        data = Uint8List.fromList(jpegData);
         mimeType = "image/jpeg";
         break;
       case _PostAttachments.none:
         break;
     }
+
+    _postBloc.add(ProcessingPost("${appLocale.processing} 100%"));
 
     if (data != null && data.length > maxPostAttachmentSize) {
       return _errorAttachmentTooBig(appLocale);
@@ -464,11 +482,11 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   void _errorWhileDecodingImage(AppLocalizations appLocale) {
-    _errorWithAttachment(appLocale.errorPostAttachmentTooBig);
+    _errorWithAttachment(appLocale.errorWhileDecodingImage);
   }
 
   void _errorUnsupportedImageType(AppLocalizations appLocale) {
-    _errorWithAttachment("error while decoding image");
+    _errorWithAttachment(appLocale.errorUnsupportedImageType);
   }
 
   void _errorWithAttachment(String message) {

@@ -38,20 +38,19 @@ class GRPCPostService implements PostService {
     List<Post> postList = <Post>[];
 
     for (int i = 0; i < response.postList.length; i++) {
-      log(response.postList.elementAt(i).date.toString());
+      var post = response.postList.elementAt(i);
       postList.add(
         Post(
-          id: response.postList.elementAt(i).postId.toInt(),
-          resourceID: response.postList.elementAt(i).resourceId.toInt(),
-          date: DateTime.fromMillisecondsSinceEpoch(
-              response.postList.elementAt(i).date.toInt() * 1000,
+          id: post.postId.toInt(),
+          resourceID: post.resourceId.toInt(),
+          date: DateTime.fromMillisecondsSinceEpoch(post.date.toInt() * 1000,
               isUtc: true),
-          description: response.postList.elementAt(i).description,
-          ownerID: response.postList.elementAt(i).ownerId.toInt(),
-          numberOfLikes: response.postList.elementAt(i).numberOfLikes.toInt(),
-          numberOfComments:
-              response.postList.elementAt(i).numberOfComments.toInt(),
-          mimeType: response.postList.elementAt(i).resourceMimeType,
+          description: post.description,
+          ownerID: post.ownerId.toInt(),
+          numberOfLikes: post.numberOfLikes.toInt(),
+          numberOfComments: post.numberOfComments.toInt(),
+          resourceMimeType: post.resourceMimeType,
+          resourceBlurHash: post.resourceBlurHash,
         ),
       );
     }
