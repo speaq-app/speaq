@@ -59,8 +59,9 @@ func TestGetResource(t *testing.T) {
 				return
 			}
 
-			if bytes.Equal(resp.Data, tc.resource.Data) ||
-				resp.MimeType != tc.resource.MIMEType {
+			if !bytes.Equal(resp.Data, tc.resource.Data) ||
+				resp.MimeType != tc.resource.MIMEType ||
+				resp.AudioDuration != tc.resource.AudioDuration {
 				t.Fail()
 			}
 		})
