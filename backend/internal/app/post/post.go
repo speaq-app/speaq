@@ -27,7 +27,7 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 	}
 
 	var blurHash string
-	if r.MIMEType == "image" {
+	if r.MIMEType == "image/jpeg" {
 		img, err := jpeg.Decode(bytes.NewReader(req.ResourceData))
 		if err != nil {
 			return nil, err
