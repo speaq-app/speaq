@@ -424,6 +424,7 @@ class _NewPostPageState extends State<NewPostPage> {
         break;
       case _PostAttachments.image:
         data = await _pickedImage!.readAsBytes();
+        mimeType = _pickedImage!.mimeType!;
         mimeType = "image";
         break;
       case _PostAttachments.none:

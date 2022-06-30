@@ -36,4 +36,5 @@ message SinglePost {
     int64 number_of_comments = 6;
     int64 resource_id = 7;
     string resource_mime_type = 8;
+    string resource_blur_hash = 9;
 }

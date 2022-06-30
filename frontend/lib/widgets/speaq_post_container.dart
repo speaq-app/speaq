@@ -21,6 +21,7 @@ class PostContainer extends StatefulWidget {
   final String postMessage;
 
   final int resourceID;
+  final String resourceBlurHash;
 
   const PostContainer({
     Key? key,
@@ -31,6 +32,7 @@ class PostContainer extends StatefulWidget {
     required this.resourceMimeType,
     this.resourceID = 0,
     this.postMessage = "",
+    this.resourceBlurHash = "",
   }) : super(key: key);
 
   @override
@@ -75,7 +77,8 @@ class _PostContainerState extends State<PostContainer> {
         if (state is ProfileLoaded) {
           var profileImageResourceId = state.profile.profileImageResourceId;
           if (profileImageResourceId > 0) {
-            _resourceBlocProfile.add(LoadResource(resourceId: profileImageResourceId));
+            _resourceBlocProfile
+                .add(LoadResource(resourceId: profileImageResourceId));
           }
         }
       },
@@ -99,7 +102,8 @@ class _PostContainerState extends State<PostContainer> {
                 } else if (profile.profileImageBlurHash.isNotEmpty) {
                   return CircleAvatar(
                     radius: 24,
-                    backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+                    backgroundImage:
+                        BlurHashImage(profile.profileImageBlurHash),
                   );
                 } else {
                   return CircleAvatar(
@@ -149,7 +153,8 @@ class _PostContainerState extends State<PostContainer> {
                 flex: 3,
                 child: Text(
                   state.profile.name,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.clip,
                   softWrap: false,
@@ -200,16 +205,20 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime, end: DateTime.now());
+    final DateTimeRange calculatedDateTime =
+        DateTimeRange(start: widget.creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
-      return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
+      return calculatedDateTime.duration.inSeconds.toString() +
+          appLocale.secondsAgo;
     }
     if (calculatedDateTime.duration.inMinutes < 2) {
-      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minuteAgo;
+      return calculatedDateTime.duration.inMinutes.toString() +
+          appLocale.minuteAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 1) {
-      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minutesAgo;
+      return calculatedDateTime.duration.inMinutes.toString() +
+          appLocale.minutesAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 2) {
@@ -217,7 +226,8 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 1) {
-      return calculatedDateTime.duration.inHours.toString() + appLocale.hoursAgo;
+      return calculatedDateTime.duration.inHours.toString() +
+          appLocale.hoursAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 2) {
@@ -229,11 +239,13 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 14) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weekAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
+          appLocale.weekAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 31) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weeksAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
+          appLocale.weeksAgo;
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");
@@ -277,8 +289,15 @@ class _PostContainerState extends State<PostContainer> {
             default:
               return const SizedBox(height: 0);
           }
+        } else if (widget.resourceBlurHash.isNotEmpty) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image(image: BlurHashImage(widget.resourceBlurHash)),
+          );
         } else {
-          return const SizedBox(height: 0);
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
       },
     );

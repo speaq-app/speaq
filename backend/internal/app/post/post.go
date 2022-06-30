@@ -1,8 +1,11 @@
 package post
 
 import (
+	"bytes"
 	"context"
+	"image"
 
+	"github.com/buckket/go-blurhash"
 	"github.com/speaq-app/speaq/internal/pkg/data"
 	"github.com/speaq-app/speaq/internal/pkg/middleware"
 )
@@ -23,7 +26,19 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 		return nil, err
 	}
 
-	p, err := s.DataService.CreatePost(userID, req.Description, r.ID, r.MIMEType)
+	var blurHash string
+	if r.MIMEType == "image" {
+		img, _, err := image.Decode(bytes.NewReader(req.ResourceData))
+		if err != nil {
+			return nil, err
+		}
+		blurHash, err = blurhash.Encode(4, 3, img)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	p, err := s.DataService.CreatePost(userID, req.Description, r.ID, r.MIMEType, blurHash)
 	if err != nil {
 		return nil, err
 	}
@@ -36,6 +51,7 @@ func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*Create
 			Description:      p.Description,
 			ResourceId:       r.ID,
 			ResourceMimeType: r.MIMEType,
+			ResourceBlurHash: p.ResourceBlurHash,
 			NumberOfLikes:    int64(len(p.LikeIDs)),
 			NumberOfComments: int64(len(p.CommentIDs)),
 		},
@@ -70,6 +86,7 @@ func (s Server) GetPostFeed(ctx context.Context, req *GetPostFeedRequest) (*GetP
 			Description:      post.Description,
 			ResourceId:       post.ResourceID,
 			ResourceMimeType: post.ResourceMimeType,
+			ResourceBlurHash: post.ResourceBlurHash,
 			NumberOfLikes:    int64(len(post.LikeIDs)),
 			NumberOfComments: int64(len(post.CommentIDs)),
 		})

@@ -42,7 +42,7 @@ func (s service) nextPostID() int64 {
 	return nextID
 }
 
-func (s service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType string) (data.Post, error) {
+func (s service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType, resourceBlurHash string) (data.Post, error) {
 	postID := s.nextPostID()
 	post := data.Post{
 		ID:               postID,
@@ -51,6 +51,7 @@ func (s service) CreatePost(ownerID int64, description string, resourceID int64,
 		Description:      description,
 		ResourceID:       resourceID,
 		ResourceMimeType: resourceMIMEType,
+		ResourceBlurHash: resourceBlurHash,
 		LikeIDs:          []int64{},
 		CommentIDs:       []int64{},
 	}
