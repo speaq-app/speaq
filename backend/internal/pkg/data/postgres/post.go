@@ -10,6 +10,3 @@ func (s Service) PostFeedFromFollowerIDs(userID []int64) ([]data.Post, error) {
 	panic("implement me")
 }
 
-func (s Service) PostFeedFromFollowerIDs(userID []int64) ([]data.Post, error) {
-	panic("implement me")
-}
