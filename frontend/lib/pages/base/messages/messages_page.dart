@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/utils/all_utils.dart';
 

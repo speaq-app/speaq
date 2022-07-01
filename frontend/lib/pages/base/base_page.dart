@@ -31,7 +31,7 @@ class _BasePageState extends State<BasePage> {
   late final ValueNotifier _selectedIndexNotifier = ValueNotifier<int>(widget.initialPage);
   late final PageController _pageController = PageController(initialPage: widget.initialPage);
 
-  /// Makes the main pages swipeable.
+  /// Makes the main pages swipe-able.
   void _switchPage(int index) {
     _selectedIndexNotifier.value = index;
     _pageController.animateToPage(_selectedIndexNotifier.value,

@@ -1,3 +1,4 @@
+/// Is used to reduce import statements in files, where many custom widget are used.
 export 'speaq_appbar.dart';
 export 'speaq_bottom_navi_bar.dart';
 export 'speaq_follower_tile.dart';

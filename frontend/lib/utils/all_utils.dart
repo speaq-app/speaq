@@ -1,3 +1,4 @@
+/// Is used to reduce import statements in files, where many utils are being used.
 export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 export 'package:frontend/utils/connection_service_util.dart';
 export 'package:frontend/utils/input_formatter/max_lines_text_input_formatter.dart';

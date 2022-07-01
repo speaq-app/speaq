@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+/// Handles the authentication, storage and usage of the users jwt token.
 class TokenUtils {
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   static const String _tokenKey = "token";

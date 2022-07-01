@@ -47,11 +47,12 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
       onRefresh: _pullRefresh,
       child: SafeArea(
-        child: BlocConsumer<ProfileBloc, ProfileState>(
+        // Loads the users profile and, if it succeeded, his profile picture.
+      child: BlocConsumer<ProfileBloc, ProfileState>(
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              var profileImageResourceId = state.profile.profileImageResourceId;
+              int profileImageResourceId = state.profile.profileImageResourceId;
               if (profileImageResourceId > 0) {
                 _resourceBloc
                     .add(LoadResource(resourceId: profileImageResourceId));
@@ -73,9 +74,7 @@ class _HomePageState extends State<HomePage> {
                 floatingActionButton: _buildFloatingActionButton(),
               );
             } else {
-              return const SizedBox(
-                height: 0,
-              );
+              return const SizedBox.shrink();
             }
           },
         ),

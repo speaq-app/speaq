@@ -110,6 +110,7 @@ class ProfilePageState extends State<ProfilePage> {
   Widget _buildProfileStack(AppLocalizations appLocale, Size deviceSize) {
     return Container(
       transform: Matrix4.translationValues(0, -45, 0),
+      // Loads the users profile and, if it succeeded, the users follower data.
       child: BlocConsumer<ProfileBloc, ProfileState>(
         bloc: _profileBloc,
         listener: (context, state) {
@@ -397,6 +398,8 @@ class ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
+        // Loads the follower and following id's from the user, which page the app user is currently visiting.
+        // If it succeeded, it loads the follower and following profile data.
         BlocConsumer<FollowerBloc, FollowerState>(
           bloc: _pageUserFollowerBloc,
           listener: (context, state) {

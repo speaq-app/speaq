@@ -43,6 +43,7 @@ class _SearchPageState extends State<SearchPage> {
         body: BlocConsumer<SearchBloc, SearchState>(
           bloc: _searchBloc,
           listener: (context, state) {
+
             if (state is ResultsReceived) {
               foundUsers = state.users;
             }

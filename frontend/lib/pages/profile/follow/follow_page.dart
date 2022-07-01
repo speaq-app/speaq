@@ -50,6 +50,7 @@ class _FollowPageState extends State<FollowPage> {
           appBar: SpqAppBar(
             preferredSize: deviceSize,
           ),
+          // Loads first the follower and following id's and then their profile.
           body: BlocConsumer<FollowerBloc, FollowerState>(
             bloc: _followerBloc,
             listener: (context, state) async {

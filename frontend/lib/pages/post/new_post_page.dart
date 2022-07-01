@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,6 +105,7 @@ class _NewPostPageState extends State<NewPostPage> {
     return SafeArea(
       child: KeyboardDismissOnTap(
         dismissOnCapturedTaps: true,
+        // If user wants to send a post, the bloc sends said post to the server and navigates the user to the previous page.
         child: BlocConsumer<PostBloc, PostState>(
           bloc: _postBloc,
           listener: (context, state) async {

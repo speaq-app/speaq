@@ -46,6 +46,7 @@ class _UserMenuState extends State<UserMenu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              // Loads the app users profile and, if it succeeded, the users follower data.
               BlocConsumer<ProfileBloc, ProfileState>(
                 bloc: _profileBloc,
                 listener: (context, state) {
@@ -74,7 +75,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  ///
+  /// Loading widget for the user menu header.
   Widget _buildHeaderShimmer(
       BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
@@ -107,7 +108,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  ///
+  /// Actual user menu header.
   Widget _buildHeader(BuildContext context, AppLocalizations appLocale,
       Size deviceSize, Profile profile) {
     return Container(
