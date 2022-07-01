@@ -7,7 +7,6 @@ import (
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
-//FollowerIDsByID takes an userID and returns a list of IDs which are following the given ID.
 func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 	u, ok := s.users[userID]
 	if !ok {
@@ -17,7 +16,6 @@ func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 	return u.FollowerIDs, nil
 }
 
-//FollowingIDsByID takes an userID and returns a list of IDs whom the given ID is following.
 func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 	u, ok := s.users[userID]
 	if !ok {
@@ -27,8 +25,6 @@ func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 	return u.FollowingIDs, nil
 }
 
-
-//UserByUserIDs takes a list of userIDs and returns a list of users matching the given IDs.
 func (s service) UserByUserIDs(userIDs []int64) ([]data.User, error) {
 	var ul []data.User
 	for _, u := range userIDs {
@@ -47,7 +43,6 @@ func (s service) UserByID(id int64) (data.User, error) {
 	return u, nil
 }
 
-//UserByUsername takes an username and returns the user with the given username.
 func (s service) UserByUsername(username string) (data.User, error) {
 	for _, u := range s.users {
 		if u.Profile.Username == username {
@@ -57,8 +52,6 @@ func (s service) UserByUsername(username string) (data.User, error) {
 	return data.User{}, errors.New("UserByUsername - user not found")
 }
 
-//SearchUser takes an userID and a term and returns a list of users which contain the given term in their username.
-//The user with the given userID must not be in the returned list.
 func (s service) SearchUser(userID int64, term string) ([]data.User, error) {
 	var u []data.User
 
@@ -73,8 +66,6 @@ func (s service) SearchUser(userID int64, term string) ([]data.User, error) {
 	return u, nil
 }
 
-//UpdateUserProfile takes an ID and a profile and updates the profile in the databse with the given one.
-//However the imageBlurHash and imageResourceID stay the same since for now changing the profile picture is not implemented.
 func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
 	u, err := s.UserByID(id)
 	if err != nil {
@@ -98,7 +89,6 @@ func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
 	return u.Profile, nil
 }
 
-//nextUserID returns the next free userID from the database.
 func (s service) nextUserID() int64 {
 	var nextID int64 = 1
 	for id := range s.users {
@@ -109,7 +99,6 @@ func (s service) nextUserID() int64 {
 	return nextID
 }
 
-//isDuplicateUsername takes an username and checks whether the username is already used or not.
 func (s service) isDuplicateUsername(username string) bool {
 	for _, u := range s.users {
 		if u.Profile.Username == username {
@@ -119,9 +108,6 @@ func (s service) isDuplicateUsername(username string) bool {
 	return false
 }
 
-//CreateUser takes an username and passwordHash and creates, if the username is not already taken, a new user
-//with the next free userID and the given parameters.
-//It will also set the users name to the username which can be changed later in EditProfile.
 func (s service) CreateUser(username string, passwordHash []byte) (data.User, error) {
 	if s.isDuplicateUsername(username) {
 		return data.User{}, errors.New("CreateUser - username already taken")
@@ -140,7 +126,6 @@ func (s service) CreateUser(username string, passwordHash []byte) (data.User, er
 	return user, nil
 }
 
-//PasswordHashByUsername takes an username and returns if the username is existing the matching passwordHash.
 func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 	for _, u := range s.users {
 		if u.Profile.Username == username {
@@ -151,8 +136,6 @@ func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 	return nil, errors.New("PasswordHashByUsername - no user found")
 }
 
-//CheckIfFollowing takes an userID and a followerID.
-//It returns true or false whether the user with the followingID is following the user of userID.
 func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
 
 	u, err := s.UserByID(userID)
@@ -170,9 +153,7 @@ func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, er
 	return false, -1, nil
 }
 
-//GetFollowerIndex takes an userID and a followerID.
-//It returns the index of the user of followerID in the follower list of the user of userID.
-func (s service) GetFollowerIndex(userID int64, followerID int64) (bool, int, error) {
+func (s service) getFollowerIndex(userID int64, followerID int64) (bool, int, error) {
 
 	f, err := s.UserByID(followerID)
 
@@ -189,9 +170,6 @@ func (s service) GetFollowerIndex(userID int64, followerID int64) (bool, int, er
 	return false, -1, nil
 }
 
-//FollowUnfollow takes an userID and a followerID.
-//It checks whether the user of followerID is following the user of userID or not.
-//In case the follower was not following it follows the user, otherwise it unfollows.
 func (s service) FollowUnfollow(userID int64, followerID int64) (bool, error) {
 	u, err := s.UserByID(userID)
 	if err != nil {
@@ -208,7 +186,7 @@ func (s service) FollowUnfollow(userID int64, followerID int64) (bool, error) {
 		return false, err
 	}
 
-	_, j, err := s.GetFollowerIndex(userID, followerID)
+	_, j, err := s.getFollowerIndex(userID, followerID)
 	if err != nil {
 		return false, err
 	}
