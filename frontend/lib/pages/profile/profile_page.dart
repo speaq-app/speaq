@@ -9,9 +9,9 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
-import 'package:frontend/widgets_shimmer/post_shimmer.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
+import 'package:frontend/widgets_shimmer/shimmer_post.dart';
 
 class ProfilePage extends StatefulWidget {
   final int pageUserID;
@@ -75,7 +75,8 @@ class ProfilePageState extends State<ProfilePage> {
           child: ListView(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
+                parent: AlwaysScrollableScrollPhysics()
+            ),
             children: [
               _buildProfileCover(deviceSize, context),
               _buildProfileStack(appLocale, deviceSize),
@@ -117,7 +118,8 @@ class ProfilePageState extends State<ProfilePage> {
           if (state is ProfileLoaded) {
             if (state.profile.profileImageResourceId > 0) {
               _resourceBloc.add(LoadResource(
-                  resourceId: state.profile.profileImageResourceId));
+                  resourceId: state.profile.profileImageResourceId
+              ));
             }
             _pageUserFollowerBloc
                 .add(LoadFollowerIDs(userId: widget.pageUserID));
@@ -188,6 +190,7 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Creates an editProfile button surrounded with the block pattern.
   Widget _buildEditProfileButton(Size deviceSize, AppLocalizations appLocale) {
     return Container(
       width: deviceSize.width * 0.33,
@@ -208,7 +211,8 @@ class ProfilePageState extends State<ProfilePage> {
                   return SpqTextButton(
                     onPressed: () {
                       _followUnfollowBloc.add(FollowUnfollow(
-                          userID: 0, followerID: widget.pageUserID));
+                          userID: 0, followerID: widget.pageUserID
+                      ));
                       _loadPage();
                     },
                     name: state.isFollowing
@@ -216,7 +220,8 @@ class ProfilePageState extends State<ProfilePage> {
                         : appLocale.toFollow,
                     textStyle: TextStyle(
                         color:
-                            state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                            state.isFollowing ? spqLightRed : spqPrimaryBlue
+                    ),
                     borderColor:
                         state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
@@ -224,7 +229,8 @@ class ProfilePageState extends State<ProfilePage> {
                   return SpqTextButton(
                     onPressed: () {
                       _followUnfollowBloc.add(FollowUnfollow(
-                          userID: 0, followerID: widget.pageUserID));
+                          userID: 0, followerID: widget.pageUserID
+                      ));
                       _loadPage();
                     },
                     name: state.isFollowing
@@ -232,14 +238,17 @@ class ProfilePageState extends State<ProfilePage> {
                         : appLocale.toFollow,
                     textStyle: TextStyle(
                         color:
-                            state.isFollowing ? spqLightRed : spqPrimaryBlue),
+                            state.isFollowing ? spqLightRed : spqPrimaryBlue
+                    ),
                     borderColor:
                         state.isFollowing ? spqLightRed : spqPrimaryBlue,
                   );
                 }
                 return Container(
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                      borderRadius: BorderRadius.all(Radius.circular(10)
+                      )
+                  ),
                   child: ShimmerCube(
                     width: deviceSize.width * 0.01,
                     height: deviceSize.height * 0.01,

@@ -35,13 +35,15 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
       children: [
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-            child: SpeaqBottomLogo(deviceSize: deviceSize * 2)),
+            child: SpeaqBottomLogo(deviceSize: deviceSize * 2)
+        ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
           decoration: BoxDecoration(
               color: spqPrimaryBlue,
               border: Border.all(color: spqPrimaryBlue),
-              borderRadius: const BorderRadius.all(Radius.circular(26))),
+              borderRadius: const BorderRadius.all(Radius.circular(26))
+          ),
           child: buildDescriptionForTeam(appLocale, deviceSize),
         ),
       ],

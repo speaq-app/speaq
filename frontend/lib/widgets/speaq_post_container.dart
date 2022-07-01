@@ -7,8 +7,8 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_audio_post_container.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
 class PostContainer extends StatefulWidget {

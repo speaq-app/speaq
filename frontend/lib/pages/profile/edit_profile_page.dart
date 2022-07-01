@@ -9,7 +9,7 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_loading_widget.dart';
 import 'package:frontend/widgets/speaq_text_field.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
 import 'package:shimmer/shimmer.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -56,6 +56,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       },
       child: SafeArea(
+        // Loads the users profile on page initialization.
+        // Returns to the previous page after sending the (changed) profile information to the server, if the user presses the save button.
         child: BlocConsumer<ProfileBloc, ProfileState>(
           bloc: _profileBloc,
           listener: (context, state) async {
@@ -437,22 +439,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (profile.name.isEmpty) return appLocale.nameIsEmpty;
     if (profile.name.endsWith(" ")) return appLocale.nameEndsWithSpace;
 
-    if (profile.username.length > maxLengthUsername)
+    if (profile.username.length > maxLengthUsername) {
       return appLocale.usernameIsToLong;
+    }
     if (profile.username.isEmpty) return appLocale.usernameIsEmpty;
     if (profile.username.endsWith(" ")) return appLocale.usernameEndsWithSpace;
 
-    if (profile.description.length > maxLengthDescription)
+    if (profile.description.length > maxLengthDescription) {
       return appLocale.descriptionIsToLong;
-    if (profile.description.endsWith(" "))
+    }
+    if (profile.description.endsWith(" ")) {
       return appLocale.descriptionEndsWithSpace;
+    }
 
-    if (profile.website.length > maxLengthWebsite)
+    if (profile.website.length > maxLengthWebsite) {
       return appLocale.websiteIsToLong;
-    if (!profile.website.contains(".") && profile.website.isNotEmpty)
+    }
+    if (!profile.website.contains(".") && profile.website.isNotEmpty) {
       return appLocale.websiteHasNoDot;
+    }
     if (profile.website.endsWith(" ")) return appLocale.websiteEndsWithSpace;
-
     return "";
   }
 

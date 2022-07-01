@@ -53,7 +53,8 @@ class SpqPopUpSettingsTile extends StatelessWidget {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),
       title: Text(tileText,
-          style: TextStyle(fontSize: 15, color: actionButtonColor)),
+          style: TextStyle(fontSize: 15, color: actionButtonColor)
+      ),
       onPressed: (context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -64,10 +65,12 @@ class SpqPopUpSettingsTile extends StatelessWidget {
                   actionButtonText,
                   style: TextStyle(color: actionButtonColor),
                 ),
-                onPressed: () => logOut(context)),
+                onPressed: () => logOut(context)
+            ),
             TextButton(
                 child: Text(appLocale.cancel),
-                onPressed: () => Navigator.pop(context)),
+                onPressed: () => Navigator.pop(context)
+            ),
           ],
         ),
       ),

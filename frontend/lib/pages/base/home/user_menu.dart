@@ -7,8 +7,8 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_profile_avatar.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
@@ -35,7 +35,6 @@ class _UserMenuState extends State<UserMenu> {
     super.initState();
   }
 
-  ///
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
@@ -158,7 +157,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  ///
+  /// Loading widget for the user menu follower info container.
   Widget _buildShimmerFollowerInfo(Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
@@ -173,7 +172,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  ///
+  /// Actual follower / following infos for a user.
   Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
       onTap: () => Navigator.popAndPushNamed(context, 'follow',
@@ -194,7 +193,8 @@ class _UserMenuState extends State<UserMenu> {
                 Text(
                   "${_followerIDs.length}",
                   style: const TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.bold),
+                      fontSize: 10, fontWeight: FontWeight.bold
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 2),
@@ -215,7 +215,8 @@ class _UserMenuState extends State<UserMenu> {
                   child: Text(
                     "${_followingIDs.length}",
                     style: const TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.bold),
+                        fontSize: 10, fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
                 Text(
@@ -230,7 +231,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  ///
+  /// Actual user menu content includes icons.
   Widget _buildMenu(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: [

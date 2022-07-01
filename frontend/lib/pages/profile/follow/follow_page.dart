@@ -6,7 +6,7 @@ import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
 
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.user}) : super(key: key);
@@ -60,7 +60,8 @@ class _FollowPageState extends State<FollowPage> {
 
                 _followerBloc.add(LoadFollower(
                     followerIDs: state.followerIDs,
-                    followingIDs: state.followingIDs));
+                    followingIDs: state.followingIDs
+                ));
               } else if (state is FollowerLoaded) {
                 _follower = state.follower;
                 _following = state.following;
@@ -155,7 +156,8 @@ class _FollowPageState extends State<FollowPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: ShimmerCube(
-                    width: double.infinity, height: deviceSize.height * 0.024)
+                    width: double.infinity, height: deviceSize.height * 0.024
+                )
             )
         ],
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'components/shimmer_profile_picture.dart';
+import 'shimmer_profile_picture.dart';
 
 class PostShimmer extends StatelessWidget {
   final bool hasImage;

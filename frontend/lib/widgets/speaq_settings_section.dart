@@ -28,7 +28,8 @@ class SpqSettingsSection extends AbstractSettingsSection {
         Container(
           decoration: const BoxDecoration(
               color: spqWhite,
-              borderRadius: BorderRadius.all(Radius.circular(24.0))),
+              borderRadius: BorderRadius.all(Radius.circular(24.0))
+          ),
           child: Column(
             children: tiles,
           ),

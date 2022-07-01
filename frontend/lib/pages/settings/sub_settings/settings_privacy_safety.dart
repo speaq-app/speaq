@@ -40,7 +40,8 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                     // Private account [SwitchTile].
                     SpqSwitchSettingsTile(
                         tileText: appLocale.privateAccount,
-                        value: valuePrivateSwitch),
+                        value: valuePrivateSwitch
+                    ),
                     // Delete search history.
                     SpqPopUpSettingsTile(
                       tileText: appLocale.deleteSearchHistory,
@@ -57,7 +58,8 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
               height: deviceSize.height * 0.1,
               child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: SpeaqBottomLogo(deviceSize: deviceSize)),
+                  child: SpeaqBottomLogo(deviceSize: deviceSize)
+              ),
             ),
           ],
         ),

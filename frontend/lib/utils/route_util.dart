@@ -25,7 +25,7 @@ class RouteGenerator {
         return PageTransition(
           child: BasePage(initialPage: index),
           settings: const RouteSettings(
-            name: "base", //HERE is where you name your route for using popUntil
+            name: "base", // Here is where you name your route for using popUntil.
           ),
           type: PageTransitionType.bottomToTop,
           alignment: Alignment.center,
@@ -85,7 +85,7 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
 
-      //Settings
+      // Settings.
       case "accountSettings":
         return PageTransition(
           child: const AccountSettingsPage(),
@@ -155,7 +155,8 @@ class RouteGenerator {
             child: FollowPage(
               user: user,
             ),
-            type: PageTransitionType.fade);
+            type: PageTransitionType.fade
+        );
       default:
         return _errorRoute();
     }

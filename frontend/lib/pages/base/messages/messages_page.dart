@@ -91,6 +91,7 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
+  /// Generates a search bar to search for different users.
   SizedBox generateSearchBar(Size deviceSize, AppLocalizations appLocale) {
     return SizedBox(
       height: deviceSize.height * 0.08,
@@ -105,7 +106,8 @@ class _MessagesPageState extends State<MessagesPage> {
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
-                borderSide: BorderSide.none),
+                borderSide: BorderSide.none
+            ),
             hintStyle: const TextStyle(
               fontSize: 14,
               color: spqDarkGreyTranslucent,
