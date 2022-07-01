@@ -135,6 +135,8 @@ class _HomePageState extends State<HomePage> {
             _allPosts.addAll(state.postList);
             if (_allPosts.length >= 5) {
               _readPosts.addAll(_allPosts.getRange(0, 5));
+            } else {
+              _readPosts.addAll(_allPosts);
             }
           });
         }
