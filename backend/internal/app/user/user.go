@@ -2,11 +2,11 @@ package user
 
 import (
 	"context"
+
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
 	"github.com/speaq-app/speaq/internal/pkg/middleware"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"log"
 )
 
 type Server struct {
@@ -118,7 +118,6 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 	if err != nil {
 		return nil, err
 	}
-	log.Println(ing)
 
 	return &GetUserFollowingIDsResponse{
 		FollowingIds: ing,
@@ -132,7 +131,6 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest
 	if err != nil {
 		return nil, err
 	}
-	log.Println(us)
 
 	var fu []*CondensedUser
 
@@ -159,7 +157,6 @@ func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingReque
 	if err != nil {
 		return nil, err
 	}
-	log.Println(us)
 
 	var fu []*CondensedUser
 

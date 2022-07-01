@@ -20,7 +20,6 @@ func (s Service) FollowingIDsByID(userID int64) ([]int64, error) {
 	panic("implement me")
 }
 
-
 func (s Service) UserByUserIDs(userIDs []int64) ([]data.User, error) {
 	panic("implement me")
 }

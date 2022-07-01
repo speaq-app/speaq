@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-	"log"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
@@ -20,7 +19,7 @@ type Server struct {
 	UnimplementedAuthServer
 }
 
-//Register takes a Password and Username from the RegisterRequest, 
+//Register takes a Password and Username from the RegisterRequest,
 //encrypts the password and creates a new account.
 //Returns an error "AlreadyExists" in case an account with the same username is already taken.
 func (s Server) Register(ctx context.Context, req *RegisterRequest) (*empty.Empty, error) {
@@ -47,25 +46,21 @@ func (s Server) Register(ctx context.Context, req *RegisterRequest) (*empty.Empt
 func (s Server) Login(ctx context.Context, req *LoginRequest) (*LoginResponse, error) {
 	hash, err := s.UserService.PasswordHashByUsername(req.Username)
 	if err != nil {
-		log.Println(err)
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
 	passwordValid := s.EncryptionService.CompareHashAndPassword(hash, []byte(req.Password))
 	if !passwordValid {
-		log.Println(err)
 		return nil, status.Error(codes.InvalidArgument, errors.New("wrong password").Error())
 	}
 
 	u, err := s.UserService.UserByUsername(req.Username)
 	if err != nil {
-		log.Println(err)
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
 	token, err := s.TokenService.GenerateForUserID(u.ID)
 	if err != nil {
-		log.Println(err)
 		return nil, status.Error(codes.Unauthenticated, err.Error())
 	}
 
