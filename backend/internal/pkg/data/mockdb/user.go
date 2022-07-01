@@ -8,6 +8,7 @@ import (
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
+//FollowerIDsByID takes an userID and returns a list of IDs which are following the given ID.
 func (s *service) FollowerIDsByID(userID int64) ([]int64, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -20,6 +21,7 @@ func (s *service) FollowerIDsByID(userID int64) ([]int64, error) {
 	return u.FollowerIDs, nil
 }
 
+//FollowingIDsByID takes an userID and returns a list of IDs whom the given ID is following.
 func (s *service) FollowingIDsByID(userID int64) ([]int64, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -69,6 +71,7 @@ func (s *service) UserByID(id int64) (data.User, error) {
 	return u, nil
 }
 
+//UserByUsername takes an username and returns the user with the given username.
 func (s *service) UserByUsername(username string) (data.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -81,6 +84,8 @@ func (s *service) UserByUsername(username string) (data.User, error) {
 	return data.User{}, errors.New("UserByUsername - user not found")
 }
 
+//SearchUser takes an userID and a term and returns a list of users which contain the given term in their username.
+//The user with the given userID must not be in the returned list.
 func (s *service) SearchUser(userID int64, term string) ([]data.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -100,6 +105,8 @@ func (s *service) SearchUser(userID int64, term string) ([]data.User, error) {
 	return u, nil
 }
 
+//UpdateUserProfile takes an ID and a profile and updates the profile in the databse with the given one.
+//However the imageBlurHash and imageResourceID stay the same since for now changing the profile picture is not implemented.
 func (s *service) UpdateUserProfile(id int64, profile data.UserProfile) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -148,6 +155,9 @@ func (s *service) isDuplicateUsername(username string) bool {
 	return false
 }
 
+//CreateUser takes an username and passwordHash and creates, if the username is not already taken, a new user
+//with the next free userID and the given parameters.
+//It will also set the users name to the username which can be changed later in EditProfile.
 func (s *service) CreateUser(username string, passwordHash []byte) (data.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -169,6 +179,7 @@ func (s *service) CreateUser(username string, passwordHash []byte) (data.User, e
 	return user, nil
 }
 
+//PasswordHashByUsername takes an username and returns if the username is existing the matching passwordHash.
 func (s *service) PasswordHashByUsername(username string) ([]byte, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -198,6 +209,8 @@ func (s *service) checkIfFollowing(userID int64, followerID int64) (bool, int, e
 	return false, -1, nil
 }
 
+//CheckIfFollowing takes an userID and a followerID.
+//It returns true or false whether the user with the followingID is following the user of userID.
 func (s *service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -220,6 +233,8 @@ func (s *service) getFollowerIndex(userID int64, followerID int64) (bool, int, e
 	return false, -1, nil
 }
 
+// GetFollowerIndex takes an userID and a followerID.
+// It returns the index of the user of followerID in the follower list of the user of userID.
 func (s *service) GetFollowerIndex(userID int64, followerID int64) (bool, int, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -227,7 +242,10 @@ func (s *service) GetFollowerIndex(userID int64, followerID int64) (bool, int, e
 	return s.getFollowerIndex(userID, followerID)
 }
 
-func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
+//FollowUnfollow takes an userID and a followerID.
+//It checks whether the user of followerID is following the user of userID or not.
+//In case the follower was not following it follows the user, otherwise it unfollows.
+func (s *service) FollowUnfollow(userID int64, followerID int64) (bool, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -236,17 +254,14 @@ func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 		return false, errors.New("FollowUnfollow - user not found")
 	}
 
-	f, ok := s.users[followID]
+	f, ok := s.users[followerID]
 	if !ok {
 		return false, errors.New("FollowUnfollow - follower not found")
 	}
 	
-	c, i, err := s.checkIfFollowing(userID, followID)
-	if err != nil {
-		return false, err
-	}
+	c, i, err := s.checkIfFollowing(userID, followerID)
 
-	_, j, err := s.getFollowerIndex(userID, followID)
+	_, j, err := s.getFollowerIndex(userID, followerID)
 	if err != nil {
 		return false, err
 	}
@@ -255,12 +270,12 @@ func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 		u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
 		f.FollowerIDs = append(f.FollowerIDs[:j], f.FollowerIDs[j+1:]...)
 	} else {
-		u.FollowingIDs = append(u.FollowingIDs, followID)
+		u.FollowingIDs = append(u.FollowingIDs, followerID)
 		f.FollowerIDs = append(f.FollowerIDs, userID)
 	}
 
 	s.users[userID] = u
-	s.users[followID] = f
+	s.users[followerID] = f
 
 	return !c, nil
 }
