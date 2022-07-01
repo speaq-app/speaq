@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -24,8 +25,9 @@ class SpqNavigationSettingsTile extends StatelessWidget {
   }
 }
 
+/// Settings elements for [SettingsPage].
 class SpqPopUpSettingsTile extends StatelessWidget {
-  final Function()? onPressed;
+  final Function? onPressed;
   final String tileText;
   final String popupMessage;
   final Widget? trailingIcon;
@@ -58,11 +60,12 @@ class SpqPopUpSettingsTile extends StatelessWidget {
           title: Text(popupMessage),
           actions: [
             TextButton(
-                child: Text(
-                  actionButtonText,
-                  style: TextStyle(color: actionButtonColor),
-                ),
-                onPressed: () => logOut(context)),
+              onPressed: () => onPressed,
+              child: Text(
+                actionButtonText,
+                style: TextStyle(color: actionButtonColor),
+              ),
+            ),
             TextButton(
                 child: Text(appLocale.cancel),
                 onPressed: () => Navigator.pop(context)),

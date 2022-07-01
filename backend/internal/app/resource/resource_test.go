@@ -2,6 +2,7 @@
 package resource_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"math/rand"
@@ -26,8 +27,8 @@ func TestGetResource(t *testing.T) {
 			name:       "ResourceByID_WithRandomID",
 			resourceID: rand.Int63(),
 			resource: data.Resource{
-				Data:     "data",
-				MIMEType: "type",
+				Data:          []byte{1, 2, 3, 4},
+				MIMEType:      "type",
 				AudioDuration: 187000,
 			},
 		},
@@ -58,8 +59,9 @@ func TestGetResource(t *testing.T) {
 				return
 			}
 
-			if resp.Data != tc.resource.Data ||
-				resp.MimeType != tc.resource.MIMEType {
+			if !bytes.Equal(resp.Data, tc.resource.Data) ||
+				resp.MimeType != tc.resource.MIMEType ||
+				resp.AudioDuration != tc.resource.AudioDuration {
 				t.Fail()
 			}
 		})

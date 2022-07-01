@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/all_utils.dart';
 
+/// Custom [TextField] used in [EditProfilePage].
 class SpeaqTextField extends StatelessWidget {
   final int newLines;
   final int minLines;

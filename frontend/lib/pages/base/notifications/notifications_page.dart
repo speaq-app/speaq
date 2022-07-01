@@ -9,6 +9,7 @@ class NotificationsPage extends StatefulWidget {
   State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
+/// The notification page is not yet implemented.
 class _NotificationsPageState extends State<NotificationsPage> {
   final String langKey = "pages.base.notifications.";
 

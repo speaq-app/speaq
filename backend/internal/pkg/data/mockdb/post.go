@@ -1,13 +1,17 @@
 package mockdb
 
 import (
+	"log"
 	"sort"
 	"time"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
-func (s service) PostFeedForUserID(userID int64) ([]data.Post, error) {
+func (s *service) PostFeedForUserID(userID int64) ([]data.Post, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	var posts []data.Post
 	for _, post := range s.posts {
 		posts = append(posts, post)
@@ -15,7 +19,10 @@ func (s service) PostFeedForUserID(userID int64) ([]data.Post, error) {
 	return posts, nil
 }
 
-func (s service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, error) {
+func (s *service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	var posts []data.Post
 	for _, post := range s.posts {
 		for _, followerID := range followerIDs {
@@ -32,7 +39,7 @@ func (s service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, erro
 	return posts, nil
 }
 
-func (s service) nextPostID() int64 {
+func (s *service) nextPostID() int64 {
 	var nextID int64 = 1
 	for id := range s.posts {
 		if id >= nextID {
@@ -42,7 +49,10 @@ func (s service) nextPostID() int64 {
 	return nextID
 }
 
-func (s service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType string) (data.Post, error) {
+func (s *service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType, resourceBlurHash string) (data.Post, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	postID := s.nextPostID()
 	post := data.Post{
 		ID:               postID,
@@ -51,10 +61,11 @@ func (s service) CreatePost(ownerID int64, description string, resourceID int64,
 		Description:      description,
 		ResourceID:       resourceID,
 		ResourceMimeType: resourceMIMEType,
+		ResourceBlurHash: resourceBlurHash,
 		LikeIDs:          []int64{},
 		CommentIDs:       []int64{},
 	}
 	s.posts[postID] = post
-
+	log.Printf("%q has created a new post", s.users[ownerID].Profile.Username)
 	return post, nil
 }

@@ -36,9 +36,15 @@ class _SpqProfileAvatarState extends State<SpqProfileAvatar> {
       bloc: _resourceBloc,
       builder: (context, state) {
         if (state is ResourceLoaded) {
-          return CircleAvatar(
-            radius: 24,
-            backgroundImage: MemoryImage(state.decodedData),
+          return Stack(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                foregroundImage: MemoryImage(state.decodedData),
+                backgroundImage:
+                    BlurHashImage(widget.profile.profileImageBlurHash),
+              ),
+            ],
           );
         } else if (widget.profile.profileImageBlurHash.isNotEmpty) {
           return CircleAvatar(

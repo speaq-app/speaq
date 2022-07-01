@@ -10,14 +10,10 @@ class AboutSpeaqSettingsPage extends StatefulWidget {
 }
 
 class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
-  late AppLocalizations appLocale;
-  late Size deviceSize;
-
   @override
   Widget build(BuildContext context) {
-    appLocale = AppLocalizations.of(context)!;
-    deviceSize = MediaQuery.of(context).size;
-
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
+    Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
@@ -28,26 +24,34 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
           ),
           preferredSize: deviceSize,
         ),
-        body: buildListView(deviceSize),
+        body: buildListView(deviceSize, appLocale),
       ),
     );
   }
 
-  ListView buildListView(Size deviceSize) {
+  ListView buildListView(Size deviceSize, AppLocalizations appLocale) {
     return ListView(
       shrinkWrap: true,
       children: [
-        Padding(padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24), child: SpeaqBottomLogo(deviceSize: deviceSize * 2)),
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            child: SpeaqBottomLogo(deviceSize: deviceSize * 2)
+        ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
-          decoration: BoxDecoration(color: spqPrimaryBlue, border: Border.all(color: spqPrimaryBlue), borderRadius: const BorderRadius.all(Radius.circular(26))),
-          child: buildColumnForTeam(deviceSize),
+          decoration: BoxDecoration(
+              color: spqPrimaryBlue,
+              border: Border.all(color: spqPrimaryBlue),
+              borderRadius: const BorderRadius.all(Radius.circular(26))
+          ),
+          child: buildDescriptionForTeam(appLocale, deviceSize),
         ),
       ],
     );
   }
 
-  Column buildColumnForTeam(Size deviceSize) {
+  /// The description that shows the [Text] of the developer team.
+  Column buildDescriptionForTeam(AppLocalizations appLocale, Size deviceSize) {
     return Column(
       children: [
         Text(appLocale.aboutUs, textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: spqWhite, fontWeight: FontWeight.bold)),
@@ -65,37 +69,54 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
               borderRadius: const BorderRadius.all(Radius.circular(26)),
             ),
             width: deviceSize.width,
-            child: buildGridView(),
+            child: buildGridView(appLocale, deviceSize),
           ),
         ),
       ],
     );
   }
 
-  GridView buildGridView() {
+  /// Creates and returns a [Gridview] with two columns and any number of rows.
+  GridView buildGridView(AppLocalizations appLocale, Size deviceSize) {
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: 2,
       children: [
-        buildNumber("Sven Gatnar", "assets/images/developer_gatnar.jpg", appLocale.frontendDeveloper),
-        buildNumber("Nosakhare Omoruyi", "assets/images/developer_omoruyi.jpg", appLocale.backendDeveloper),
-        buildNumber("Daniel Holzwarth", "assets/images/developer_holzwarth.jpg", appLocale.backendDeveloper),
-        buildNumber("David Löwe", "assets/images/developer_loewe.jpg", appLocale.frontendDeveloper),
-        buildNumber("Hendrik Schlehlein", "assets/images/developer_schlehlein.jpg", appLocale.backendDeveloper),
-        buildNumber("Eric Eisemann", "assets/images/developer_eisemann.jpg", appLocale.frontendDeveloper),
+        buildDeveloperProfile(
+            "Sven Gatnar",
+            "assets/images/developer_gatnar.jpg",
+            appLocale.frontendDeveloper,
+            deviceSize),
+        buildDeveloperProfile(
+            "Nosakhare Omoruyi",
+            "assets/images/developer_omoruyi.jpg",
+            appLocale.backendDeveloper,
+            deviceSize),
+        buildDeveloperProfile(
+            "Daniel Holzwarth",
+            "assets/images/developer_holzwarth.jpg",
+            appLocale.backendDeveloper,
+            deviceSize),
+        buildDeveloperProfile("David Löwe", "assets/images/developer_loewe.jpg",
+            appLocale.frontendDeveloper, deviceSize),
+        buildDeveloperProfile(
+            "Hendrik Schlehlein",
+            "assets/images/developer_schlehlein.jpg",
+            appLocale.backendDeveloper,
+            deviceSize),
+        buildDeveloperProfile(
+            "Eric Eisemann",
+            "assets/images/developer_eisemann.jpg",
+            appLocale.frontendDeveloper,
+            deviceSize),
       ],
     );
   }
 
-  Widget buildImage(String jpgString) {
-    return CircleAvatar(
-      backgroundImage: AssetImage(jpgString),
-      radius: deviceSize.width / 8,
-    );
-  }
-
-  Widget buildNumber(String name, String jpgString, String role) {
+  /// Returns a [Container] for one developer profile and later for [buildGridView].
+  Widget buildDeveloperProfile(
+      String name, String jpgString, String role, Size deviceSize) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: GridTile(
@@ -104,9 +125,16 @@ class _AboutSpeaqSettingsPageState extends State<AboutSpeaqSettingsPage> {
           textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        footer: Text(role, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold)),
-        child: Center(child: buildImage(jpgString)),
+        footer: Text(role, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold),),
+        child: Center(child: buildImage(jpgString, deviceSize),),
       ),
+    );
+  }
+
+  Widget buildImage(String jpgString, Size deviceSize) {
+    return CircleAvatar(
+      backgroundImage: AssetImage(jpgString),
+      radius: deviceSize.width / 8,
     );
   }
 }

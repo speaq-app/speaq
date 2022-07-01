@@ -3,24 +3,14 @@ import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/api/model/profile.dart';
 import 'package:frontend/api/user_service.dart';
 import 'package:frontend/utils/token_utils.dart';
-import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_connection_interface.dart';
 
 class GRPCUserService implements UserService {
   late UserClient _client;
   late CallOptions _callOptions;
 
-  GRPCUserService(
-    String ip, {
-    int port = 443,
-  }) {
-    _client = UserClient(
-      ClientChannel(
-        ip,
-        port: port,
-        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
-      ),
-    );
-
+  GRPCUserService(ClientChannelBase channel) {
+    _client = UserClient(channel);
     var token = TokenUtils.getToken();
     _callOptions = CallOptions(metadata: {"authorization": "bearer $token"});
   }

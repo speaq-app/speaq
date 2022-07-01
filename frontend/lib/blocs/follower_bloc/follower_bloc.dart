@@ -10,10 +10,8 @@ part 'follower_event.dart';
 part 'follower_state.dart';
 
 class FollowerBloc extends Bloc<FollowerEvent, FollowerState> {
-  final UserService _userService = GRPCUserService(
-    BackendUtils.getHost(),
-    port: BackendUtils.getPort(),
-  );
+  final UserService _userService =
+      GRPCUserService(BackendUtils.createClientChannel());
 
   FollowerBloc() : super(FollowerInitial()) {
     on<LoadFollowerIDs>(_onLoadFollowerIDs);

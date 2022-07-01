@@ -7,7 +7,8 @@ class ContentPrefSettingsPage extends StatefulWidget {
   const ContentPrefSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<ContentPrefSettingsPage> createState() => _ContentPrefSettingsPageState();
+  State<ContentPrefSettingsPage> createState() =>
+      _ContentPrefSettingsPageState();
 }
 
 class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
@@ -35,7 +36,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
                   padding: EdgeInsets.all(25.0),
                 ),
                 tiles: [
-                  //Sprachauswahl
+                  // Language selection.
                   SpqNavigationSettingsTile(text: appLocale.language),
                 ],
               ),
@@ -44,11 +45,13 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
           Positioned(
             bottom: 20,
             height: deviceSize.height * 0.1,
-            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: SpeaqBottomLogo(deviceSize: deviceSize),
+            ),
           )
         ]),
       ),
     );
   }
-
 }

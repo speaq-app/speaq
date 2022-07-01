@@ -8,3 +8,6 @@ dev:
 
 run:
 	go run -race . -c ./configs/config.dev.yml
+
+compile:
+	go build .

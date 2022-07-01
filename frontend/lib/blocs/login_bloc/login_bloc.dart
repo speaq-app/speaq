@@ -10,10 +10,8 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthService _authService = GRPCAuthService(
-    BackendUtils.getHost(),
-    port: BackendUtils.getPort(),
-  );
+  final AuthService _authService =
+      GRPCAuthService(BackendUtils.createClientChannel());
 
   LoginBloc() : super(LoginInitial()) {
     on<Login>(_onLogin);

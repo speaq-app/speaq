@@ -2,25 +2,14 @@ import 'package:frontend/api/grpc/protos/google/protobuf/empty.pb.dart';
 import 'package:frontend/api/grpc/protos/settings.pbgrpc.dart';
 import 'package:frontend/api/settings_service.dart';
 import 'package:frontend/utils/token_utils.dart';
-import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_connection_interface.dart';
 
 class GRPCSettingsService implements SettingsService {
   late SettingsClient _client;
   late CallOptions _callOptions;
 
-  GRPCSettingsService(
-    String ip, {
-    int port = 443,
-  }) {
-    _client = SettingsClient(
-      ClientChannel(
-        ip,
-        port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
-      ),
-    );
-
+  GRPCSettingsService(ClientChannelBase channel) {
+    _client = SettingsClient(channel);
     var token = TokenUtils.getToken();
     _callOptions = CallOptions(metadata: {"authorization": "bearer $token"});
   }

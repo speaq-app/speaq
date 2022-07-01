@@ -5,8 +5,8 @@ abstract class PostService {
 
   Future<void> createPost({
     required String description,
-    String resourceDataInBase64 = "",
-    String resourceMimeType = "",
-    Duration audioDuration = Duration.zero,
+    List<int>? resourceData,
+    String? resourceMimeType,
+    Duration? audioDuration,
   });
 }

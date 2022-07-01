@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/utils/speaq_styles.dart';
 
+/// Custom [TextFormField] used for instance in [NewPostPage].
 class SpqPostTextField extends StatelessWidget {
   const SpqPostTextField({
     Key? key,
@@ -63,7 +65,9 @@ class SpqPostTextField extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 12.0),
             child: Text(hintText,
                 style: const TextStyle(
-                    color: spqLightGrey, fontWeight: FontWeight.w100)),
+                    color: spqLightGrey, fontWeight: FontWeight.w100
+                )
+            ),
           ),
           contentPadding: contentPadding,
           labelStyle:
@@ -85,7 +89,8 @@ class SpqPostTextField extends StatelessWidget {
             borderSide: const BorderSide(color: spqPrimaryBlue, width: 1.0),
           ),
           hintStyle: const TextStyle(
-              color: spqLightGrey, fontSize: 16, fontWeight: FontWeight.w100),
+              color: spqLightGrey, fontSize: 16, fontWeight: FontWeight.w100
+          ),
           //hintText: hintText,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),

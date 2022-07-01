@@ -1,24 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/protos/auth.pbgrpc.dart';
-import 'package:grpc/grpc.dart';
-import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_connection_interface.dart';
 
 class GRPCAuthService implements AuthService {
   late AuthClient _client;
 
-  GRPCAuthService(
-    String ip, {
-    int port = 443,
-  }) {
-    _client = AuthClient(
-      ClientChannel(
-        ip,
-        port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
-      ),
-    );
+  GRPCAuthService(ClientChannelBase channel) {
+    _client = AuthClient(channel);
   }
 
   @override

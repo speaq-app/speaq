@@ -6,6 +6,8 @@ import 'package:frontend/pages/settings/sub_settings/settings_about_speaq.dart';
 import 'package:page_transition/page_transition.dart';
 
 class RouteGenerator {
+
+  /// Creates different Routes.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
 
@@ -23,7 +25,7 @@ class RouteGenerator {
         return PageTransition(
           child: BasePage(initialPage: index),
           settings: const RouteSettings(
-            name: "base", //HERE is where you name your route for using popUntil
+            name: "base", // Here is where you name your route for using popUntil.
           ),
           type: PageTransitionType.bottomToTop,
           alignment: Alignment.center,
@@ -48,7 +50,6 @@ class RouteGenerator {
         );
       case "profile":
         List<dynamic> profileInfo = args as List<dynamic>;
-
         return PageTransition(
           child: ProfilePage(
             pageUserID: profileInfo[0],
@@ -83,7 +84,8 @@ class RouteGenerator {
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      //Settings
+
+      // Settings.
       case "accountSettings":
         return PageTransition(
           child: const AccountSettingsPage(),
@@ -120,12 +122,15 @@ class RouteGenerator {
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
-      case "bookmarks":
+
+        // UserMenu.
+        case "bookmarks":
         return PageTransition(
           child: const BookmarksPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
+
       case "new_post":
         return PageTransition(
           child: const NewPostPage(),
@@ -150,12 +155,14 @@ class RouteGenerator {
             child: FollowPage(
               user: user,
             ),
-            type: PageTransitionType.fade);
+            type: PageTransitionType.fade
+        );
       default:
         return _errorRoute();
     }
   }
 
+  /// If e.g. a wrong route has been selected, an error occurs in the [AppBar].
   static _errorRoute() {
     return MaterialPageRoute(
       builder: (context) {

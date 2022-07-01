@@ -20,11 +20,7 @@ func (s Service) FollowingIDsByID(userID int64) ([]int64, error) {
 	panic("implement me")
 }
 
-func (s Service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
-	panic("implement me")
-}
-
-func (s Service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
+func (s Service) UserByUserIDs(userIDs []int64) ([]data.User, error) {
 	panic("implement me")
 }
 
