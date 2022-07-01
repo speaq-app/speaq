@@ -3,6 +3,7 @@ package mockdb
 import (
 	"io/ioutil"
 	"log"
+	"sync"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -14,6 +15,7 @@ type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
 	posts     map[int64]data.Post
+	mu        sync.Mutex
 }
 
 func New() data.Service {
