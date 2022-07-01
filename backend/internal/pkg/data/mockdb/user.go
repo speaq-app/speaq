@@ -7,6 +7,7 @@ import (
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
+//FollowerIDsByID takes a userID and returns a list of IDs which are following the given ID.
 func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 	u, ok := s.users[userID]
 	if !ok {
@@ -16,6 +17,7 @@ func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 	return u.FollowerIDs, nil
 }
 
+//FollowingIDsByID takes a userID and returns a list of IDs whom the given ID is following.
 func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 	u, ok := s.users[userID]
 	if !ok {
@@ -25,7 +27,9 @@ func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 	return u.FollowingIDs, nil
 }
 
-func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
+
+//UserByUserIDs takes a list of userIDs and returns a list of users matching the given IDs.
+func (s service) UserByUserIDs(userIDs []int64) ([]data.User, error) {
 	var ul []data.User
 	for _, u := range userIDs {
 		ul = append(ul, s.users[u])
@@ -34,19 +38,11 @@ func (s service) FollowerByIDs(userIDs []int64) ([]data.User, error) {
 	return ul, nil
 }
 
-func (s service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
-	var ul []data.User
-	for _, u := range userIDs {
-		ul = append(ul, s.users[u])
-	}
-
-	return ul, nil
-}
-
+//UserByID takes an id and returns the 
 func (s service) UserByID(id int64) (data.User, error) {
 	u, ok := s.users[id]
 	if !ok {
-		return u, errors.New("not workin 2")
+		return u, errors.New("UserByID - user not found")
 	}
 	u.ID = id
 	return u, nil
@@ -58,7 +54,7 @@ func (s service) UserByUsername(username string) (data.User, error) {
 			return u, nil
 		}
 	}
-	return data.User{}, errors.New("user not found")
+	return data.User{}, errors.New("UserByUsername - user not found")
 }
 
 func (s service) SearchUser(userID int64, term string) ([]data.User, error) {
@@ -119,7 +115,7 @@ func (s service) isDuplicateUsername(username string) bool {
 
 func (s service) CreateUser(username string, passwordHash []byte) (data.User, error) {
 	if s.isDuplicateUsername(username) {
-		return data.User{}, errors.New("username already taken")
+		return data.User{}, errors.New("CreateUser - username already taken")
 	}
 
 	userID := s.nextUserID()
@@ -142,7 +138,7 @@ func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 		}
 	}
 
-	return nil, errors.New("no user found")
+	return nil, errors.New("PasswordHashByUsername - no user found")
 }
 
 func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
@@ -150,7 +146,7 @@ func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, er
 	u, err := s.UserByID(userID)
 
 	if err != nil {
-		return false, -1, errors.New("no User found")
+		return false, -1, errors.New("CheckIfFollowing - no User found")
 	}
 
 	for i, f := range u.FollowingIDs {
@@ -167,7 +163,7 @@ func (s service) GetFollowerIndex(userID int64, followerID int64) (bool, int, er
 	f, err := s.UserByID(followerID)
 
 	if err != nil {
-		return false, -1, errors.New("no User found")
+		return false, -1, errors.New("GetFollowerIndex - no User found")
 	}
 
 	for i, u := range f.FollowerIDs {
@@ -183,13 +179,13 @@ func (s service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 	u, err := s.UserByID(userID)
 
 	if err != nil {
-		return false, errors.New("user not found")
+		return false, errors.New("FollowUnfollow - user not found")
 	}
 
 	f, err := s.UserByID(followID)
 
 	if err != nil {
-		return false, errors.New("follower not found")
+		return false, errors.New("FollowUnfollow - follower not found")
 	}
 
 	c, i, err := s.CheckIfFollowing(userID, followID)

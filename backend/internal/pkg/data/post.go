@@ -4,7 +4,6 @@ import "time"
 
 type PostService interface {
 	CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType, resourceBlurHash string) (Post, error)
-	PostFeedForUserID(userID int64) ([]Post, error)
 	PostFeedFromFollowerIDs(followerIDs []int64) ([]Post, error)
 }
 

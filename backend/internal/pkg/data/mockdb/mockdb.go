@@ -29,6 +29,7 @@ func New() data.Service {
 
 	imageDavid, err := ioutil.ReadFile("testdata/testDavidImage.txt")
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	imageEric, err := ioutil.ReadFile("testdata/eric.jpg")

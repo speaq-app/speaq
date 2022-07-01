@@ -7,14 +7,6 @@ import (
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
-func (s service) PostFeedForUserID(userID int64) ([]data.Post, error) {
-	var posts []data.Post
-	for _, post := range s.posts {
-		posts = append(posts, post)
-	}
-	return posts, nil
-}
-
 func (s service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, error) {
 	var posts []data.Post
 	for _, post := range s.posts {
@@ -30,16 +22,6 @@ func (s service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, erro
 	})
 
 	return posts, nil
-}
-
-func (s service) nextPostID() int64 {
-	var nextID int64 = 1
-	for id := range s.posts {
-		if id >= nextID {
-			nextID = id + 1
-		}
-	}
-	return nextID
 }
 
 func (s service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType, resourceBlurHash string) (data.Post, error) {
@@ -58,4 +40,14 @@ func (s service) CreatePost(ownerID int64, description string, resourceID int64,
 	s.posts[postID] = post
 
 	return post, nil
+}
+
+func (s service) nextPostID() int64 {
+	var nextID int64 = 1
+	for id := range s.posts {
+		if id >= nextID {
+			nextID = id + 1
+		}
+	}
+	return nextID
 }

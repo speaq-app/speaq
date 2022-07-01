@@ -128,7 +128,7 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 //GetUserFollower takes takes a list of followerIDs which are used to get the users of the corresponding given ids.
 //Based on the data CondensedUsers are created and returned in CondensedUserListResponse.
 func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*CondensedUserListResponse, error) {
-	us, err := s.DataService.FollowerByIDs(req.FollowerIds)
+	us, err := s.DataService.UserByUserIDs(req.FollowerIds)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +155,7 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest
 //GetUserFollowing takes takes a list of followingIDs which are used to get the users of the corresponding given ids.
 //Based on the data CondensedUsers are created and returned in CondensedUserListResponse.
 func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*CondensedUserListResponse, error) {
-	us, err := s.DataService.FollowingByIDs(req.FollowingIds)
+	us, err := s.DataService.UserByUserIDs(req.FollowingIds)
 	if err != nil {
 		return nil, err
 	}

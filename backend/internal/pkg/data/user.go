@@ -17,8 +17,8 @@ type UserService interface {
 	CheckIfFollowing(userID int64, followerID int64) (bool, int, error)
 	FollowUnfollow(userID int64, followerID int64) (bool, error)
 
-	FollowerByIDs(userIDs []int64) ([]User, error)
-	FollowingByIDs(userIDs []int64) ([]User, error)
+	UserByUserIDs(userIDs []int64) ([]User, error)
+
 
 	SearchUser(userID int64, term string) ([]User, error)
 }
@@ -27,7 +27,6 @@ type User struct {
 	ID       int64
 	Profile  UserProfile
 	Password []byte
-	//Settings    UserSettings
 	FollowerIDs  []int64
 	FollowingIDs []int64
 	CreatedAt    time.Time
@@ -42,13 +41,3 @@ type UserProfile struct {
 	ProfileImageResourceID int64
 	IsOwnProfile           bool
 }
-
-/*type UserLogin struct {
-	Username string
-	Password string
-}*/
-
-/*type UserSettings struct {
-	Darkmode bool
-	Language string
-}*/
