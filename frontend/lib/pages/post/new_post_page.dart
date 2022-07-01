@@ -426,9 +426,9 @@ class _NewPostPageState extends State<NewPostPage> {
   }
 
   Future<void> _createPost(AppLocalizations appLocale) async {
-    _postBloc.add(ProcessingPost("${appLocale.processing} 0%"));
     Uint8List? data;
     String? mimeType;
+    String description = _postController.text.trim();
 
     switch (_postAttachment) {
       case _PostAttachments.audio:
@@ -436,6 +436,7 @@ class _NewPostPageState extends State<NewPostPage> {
         mimeType = "audio/pcm16";
         break;
       case _PostAttachments.image:
+        _postBloc.add(ProcessingPost("${appLocale.processing} 0%"));
         data = await _pickedImage!.readAsBytes();
         var decoder = image.findDecoderForData(data);
         if (decoder == null) {
@@ -460,6 +461,9 @@ class _NewPostPageState extends State<NewPostPage> {
         mimeType = "image/jpeg";
         break;
       case _PostAttachments.none:
+        if (description.isEmpty) {
+          return _errorEmptyPost(appLocale);
+        }
         break;
     }
 
@@ -477,19 +481,23 @@ class _NewPostPageState extends State<NewPostPage> {
     ));
   }
 
+  void _errorEmptyPost(AppLocalizations appLocale) {
+    _errorFlushbar(appLocale.errorPostIsEmpty);
+  }
+
   void _errorAttachmentTooBig(AppLocalizations appLocale) {
-    _errorWithAttachment(appLocale.errorPostAttachmentTooBig);
+    _errorFlushbar(appLocale.errorPostAttachmentTooBig);
   }
 
   void _errorWhileDecodingImage(AppLocalizations appLocale) {
-    _errorWithAttachment(appLocale.errorWhileDecodingImage);
+    _errorFlushbar(appLocale.errorWhileDecodingImage);
   }
 
   void _errorUnsupportedImageType(AppLocalizations appLocale) {
-    _errorWithAttachment(appLocale.errorUnsupportedImageType);
+    _errorFlushbar(appLocale.errorUnsupportedImageType);
   }
 
-  void _errorWithAttachment(String message) {
+  void _errorFlushbar(String message) {
     setState(() {
       Flushbar(
         messageText: Text(

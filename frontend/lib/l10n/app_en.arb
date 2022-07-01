@@ -112,6 +112,7 @@
   "errorPostAttachmentTooBig": "Attachment too big",
   "errorWhileDecodingImage": "Failed to decode image",
   "errorUnsupportedImageType": "Image Type is not supported",
+  "errorPostIsEmpty": "Post cannot be empty",
   "processing": "Processing",
   "uploadingPost": "Uploading Post"
 }

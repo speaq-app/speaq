@@ -113,6 +113,7 @@
   "errorPostAttachmentTooBig": "Anhang zu groß",
   "errorWhileDecodingImage": "Bild konnte nicht dekodiert werden",
   "errorUnsupportedImageType": "Bild-Typ wird nicht unterstützt",
+  "errorPostIsEmpty": "Post darf nicht leer sein",
   "processing": "Bearbeiten",
   "uploadingPost": "Post wird hochgeladen"
 }
