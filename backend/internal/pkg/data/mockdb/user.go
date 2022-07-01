@@ -56,13 +56,14 @@ func (s *service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
 	return ul, nil
 }
 
+//UserByID takes an id and returns the 
 func (s *service) UserByID(id int64) (data.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	u, ok := s.users[id]
 	if !ok {
-		return u, fmt.Errorf("user with ID %d not found", id)
+		return u, errors.New("UserByID - user not found")
 	}
 	u.ID = id
 	return u, nil
@@ -77,7 +78,7 @@ func (s *service) UserByUsername(username string) (data.User, error) {
 			return u, nil
 		}
 	}
-	return data.User{}, errors.New("user not found")
+	return data.User{}, errors.New("UserByUsername - user not found")
 }
 
 func (s *service) SearchUser(userID int64, term string) ([]data.User, error) {
@@ -152,7 +153,7 @@ func (s *service) CreateUser(username string, passwordHash []byte) (data.User, e
 	defer s.mu.Unlock()
 
 	if s.isDuplicateUsername(username) {
-		return data.User{}, errors.New("username already taken")
+		return data.User{}, errors.New("CreateUser - username already taken")
 	}
 
 	userID := s.nextUserID()
@@ -178,14 +179,14 @@ func (s *service) PasswordHashByUsername(username string) ([]byte, error) {
 		}
 	}
 
-	return nil, errors.New("no user found")
+	return nil, errors.New("PasswordHashByUsername - no user found")
 }
 
 func (s *service) checkIfFollowing(userID int64, followerID int64) (bool, int, error) {
 	u, err := s.UserByID(userID)
 
 	if err != nil {
-		return false, -1, errors.New("no User found")
+		return false, -1, errors.New("CheckIfFollowing - no User found")
 	}
 
 	for i, f := range u.FollowingIDs {
@@ -207,7 +208,7 @@ func (s *service) CheckIfFollowing(userID int64, followerID int64) (bool, int, e
 func (s *service) getFollowerIndex(userID int64, followerID int64) (bool, int, error) {
 	u, ok := s.users[followerID]
 	if !ok {
-		return false, -1, fmt.Errorf("user with ID %d not found", userID)
+		return false, -1,errors.New("GetFollowerIndex - no User found")
 	}
 
 	for i, u := range u.FollowerIDs {
@@ -232,14 +233,14 @@ func (s *service) FollowUnfollow(userID int64, followID int64) (bool, error) {
 
 	u, ok := s.users[userID]
 	if !ok {
-		return false, fmt.Errorf("user with ID %d not found", userID)
+		return false, errors.New("FollowUnfollow - user not found")
 	}
 
 	f, ok := s.users[followID]
 	if !ok {
-		return false, fmt.Errorf("user with ID %d not found", followID)
+		return false, errors.New("FollowUnfollow - follower not found")
 	}
-
+	
 	c, i, err := s.checkIfFollowing(userID, followID)
 	if err != nil {
 		return false, err
