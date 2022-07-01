@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:frontend/api/auth_service.dart';
 import 'package:frontend/api/grpc/protos/auth.pbgrpc.dart';
-import 'package:grpc/grpc.dart';
 import 'package:grpc/grpc.dart';
 
 class GRPCAuthService implements AuthService {
@@ -15,8 +13,7 @@ class GRPCAuthService implements AuthService {
       ClientChannel(
         ip,
         port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
+        options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
       ),
     );
   }

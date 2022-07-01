@@ -10,7 +10,8 @@ class BackendUtils {
   static init({
     String? host,
   }) async {
-    if (!kDebugMode) {
+    if (!kDebugMode) { //In order to use locally
+    // if (kDebugMode) { //In order to access server
       return;
     }
 
