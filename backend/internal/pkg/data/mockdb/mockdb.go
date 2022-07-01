@@ -24,12 +24,12 @@ func New() data.Service {
 		log.Fatal(err)
 	}
 
-	imageDaniel, err := ioutil.ReadFile("testdata/testDanielImage.txt")
+	imageDaniel, err := ioutil.ReadFile("testdata/daniel.jpg")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	imageDavid, err := ioutil.ReadFile("testdata/testDavidImage.txt")
+	imageDavid, err := ioutil.ReadFile("testdata/david.jpg")
 	if err != nil {
 		log.Fatal(err)
 	}
