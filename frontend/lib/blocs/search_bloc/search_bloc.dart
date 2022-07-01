@@ -25,9 +25,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     emit(RequestSend());
 
-    List<CondensedUser> matchingUsers = event.term.isNotEmpty
-        ? await _userService.searchUser(searchTerm: event.term.trim())
-        : [];
+    List<CondensedUser> matchingUsers =
+        await _userService.searchUser(searchTerm: event.term.trim());
 
     emit(ResultsReceived(users: matchingUsers));
   }

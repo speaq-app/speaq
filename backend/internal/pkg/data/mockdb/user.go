@@ -182,9 +182,8 @@ func (s *service) PasswordHashByUsername(username string) ([]byte, error) {
 }
 
 func (s *service) checkIfFollowing(userID int64, followerID int64) (bool, int, error) {
-	u, err := s.UserByID(userID)
-
-	if err != nil {
+	u, ok := s.users[userID]
+	if !ok {
 		return false, -1, errors.New("CheckIfFollowing - no User found")
 	}
 
@@ -207,7 +206,7 @@ func (s *service) CheckIfFollowing(userID int64, followerID int64) (bool, int, e
 func (s *service) getFollowerIndex(userID int64, followerID int64) (bool, int, error) {
 	u, ok := s.users[followerID]
 	if !ok {
-		return false, -1,errors.New("GetFollowerIndex - no User found")
+		return false, -1, errors.New("GetFollowerIndex - no User found")
 	}
 
 	for i, u := range u.FollowerIDs {
@@ -239,12 +238,12 @@ func (s *service) FollowUnfollow(userID int64, followerID int64) (bool, error) {
 	if !ok {
 		return false, errors.New("FollowUnfollow - follower not found")
 	}
-	
+
 	c, i, err := s.checkIfFollowing(userID, followerID)
 	if err != nil {
 		return false, err
 	}
-	
+
 	_, j, err := s.getFollowerIndex(userID, followerID)
 	if err != nil {
 		return false, err
