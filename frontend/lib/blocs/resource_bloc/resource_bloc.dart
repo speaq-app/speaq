@@ -12,10 +12,8 @@ part 'resource_event.dart';
 part 'resource_state.dart';
 
 class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
-  final ResourceService _resourceService = GRPCResourceService(
-    BackendUtils.getHost(),
-    port: BackendUtils.getPort(),
-  );
+  final ResourceService _resourceService =
+      GRPCResourceService(BackendUtils.createClientChannel());
 
   ResourceBloc() : super(ResourceInitial()) {
     on<LoadResource>(_onLoadResource);

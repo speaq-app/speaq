@@ -8,10 +8,8 @@ part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  final SettingsService _settingsService = GRPCSettingsService(
-    BackendUtils.getHost(),
-    port: BackendUtils.getPort(),
-  );
+  final SettingsService _settingsService =
+      GRPCSettingsService(BackendUtils.createClientChannel());
 
   SettingsBloc() : super(SettingsInitial()) {
     on<LoadImprintURL>(_onLoadImprintURL);

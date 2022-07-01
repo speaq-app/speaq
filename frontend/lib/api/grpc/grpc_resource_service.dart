@@ -3,25 +3,14 @@ import 'package:frontend/api/grpc/protos/resource.pbgrpc.dart';
 import 'package:frontend/api/model/resource.dart';
 import 'package:frontend/api/resource_service.dart';
 import 'package:frontend/utils/token_utils.dart';
-import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_connection_interface.dart';
 
 class GRPCResourceService implements ResourceService {
   late ResourceClient _client;
   late CallOptions _callOptions;
 
-  GRPCResourceService(
-    String ip, {
-    int port = 443,
-  }) {
-    _client = ResourceClient(
-      ClientChannel(
-        ip,
-        port: port,
-        options:
-            const ChannelOptions(credentials: ChannelCredentials.insecure()),
-      ),
-    );
-
+  GRPCResourceService(ClientChannelBase channel) {
+    _client = ResourceClient(channel);
     var token = TokenUtils.getToken();
     _callOptions = CallOptions(metadata: {"authorization": "bearer $token"});
   }

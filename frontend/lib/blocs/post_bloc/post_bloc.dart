@@ -12,10 +12,8 @@ part 'post_event.dart';
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  final PostService _postService = GRPCPostService(
-    BackendUtils.getHost(),
-    port: BackendUtils.getPort(),
-  );
+  final PostService _postService =
+      GRPCPostService(BackendUtils.createClientChannel());
 
   PostBloc() : super(PostInitial()) {
     on<ProcessingPost>(_onProcessingPost);

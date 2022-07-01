@@ -12,10 +12,8 @@ part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final UserService _userService = GRPCUserService(
-    BackendUtils.getHost(),
-    port: BackendUtils.getPort(),
-  );
+  final UserService _userService =
+      GRPCUserService(BackendUtils.createClientChannel());
 
   ProfileBloc() : super(ProfileInitial()) {
     on<LoadProfile>(_onLoadProfile);
