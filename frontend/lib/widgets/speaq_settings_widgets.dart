@@ -27,7 +27,7 @@ class SpqNavigationSettingsTile extends StatelessWidget {
 
 /// Settings elements for [SettingsPage].
 class SpqPopUpSettingsTile extends StatelessWidget {
-  final Function? onPressed;
+  final Function()? onPressed;
   final String tileText;
   final String popupMessage;
   final Widget? trailingIcon;
@@ -60,7 +60,7 @@ class SpqPopUpSettingsTile extends StatelessWidget {
           title: Text(popupMessage),
           actions: [
             TextButton(
-              onPressed: () => onPressed,
+              onPressed: onPressed,
               child: Text(
                 actionButtonText,
                 style: TextStyle(color: actionButtonColor),
