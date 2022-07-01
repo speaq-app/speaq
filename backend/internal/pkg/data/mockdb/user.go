@@ -2,12 +2,16 @@ package mockdb
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
 )
 
-func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
+func (s *service) FollowerIDsByID(userID int64) ([]int64, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	u, ok := s.users[userID]
 	if !ok {
 		return nil, errors.New("followers by ID not working")
@@ -16,7 +20,10 @@ func (s service) FollowerIDsByID(userID int64) ([]int64, error) {
 	return u.FollowerIDs, nil
 }
 
-func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
+func (s *service) FollowingIDsByID(userID int64) ([]int64, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	u, ok := s.users[userID]
 	if !ok {
 		return nil, errors.New("following by ID not working")
@@ -25,7 +32,10 @@ func (s service) FollowingIDsByID(userID int64) ([]int64, error) {
 	return u.FollowingIDs, nil
 }
 
-func (s service) UserByUserIDs(userIDs []int64) ([]data.User, error) {
+func (s *service) UserByUserIDs(userIDs []int64) ([]data.User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	var ul []data.User
 	for _, u := range userIDs {
 		ul = append(ul, s.users[u])
@@ -34,7 +44,22 @@ func (s service) UserByUserIDs(userIDs []int64) ([]data.User, error) {
 	return ul, nil
 }
 
-func (s service) UserByID(id int64) (data.User, error) {
+func (s *service) FollowingByIDs(userIDs []int64) ([]data.User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var ul []data.User
+	for _, u := range userIDs {
+		ul = append(ul, s.users[u])
+	}
+
+	return ul, nil
+}
+
+func (s *service) UserByID(id int64) (data.User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	u, ok := s.users[id]
 	if !ok {
 		return u, errors.New("UserByID - user not found")
@@ -43,7 +68,10 @@ func (s service) UserByID(id int64) (data.User, error) {
 	return u, nil
 }
 
-func (s service) UserByUsername(username string) (data.User, error) {
+func (s *service) UserByUsername(username string) (data.User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	for _, u := range s.users {
 		if u.Profile.Username == username {
 			return u, nil
@@ -52,24 +80,32 @@ func (s service) UserByUsername(username string) (data.User, error) {
 	return data.User{}, errors.New("UserByUsername - user not found")
 }
 
-func (s service) SearchUser(userID int64, term string) ([]data.User, error) {
-	var u []data.User
+func (s *service) SearchUser(userID int64, term string) ([]data.User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
+	var u []data.User
 	for _, user := range s.users {
-		if user.ID != userID {
-			if strings.Contains(strings.ToLower(user.Profile.Username), strings.ToLower(term)) || strings.Contains(strings.ToLower(user.Profile.Name), strings.ToLower(term)) {
-				u = append(u, user)
-			}
+		if user.ID == userID {
+			continue
+		}
+
+		if term == "" {
+			u = append(u, user)
+		} else if strings.Contains(strings.ToLower(user.Profile.Username), strings.ToLower(term)) || strings.Contains(strings.ToLower(user.Profile.Name), strings.ToLower(term)) {
+			u = append(u, user)
 		}
 	}
-
 	return u, nil
 }
 
-func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
-	u, err := s.UserByID(id)
-	if err != nil {
-		return err
+func (s *service) UpdateUserProfile(id int64, profile data.UserProfile) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	u, ok := s.users[id]
+	if !ok {
+		return fmt.Errorf("user with ID %d not found", id)
 	}
 
 	profile.ProfileImageBlurHash = u.Profile.ProfileImageBlurHash
@@ -80,16 +116,19 @@ func (s service) UpdateUserProfile(id int64, profile data.UserProfile) error {
 	return nil
 }
 
-func (s service) UserProfileByID(id int64) (data.UserProfile, error) {
-	u, err := s.UserByID(id)
-	if err != nil {
-		return data.UserProfile{}, err
+func (s *service) UserProfileByID(id int64) (data.UserProfile, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	u, ok := s.users[id]
+	if !ok {
+		return data.UserProfile{}, fmt.Errorf("user with ID %d not found", id)
 	}
 
 	return u.Profile, nil
 }
 
-func (s service) nextUserID() int64 {
+func (s *service) nextUserID() int64 {
 	var nextID int64 = 1
 	for id := range s.users {
 		if id >= nextID {
@@ -99,7 +138,7 @@ func (s service) nextUserID() int64 {
 	return nextID
 }
 
-func (s service) isDuplicateUsername(username string) bool {
+func (s *service) isDuplicateUsername(username string) bool {
 	for _, u := range s.users {
 		if u.Profile.Username == username {
 			return true
@@ -108,7 +147,10 @@ func (s service) isDuplicateUsername(username string) bool {
 	return false
 }
 
-func (s service) CreateUser(username string, passwordHash []byte) (data.User, error) {
+func (s *service) CreateUser(username string, passwordHash []byte) (data.User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	if s.isDuplicateUsername(username) {
 		return data.User{}, errors.New("CreateUser - username already taken")
 	}
@@ -126,7 +168,10 @@ func (s service) CreateUser(username string, passwordHash []byte) (data.User, er
 	return user, nil
 }
 
-func (s service) PasswordHashByUsername(username string) ([]byte, error) {
+func (s *service) PasswordHashByUsername(username string) ([]byte, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	for _, u := range s.users {
 		if u.Profile.Username == username {
 			return u.Password, nil
@@ -136,8 +181,7 @@ func (s service) PasswordHashByUsername(username string) ([]byte, error) {
 	return nil, errors.New("PasswordHashByUsername - no user found")
 }
 
-func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
-
+func (s *service) checkIfFollowing(userID int64, followerID int64) (bool, int, error) {
 	u, err := s.UserByID(userID)
 
 	if err != nil {
@@ -153,15 +197,20 @@ func (s service) CheckIfFollowing(userID int64, followerID int64) (bool, int, er
 	return false, -1, nil
 }
 
-func (s service) getFollowerIndex(userID int64, followerID int64) (bool, int, error) {
+func (s *service) CheckIfFollowing(userID int64, followerID int64) (bool, int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
-	f, err := s.UserByID(followerID)
+	return s.checkIfFollowing(userID, followerID)
+}
 
-	if err != nil {
-		return false, -1, errors.New("GetFollowerIndex - no User found")
+func (s *service) getFollowerIndex(userID int64, followerID int64) (bool, int, error) {
+	u, ok := s.users[followerID]
+	if !ok {
+		return false, -1,errors.New("GetFollowerIndex - no User found")
 	}
 
-	for i, u := range f.FollowerIDs {
+	for i, u := range u.FollowerIDs {
 		if u == userID {
 			return true, i, nil
 		}
@@ -170,22 +219,32 @@ func (s service) getFollowerIndex(userID int64, followerID int64) (bool, int, er
 	return false, -1, nil
 }
 
-func (s service) FollowUnfollow(userID int64, followerID int64) (bool, error) {
-	u, err := s.UserByID(userID)
-	if err != nil {
+func (s *service) GetFollowerIndex(userID int64, followerID int64) (bool, int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	return s.getFollowerIndex(userID, followerID)
+}
+
+func (s *service) FollowUnfollow(userID int64, followerID int64) (bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	u, ok := s.users[userID]
+	if !ok {
 		return false, errors.New("FollowUnfollow - user not found")
 	}
 
-	f, err := s.UserByID(followerID)
-	if err != nil {
+	f, ok := s.users[followerID]
+	if !ok {
 		return false, errors.New("FollowUnfollow - follower not found")
 	}
-
-	c, i, err := s.CheckIfFollowing(userID, followerID)
+	
+	c, i, err := s.checkIfFollowing(userID, followerID)
 	if err != nil {
 		return false, err
 	}
-
+	
 	_, j, err := s.getFollowerIndex(userID, followerID)
 	if err != nil {
 		return false, err
