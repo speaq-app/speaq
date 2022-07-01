@@ -28,7 +28,7 @@ make build
 This will create a binary executable of the backend:
 ```
 cd speaq/backend
-make compile
+go build .
 ```
 The executable can be found in speaq/backend
 
@@ -37,6 +37,12 @@ The executable can be found in speaq/backend
 This will create an APK of the frontend:
 ```
 cd speaq/frontend
-make compile
+flutter build apk --dart-define=SERVER_IP=<SERVER_IP> --dart-define=SERVER_PORT=<SERVER_IP>
 ```
+
+Example:
+```
+flutter build apk --dart-define=SERVER_IP=api.speaq.app --dart-define=SERVER_PORT=1337
+```
+
 The APK can be found in speaq/frontend/build/app/outputs/flutter-apk
