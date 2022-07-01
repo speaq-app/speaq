@@ -68,13 +68,3 @@ func (s *service) CreatePost(ownerID int64, description string, resourceID int64
 
 	return post, nil
 }
-
-func (s *service) nextPostID() int64 {
-	var nextID int64 = 1
-	for id := range s.posts {
-		if id >= nextID {
-			nextID = id + 1
-		}
-	}
-	return nextID
-}

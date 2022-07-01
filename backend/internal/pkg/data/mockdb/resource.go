@@ -45,13 +45,3 @@ func (s *service) CreateResource(bb []byte, mimeType string, audioDuration int64
 	return resource, nil
 }
 
-//nextResoureID returns the next free resourceID in the database.
-func (s service) nextResourceID() int64 {
-	var nextID int64 = 1
-	for id := range s.resources {
-		if id >= nextID {
-			nextID = id + 1
-		}
-	}
-	return nextID
-}
