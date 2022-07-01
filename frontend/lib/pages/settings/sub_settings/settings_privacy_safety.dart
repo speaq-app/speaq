@@ -7,8 +7,7 @@ class PrivacySafetySettingsPage extends StatefulWidget {
   const PrivacySafetySettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<PrivacySafetySettingsPage> createState() =>
-      _PrivacySafetySettingsPageState();
+  State<PrivacySafetySettingsPage> createState() => _PrivacySafetySettingsPageState();
 }
 
 class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
@@ -37,17 +36,13 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
                   padding: EdgeInsets.all(25.0),
                 ),
                 tiles: [
-                  //Privates Konto SwitchTile
-                  SpqSwitchSettingsTile(
-                      tileText: appLocale.privateAccount,
-                      value: valuePrivateSwitch),
-                  //Suchverlauf löschen
+                  SpqSwitchSettingsTile(tileText: appLocale.privateAccount, value: valuePrivateSwitch),
                   SpqPopUpSettingsTile(
                     tileText: appLocale.deleteSearchHistory,
                     actionButtonText: appLocale.delete,
                     popupMessage: appLocale.askDeleteSearchHistory,
                     actionButtonColor: spqErrorRed,
-                    onPressed: null,
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -56,9 +51,7 @@ class _PrivacySafetySettingsPageState extends State<PrivacySafetySettingsPage> {
           Positioned(
             bottom: 20,
             height: deviceSize.height * 0.1,
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SpeaqBottomLogo(deviceSize: deviceSize)),
+            child: Align(alignment: Alignment.bottomCenter, child: SpeaqBottomLogo(deviceSize: deviceSize)),
           )
         ]),
       ),

@@ -58,11 +58,11 @@ class SpqPopUpSettingsTile extends StatelessWidget {
           title: Text(popupMessage),
           actions: [
             TextButton(
+                onPressed: onPressed,
                 child: Text(
                   actionButtonText,
                   style: TextStyle(color: actionButtonColor),
-                ),
-                onPressed: () => logOut(context)),
+                )),
             TextButton(
                 child: Text(appLocale.cancel),
                 onPressed: () => Navigator.pop(context)),
