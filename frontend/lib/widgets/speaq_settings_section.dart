@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+/// Custom [SettingsSection] used in [SettingsPage] to put in more elements.
 class SpqSettingsSection extends AbstractSettingsSection {
   final List<Widget> tiles;
   final EdgeInsetsDirectional? margin;
@@ -27,7 +28,8 @@ class SpqSettingsSection extends AbstractSettingsSection {
         Container(
           decoration: const BoxDecoration(
               color: spqWhite,
-              borderRadius: BorderRadius.all(Radius.circular(24.0))),
+              borderRadius: BorderRadius.all(Radius.circular(24.0))
+          ),
           child: Column(
             children: tiles,
           ),

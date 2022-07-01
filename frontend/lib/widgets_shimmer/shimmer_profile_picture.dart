@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:shimmer/shimmer.dart';
 
-/// radius should be between 1 and 100; representing a percentage of the available space.
+/// Radius should be between 1 and 100; representing a percentage of the available space.
 class ShimmerProfilePicture extends StatelessWidget {
   final double diameter;
 

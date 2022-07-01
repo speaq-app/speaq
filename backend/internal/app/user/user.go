@@ -2,11 +2,11 @@ package user
 
 import (
 	"context"
+
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/speaq-app/speaq/internal/pkg/data"
 	"github.com/speaq-app/speaq/internal/pkg/middleware"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"log"
 )
 
 type Server struct {
@@ -105,7 +105,6 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 	if err != nil {
 		return nil, err
 	}
-	log.Println(ing)
 
 	return &GetUserFollowingIDsResponse{
 		FollowingIds: ing,
@@ -113,11 +112,10 @@ func (s Server) GetUserFollowingIDs(ctx context.Context, req *GetUserProfileRequ
 }
 
 func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest) (*CondensedUserListResponse, error) {
-	us, err := s.DataService.FollowerByIDs(req.FollowerIds)
+	us, err := s.DataService.UserByUserIDs(req.FollowerIds)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(us)
 
 	var fu []*CondensedUser
 
@@ -138,11 +136,10 @@ func (s Server) GetUserFollower(ctx context.Context, req *GetUserFollowerRequest
 }
 
 func (s Server) GetUserFollowing(ctx context.Context, req *GetUserFollowingRequest) (*CondensedUserListResponse, error) {
-	us, err := s.DataService.FollowingByIDs(req.FollowingIds)
+	us, err := s.DataService.UserByUserIDs(req.FollowingIds)
 	if err != nil {
 		return nil, err
 	}
-	log.Println(us)
 
 	var fu []*CondensedUser
 
@@ -174,7 +171,6 @@ func (s Server) CheckIfFollowing(ctx context.Context, req *CheckIfFollowingReque
 	}
 
 	f, _, err := s.DataService.CheckIfFollowing(userID, req.FollowerId)
-
 	if err != nil {
 		return nil, err
 	}
@@ -196,7 +192,6 @@ func (s Server) FollowUnfollow(ctx context.Context, req *FollowUnfollowRequest) 
 	}
 
 	f, err := s.DataService.FollowUnfollow(userID, req.FollowerId)
-
 	if err != nil {
 		return nil, err
 	}
@@ -213,7 +208,6 @@ func (s Server) SearchUser(ctx context.Context, req *SearchUserRequest) (*Conden
 	}
 
 	u, err := s.DataService.SearchUser(userID, req.Term)
-
 	if err != nil {
 		return nil, err
 	}

@@ -109,5 +109,11 @@
   "wrongPassword": "Das eingegebene Password ist falsch",
   "unknownError": "Es ist ein unbekannter Fehler aufgetreten",
   "userNotFound": "Es gibt keinen Nutzer mit diesem Nutzernamen",
-  "noTokenGenerated": "Es konnte kein User-token generiert werden"
+  "noTokenGenerated": "Es konnte kein User-token generiert werden",
+  "errorPostAttachmentTooBig": "Anhang zu groß",
+  "errorWhileDecodingImage": "Bild konnte nicht dekodiert werden",
+  "errorUnsupportedImageType": "Bild-Typ wird nicht unterstützt",
+  "errorPostIsEmpty": "Post darf nicht leer sein",
+  "processing": "Bearbeiten",
+  "uploadingPost": "Post wird hochgeladen"
 }

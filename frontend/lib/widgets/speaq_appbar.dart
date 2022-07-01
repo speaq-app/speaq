@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/all_pages_export.dart';
 
+/// Custom appbar used for instance in all Main-Pages and [ProfilePage].
 class SpqAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;

@@ -9,7 +9,7 @@ service Post {
 
 message CreatePostRequest {
     string description = 1;     
-    string resource_data = 2;
+    bytes resource_data = 2;
     string resource_mime_type = 3;
     int64 audio_duration = 4;
 }
@@ -36,4 +36,5 @@ message SinglePost {
     int64 number_of_comments = 6;
     int64 resource_id = 7;
     string resource_mime_type = 8;
+    string resource_blur_hash = 9;
 }

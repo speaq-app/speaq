@@ -9,6 +9,7 @@ class QrCodePage extends StatefulWidget {
   State<QrCodePage> createState() => _QrCodePageState();
 }
 
+/// Creates and returns elements for [SafeArea] for the build widget.
 class _QrCodePageState extends State<QrCodePage> {
   @override
   Widget build(BuildContext context) {

@@ -9,3 +9,6 @@ gen:
 	protoc --proto_path=../protos/ --dart_out=grpc:lib/api/grpc/protos/ \
 		google/protobuf/empty.proto \
 		../protos/*.proto
+
+compile:
+	flutter build apk

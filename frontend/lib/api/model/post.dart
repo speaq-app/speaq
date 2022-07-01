@@ -26,7 +26,10 @@ class Post extends HiveObject {
   final int numberOfComments;
 
   @HiveField(7)
-  final String mimeType;
+  final String resourceMimeType;
+
+  @HiveField(8)
+  final String resourceBlurHash;
 
   Post({
     required this.id,
@@ -36,6 +39,7 @@ class Post extends HiveObject {
     required this.ownerID,
     this.numberOfLikes = 0,
     this.numberOfComments = 0,
-    required this.mimeType,
+    required this.resourceMimeType,
+    required this.resourceBlurHash,
   });
 }

@@ -12,8 +12,8 @@ class LocaleProvider extends ChangeNotifier {
   }
 
   static final List<Locale> allSupportedLocales = [
-    const Locale('de'), // German, no country code
-    const Locale('en'), // English, no country code
+    const Locale('de'), // German, no country code.
+    const Locale('en'), // English, no country code.
   ];
 
   static String? getLocaleFlag(String localeCode) {
@@ -35,11 +35,4 @@ class LocaleProvider extends ChangeNotifier {
     _locale = newLocale;
     notifyListeners();
   }
-
-/*
-  void clearLocale() {
-    _locale = null;
-    notifyListeners();
-  }
-*/
 }

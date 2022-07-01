@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -7,8 +9,9 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/resource_bloc/resource_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_audio_post_container.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:frontend/widgets/speaq_hero_content.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
 import 'package:intl/intl.dart';
 
 class PostContainer extends StatefulWidget {
@@ -21,6 +24,7 @@ class PostContainer extends StatefulWidget {
   final String postMessage;
 
   final int resourceID;
+  final String resourceBlurHash;
 
   const PostContainer({
     Key? key,
@@ -31,6 +35,7 @@ class PostContainer extends StatefulWidget {
     required this.resourceMimeType,
     this.resourceID = 0,
     this.postMessage = "",
+    this.resourceBlurHash = "",
   }) : super(key: key);
 
   @override
@@ -42,27 +47,33 @@ class _PostContainerState extends State<PostContainer> {
   final ResourceBloc _resourceBlocPost = ResourceBloc();
   final ResourceBloc _resourceBlocProfile = ResourceBloc();
 
+  var _isFirstBuild = true;
+
   @override
   void initState() {
     super.initState();
 
     _profileBloc.add(LoadProfile(userId: widget.ownerID));
-
-    if (widget.resourceID > 0) {
-      _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
     AppLocalizations appLocale = AppLocalizations.of(context)!;
+
+    if (_isFirstBuild && widget.resourceID > 0) {
+      Future.delayed(Duration(seconds: 1), () {
+        _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
+      });
+      _isFirstBuild = false;
+    }
 
     return Column(
       children: [
         ListTile(
           leading: _buildOwnerPicture(),
           title: _buildPostTitle(),
-          subtitle: _buildContent(appLocale),
+          subtitle: _buildContent(deviceSize, appLocale),
         ),
       ],
     );
@@ -94,12 +105,15 @@ class _PostContainerState extends State<PostContainer> {
                 if (state is ResourceLoaded) {
                   return CircleAvatar(
                     radius: 24,
-                    backgroundImage: MemoryImage(state.decodedData),
+                    foregroundImage: MemoryImage(state.decodedData),
+                    backgroundImage:
+                        BlurHashImage(profile.profileImageBlurHash),
                   );
                 } else if (profile.profileImageBlurHash.isNotEmpty) {
                   return CircleAvatar(
                     radius: 24,
-                    backgroundImage: BlurHashImage(profile.profileImageBlurHash),
+                    backgroundImage:
+                        BlurHashImage(profile.profileImageBlurHash),
                   );
                 } else {
                   return CircleAvatar(
@@ -149,7 +163,8 @@ class _PostContainerState extends State<PostContainer> {
                 flex: 3,
                 child: Text(
                   state.profile.name,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.clip,
                   softWrap: false,
@@ -175,7 +190,7 @@ class _PostContainerState extends State<PostContainer> {
     );
   }
 
-  Widget _buildContent(AppLocalizations appLocale) {
+  Widget _buildContent(Size deviceSize, AppLocalizations appLocale) {
     final String formattedDate = _formatDate(appLocale);
     bool hasText = widget.postMessage.isNotEmpty;
 
@@ -240,50 +255,101 @@ class _PostContainerState extends State<PostContainer> {
     return appLocale.dateAt + formatter.format(widget.creationTime);
   }
 
+  /// Selects the correct case for different Post-Types.
   Widget _buildCorrectPostItem() {
     return BlocBuilder<ResourceBloc, ResourceState>(
       bloc: _resourceBlocPost,
       builder: (context, state) {
         if (state is ResourceLoaded) {
           switch (widget.resourceMimeType) {
-            case "image":
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image(image: MemoryImage(state.decodedData)),
+            case "image/gif":
+            case "image/jpeg":
+              return Stack(
+                children: [
+                  if (widget.resourceBlurHash.isNotEmpty)
+                    AspectRatio(
+                      aspectRatio: 4 / 3,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image(
+                          image: BlurHashImage(widget.resourceBlurHash),
+                          width: double.infinity,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    ),
+                  AspectRatio(
+                    aspectRatio: 4 / 3,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: SpqHeroContent(
+                        content: Image(
+                          image: MemoryImage(state.decodedData),
+                        ),
+                        tag: '${widget.resourceID}',
+                        child: Image(
+                          image: MemoryImage(state.decodedData),
+                          width: double.infinity,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               );
-
-            case "gif":
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image(image: MemoryImage(state.decodedData)),
-              );
-
             case "audio/pcm16":
               return SpqAudioPostContainer(
                 audioData: state.decodedData,
                 durationInMillis: state.resource.audioDurationInMillis,
               );
-
             case "audio/mp3":
               return SpqAudioPostContainer(
                 audioData: state.decodedData,
                 durationInMillis: state.resource.audioDurationInMillis,
                 codec: Codec.mp3,
               );
-
-            case "video":
-              return const Text("Video Type not implemented");
-
-            default:
+            case "":
               return const SizedBox(height: 0);
+            default:
+              return const Text("Media Type not implemented yet");
           }
         } else {
-          return const SizedBox(height: 0);
+          switch (widget.resourceMimeType) {
+            case "image/gif":
+            case "image/jpeg":
+              return AspectRatio(
+                aspectRatio: 4 / 3,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: (widget.resourceBlurHash.isNotEmpty)
+                      ? Image(
+                          image: BlurHashImage(widget.resourceBlurHash),
+                          width: double.infinity,
+                          fit: BoxFit.fitWidth,
+                        )
+                      : const ShimmerCube(width: 100, height: 100),
+                ),
+              );
+            case "audio/pcm16":
+            case "audio/mp3":
+              return SizedBox(
+                height: 69,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: const ShimmerCube(
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+              );
+            default:
+              return Container();
+          }
         }
       },
     );
   }
-
+  /// Builds a row with comment, like, share and bookmark icon.
   Widget _buildReactionList() {
     return Column(
       children: [

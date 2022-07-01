@@ -14,19 +14,20 @@ class SpeaqButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          backgroundColor: spqPrimaryBlue,
-          padding: const EdgeInsets.all(15.0),
-          fixedSize: const Size(200, 50),
-          primary: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(29),
-            ),
+      style: OutlinedButton.styleFrom(
+        backgroundColor: spqPrimaryBlue,
+        padding: const EdgeInsets.all(15.0),
+        fixedSize: const Size(200, 50),
+        primary: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(29),
           ),
         ),
-        onPressed: () => onPressed(),
-        child: Text(loginText));
+      ),
+      onPressed: () => onPressed(),
+      child: Text(loginText),
+    );
   }
 }
 
