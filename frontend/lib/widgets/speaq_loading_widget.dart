@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:frontend/utils/all_utils.dart';
 
+/// Custom loading widget used after logging in to app.
 class SpqLoadingWidget extends StatelessWidget {
   final double radius;
   final Widget? child;

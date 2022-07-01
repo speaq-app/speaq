@@ -9,7 +9,7 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/speaq_loading_widget.dart';
 import 'package:frontend/widgets/speaq_text_field.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
 import 'package:shimmer/shimmer.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -36,9 +36,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _profileBloc.add(LoadProfile(
-      fromCache: false,
-    ));
+    _profileBloc.add(
+      LoadProfile(
+        fromCache: false,
+      ),
+    );
   }
 
   @override
@@ -54,6 +56,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       },
       child: SafeArea(
+        // Loads the users profile on page initialization.
+        // Returns to the previous page after sending the (changed) profile information to the server, if the user presses the save button.
         child: BlocConsumer<ProfileBloc, ProfileState>(
           bloc: _profileBloc,
           listener: (context, state) async {

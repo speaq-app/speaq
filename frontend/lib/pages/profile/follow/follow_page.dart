@@ -6,7 +6,7 @@ import 'package:frontend/blocs/follower_bloc/follower_bloc.dart';
 import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/all_widgets.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
 
 class FollowPage extends StatefulWidget {
   const FollowPage({Key? key, required this.user}) : super(key: key);
@@ -50,6 +50,7 @@ class _FollowPageState extends State<FollowPage> {
           appBar: SpqAppBar(
             preferredSize: deviceSize,
           ),
+          // Loads first the follower and following id's and then their profile.
           body: BlocConsumer<FollowerBloc, FollowerState>(
             bloc: _followerBloc,
             listener: (context, state) async {
@@ -59,7 +60,8 @@ class _FollowPageState extends State<FollowPage> {
 
                 _followerBloc.add(LoadFollower(
                     followerIDs: state.followerIDs,
-                    followingIDs: state.followingIDs));
+                    followingIDs: state.followingIDs
+                ));
               } else if (state is FollowerLoaded) {
                 _follower = state.follower;
                 _following = state.following;
@@ -86,14 +88,15 @@ class _FollowPageState extends State<FollowPage> {
                         ),
                       ),
                       SizedBox(
-                          height: deviceSize.height * 0.05,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              "$_followingCount ${appLocale.following}",
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          )),
+                        height: deviceSize.height * 0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            "$_followingCount ${appLocale.following}",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   body: TabBarView(
@@ -123,14 +126,15 @@ class _FollowPageState extends State<FollowPage> {
                         ),
                       ),
                       SizedBox(
-                          height: deviceSize.height * 0.05,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              "$_followingCount ${appLocale.following}",
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          )),
+                        height: deviceSize.height * 0.05,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            "$_followingCount ${appLocale.following}",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   body: _buildShimmerList(deviceSize),
@@ -152,7 +156,9 @@ class _FollowPageState extends State<FollowPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: ShimmerCube(
-                    width: double.infinity, height: deviceSize.height * 0.024))
+                    width: double.infinity, height: deviceSize.height * 0.024
+                )
+            )
         ],
       ),
     );
@@ -187,7 +193,8 @@ class _FollowPageState extends State<FollowPage> {
       child: ListView.builder(
           shrinkWrap: false,
           physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics()),
+              parent: BouncingScrollPhysics()
+          ),
           itemBuilder: (context, index) {
             CondensedUser currentFollower = followUserList[index];
 
@@ -196,7 +203,8 @@ class _FollowPageState extends State<FollowPage> {
               onPop: refresh,
             );
           },
-          itemCount: followUserList.length),
+          itemCount: followUserList.length
+      ),
     );
   }
 
@@ -208,47 +216,3 @@ class _FollowPageState extends State<FollowPage> {
     super.dispose();
   }
 }
-
-/*
-
-class FollowerSearchDelegate extends SearchDelegate {
-  FollowerSearchDelegate({required this.followerList});
-
-  List<FollowUser> followerList = [];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [IconButton(onPressed: () => query = "", icon: const Icon(Icons.clear_outlined))];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(onPressed: () => close(context, null), icon: Icon(Icons.adaptive.arrow_back_rounded));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<FollowUser> matchQuery = [];
-
-    for (FollowUser currentFollower in followerList) {
-      if (currentFollower.name.isNotEmpty ? currentFollower.name.toLowerCase().contains(query.toLowerCase()) : false) {
-        matchQuery.add(currentFollower);
-      }
-    }
-
-    return _buildFollowList(matchQuery);
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<FollowUser> matchQuery = [];
-
-    for (FollowUser currentFollower in followerList) {
-      if (currentFollower.name.isNotEmpty ? currentFollower.name.toLowerCase().contains(query.toLowerCase()) : false) {
-        matchQuery.add(currentFollower);
-      }
-    }
-
-    return _buildFollowList(matchQuery);
-  }
-}*/

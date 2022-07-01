@@ -27,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
-
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -39,65 +38,67 @@ class _LoginPageState extends State<LoginPage> {
         color: spqWhite,
         child: Scaffold(
           body: BlocConsumer<LoginBloc, LoginState>(
-              bloc: _loginBloc,
-              listener: (context, state) {
-                if (state is LoginSuccess) {
-                  Navigator.pushNamed(context, "base", arguments: 0);
-                } else if (state is LoginError) {
-                  String message;
-                  switch (state.code) {
-                    case StatusCode.invalidArgument:
-                      message = appLocale.wrongPassword;
-                      break;
-                    case StatusCode.notFound:
-                      message = appLocale.userNotFound;
-                      break;
-                    case StatusCode.unauthenticated:
-                      message = appLocale.noTokenGenerated;
-                      break;
-                    case StatusCode.unknown:
-                      message = appLocale.unknownError;
-                      break;
-                    default:
-                      message = appLocale.unknownError;
-                  }
-                  Flushbar(
-                    messageText: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                    ),
-                    backgroundColor: spqPrimaryBlue,
-                    messageColor: spqWhite,
-                    duration: const Duration(seconds: 5),
-                  ).show(context);
+            bloc: _loginBloc,
+            listener: (context, state) {
+              if (state is LoginSuccess) {
+                Navigator.pushNamed(context, "base", arguments: 0);
+              } else if (state is LoginError) {
+                String message;
+                switch (state.code) {
+                  case StatusCode.invalidArgument:
+                    message = appLocale.wrongPassword;
+                    break;
+                  case StatusCode.notFound:
+                    message = appLocale.userNotFound;
+                    break;
+                  case StatusCode.unauthenticated:
+                    message = appLocale.noTokenGenerated;
+                    break;
+                  case StatusCode.unknown:
+                    message = appLocale.unknownError;
+                    break;
+                  default:
+                    message = appLocale.unknownError;
                 }
-              },
-              builder: (context, state) {
-                if (state is LoginLoading) {
-                  return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
-                } else if (state is LoginError) {
-                  return ListView(
-                    children: <Widget>[
-                      _buildTop(context, appLocale),
-                      _buildBottom(context, appLocale),
-                    ],
-                  );
-                } else if (state is LoginSuccess) {
-                  return const SizedBox.shrink();
-                } else {
-                  return ListView(
-                    children: <Widget>[
-                      _buildTop(context, appLocale),
-                      _buildBottom(context, appLocale),
-                    ],
-                  );
-                }
-              }),
+                Flushbar(
+                  messageText: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                  ),
+                  backgroundColor: spqPrimaryBlue,
+                  messageColor: spqWhite,
+                  duration: const Duration(seconds: 5),
+                ).show(context);
+              }
+            },
+            builder: (context, state) {
+              if (state is LoginLoading) {
+                return SpqLoadingWidget(deviceSize.shortestSide * 0.15);
+              } else if (state is LoginError) {
+                return ListView(
+                  children: <Widget>[
+                    _buildTop(context, appLocale),
+                    _buildBottom(context, appLocale),
+                  ],
+                );
+              } else if (state is LoginSuccess) {
+                return const SizedBox.shrink();
+              } else {
+                return ListView(
+                  children: <Widget>[
+                    _buildTop(context, appLocale),
+                    _buildBottom(context, appLocale),
+                  ],
+                );
+              }
+            },
+          ),
         ),
       ),
     );
   }
 
+  /// Creates the layout for entering [name] and [password] for logging in the user.
   Widget _buildTop(BuildContext context, AppLocalizations appLocale) {
     return Container(
       padding: const EdgeInsets.only(
@@ -136,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           GestureDetector(
             onTap: () {
-              //TODO - Implement forgot password
+              // TODO - Implement forgot password
             },
             child: Text(
               appLocale.forgotPassword,
@@ -152,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Creates the bottom part of the page with a user interface.
   Widget _buildBottom(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: <Widget>[
@@ -179,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
             thickness: 0.75,
           ),
         ),
-        //TODO - Guest Login
+        // TODO - Login as a guest
       ],
     );
   }

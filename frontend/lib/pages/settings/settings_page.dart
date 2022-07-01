@@ -23,7 +23,6 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
-
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
@@ -72,6 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  /// Returns a [SizedBox] for one logoPicture.
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
@@ -79,6 +79,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  /// Returns a [SettingsTile] an Element for the Listview.
   SettingsTile _buildSettingsTile(String text, String route) {
     return SettingsTile.navigation(
       trailing: Icon(Icons.adaptive.arrow_forward),

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/token_utils.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-/*Geht zurück zum Ursprung des Widget-Trees und ruft die Login-Seite auf*/
+/// Goes back to the origin of the widget tree and calls the login page.
 void logOut(BuildContext context) {
   TokenUtils.setToken(null).then((_) {
     Navigator.popUntil(context, ModalRoute.withName("main"));
@@ -17,38 +17,36 @@ void logOut(BuildContext context) {
 }
 
 class ConnectionUtilSingleton {
-  //This creates the single instance by calling the `_internal` constructor specified below
+  /// Creates the single instance by calling the [ConnectionUtilSingleton._internal()] constructor specified below.
   static final ConnectionUtilSingleton _singleton =
       ConnectionUtilSingleton._internal();
 
   ConnectionUtilSingleton._internal();
 
-  //This is what's used to retrieve the instance through the app
+  ///  Retrieve the instance through the app.
   static ConnectionUtilSingleton getInstance() => _singleton;
 
-  //This tracks the current connection status
+  /// Tracks the current connection status.
   bool hasConnection = false;
 
-  //This is how we'll allow subscribing to connection changes
+  /// Subscribing to connection changes.
   StreamController connectionChangeController = StreamController.broadcast();
 
-  //flutter_connectivity
   final Connectivity _connectivity = Connectivity();
 
-  //Hook into flutter_connectivity's Stream to listen for changes
-  //And check the connection status out of the gate
+  /// Hook into flutter_connectivity's Stream to listen for changes and check the connection status out of the gate.
   void initialize() {
     _connectivity.onConnectivityChanged.listen(_connectionChange);
   }
 
-  //flutter_connectivity's listener
+  /// Flutter_connectivity's listener.
   void _connectionChange(ConnectivityResult result) {
     _hasInternetInternetConnection();
   }
 
   Stream get connectionChange => connectionChangeController.stream;
 
-  //The test to actually see if there is a connection
+  /// Tests if there is a [_connectivity].
   Future<bool> _hasInternetInternetConnection() async {
     bool previousConnection = hasConnection;
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -98,7 +96,7 @@ class ConnectionUtilSingleton {
       );
     }
 
-    // todo : showDialog for ios
+    // Todo : ShowDialog for ios
     return showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(

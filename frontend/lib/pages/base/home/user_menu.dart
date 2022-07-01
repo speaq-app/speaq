@@ -7,8 +7,8 @@ import 'package:frontend/blocs/profile_bloc/profile_bloc.dart';
 import 'package:frontend/blocs/settings_bloc/settings_bloc.dart';
 import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_profile_avatar.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_cube.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:frontend/widgets_shimmer/shimmer_cube.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserMenu extends StatefulWidget {
@@ -23,11 +23,9 @@ class _UserMenuState extends State<UserMenu> {
   final SettingsBloc _settingsBloc = SettingsBloc();
   final FollowerBloc _followerBloc = FollowerBloc();
 
-  //Follower
   List<int> _followerIDs = [];
   List<int> _followingIDs = [];
 
-  //App User (beim login holen)
   late Profile _profile;
 
   @override
@@ -41,13 +39,13 @@ class _UserMenuState extends State<UserMenu> {
   Widget build(BuildContext context) {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
-
     return Drawer(
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              // Loads the app users profile and, if it succeeded, the users follower data.
               BlocConsumer<ProfileBloc, ProfileState>(
                 bloc: _profileBloc,
                 listener: (context, state) {
@@ -75,7 +73,9 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeaderShimmer(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
+  /// Loading widget for the user menu header.
+  Widget _buildHeaderShimmer(
+      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
         top: deviceSize.width * 0.06,
@@ -106,7 +106,9 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, AppLocalizations appLocale, Size deviceSize, Profile profile) {
+  /// Actual user menu header.
+  Widget _buildHeader(BuildContext context, AppLocalizations appLocale,
+      Size deviceSize, Profile profile) {
     return Container(
       padding: const EdgeInsets.only(
         top: 24,
@@ -154,6 +156,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  /// Loading widget for the user menu follower info container.
   Widget _buildShimmerFollowerInfo(Size deviceSize) {
     return Container(
       padding: EdgeInsets.only(
@@ -168,6 +171,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  /// Actual follower / following infos for a user.
   Widget _buildFollowerInfo(BuildContext context, AppLocalizations appLocale) {
     return InkWell(
       onTap: () => Navigator.popAndPushNamed(context, 'follow',
@@ -187,7 +191,9 @@ class _UserMenuState extends State<UserMenu> {
               children: [
                 Text(
                   "${_followerIDs.length}",
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.bold
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 2),
@@ -207,7 +213,9 @@ class _UserMenuState extends State<UserMenu> {
                   padding: const EdgeInsets.only(right: 2.0),
                   child: Text(
                     "${_followingIDs.length}",
-                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 10, fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
                 Text(
@@ -222,6 +230,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  /// Actual user menu content includes icons.
   Widget _buildMenu(BuildContext context, AppLocalizations appLocale) {
     return Column(
       children: [
@@ -229,7 +238,8 @@ class _UserMenuState extends State<UserMenu> {
           leading: const Icon(Icons.person_outline),
           title: Text(appLocale.profile),
           onTap: () {
-            Navigator.popAndPushNamed(context, "profile", arguments: [0, true, 0]);
+            Navigator.popAndPushNamed(context, "profile",
+                arguments: [0, true, 0]);
           },
         ),
         ListTile(
@@ -283,6 +293,7 @@ class _UserMenuState extends State<UserMenu> {
     );
   }
 
+  /// Close all blocs ond dispose.
   @override
   void dispose() {
     _settingsBloc.close();

@@ -11,7 +11,6 @@ import 'package:frontend/utils/all_utils.dart';
 import 'package:frontend/widgets/speaq_fab.dart';
 import 'package:frontend/widgets/speaq_profile_avatar.dart';
 import 'package:frontend/widgets_shimmer/all_widgets_shimmer.dart';
-import 'package:frontend/widgets_shimmer/post_shimmer.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,7 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    //Change from Hardcoded
     _profileBloc.add(LoadProfile(fromCache: false));
     //If no internet connection Load from cache?
     _postBloc.add(LoadPosts());
@@ -51,11 +49,12 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
       onRefresh: _pullRefresh,
       child: SafeArea(
-        child: BlocConsumer<ProfileBloc, ProfileState>(
+        // Loads the users profile and, if it succeeded, his profile picture.
+      child: BlocConsumer<ProfileBloc, ProfileState>(
           bloc: _profileBloc,
           listener: (context, state) {
             if (state is ProfileLoaded) {
-              var profileImageResourceId = state.profile.profileImageResourceId;
+              int profileImageResourceId = state.profile.profileImageResourceId;
               if (profileImageResourceId > 0) {
                 _resourceBloc
                     .add(LoadResource(resourceId: profileImageResourceId));
@@ -87,8 +86,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Jumps to the top of [HomePage] and updates automatically.
   Future<void> _pullRefresh() async {
-    //Change from Hardcoded
     _postBloc.add(LoadPosts());
     _scrollController.jumpTo(0);
   }
@@ -123,6 +122,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Returns a [BlockBuilder] for different post states.
   Widget _buildPostView(AppLocalizations appLocale) {
     return BlocConsumer<PostBloc, PostState>(
       bloc: _postBloc,
@@ -153,6 +153,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Returns a [SpqFloatingActionButton] for posting a new post.
   Widget _buildFloatingActionButton() {
     return SpqFloatingActionButton(
       onPressed: () => Navigator.pushNamed(context, 'new_post')
@@ -202,6 +203,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Creates and returns a [Column] to build a FeedFooter.
   Widget _buildFeedFooter(AppLocalizations appLocale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

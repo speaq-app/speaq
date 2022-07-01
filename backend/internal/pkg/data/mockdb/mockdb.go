@@ -102,7 +102,7 @@ func New() data.Service {
 					Description:            "Test Description 2",
 					Website:                "Test Website 2",
 					ProfileImageBlurHash:   "LKD0Jy_4_3xv4TMcR4wu?bR-bwIo",
-					ProfileImageResourceID: 1,
+					ProfileImageResourceID: 2,
 				},
 				Password:     passHash,
 				FollowerIDs:  []int64{},

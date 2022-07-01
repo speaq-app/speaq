@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/blocs/login_bloc/login_bloc.dart';
 
-
+/// Custom [TextFields] used in [Login] and [Register].
 class RoundTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final bool isHidden;

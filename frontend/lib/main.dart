@@ -37,6 +37,7 @@ Future<void> main() async {
   runApp(const Speaq());
 }
 
+// Initializes the caches for different data types
 initHive() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ProfileAdapter());

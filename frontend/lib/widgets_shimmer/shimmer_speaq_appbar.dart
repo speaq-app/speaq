@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/utils/all_utils.dart';
-import 'package:frontend/widgets_shimmer/components/shimmer_profile_picture.dart';
+import 'package:frontend/widgets_shimmer/shimmer_profile_picture.dart';
 
 class SpqAppBarShimmer extends StatelessWidget implements PreferredSizeWidget {
   @override

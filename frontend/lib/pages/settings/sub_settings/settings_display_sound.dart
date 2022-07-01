@@ -35,7 +35,7 @@ class _DisplaySoundSettingsPageState extends State<DisplaySoundSettingsPage> {
                   padding: EdgeInsets.all(25.0),
                 ),
                 tiles: [
-                  //Darkmode SwitchTile
+                  // Dark mode SwitchTile.
                   SpqSwitchSettingsTile(tileText: appLocale.darkMode, value: valuePrivateSwitch),
                 ],
               ),

@@ -39,10 +39,14 @@ class _SearchPageState extends State<SearchPage> {
           ),
           preferredSize: deviceSize,
           centerTitle: true,
+          actionList: [SpqSettingsIconButton(onPressed:() => Navigator.pushNamed(context, "privacySafetySettings"),)],
         ),
+
+        // Selects the appropriate state and returns a [foundUsers] Listview.
         body: BlocConsumer<SearchBloc, SearchState>(
           bloc: _searchBloc,
           listener: (context, state) {
+
             if (state is ResultsReceived) {
               foundUsers = state.users;
             }
@@ -74,6 +78,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
+  /// Generates a search bar to search for different users.
   SizedBox generateSearchBar(Size deviceSize, AppLocalizations appLocale) {
     return SizedBox(
       height: deviceSize.height * 0.09,
@@ -87,7 +92,8 @@ class _SearchPageState extends State<SearchPage> {
             prefixIcon: const Icon(Icons.search, color: spqDarkGreyTranslucent),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
-                borderSide: BorderSide.none),
+                borderSide: BorderSide.none
+            ),
             hintStyle: const TextStyle(
               fontSize: 16,
               color: spqDarkGreyTranslucent,

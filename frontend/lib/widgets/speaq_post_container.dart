@@ -86,8 +86,7 @@ class _PostContainerState extends State<PostContainer> {
         if (state is ProfileLoaded) {
           var profileImageResourceId = state.profile.profileImageResourceId;
           if (profileImageResourceId > 0) {
-            _resourceBlocProfile
-                .add(LoadResource(resourceId: profileImageResourceId));
+            _resourceBlocProfile.add(LoadResource(resourceId: profileImageResourceId));
           }
         }
       },
@@ -216,20 +215,16 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime =
-        DateTimeRange(start: widget.creationTime, end: DateTime.now());
+    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime, end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
-      return calculatedDateTime.duration.inSeconds.toString() +
-          appLocale.secondsAgo;
+      return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
     }
     if (calculatedDateTime.duration.inMinutes < 2) {
-      return calculatedDateTime.duration.inMinutes.toString() +
-          appLocale.minuteAgo;
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minuteAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 1) {
-      return calculatedDateTime.duration.inMinutes.toString() +
-          appLocale.minutesAgo;
+      return calculatedDateTime.duration.inMinutes.toString() + appLocale.minutesAgo;
     }
 
     if (calculatedDateTime.duration.inHours < 2) {
@@ -237,8 +232,7 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 1) {
-      return calculatedDateTime.duration.inHours.toString() +
-          appLocale.hoursAgo;
+      return calculatedDateTime.duration.inHours.toString() + appLocale.hoursAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 2) {
@@ -250,20 +244,19 @@ class _PostContainerState extends State<PostContainer> {
     }
 
     if (calculatedDateTime.duration.inDays < 14) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
-          appLocale.weekAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weekAgo;
     }
 
     if (calculatedDateTime.duration.inDays < 31) {
-      return (calculatedDateTime.duration.inDays ~/ 7).toString() +
-          appLocale.weeksAgo;
+      return (calculatedDateTime.duration.inDays ~/ 7).toString() + appLocale.weeksAgo;
     }
 
     final DateFormat formatter = DateFormat("d. MMMM y");
     return appLocale.dateAt + formatter.format(widget.creationTime);
   }
 
-  Widget _buildCorrectPostItem(Size deviceSize) {
+  /// Selects the correct case for different Post-Types.
+  Widget _buildCorrectPostItem() {
     return BlocBuilder<ResourceBloc, ResourceState>(
       bloc: _resourceBlocPost,
       builder: (context, state) {
@@ -356,7 +349,7 @@ class _PostContainerState extends State<PostContainer> {
       },
     );
   }
-
+  /// Builds a row with comment, like, share and bookmark icon.
   Widget _buildReactionList() {
     return Column(
       children: [

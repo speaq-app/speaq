@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
-import 'package:frontend/widgets/speaq_appbar.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/utils/all_utils.dart';
 
@@ -15,6 +14,7 @@ class _MessagesPageState extends State<MessagesPage> {
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
+  // Todo: Include backend
   final List<CondensedUser> _allUserList = [
     CondensedUser(name: "Hendrik"),
     CondensedUser(name: "Daniel"),
@@ -37,12 +37,11 @@ class _MessagesPageState extends State<MessagesPage> {
     super.initState();
   }
 
-  late AppLocalizations appLocale;
-
   @override
   Widget build(BuildContext context) {
-    appLocale = AppLocalizations.of(context)!;
+    AppLocalizations appLocale = AppLocalizations.of(context)!;
     Size deviceSize = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Scaffold(
         appBar: SpqAppBar(
@@ -52,16 +51,23 @@ class _MessagesPageState extends State<MessagesPage> {
           ),
           preferredSize: deviceSize,
           centerTitle: true,
-          actionList: [generateSettingsIcon(context)],
-          leading: Container(),
+          leading: null,
+          automaticallyImplyLeading: false,
+          actionList: [
+            SpqSettingsIconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, "notificationSettings"),
+            )
+          ],
         ),
         body: Column(
           children: <Widget>[
-            generateSearchBar(deviceSize),
+            generateSearchBar(deviceSize, appLocale),
             Expanded(
               child: ListView.builder(
                 itemCount: _foundUsersList.length,
                 itemBuilder: (context, index) {
+                  // Returns elements of the users and add them to a [ListTile].
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundColor: spqPrimaryBlue,
@@ -85,7 +91,8 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
-  SizedBox generateSearchBar(Size deviceSize) {
+  /// Generates a search bar to search for different users.
+  SizedBox generateSearchBar(Size deviceSize, AppLocalizations appLocale) {
     return SizedBox(
       height: deviceSize.height * 0.08,
       width: deviceSize.width,
@@ -111,17 +118,7 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 
-  IconButton generateSettingsIcon(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.settings),
-      color: Colors.blue,
-      iconSize: 25,
-      onPressed: () => {
-        Navigator.pushNamed(context, "notificationSettings"),
-      },
-    );
-  }
-
+  /// Checks if user input [text] is equal to the [name] of all users and overwrites [_foundUsersList].
   filterSearchResults(String? text) {
     List<CondensedUser> filterList = <CondensedUser>[];
     if (text != null && text.isNotEmpty) {

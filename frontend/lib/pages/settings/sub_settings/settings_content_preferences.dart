@@ -36,7 +36,7 @@ class _ContentPrefSettingsPageState extends State<ContentPrefSettingsPage> {
                   padding: EdgeInsets.all(25.0),
                 ),
                 tiles: [
-                  //Sprachauswahl
+                  // Language selection.
                   SpqNavigationSettingsTile(text: appLocale.language),
                 ],
               ),

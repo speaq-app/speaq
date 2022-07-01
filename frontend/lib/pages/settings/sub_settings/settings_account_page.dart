@@ -38,6 +38,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   ),
                   SpqNavigationSettingsTile(text: appLocale.accountInformation),
                   SpqNavigationSettingsTile(text: appLocale.changePassword),
+                  // Account logout.
                   SpqPopUpSettingsTile(
                     tileText: appLocale.logout,
                     actionButtonText: appLocale.logout,
@@ -45,6 +46,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     actionButtonColor: spqWarningOrange,
                     onPressed: () => logOut(context),
                   ),
+                  // Account delete.
                   SpqPopUpSettingsTile(
                     tileText: appLocale.deleteAccount,
                     actionButtonText: appLocale.delete,
@@ -56,11 +58,14 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
               ),
             ],
           ),
-          //Logo
+          // Logo.
           Positioned(
             bottom: 20,
             height: deviceSize.height * 0.1,
-            child: Align(alignment: Alignment.bottomCenter, child: _buildLogoPictures(deviceSize)),
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _buildLogoPictures(deviceSize)
+            ),
           )
         ]),
       ),
@@ -70,7 +75,9 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   Widget _buildLogoPictures(Size deviceSize) {
     return SizedBox(
       width: deviceSize.width,
-      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg", height: deviceSize.height * 0.05, width: deviceSize.width * 0.3),
+      child: SvgPicture.asset("assets/images/logo/speaq_text_logo.svg",
+          height: deviceSize.height * 0.05, width: deviceSize.width * 0.3
+      ),
     );
   }
 }

@@ -19,8 +19,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<StartSearch>(_onStartSearch);
   }
 
-  Future<void> _onStartSearch(
-      StartSearch event, Emitter<SearchState> emit) async {
+  Future<void> _onStartSearch(StartSearch event, Emitter<SearchState> emit) async {
     emit(SearchStarted());
 
     emit(RequestSend());

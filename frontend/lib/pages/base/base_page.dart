@@ -13,12 +13,10 @@ class BasePage extends StatefulWidget {
 }
 
 class _BasePageState extends State<BasePage> {
-  /*Singleton, für die Überprüfung der Internetverbindung zuständig ist*/
   late ConnectionUtilSingleton connectionStatus;
   bool hasInternetConnection = true;
 
-  /*Methode setzt die boolean Variable, welche angibt, ob eine aktive Verbindung zum Internet besteht
-  * und ruft bei keine Internetverbindung einen Alert-Dialog auf*/
+  /// Checks the active internet connection and invokes alert dialog if not.
   void _connectionChanged(dynamic hasConnection) {
     setState(() {
       hasInternetConnection = hasConnection;
@@ -35,16 +33,14 @@ class _BasePageState extends State<BasePage> {
   late final PageController _pageController =
       PageController(initialPage: widget.initialPage);
 
+  /// Makes the main pages swipe-able.
   void _switchPage(int index) {
     _selectedIndexNotifier.value = index;
     _pageController.animateToPage(_selectedIndexNotifier.value,
         duration: const Duration(milliseconds: 200), curve: Curves.linear);
   }
 
-  /*Alle Seiten, direkt nach dem Login aufgerufen werden können
-  * und in der BottomNavigationBar vertreten sind*/
-
-  /*Die Variable wird initialisiert und hört dem Stream, welcher updates über die Internetverbindung gibt, zu*/
+  /// Inits and invokes the four main pages after login. Listens to stream and checks updates of the internet connection.
   @override
   initState() {
     connectionStatus = ConnectionUtilSingleton.getInstance();
@@ -67,7 +63,6 @@ class _BasePageState extends State<BasePage> {
         if (_selectedIndexNotifier.value != 0) {
           _switchPage(0);
         }
-
         return false;
       },
       child: Container(
@@ -81,6 +76,7 @@ class _BasePageState extends State<BasePage> {
               controller: _pageController,
               children: _pages,
             ),
+            // Custom bottom navigation bar for the pages.
             bottomNavigationBar: ValueListenableBuilder(
                 valueListenable: _selectedIndexNotifier,
                 builder: (context, value, widget) {
