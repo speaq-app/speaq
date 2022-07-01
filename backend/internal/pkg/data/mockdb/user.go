@@ -3,6 +3,7 @@ package mockdb
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/speaq-app/speaq/internal/pkg/data"
@@ -165,6 +166,7 @@ func (s *service) CreateUser(username string, passwordHash []byte) (data.User, e
 		Password: passwordHash,
 	}
 	s.users[userID] = user
+	log.Printf("Creating new user with username %q", username)
 	return user, nil
 }
 
@@ -252,9 +254,11 @@ func (s *service) FollowUnfollow(userID int64, followerID int64) (bool, error) {
 	if c {
 		u.FollowingIDs = append(u.FollowingIDs[:i], u.FollowingIDs[i+1:]...)
 		f.FollowerIDs = append(f.FollowerIDs[:j], f.FollowerIDs[j+1:]...)
+		log.Printf("%q has unfollowed %q", u.Profile.Username, f.Profile.Username)
 	} else {
 		u.FollowingIDs = append(u.FollowingIDs, followerID)
 		f.FollowerIDs = append(f.FollowerIDs, userID)
+		log.Printf("%q is now following %q", u.Profile.Username, f.Profile.Username)
 	}
 
 	s.users[userID] = u

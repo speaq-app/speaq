@@ -1,6 +1,7 @@
 package mockdb
 
 import (
+	"log"
 	"sort"
 	"time"
 
@@ -65,6 +66,6 @@ func (s *service) CreatePost(ownerID int64, description string, resourceID int64
 		CommentIDs:       []int64{},
 	}
 	s.posts[postID] = post
-
+	log.Printf("%q has created a new post", s.users[ownerID].Profile.Username)
 	return post, nil
 }
