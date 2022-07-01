@@ -89,10 +89,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _pullRefresh() async {
     //Change from Hardcoded
-    setState(() {
-      _readPosts.clear();
-      _allPosts.clear();
-    });
     _postBloc.add(LoadPosts());
     _scrollController.jumpTo(0);
   }
@@ -133,11 +129,13 @@ class _HomePageState extends State<HomePage> {
       listener: (context, state) {
         if (state is PostsLoaded) {
           setState(() {
+            _readPosts.clear();
+            _allPosts.clear();
+
             _allPosts.addAll(state.postList);
             if (_allPosts.length >= 5) {
-              _readPosts.addAll(_allPosts.getRange(0, 4));
+              _readPosts.addAll(_allPosts.getRange(0, 5));
             }
-            _readPosts.addAll(_allPosts);
           });
         }
       },
@@ -235,10 +233,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _fetchData() {
+    if (_readPosts.length >= _allPosts.length) {
+      return;
+    }
+
+    var newPost = _allPosts.elementAt(_readPosts.length);
     setState(() {
-      if (_readPosts.length < _allPosts.length) {
-        _readPosts.add(_allPosts.elementAt(_readPosts.length));
-      }
+      _readPosts.add(newPost);
     });
   }
 

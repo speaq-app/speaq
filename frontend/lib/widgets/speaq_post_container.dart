@@ -315,6 +315,8 @@ class _PostContainerState extends State<PostContainer> {
                 durationInMillis: state.resource.audioDurationInMillis,
                 codec: Codec.mp3,
               );
+            case "":
+              return const SizedBox(height: 0);
             default:
               return const Text("Media Type not implemented yet");
           }
@@ -337,7 +339,16 @@ class _PostContainerState extends State<PostContainer> {
               );
             case "audio/pcm16":
             case "audio/mp3":
-              return const ShimmerCube(width: 100, height: 20);
+              return SizedBox(
+                height: 69,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: const ShimmerCube(
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+              );
             default:
               return Container();
           }

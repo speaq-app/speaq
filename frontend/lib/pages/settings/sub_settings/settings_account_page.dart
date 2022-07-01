@@ -51,6 +51,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     actionButtonText: appLocale.delete,
                     popupMessage: appLocale.askDeleteAccount,
                     actionButtonColor: spqErrorRed,
+                    onPressed: null,
                   ),
                 ],
               ),

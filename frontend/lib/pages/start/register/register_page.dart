@@ -20,7 +20,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordCheckController = TextEditingController();
+  final TextEditingController _passwordCheckController =
+      TextEditingController();
 
   final RegisterBloc _registerBloc = RegisterBloc();
 
@@ -106,7 +107,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget buildBottom(BuildContext context, AppLocalizations appLocale, Size deviceSize) {
+  Widget buildBottom(
+      BuildContext context, AppLocalizations appLocale, Size deviceSize) {
     return Column(
       children: <Widget>[
         Padding(
@@ -200,9 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
         SpeaqPageForwarding(
           hintText: appLocale.guestText,
           text: appLocale.guest,
-          press: () {
-            Navigator.popAndPushNamed(context, "base");
-          },
+          press: () {},
         ),
       ],
     );

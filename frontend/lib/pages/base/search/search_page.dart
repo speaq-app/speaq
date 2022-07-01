@@ -19,6 +19,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
+    _searchBloc.add(StartSearch(term: ""));
     super.initState();
   }
 
@@ -33,8 +34,9 @@ class _SearchPageState extends State<SearchPage> {
           leading: null,
           automaticallyImplyLeading: false,
           title: SpqSearchBar(
-              searchBloc: _searchBloc,
-              hintText: appLocale.hintTextSearchBarSearchPage),
+            searchBloc: _searchBloc,
+            hintText: appLocale.hintTextSearchBarSearchPage,
+          ),
           preferredSize: deviceSize,
           centerTitle: true,
         ),
