@@ -15,13 +15,11 @@ import 'package:frontend/widgets_shimmer/shimmer_post.dart';
 
 class ProfilePage extends StatefulWidget {
   final int pageUserID;
-  final bool isOwnPage;
   final int initialPageIndex;
 
   const ProfilePage({
     Key? key,
     required this.pageUserID,
-    this.isOwnPage = false,
     this.initialPageIndex = 0,
   }) : super(key: key);
 
@@ -54,10 +52,12 @@ class ProfilePageState extends State<ProfilePage> {
 
   Future<void> _loadPage() async {
     _profileBloc.add(LoadProfile(userId: widget.pageUserID));
+/*
     if (!widget.isOwnPage) {
       _followUnfollowBloc
           .add(CheckIfFollowing(userID: 0, followerID: widget.pageUserID));
     }
+*/
   }
 
   @override
@@ -115,13 +115,21 @@ class ProfilePageState extends State<ProfilePage> {
         bloc: _profileBloc,
         listener: (context, state) {
           if (state is ProfileLoaded) {
+            _profile = state.profile;
+
             if (state.profile.profileImageResourceId > 0) {
               _resourceBloc.add(LoadResource(
                   resourceId: state.profile.profileImageResourceId));
             }
-            _pageUserFollowerBloc
-                .add(LoadFollowerIDs(userId: widget.pageUserID));
-            _profile = state.profile;
+
+            if (!state.profile.isOwnProfile) {
+              _followUnfollowBloc
+                  .add(CheckIfFollowing(userID: 0, followerID: widget.pageUserID));
+            }
+
+            _pageUserFollowerBloc.add(LoadFollowerIDs(userId: widget.pageUserID));
+            print(_profile.isOwnProfile)
+            ;
           }
         },
         builder: (context, state) {
@@ -148,7 +156,7 @@ class ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _buildProfilePicture(deviceSize, profile),
-              _buildEditProfileButton(deviceSize, appLocale),
+              _buildEditProfileFollowButton(deviceSize, appLocale),
             ],
           ),
         ),
@@ -189,12 +197,12 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   /// Creates an editProfile button surrounded with the block pattern.
-  Widget _buildEditProfileButton(Size deviceSize, AppLocalizations appLocale) {
+  Widget _buildEditProfileFollowButton(Size deviceSize, AppLocalizations appLocale) {
     return Container(
       width: deviceSize.width * 0.33,
       height: deviceSize.height * 0.05,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: widget.isOwnPage
+      child: _profile.isOwnProfile
           ? SpqTextButton(
               onPressed: () => Navigator.pushNamed(context, 'edit_profile')
                   .then((value) => _profileBloc.add(LoadProfile(userId: 0))),

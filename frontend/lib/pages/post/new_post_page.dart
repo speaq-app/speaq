@@ -30,9 +30,11 @@ class _NewPostPageState extends State<NewPostPage> {
   final _postBloc = PostBloc();
   FlutterSoundPlayer? _player;
   FlutterSoundRecorder? _recorder;
+  final ValueNotifier<bool?> _isRecordingNotifier = ValueNotifier<bool?>(false);
   final _picker = ImagePicker();
   final _keyboardVisibilityController = KeyboardVisibilityController();
   final _postController = TextEditingController();
+
 
   var _hasMicrophoneAccess = true;
   var _postAttachment = _PostAttachments.none;
@@ -56,6 +58,12 @@ class _NewPostPageState extends State<NewPostPage> {
       _activeKeyboard = _Keyboards.none;
     } else {
       _activeKeyboard = keyboard;
+    }
+
+    if (_recorder?.isRecording ?? false) {
+      _recorder!.stopRecorder();
+      _isRecordingNotifier.value = false;
+
     }
   }
 
@@ -240,6 +248,15 @@ class _NewPostPageState extends State<NewPostPage> {
           padding: const EdgeInsets.all(16.0),
           child: SpeedDial(
             childrenButtonSize: const Size(64, 64),
+            onOpen: () {
+              if (_recorder!.isRecording) {
+                _recorder!.stopRecorder();
+                _isRecordingNotifier.value = false;
+                setState(() {
+                  _audioDuration = Duration.zero;
+                });
+              }
+            },
             spaceBetweenChildren: 4,
             buttonSize: const Size(34, 34),
             childPadding: const EdgeInsets.only(left: 18),
@@ -291,8 +308,7 @@ class _NewPostPageState extends State<NewPostPage> {
                   ),
                 ),
                 hintText: 'Speaq',
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.0),
                 ),
@@ -488,7 +504,7 @@ class _NewPostPageState extends State<NewPostPage> {
     if (data != null && data.length > maxPostAttachmentSize) {
       return _errorAttachmentTooBig(appLocale);
     }
-    
+
     _postBloc.add(CreatePost(
       description: _postController.text,
       resourceData: data,
@@ -547,15 +563,11 @@ class _NewPostPageState extends State<NewPostPage> {
               StreamBuilder<RecordingDisposition>(
                 stream: _recorder?.onProgress,
                 builder: (context, snapshot) {
-                  _audioDuration = snapshot.hasData
-                      ? snapshot.data!.duration
-                      : Duration.zero;
+                  _audioDuration = snapshot.hasData ? snapshot.data!.duration : Duration.zero;
 
                   String twoDigits(int n) => n.toString().padLeft(2, "0");
-                  String twoDigitMinutes =
-                      twoDigits(_audioDuration.inMinutes.remainder(60));
-                  String twoDigitSeconds =
-                      twoDigits(_audioDuration.inSeconds.remainder(60));
+                  String twoDigitMinutes = twoDigits(_audioDuration.inMinutes.remainder(60));
+                  String twoDigitSeconds = twoDigits(_audioDuration.inSeconds.remainder(60));
 
                   return Text(
                     '$twoDigitMinutes:$twoDigitSeconds',
@@ -587,6 +599,8 @@ class _NewPostPageState extends State<NewPostPage> {
 
         if (_recorder!.isRecording) {
           await _recorder?.stopRecorder();
+          _isRecordingNotifier.value = false;
+
           setState(() {
             _postAttachment = _PostAttachments.audio;
           });
@@ -597,9 +611,20 @@ class _NewPostPageState extends State<NewPostPage> {
           });
         }
       },
-      child: Icon(
-        _recorder?.isRecording ?? false ? Icons.stop : Icons.mic,
-        size: 32,
+      child: ValueListenableBuilder(
+        valueListenable: _isRecordingNotifier,
+        builder: (BuildContext context, bool? value, Widget? child) {
+          return Icon(
+            value ?? false ? Icons.stop : Icons.mic,
+            size: 32,
+          );
+        },
+/*
+        child: Icon(
+          _recorder?.isRecording ?? false ? Icons.stop : Icons.mic,
+          size: 32,
+        ),
+*/
       ),
     );
   }
@@ -612,8 +637,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
     _recordedAudio.clear();
     var recordingDataController = StreamController<Food>();
-    _recordingDataSubscription =
-        recordingDataController.stream.listen((buffer) {
+    _recordingDataSubscription = recordingDataController.stream.listen((buffer) {
       if (buffer is FoodData) {
         _recordedAudio.addAll(buffer.data!);
       }
@@ -623,6 +647,7 @@ class _NewPostPageState extends State<NewPostPage> {
       toStream: recordingDataController.sink,
       codec: Codec.pcm16,
     );
+    _isRecordingNotifier.value = true;
     setState(() {});
   }
 

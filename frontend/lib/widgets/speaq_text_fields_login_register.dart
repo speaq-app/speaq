@@ -39,7 +39,7 @@ class RoundTextField extends StatelessWidget {
       width: size.width * 0.8,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(29),
+        borderRadius: BorderRadius.circular(24),
         border: borderColor,
       ),
       child: TextField(
