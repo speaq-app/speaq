@@ -153,7 +153,6 @@ class _PostContainerState extends State<PostContainer> {
         return InkWell(
           onTap: () => Navigator.pushNamed(context, "profile", arguments: [
             widget.ownerID,
-            state.profile.isOwnProfile,
             state.profile.isOwnProfile ? 0 : 1,
           ]),
           child: Row(
