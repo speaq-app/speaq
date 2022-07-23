@@ -62,7 +62,7 @@ class _PostContainerState extends State<PostContainer> {
     AppLocalizations appLocale = AppLocalizations.of(context)!;
 
     if (_isFirstBuild && widget.resourceID > 0) {
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         _resourceBlocPost.add(LoadResource(resourceId: widget.resourceID));
       });
       _isFirstBuild = false;
@@ -215,7 +215,8 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   String _formatDate(AppLocalizations appLocale) {
-    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime, end: DateTime.now());
+    // TODO: Remove subtract duration
+    final DateTimeRange calculatedDateTime = DateTimeRange(start: widget.creationTime.subtract(const Duration(seconds: 1)), end: DateTime.now());
     if (calculatedDateTime.duration.inMinutes < 1) {
       return calculatedDateTime.duration.inSeconds.toString() + appLocale.secondsAgo;
     }
