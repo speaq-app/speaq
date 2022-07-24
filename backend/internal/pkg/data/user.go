@@ -46,6 +46,7 @@ type User struct {
 	Password     []byte
 	FollowerIDs  []int64
 	FollowingIDs []int64
+	ChatIDs      []int64
 	CreatedAt    time.Time
 }
 

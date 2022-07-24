@@ -1,12 +1,77 @@
 package chat
 
 import (
+	"bytes"
+	"context"
+	"github.com/buckket/go-blurhash"
 	"github.com/speaq-app/speaq/internal/pkg/data"
+	"github.com/speaq-app/speaq/internal/pkg/middleware"
+	"image/jpeg"
 )
 
 type Server struct {
 	DataService data.Service
 	UnimplementedChatServer
+}
+
+func (s Server) CreateChat(ctx context.Context, req *CreateChatRequest) (*CreateChatResponse, error) {
+	r, err := s.DataService.CreateChat(req.ParticipantIds, req.Title)
+
+	if err != nil {
+		return nil, err
+	}
+
+	/*	userID, err := middleware.GetUserIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+	*/
+	return &CreateChatResponse{
+		CreatedChat: &PrivateChat{
+			ParticipantIds: r.ParticipantsIDs,
+		},
+	}, nil
+}
+func (s Server) CreateMessage(ctx context.Context, req *CreateMessageRequest) (*CreateMessageResponse, error) {
+	r, err := s.DataService.CreateResource(req.ResourceData, req.ResourceMimeType, req.AudioDuration)
+	if err != nil {
+		return nil, err
+	}
+
+	userID, err := middleware.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var blurHash string
+	if r.MIMEType == "image/jpeg" {
+		img, err := jpeg.Decode(bytes.NewReader(req.ResourceData))
+		if err != nil {
+			return nil, err
+		}
+		blurHash, err = blurhash.Encode(4, 3, img)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	m, err := s.DataService.CreateMessage(userID, req.ChatId, req.Text, r.ID, r.MIMEType, blurHash, req.PersistantDuration)
+
+	if err != nil {
+		return nil, err
+	}
+	
+	return &CreateMessageResponse{
+		CreatedMessage: &SingleMessage{
+			MessageId:        m.ID,
+			OwnerId:          userID,
+			Date:             m.CreatedAt.Unix(),
+			ResourceId:       m.ResourceID,
+			ResourceMimeType: m.ResourceMimeType,
+			ResourceBlurHash: m.ResourceBlurHash,
+			DeletionDate:     m.DeletionDate.Unix(),
+		},
+	}, nil
 }
 
 //CreatePost takes a description, recourceData, recourceMimeType and audioDuration frm CreatePostRequest.
