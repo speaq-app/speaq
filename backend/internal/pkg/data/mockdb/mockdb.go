@@ -15,6 +15,8 @@ type service struct {
 	resources map[int64]data.Resource
 	users     map[int64]data.User
 	posts     map[int64]data.Post
+	chats     map[int64]data.Chat
+	messages  map[int64]data.Message
 	mu        sync.Mutex
 }
 
@@ -185,6 +187,8 @@ func New() data.Service {
 				CreatedAt:    time.Now(),
 			},
 		},
-		posts: map[int64]data.Post{},
+		posts:    map[int64]data.Post{},
+		chats:    map[int64]data.Chat{},
+		messages: map[int64]data.Message{},
 	}
 }

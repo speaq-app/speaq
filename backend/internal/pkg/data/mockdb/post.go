@@ -39,16 +39,6 @@ func (s *service) PostFeedFromFollowerIDs(followerIDs []int64) ([]data.Post, err
 	return posts, nil
 }
 
-func (s *service) nextPostID() int64 {
-	var nextID int64 = 1
-	for id := range s.posts {
-		if id >= nextID {
-			nextID = id + 1
-		}
-	}
-	return nextID
-}
-
 func (s *service) CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType, resourceBlurHash string) (data.Post, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -68,4 +58,14 @@ func (s *service) CreatePost(ownerID int64, description string, resourceID int64
 	s.posts[postID] = post
 	log.Printf("%q has created a new post", s.users[ownerID].Profile.Username)
 	return post, nil
+}
+
+func (s *service) nextPostID() int64 {
+	var nextID int64 = 1
+	for id := range s.posts {
+		if id >= nextID {
+			nextID = id + 1
+		}
+	}
+	return nextID
 }

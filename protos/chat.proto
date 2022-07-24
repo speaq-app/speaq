@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "app/message";
+option go_package = "app/chat";
 
-service Message {
+service Chat {
     rpc GetChats(GetChatsRequest) returns (GetChatsResponse);
     rpc GetChatMessages(GetMessagesRequest) returns (GetMessagesResponse);
 }
@@ -12,7 +12,7 @@ message GetChatsRequest {
 }
 
 message GetChatsResponse {
-  repeated Chat chats = 1;
+  repeated PrivateChat chats = 1;
 }
 
 message GetMessagesRequest {
@@ -36,7 +36,7 @@ message CreateMessageResponse {
   SingleMessage created_message = 1;
 }
 
-message Chat {
+message PrivateChat {
   int64 id = 1;
   int64 interlocutor_id = 2;
   repeated int64 message_ids = 3 [packed = true];

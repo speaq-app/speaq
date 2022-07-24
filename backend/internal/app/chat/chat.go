@@ -1,4 +1,4 @@
-package message
+package chat
 
 import (
 	"github.com/speaq-app/speaq/internal/pkg/data"
@@ -6,7 +6,7 @@ import (
 
 type Server struct {
 	DataService data.Service
-	UnimplementedMessageServer
+	UnimplementedChatServer
 }
 
 //CreatePost takes a description, recourceData, recourceMimeType and audioDuration frm CreatePostRequest.
