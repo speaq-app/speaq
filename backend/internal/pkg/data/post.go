@@ -3,7 +3,7 @@ package data
 import "time"
 
 type PostService interface {
-	CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType, resourceBlurHash string) (Post, error)
+	CreatePost(ownerID int64, description string, resourceID int64, resourceMIMEType string, resourceBlurHash string) (Post, error)
 	PostFeedFromFollowerIDs(followerIDs []int64) ([]Post, error)
 }
 
