@@ -15,9 +15,9 @@ type Server struct {
 	UnimplementedPostServer
 }
 
-//CreatePost takes a description, recourceData, recourceMimeType and audioDuration frm CreatePostRequest.
+//CreatePost takes a description, resourceData, resourceMimeType and audioDuration frm CreatePostRequest.
 //First it creates a resource in the backend by resourceData, resourceMimeType and audioDuration.
-//Then it gets the userID corresponding to the logged in user.
+//Then it gets the userID corresponding to the logged-in user.
 //Then it creates a post taking the userID, description, resourceID and mimeType and returns it in CreatePostResponse.
 func (s Server) CreatePost(ctx context.Context, req *CreatePostRequest) (*CreatePostResponse, error) {
 	r, err := s.DataService.CreateResource(req.ResourceData, req.ResourceMimeType, req.AudioDuration)

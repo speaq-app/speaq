@@ -52,7 +52,7 @@ class _BasePageState extends State<BasePage> {
       const HomePage(),
       const SearchPage(),
       const NotificationsPage(),
-      const MessagesPage()
+      const ChatsPage()
     ];
   }
 

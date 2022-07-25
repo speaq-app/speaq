@@ -3,14 +3,14 @@ import 'package:frontend/api/grpc/protos/user.pbgrpc.dart';
 import 'package:frontend/widgets/all_widgets.dart';
 import 'package:frontend/utils/all_utils.dart';
 
-class MessagesPage extends StatefulWidget {
-  const MessagesPage({Key? key}) : super(key: key);
+class ChatsPage extends StatefulWidget {
+  const ChatsPage({Key? key}) : super(key: key);
 
   @override
-  State<MessagesPage> createState() => _MessagesPageState();
+  State<ChatsPage> createState() => _ChatsPageState();
 }
 
-class _MessagesPageState extends State<MessagesPage> {
+class _ChatsPageState extends State<ChatsPage> {
   String profilePicture =
       "https://unicheck.unicum.de/sites/default/files/artikel/image/informatik-kannst-du-auch-auf-englisch-studieren-gettyimages-rosshelen-uebersichtsbild.jpg";
 
@@ -81,6 +81,7 @@ class _MessagesPageState extends State<MessagesPage> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     trailing: const Text("12:34 Uhr"),
+                    onTap: () => Navigator.of(context).pushNamed("chat_messages"),
                   );
                 },
               ),

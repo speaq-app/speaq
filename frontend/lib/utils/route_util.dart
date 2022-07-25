@@ -5,6 +5,8 @@ import 'package:frontend/pages/all_pages_export.dart';
 import 'package:frontend/pages/settings/sub_settings/settings_about_speaq.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../pages/base/messages/private_chat/private_chat_page.dart';
+
 class RouteGenerator {
 
   /// Creates different Routes.
@@ -67,7 +69,7 @@ class RouteGenerator {
         );
       case "messages":
         return PageTransition(
-          child: const MessagesPage(),
+          child: const ChatsPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
@@ -84,7 +86,7 @@ class RouteGenerator {
           alignment: Alignment.center,
         );
 
-      // Settings.
+      //region Settings.
       case "accountSettings":
         return PageTransition(
           child: const AccountSettingsPage(),
@@ -121,15 +123,23 @@ class RouteGenerator {
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
+        // endregion
 
-        // UserMenu.
+      //region UserMenu.
         case "bookmarks":
         return PageTransition(
           child: const BookmarksPage(),
           type: PageTransitionType.fade,
           alignment: Alignment.center,
         );
+        //endregion
 
+      case "chat_messages":
+        return PageTransition(
+          child: const ChatMessagesPage(),
+          type: PageTransitionType.fade,
+          alignment: Alignment.center,
+        );
       case "new_post":
         return PageTransition(
           child: const NewPostPage(),

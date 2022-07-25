@@ -10,7 +10,7 @@ export 'base/base_page.dart';
 export 'base/home/home_page.dart';
 export 'base/home/userMenu/bookmarks_page.dart';
 export 'base/home/userMenu/qr_code_page.dart';
-export 'base/messages/messages_page.dart';
+export 'base/messages/chats_page.dart';
 export 'base/notifications/notifications_page.dart';
 export 'base/search/search_page.dart';
 //endregion

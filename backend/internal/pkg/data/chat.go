@@ -7,16 +7,16 @@ type ChatService interface {
 	GetChatMessages(messageIDs []int64) ([]Message, error)
 	CreateChat(participantIDs []int64, title string) (Chat, error)
 	CreateMessage(ownerID int64, chatID int64, text string, resourceID int64, resourceMIMEType string, resourceBlurHash string, persistanceDuration int64) (Message, error)
-	DeleteChat(chatID int64)
-	DeleteMessage(chatID int64, messageID int64)
+	DeleteChat(chatID int64) (bool, error)
+	DeleteMessage(chatID int64, messageID int64) (bool, error)
 }
 
 type Chat struct {
 	ID              int64
 	Title           string
 	ParticipantsIDs []int64
-	CreatedAt       time.Time
 	MessageIDs      []int64
+	CreatedAt       time.Time
 }
 
 type Message struct {
