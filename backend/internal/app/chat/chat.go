@@ -60,7 +60,7 @@ func (s Server) CreateMessage(ctx context.Context, req *CreateMessageRequest) (*
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return &CreateMessageResponse{
 		CreatedMessage: &SingleMessage{
 			MessageId:        m.ID,
